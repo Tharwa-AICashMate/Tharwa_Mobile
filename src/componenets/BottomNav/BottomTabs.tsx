@@ -21,6 +21,7 @@ import GreenScreen from '@/screens/GreenScreen';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { StackScreenProps } from '@react-navigation/stack';
 import { NavigatorScreenParams } from '@react-navigation/native';
+import FingerprintDetails from '@/screens/FingerPrintDetails';
 
 // Define types for Profile Stack and Bottom Tabs
 type ProfileStackParamList = {
@@ -60,6 +61,7 @@ function ProfileStackScreen() {
       <ProfileStack.Screen name="ChangePin" component={ChangePin} />
       <ProfileStack.Screen name="FingerPrint" component={FingerPrint} />
       <ProfileStack.Screen name="TermsAndConditions" component={TermsAndConditions} />
+      <ProfileStack.Screen name="FingerprintDetails" component={FingerprintDetails} />
     </ProfileStack.Navigator>
   );
 }

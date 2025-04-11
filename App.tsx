@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, StyleSheet } from 'react-native';
 import BottomTabs from './src/componenets/BottomNav/BottomTabs';
 import GreenScreen from '@/screens/GreenScreen';
+import GreenScreenFP from '@/screens/GreenScreenFP';
 
 const RootStack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ export default function App() {
         
         {/* GreenScreen outside of BottomTabs */}
         <RootStack.Screen name="GreenScreen" component={GreenScreen} />
+        <RootStack.Screen name="GreenScreenFP" component={GreenScreenFP} />
       </RootStack.Navigator>
     </NavigationContainer>
   );
