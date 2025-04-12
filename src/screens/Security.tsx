@@ -1,4 +1,4 @@
-// screens/Security.tsx
+
 import React from 'react';
 import {
   StatusBar,
@@ -12,7 +12,6 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import Theme from '@/theme';
 
-// Define the navigation stack param list
 type RootStackParamList = {
   ChangePin: undefined;
   FingerPrint: undefined;
@@ -20,13 +19,13 @@ type RootStackParamList = {
   Security: undefined;
 };
 
-// Define the navigation prop type for the Security screen
+
 type SecurityNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Security'
 >;
 
-// Props interface
+
 interface SecurityProps {
   navigation: SecurityNavigationProp;
 }

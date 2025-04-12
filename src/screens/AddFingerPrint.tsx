@@ -5,7 +5,7 @@ import * as LocalAuthentication from 'expo-local-authentication'
 import Dialog from 'react-native-dialog'
 import { useNavigation, useRoute } from '@react-navigation/native'
 
-// Assuming your Header component exists in the correct path
+
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle'
 import Theme from '@/theme'
 

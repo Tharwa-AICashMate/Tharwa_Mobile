@@ -20,7 +20,6 @@ const TermsAndConditions: React.FC = () => {
   };
 
   const handleAccept = () => {
-    // Handle the accept action here
     console.log('Terms accepted:', isChecked);
   };
 

@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Theme from '@/theme';
 
-// Define the navigation param list
+
 type RootStackParamList = {
   Profile: undefined;
   ChangePin: undefined;
@@ -26,7 +26,7 @@ type RootStackParamList = {
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-// Define types for the styles
+
 interface Styles {
   container: StyleProp<ViewStyle>;
   content: StyleProp<ViewStyle>;
@@ -37,7 +37,7 @@ interface Styles {
   icon: StyleProp<ViewStyle>;
 }
 
-// Define props for the reusable PinInput component
+
 interface PinInputProps {
   label: string;
   value: string;
@@ -85,12 +85,12 @@ export default function ChangePin() {
   const [newPin, setNewPin] = useState<string>('');
   const [confirmPin, setConfirmPin] = useState<string>('');
 
-  // States to track visibility of each PIN input
+
   const [showCurrentPin, setShowCurrentPin] = useState<boolean>(false);
   const [showNewPin, setShowNewPin] = useState<boolean>(false);
   const [showConfirmPin, setShowConfirmPin] = useState<boolean>(false);
 
-  // Navigation hook
+
   const navigation = useNavigation<NavigationProp>();
 
   return (
