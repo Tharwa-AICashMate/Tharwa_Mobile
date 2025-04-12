@@ -24,7 +24,6 @@ export default function FingerPrint() {
        
         if (fingerprint) {
             setFingerprints((prev) => {
-                // Avoid duplicates
                 if (!prev.some((fp) => fp.id === fingerprint.id)) {
                     return [...prev, fingerprint]
                 }
@@ -63,7 +62,7 @@ export default function FingerPrint() {
 
     return (
         <View style={styles.container}>
-            <StatusBar style="light" backgroundColor="#00D09E" translucent={false} />
+            <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
             <Header title="Fingerprint"  />
 
             <View style={styles.contentBox}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Alert, Image } from 'react-native'
+import { View, Text, StyleSheet, Alert, Image, StatusBar } from 'react-native'
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle'
 import UpdateButton from '@/componenets/Button/Button'
 import Theme from '@/theme'
@@ -45,6 +45,8 @@ const FingerprintDetails: React.FC<FingerprintDetailsProps> = ({ route, navigati
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor={Theme.colors.highlight} translucent={false} />
+
       <Header title={fingerprint.name} />
 
       <View style={styles.contentBox}>

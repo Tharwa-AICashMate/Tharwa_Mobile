@@ -88,7 +88,7 @@ export default function AddFingerPrint() {
 
     return (
         <View style={styles.container}>
-            <StatusBar style="light" backgroundColor="#00D09E" translucent={false} />
+            <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
             <Header title="Add Fingerprint" />
 
             <View style={styles.contentBox}>

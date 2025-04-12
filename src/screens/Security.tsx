@@ -33,7 +33,7 @@ interface SecurityProps {
 const Security: React.FC<SecurityProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <StatusBar style="light" backgroundColor="#00D09E" translucent={false} />
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
       <Header title="Security" />
 
       <View style={styles.contentBox}>

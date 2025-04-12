@@ -95,7 +95,7 @@ export default function ChangePin() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#00D09E" translucent={false} />
+      <StatusBar barStyle="light-content" backgroundColor={Theme.colors.highlight} translucent={false} />
       <Header title="Change Pin" />
 
       <View style={styles.content}>

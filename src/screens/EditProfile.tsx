@@ -36,7 +36,7 @@ const Profile: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" backgroundColor="#00D09E" translucent={false} />
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
       <Header title="Edit My Profile" />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
