@@ -15,6 +15,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Theme from '@/theme';
 
 // Define the navigation param list
 type RootStackParamList = {
@@ -142,11 +143,11 @@ export default function ChangePin() {
 const styles: Styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00D09E',
+    backgroundColor: Theme.colors.highlight,
   },
   content: {
     flex: 1,
-    backgroundColor: '#F1FFF3',
+    backgroundColor: Theme.colors.background,
     borderTopLeftRadius: 60,
     borderTopRightRadius: 60,
     padding: 20,
@@ -159,7 +160,7 @@ const styles: Styles = StyleSheet.create({
     fontWeight: '500',
   },
   inputContainer: {
-    backgroundColor: '#DFF7E2',
+    backgroundColor: Theme.colors.secondery,
     borderRadius: 20,
     marginBottom: 20,
     paddingHorizontal: 15,

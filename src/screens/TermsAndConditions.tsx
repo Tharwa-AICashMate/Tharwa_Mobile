@@ -10,6 +10,7 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+import Theme from '@/theme';
 
 const TermsAndConditions: React.FC = () => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -140,11 +141,11 @@ export default TermsAndConditions;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00D09E',
+    backgroundColor: Theme.colors.highlight,
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: '#F1FFF3',
+    backgroundColor: Theme.colors.background,
     borderTopLeftRadius: 60,
     borderTopRightRadius: 60,
     paddingTop: 40,
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   checkboxChecked: {
-    backgroundColor: '#00D09E',
+    backgroundColor: Theme.colors.highlight,
   },
   checkmark: {
     color: 'white',
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   acceptButton: {
-    backgroundColor: '#00D09E',
+    backgroundColor: Theme.colors.highlight,
     borderRadius: 24,
     paddingVertical: 12,
     alignItems: 'center',

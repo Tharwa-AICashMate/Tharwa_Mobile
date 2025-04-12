@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Theme from '@/theme';
 
 type RootStackParamList = {
   MainApp: { screen: string; params?: { screen: string } };
@@ -44,7 +45,7 @@ export default GreenScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00D09E',
+    backgroundColor: Theme.colors.highlight,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     width: '60%',
-    color: '#DFF7E2',
+    color: Theme.colors.secondery,
     fontWeight: '600',
     textAlign: 'center',
   },

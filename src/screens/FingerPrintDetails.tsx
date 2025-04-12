@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, Alert, Image } from 'react-native'
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle'
 import UpdateButton from '@/componenets/Button/Button'
+import Theme from '@/theme'
 
 type Fingerprint = {
   id: string
@@ -65,11 +66,11 @@ const FingerprintDetails: React.FC<FingerprintDetailsProps> = ({ route, navigati
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00D09E',
+    backgroundColor: Theme.colors.highlight,
   },
   contentBox: {
     flex: 1,
-    backgroundColor: '#F1FFF3',
+    backgroundColor: Theme.colors.background,
     borderTopLeftRadius: 60,
     borderTopRightRadius: 60,
     alignItems: 'center',

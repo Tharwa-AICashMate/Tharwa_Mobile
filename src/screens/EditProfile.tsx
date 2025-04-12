@@ -15,8 +15,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import ProfileHeader from '../componenets/ProfileHeader/ProfileHeader';
 import Header from '../componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import UpdateButton from '@/componenets/Button/Button';
+import Theme from '@/theme';
 
-// Define your navigation stack
 type RootStackParamList = {
   Profile: undefined;
   ChangePin: undefined;
@@ -85,7 +85,7 @@ const Profile: React.FC = () => {
               <Switch
                 value={pushNotifications}
                 onValueChange={setPushNotifications}
-                trackColor={{ false: '#ccc', true: '#00D09E' }}
+                trackColor={{ false: '#ccc', true: Theme.colors.highlight }}
                 thumbColor={pushNotifications ? '#fff' : '#f4f3f4'}
               />
             </View>
@@ -95,7 +95,7 @@ const Profile: React.FC = () => {
               <Switch
                 value={darkTheme}
                 onValueChange={setDarkTheme}
-                trackColor={{ false: '#ccc', true: '#00D09E' }}
+                trackColor={{ false: '#ccc', true: Theme.colors.highlight }}
                 thumbColor={darkTheme ? '#fff' : '#f4f3f4'}
               />
             </View>
@@ -103,7 +103,6 @@ const Profile: React.FC = () => {
             <UpdateButton
               onPress={() => {
                 console.log('Profile updated');
-                // You can add API logic or navigation here
               }}
               title="Update Profile"
             />
@@ -119,7 +118,7 @@ export default Profile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00D09E',
+    backgroundColor: Theme.colors.highlight,
   },
   scrollContent: {
     flexGrow: 1,
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
   },
   contentBox: {
     flex: 1,
-    backgroundColor: '#F1FFF3',
+    backgroundColor: Theme.colors.background,
     borderTopLeftRadius: 60,
     borderTopRightRadius: 60,
     alignItems: 'center',
@@ -158,7 +157,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   input: {
-    backgroundColor: '#DFF7E2',
+    backgroundColor: Theme.colors.secondery,
     borderRadius: 15,
     padding: 12,
     fontSize: 14,
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
   },
   switchLabel: {
     fontSize: 16,
-    color: '#333',
+    color: Theme.colors.textLight,
     fontWeight: '500',
   },
 });

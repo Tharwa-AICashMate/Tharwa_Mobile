@@ -22,6 +22,8 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { StackScreenProps } from '@react-navigation/stack';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import FingerprintDetails from '@/screens/FingerPrintDetails';
+import AddFingerPrint from '@/screens/AddFingerPrint';
+import Theme from '@/theme';
 
 // Define types for Profile Stack and Bottom Tabs
 type ProfileStackParamList = {
@@ -62,6 +64,7 @@ function ProfileStackScreen() {
       <ProfileStack.Screen name="FingerPrint" component={FingerPrint} />
       <ProfileStack.Screen name="TermsAndConditions" component={TermsAndConditions} />
       <ProfileStack.Screen name="FingerprintDetails" component={FingerprintDetails} />
+      <ProfileStack.Screen name="AddFingerPrint" component={AddFingerPrint} />
     </ProfileStack.Navigator>
   );
 }
@@ -100,7 +103,7 @@ export default function BottomTabs() {
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'black',
         tabBarStyle: {
-          backgroundColor: '#dfffee',
+          backgroundColor: Theme.colors.secondery,
           borderTopLeftRadius: 60,
           borderTopRightRadius: 60,
           paddingBottom: 10,
@@ -124,7 +127,7 @@ export default function BottomTabs() {
 
 const styles = StyleSheet.create({
   activeTabIcon: {
-    backgroundColor: '#00D09E',
+    backgroundColor: Theme.colors.primary,
     borderRadius: 22,
     padding: 13,
     justifyContent: 'center',

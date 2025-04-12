@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import ProfileHeader from '../componenets/ProfileHeader/ProfileHeader';
 import Header from '../componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
+import Theme from '@/theme';
 type RootStackParamList = {
   EditProfile: undefined;
   Security: undefined;
@@ -70,7 +70,7 @@ export default Profile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00D09E',
+    backgroundColor: Theme.colors.highlight,
   },
   scrollContent: {
     flexGrow: 1,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   contentBox: {
     flex: 1,
-    backgroundColor: '#F1FFF3',
+    backgroundColor:Theme.colors.background,
     borderTopLeftRadius: 60,
     borderTopRightRadius: 60,
     alignItems: 'center',
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
   },
   menuText: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '600',
+    color:Theme.colors.textLight,
   },
 });

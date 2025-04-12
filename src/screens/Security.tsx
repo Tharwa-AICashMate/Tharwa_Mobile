@@ -10,6 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+import Theme from '@/theme';
 
 // Define the navigation stack param list
 type RootStackParamList = {
@@ -44,7 +45,7 @@ const Security: React.FC<SecurityProps> = ({ navigation }) => {
           onPress={() => navigation.navigate('ChangePin')}
         >
           <Text style={styles.optionText}>Change Pin</Text>
-          <Ionicons name="chevron-forward" size={20} color="#000" />
+          <Ionicons name="chevron-forward" size={20} color={Theme.colors.textLight} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -52,7 +53,7 @@ const Security: React.FC<SecurityProps> = ({ navigation }) => {
           onPress={() => navigation.navigate('FingerPrint')}
         >
           <Text style={styles.optionText}>Fingerprint</Text>
-          <Ionicons name="chevron-forward" size={20} color="#000" />
+          <Ionicons name="chevron-forward" size={20} color={Theme.colors.textLight} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -60,7 +61,7 @@ const Security: React.FC<SecurityProps> = ({ navigation }) => {
           onPress={() => navigation.navigate('TermsAndConditions')}
         >
           <Text style={styles.optionText}>Terms And Conditions</Text>
-          <Ionicons name="chevron-forward" size={20} color="#000" />
+          <Ionicons name="chevron-forward" size={20} color={Theme.colors.textLight} />
         </TouchableOpacity>
       </View>
     </View>
@@ -72,11 +73,11 @@ export default Security;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00D09E',
+    backgroundColor: Theme.colors.highlight,
   },
   contentBox: {
     flex: 1,
-    backgroundColor: '#F1FFF3',
+    backgroundColor: Theme.colors.background,
     borderTopLeftRadius: 60,
     borderTopRightRadius: 60,
     paddingVertical: 30,
@@ -86,6 +87,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '800',
     marginBottom: 30,
+    color:Theme.colors.textLight
   },
   option: {
     flexDirection: 'row',
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 15,
-    color: '#000',
+    color: Theme.colors.textLight,
     fontWeight: '600',
   },
 });
