@@ -6,6 +6,7 @@ import BottomTabs from './src/componenets/BottomNav/BottomTabs';
 import GreenScreen from '@/screens/GreenScreen';
 import GreenScreenFP from '@/screens/GreenScreenFP';
 import GreenScreenSFP from '@/screens/GreenScreenSFP';
+import Theme from '@/theme';
 
 const RootStack = createNativeStackNavigator();
 
@@ -35,6 +36,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F1FFF3',
+    backgroundColor: Theme.colors.highlight,
   },
 });
