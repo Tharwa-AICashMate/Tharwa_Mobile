@@ -1,0 +1,109 @@
+{
+  "userSettings": {
+    "notificationSettings": {
+      "generalNotification": false,
+      "sound": true,
+      "soundCall": true,
+      "vibrate": true,
+      "transactionUpdate": true,
+      "expenseReminder": true,
+      "budgetNotifications": true,
+      "lowBalanceAlerts": true
+    },
+    "language": "en",
+    "theme": "light",
+    "currency": "USD",
+    "biometricEnabled": false
+  },
+  "password": {
+    "currentPassword": "123456789"
+  },
+  "faqs": [
+    {
+      "id": "1",
+      "question": "How do I start investing?",
+      "answer": "To begin investing, create an account, add funds to your wallet, and choose from various investment options available on our platform.",
+      "category": "general"
+    },
+    {
+      "id": "2",
+      "question": "How much does it cost to use Finvesto?",
+      "answer": "Our platform is free to use. We only charge minimal fees on transactions and successful investments.",
+      "category": "general"
+    },
+    {
+      "id": "3",
+      "question": "How to contact support?",
+      "answer": "You can reach our support team through the 'Contact Us' button in the Help Center, or via any of our support channels.",
+      "category": "general"
+    },
+    {
+      "id": "4",
+      "question": "How can I reset my password if I forget it?",
+      "answer": "Click on 'Forgot Password' on the login screen and follow the instructions sent to your registered email.",
+      "category": "account"
+    },
+    {
+      "id": "5",
+      "question": "How do I update my contact information?",
+      "answer": "Go to 'Profile', select 'Edit Profile', update your information, and save changes.",
+      "category": "account"
+    },
+    {
+      "id": "6",
+      "question": "How can I update my settings within the application?",
+      "answer": "Navigate to 'Settings' from your profile page to manage notifications, security, and other preferences.",
+      "category": "account"
+    },
+    {
+      "id": "7",
+      "question": "How can I delete my account?",
+      "answer": "Go to 'Settings', select 'Account', and click on 'Delete Account'. Follow the confirmation steps to complete the process.",
+      "category": "account"
+    },
+    {
+      "id": "8",
+      "question": "How do I access my expense history?",
+      "answer": "Go to 'Transactions' in the main menu to view your complete expense history and filter by date or category.",
+      "category": "services"
+    },
+    {
+      "id": "9",
+      "question": "Can I use the app offline?",
+      "answer": "Some features are available offline, but you'll need an internet connection for real-time updates and transactions.",
+      "category": "services"
+    }
+  ],
+  "supportChannels": [
+    {
+      "id": "1",
+      "name": "Customer Service",
+      "icon": "headset",
+      "link": "tel:+1234567890"
+    },
+    {
+      "id": "2",
+      "name": "Website",
+      "icon": "globe",
+      "link": "https://example.com/support"
+    },
+    {
+      "id": "3",
+      "name": "Facebook",
+      "icon": "facebook",
+      "link": "https://facebook.com/example"
+    },
+    {
+      "id": "4",
+      "name": "WhatsApp",
+      "icon": "whatsapp",
+      "link": "https://wa.me/1234567890"
+    },
+    {
+      "id": "5",
+      "name": "Instagram",
+      "icon": "instagram",
+      "link": "https://instagram.com/example"
+    }
+  ]
+}
