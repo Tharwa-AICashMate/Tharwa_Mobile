@@ -1,4 +1,4 @@
-// screens/Security.tsx
+
 import React from 'react';
 import {
   StatusBar,
@@ -10,8 +10,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
-
-// Define the navigation stack param list
+import Theme from '@/theme';
+import styles from './Security.styles';
 type RootStackParamList = {
   ChangePin: undefined;
   FingerPrint: undefined;
@@ -19,13 +19,13 @@ type RootStackParamList = {
   Security: undefined;
 };
 
-// Define the navigation prop type for the Security screen
+
 type SecurityNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Security'
 >;
 
-// Props interface
+
 interface SecurityProps {
   navigation: SecurityNavigationProp;
 }
@@ -33,7 +33,7 @@ interface SecurityProps {
 const Security: React.FC<SecurityProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <StatusBar style="light" backgroundColor="#00D09E" translucent={false} />
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
       <Header title="Security" />
 
       <View style={styles.contentBox}>
@@ -44,7 +44,7 @@ const Security: React.FC<SecurityProps> = ({ navigation }) => {
           onPress={() => navigation.navigate('ChangePin')}
         >
           <Text style={styles.optionText}>Change Pin</Text>
-          <Ionicons name="chevron-forward" size={20} color="#000" />
+          <Ionicons name="chevron-forward" size={20} color={Theme.colors.textLight} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -52,7 +52,7 @@ const Security: React.FC<SecurityProps> = ({ navigation }) => {
           onPress={() => navigation.navigate('FingerPrint')}
         >
           <Text style={styles.optionText}>Fingerprint</Text>
-          <Ionicons name="chevron-forward" size={20} color="#000" />
+          <Ionicons name="chevron-forward" size={20} color={Theme.colors.textLight} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -60,7 +60,7 @@ const Security: React.FC<SecurityProps> = ({ navigation }) => {
           onPress={() => navigation.navigate('TermsAndConditions')}
         >
           <Text style={styles.optionText}>Terms And Conditions</Text>
-          <Ionicons name="chevron-forward" size={20} color="#000" />
+          <Ionicons name="chevron-forward" size={20} color={Theme.colors.textLight} />
         </TouchableOpacity>
       </View>
     </View>
@@ -69,36 +69,3 @@ const Security: React.FC<SecurityProps> = ({ navigation }) => {
 
 export default Security;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#00D09E',
-  },
-  contentBox: {
-    flex: 1,
-    backgroundColor: '#F1FFF3',
-    borderTopLeftRadius: 60,
-    borderTopRightRadius: 60,
-    paddingVertical: 30,
-    paddingHorizontal: 25,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '800',
-    marginBottom: 30,
-  },
-  option: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2F4E7',
-    marginBottom: 10,
-  },
-  optionText: {
-    fontSize: 15,
-    color: '#000',
-    fontWeight: '600',
-  },
-});

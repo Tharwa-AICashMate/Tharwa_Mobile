@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Theme from '@/theme';
+import styles from './GreenScreen.styles';
 
 type RootStackParamList = {
   MainApp: { screen: string; params?: { screen: string } };
@@ -30,7 +32,7 @@ const GreenScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/success.png')}
+        source={require('../../../../../assets/success.png')}
         style={styles.image}
         resizeMode="contain"
       />
@@ -41,24 +43,3 @@ const GreenScreen: React.FC = () => {
 
 export default GreenScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#00D09E',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  image: {
-    width: 150,
-    height: 150,
-    marginBottom: 30,
-  },
-  text: {
-    fontSize: 20,
-    width: '60%',
-    color: '#DFF7E2',
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-});

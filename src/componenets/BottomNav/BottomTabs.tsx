@@ -3,26 +3,28 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { View, StyleSheet } from 'react-native';
-import Profile from '../../screens/Profile';
+import Profile from '../../screens/Profile/Profile';
 import Home from '../../screens/Home';
 import Stats from '../../screens/Stats';
 import Transactions from '../../screens/Transactions';
 import Portfolio from '../../screens/Portfolio';
-import EditProfile from '../../screens/EditProfile';
-import Security from '../../screens/Security';
+import EditProfile from '../../screens/EditProfile/EditProfile';
+import Security from '../../screens/Security/Security';
 import Settings from '../../screens/Settings';
 import Help from '../../screens/Help';
 import Logout from '../../screens/Logout';
 import Notification from '@/screens/Notification';
-import ChangePin from '@/screens/ChangePin';
-import FingerPrint from '@/screens/FingerPrint';
-import TermsAndConditions from '@/screens/TermsAndConditions';
-import GreenScreen from '@/screens/GreenScreen';
+import ChangePin from '@/screens/Security/ChangePin/ChangePin';
+import FingerPrint from '@/screens/Security/FingerPrint/FingerPrint';
+import TermsAndConditions from '@/screens/Security/TermsAndConditions/TermsAndConditions';
+import GreenScreen from '@/screens/Security/ChangePin/GreenScreen/GreenScreen';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { StackScreenProps } from '@react-navigation/stack';
 import { NavigatorScreenParams } from '@react-navigation/native';
-
-// Define types for Profile Stack and Bottom Tabs
+import FingerprintDetails from '@/screens/Security/FingerPrint/FingerPrintDetails/FingerPrintDetails';
+import AddFingerPrint from '@/screens/Security/FingerPrint/AddFingerPrint/AddFingerPrint';
+import Theme from '@/theme';
+import styles from './BottomTabs.styles';
 type ProfileStackParamList = {
   ProfileMain: undefined;
   EditProfile: undefined;
@@ -60,6 +62,8 @@ function ProfileStackScreen() {
       <ProfileStack.Screen name="ChangePin" component={ChangePin} />
       <ProfileStack.Screen name="FingerPrint" component={FingerPrint} />
       <ProfileStack.Screen name="TermsAndConditions" component={TermsAndConditions} />
+      <ProfileStack.Screen name="FingerprintDetails" component={FingerprintDetails} />
+      <ProfileStack.Screen name="AddFingerPrint" component={AddFingerPrint} />
     </ProfileStack.Navigator>
   );
 }
@@ -98,7 +102,7 @@ export default function BottomTabs() {
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'black',
         tabBarStyle: {
-          backgroundColor: '#dfffee',
+          backgroundColor: Theme.colors.secondery,
           borderTopLeftRadius: 60,
           borderTopRightRadius: 60,
           paddingBottom: 10,
@@ -120,14 +124,4 @@ export default function BottomTabs() {
   );
 }
 
-const styles = StyleSheet.create({
-  activeTabIcon: {
-    backgroundColor: '#00D09E',
-    borderRadius: 22,
-    padding: 13,
-    justifyContent: 'center',
-    alignItems: 'center',
-    minWidth: 55,
-    minHeight: 55,
-  },
-});
+

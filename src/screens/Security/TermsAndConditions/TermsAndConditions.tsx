@@ -10,6 +10,9 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+import Theme from '@/theme';
+import styles from './TermsAndConditions.styles';
+
 
 const TermsAndConditions: React.FC = () => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -19,7 +22,6 @@ const TermsAndConditions: React.FC = () => {
   };
 
   const handleAccept = () => {
-    // Handle the accept action here
     console.log('Terms accepted:', isChecked);
   };
 
@@ -56,7 +58,7 @@ const TermsAndConditions: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" backgroundColor="#00D09E" translucent={false} />
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
       <Header title="Terms And Conditions" />
       <View style={styles.contentContainer}>
         <ScrollView style={styles.scrollView}>
@@ -136,98 +138,3 @@ const TermsAndConditions: React.FC = () => {
 };
 
 export default TermsAndConditions;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#00D09E',
-  },
-  contentContainer: {
-    flex: 1,
-    backgroundColor: '#F1FFF3',
-    borderTopLeftRadius: 60,
-    borderTopRightRadius: 60,
-    paddingTop: 40,
-    paddingHorizontal: 25,
-    marginTop: 10,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  paragraphContainer: {
-    marginBottom: 16,
-  },
-  fixedWidthText: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontFamily: 'monospace',
-    color: '#333',
-  },
-  listContainer: {
-    marginBottom: 16,
-  },
-  listItem: {
-    fontSize: 14,
-    lineHeight: 22,
-    paddingLeft: 8,
-    color: '#333',
-  },
-  readMoreText: {
-    fontSize: 14,
-    marginVertical: 20,
-    textAlign: 'left',
-  },
-  link: {
-    color: '#3299FF',
-    textDecorationLine: 'underline',
-  },
-  footer: {
-    paddingVertical: 20,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  checkbox: {
-    width: 24,
-    height: 24,
-    borderWidth: 2,
-    borderColor: '#00D09E',
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  checkboxChecked: {
-    backgroundColor: '#00D09E',
-  },
-  checkmark: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  checkboxLabel: {
-    fontSize: 14,
-  },
-  acceptButton: {
-    backgroundColor: '#00D09E',
-    borderRadius: 24,
-    paddingVertical: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  acceptButtonDisabled: {
-    backgroundColor: '#A0E5D3',
-  },
-  acceptButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});

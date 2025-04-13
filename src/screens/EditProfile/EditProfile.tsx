@@ -1,22 +1,21 @@
-// screens/Profile.tsx
 import React, { useState } from 'react';
 import {
   View,
   Text,
   TextInput,
   Switch,
-  StyleSheet,
   ScrollView,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import ProfileHeader from '../componenets/ProfileHeader/ProfileHeader';
-import Header from '../componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+import ProfileHeader from '../../componenets/ProfileHeader/ProfileHeader';
+import Header from '../../componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import UpdateButton from '@/componenets/Button/Button';
+import Theme from '@/theme';
+import styles from './Profile.styles';
 
-// Define your navigation stack
 type RootStackParamList = {
   Profile: undefined;
   ChangePin: undefined;
@@ -36,7 +35,7 @@ const Profile: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" backgroundColor="#00D09E" translucent={false} />
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
       <Header title="Edit My Profile" />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -85,7 +84,7 @@ const Profile: React.FC = () => {
               <Switch
                 value={pushNotifications}
                 onValueChange={setPushNotifications}
-                trackColor={{ false: '#ccc', true: '#00D09E' }}
+                trackColor={{ false: '#ccc', true: Theme.colors.highlight }}
                 thumbColor={pushNotifications ? '#fff' : '#f4f3f4'}
               />
             </View>
@@ -95,7 +94,7 @@ const Profile: React.FC = () => {
               <Switch
                 value={darkTheme}
                 onValueChange={setDarkTheme}
-                trackColor={{ false: '#ccc', true: '#00D09E' }}
+                trackColor={{ false: '#ccc', true: Theme.colors.highlight }}
                 thumbColor={darkTheme ? '#fff' : '#f4f3f4'}
               />
             </View>
@@ -103,7 +102,6 @@ const Profile: React.FC = () => {
             <UpdateButton
               onPress={() => {
                 console.log('Profile updated');
-                // You can add API logic or navigation here
               }}
               title="Update Profile"
             />
@@ -115,64 +113,3 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#00D09E',
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingTop: 50,
-  },
-  contentBox: {
-    flex: 1,
-    backgroundColor: '#F1FFF3',
-    borderTopLeftRadius: 60,
-    borderTopRightRadius: 60,
-    alignItems: 'center',
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-  },
-  profileContent: {
-    alignItems: 'center',
-    marginTop: -70,
-    width: '110%',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    alignSelf: 'flex-start',
-    marginVertical: 20,
-    marginLeft: '10%',
-    color: '#000',
-  },
-  inputGroup: {
-    width: '80%',
-    marginBottom: 15,
-  },
-  inputLabel: {
-    fontSize: 15,
-    marginBottom: 8,
-    fontWeight: '600',
-    color: '#333',
-  },
-  input: {
-    backgroundColor: '#DFF7E2',
-    borderRadius: 15,
-    padding: 12,
-    fontSize: 14,
-  },
-  switchRow: {
-    width: '80%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  switchLabel: {
-    fontSize: 16,
-    color: '#333',
-    fontWeight: '500',
-  },
-});

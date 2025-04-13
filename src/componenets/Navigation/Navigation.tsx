@@ -2,12 +2,12 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import EditProfile from '../../screens/EditProfile';
-import Security from '../../screens/Security';
+import EditProfile from '../../screens/EditProfile/EditProfile';
+import Security from '../../screens/Security/Security';
 import Settings from '../../screens/Settings';
 import Help from '../../screens/Help';
 import Login from '../../screens/Logout';
-import Profile from '@/screens/Profile';
+import Profile from '@/screens/Profile/Profile';
 import Notification from '@/screens/Notification';
 
 export type RootStackParamList = {

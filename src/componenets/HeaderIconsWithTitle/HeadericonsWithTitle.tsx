@@ -2,18 +2,28 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { BottomTabParamList } from '@/navigation/BottomTabs'; // Adjust the path based on where your types are defined
-
+import Theme from '@/theme';
+import styles from './HeadericonsWithTitle.styles'
 interface HeaderProps {
   title: string;
+  goBackTo?: string; 
 }
 
-export default function Header({ title }: HeaderProps) {
-  const navigation = useNavigation<NavigationProp<any>>(); 
+export default function Header({ title, goBackTo }: HeaderProps) {
+  const navigation = useNavigation<NavigationProp<any>>();
+
+  const handleBack = () => {
+    if (goBackTo) {
+      navigation.navigate(goBackTo);
+    } else {
+      navigation.goBack();
+    }
+  };
+
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={24} color="white" />
+      <TouchableOpacity onPress={handleBack}>
+        <Ionicons name="arrow-back" size={24} color={Theme.colors.secondery} />
       </TouchableOpacity>
       <Text style={styles.title}>{title}</Text>
       <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
@@ -28,26 +38,4 @@ export default function Header({ title }: HeaderProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    height: 60,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    marginVertical: 20,
-  },
-  bellIcon: {
-    backgroundColor: '#DFF7E2',
-    padding: 4,
-    borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    color: 'black',
-    fontSize: 20,
-    fontWeight: '900',
-  },
-});
+
