@@ -26,7 +26,7 @@ export default function App() {
     LeagueSpartan_400Regular,
   });
 
-  if (!fontsLoaded) return null; // Prevent rendering before fonts are loaded
+  if (!fontsLoaded) return null; 
 
   return (
     <NavigationContainer>
