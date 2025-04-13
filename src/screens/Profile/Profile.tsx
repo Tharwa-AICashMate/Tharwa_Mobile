@@ -3,16 +3,17 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import ProfileHeader from '../componenets/ProfileHeader/ProfileHeader';
-import Header from '../componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+import ProfileHeader from '../../componenets/ProfileHeader/ProfileHeader';
+import Header from '../../componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Theme from '@/theme';
+import styles from './ProfileMenu.styles'; 
+
 type RootStackParamList = {
   EditProfile: undefined;
   Security: undefined;
@@ -66,45 +67,3 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, label, onPress }) => {
 };
 
 export default Profile;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Theme.colors.highlight,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingTop: 50,
-  },
-  contentBox: {
-    flex: 1,
-    backgroundColor:Theme.colors.background,
-    borderTopLeftRadius: 60,
-    borderTopRightRadius: 60,
-    alignItems: 'center',
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-  },
-  profileContent: {
-    alignItems: 'center',
-    marginTop: -70,
-    width: '110%',
-  },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-    width: '80%',
-  },
-  iconWrapper: {
-    backgroundColor: '#00aaff',
-    padding: 10,
-    borderRadius: 30,
-    marginRight: 15,
-  },
-  menuText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color:Theme.colors.textLight,
-  },
-});

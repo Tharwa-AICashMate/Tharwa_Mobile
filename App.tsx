@@ -3,9 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, StyleSheet } from 'react-native';
 import BottomTabs from './src/componenets/BottomNav/BottomTabs';
-import GreenScreen from '@/screens/GreenScreen';
-import GreenScreenFP from '@/screens/GreenScreenFP';
-import GreenScreenSFP from '@/screens/GreenScreenSFP';
+import GreenScreen from '@/screens/Security/ChangePin/GreenScreen/GreenScreen';
+import GreenScreenFP from '@/screens/Security/FingerPrint/FingerPrintDetails/GreenScreenFP/GreenScreenFP';
+import GreenScreenSFP from '@/screens/Security/FingerPrint/AddFingerPrint/GreenScreenSFP/GreenScreenSFP';
 import Theme from '@/theme';
 
 const RootStack = createNativeStackNavigator();

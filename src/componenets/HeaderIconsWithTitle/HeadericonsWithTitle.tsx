@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import Theme from '@/theme';
-
+import styles from './HeadericonsWithTitle.styles'
 interface HeaderProps {
   title: string;
   goBackTo?: string; 
@@ -38,27 +38,4 @@ export default function Header({ title, goBackTo }: HeaderProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    height: 60,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    marginVertical: 20,
-  },
-  bellIcon: {
-    backgroundColor: Theme.colors.secondery,
-    color:Theme.colors.textLight,
-    padding: 4,
-    borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    color: Theme.colors.textLight,
-    fontSize: 20,
-    fontWeight: '900',
-  },
-});
+

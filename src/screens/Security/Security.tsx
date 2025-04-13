@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import Theme from '@/theme';
-
+import styles from './Security.styles';
 type RootStackParamList = {
   ChangePin: undefined;
   FingerPrint: undefined;
@@ -69,37 +69,3 @@ const Security: React.FC<SecurityProps> = ({ navigation }) => {
 
 export default Security;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Theme.colors.highlight,
-  },
-  contentBox: {
-    flex: 1,
-    backgroundColor: Theme.colors.background,
-    borderTopLeftRadius: 60,
-    borderTopRightRadius: 60,
-    paddingVertical: 30,
-    paddingHorizontal: 25,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '800',
-    marginBottom: 30,
-    color:Theme.colors.textLight
-  },
-  option: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2F4E7',
-    marginBottom: 10,
-  },
-  optionText: {
-    fontSize: 15,
-    color: Theme.colors.textLight,
-    fontWeight: '600',
-  },
-});
