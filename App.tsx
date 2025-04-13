@@ -47,7 +47,13 @@ import CategoryDetailScreen from '@/screens/CategoryDetails';
 import AddExpensesScreen from '@/screens/AddExpense';
 
 import { Provider } from 'react-redux';
-import { store } from '@/redux/store';
+import { store } from './src/store/store';
+import SettingsScreen from '@/screens/SettingsScreen';
+import HelpCenterScreen from '@/screens/HelpCenterScreen';
+import PasswordSettingsScreen from '@/screens/PasswordSettingsScreen';
+import NotificationSettingsScreen from '@/screens/NotificationSettingsScreen';
+import DeleteAccountScreen from '@/screens/DeleteAccountScreen';
+import SupportChannelsScreen from '@/screens/SupportChannelsScreen';
 
 const RootStack = createNativeStackNavigator();
 
@@ -100,6 +106,12 @@ export default function App() {
             <RootStack.Screen name="PasswordChanged" component={PasswordChangedScreen} />
             <RootStack.Screen name="Fingerprint" component={FingerprintScreen} />
             <RootStack.Screen name="OnBoarding" component={OnBoardingNavigation} />
+            <RootStack.Screen name="SettingsScreen" component={SettingsScreen} />
+            <RootStack.Screen name="HelpCenterScreen" component={HelpCenterScreen} />
+            <RootStack.Screen name="PasswordSettingsScreen" component={PasswordSettingsScreen} />
+            <RootStack.Screen name="NotificationSettingsScreen" component={NotificationSettingsScreen} />
+            <RootStack.Screen name="DeleteAccountScreen" component={DeleteAccountScreen} />
+            <RootStack.Screen name="SupportChannelsScreen" component={SupportChannelsScreen} />
 
             {/* Security Screens */}
             <RootStack.Screen name="GreenScreen" component={GreenScreen} />

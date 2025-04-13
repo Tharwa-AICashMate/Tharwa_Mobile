@@ -45,8 +45,8 @@ const Profile: React.FC = () => {
             <ProfileHeader />
             <MenuItem icon="person" label="Edit Profile" onPress={() => navigation.navigate('EditProfile')} />
             <MenuItem icon="shield-checkmark" label="Security" onPress={() => navigation.navigate('Security')} />
-            <MenuItem icon="settings" label="Setting" onPress={() => navigation.navigate('Settings')} />
-            <MenuItem icon="help-circle" label="Help" onPress={() => navigation.navigate('Help')} />
+            <MenuItem icon="settings" label="Settings" onPress={() => navigation.navigate('SettingsScreen')} />
+            <MenuItem icon="help-circle" label="Help" onPress={() => navigation.navigate('HelpCenterScreen')} />
             <MenuItem icon="log-out-outline" label="Logout" onPress={() => navigation.navigate('Logout')} />
           </View>
         </View>

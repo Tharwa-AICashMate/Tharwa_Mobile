@@ -9,6 +9,8 @@ import Help from '../../screens/Help';
 import Login from '../../screens/Logout';
 import Profile from '@/screens/Profile/Profile';
 import Notification from '@/screens/Notification';
+import SettingsScreen from '@/screens/SettingsScreen';
+import HelpCenterScreen from '@/screens/HelpCenterScreen';
 
 export type RootStackParamList = {
   Profile: undefined;
@@ -29,8 +31,8 @@ const App: React.FC = () => {
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="Security" component={Security} />
-        <Stack.Screen name="Settings" component={Settings} />
-        <Stack.Screen name="Help" component={Help} />
+        <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+        <Stack.Screen name="HelpCenterScreen" component={HelpCenterScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Notification" component={Notification} />
       </Stack.Navigator>

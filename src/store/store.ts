@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-
+import settingsReducer from './slices/settingsSlice';
+import helpCenterReducer from './slices/helpCenterSlice';
 export const store = configureStore({
   reducer: {
+    settings: settingsReducer,
+    helpCenter: helpCenterReducer,
   },
 });
 
