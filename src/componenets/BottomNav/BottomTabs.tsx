@@ -25,6 +25,9 @@ import FingerprintDetails from '@/screens/Security/FingerPrint/FingerPrintDetail
 import AddFingerPrint from '@/screens/Security/FingerPrint/AddFingerPrint/AddFingerPrint';
 import Theme from '@/theme';
 import styles from './BottomTabs.styles';
+import OnBoardingNavigation from '@/navigation/onBoardingNavigation';
+import OnboardingScreen from '@/screens/onboarding/OnboardingScreen';
+import LoginScreen from '@/screens/Authentication/LoginScreen';
 type ProfileStackParamList = {
   ProfileMain: undefined;
   EditProfile: undefined;
@@ -115,7 +118,10 @@ export default function BottomTabs() {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Home" component={Home} />
+
+      {/* <Tab.Screen name="OnBoarding" component={OnboardingScreen} /> */}
+      {/* <Tab.Screen name="Login" component={LoginScreen} /> */}
+      <Tab.Screen name="Home" component={OnboardingScreen} />
       <Tab.Screen name="Stats" component={Stats} />
       <Tab.Screen name="Transactions" component={Transactions} />
       <Tab.Screen name="Portfolio" component={Portfolio} />

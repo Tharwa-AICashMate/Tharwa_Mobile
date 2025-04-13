@@ -12,6 +12,7 @@ import NewPasswordScreen from '@/screens/Authentication/LoginForms/NewPasswordSc
 import SecurityPinScreen from '@/screens/Authentication/LoginForms/SecurityPinScreen';
 import ForgotPasswordScreen from '@/screens/Authentication/LoginForms/ForgotPasswordScreen';
 import CreateAccountScreen from '@/screens/Authentication/LoginForms/CreateAccountScreen';
+import BottomTabs from '@/componenets/BottomNav/BottomTabs';
 
 type RootStackParamList = {
     Launch: undefined;
@@ -36,6 +37,7 @@ type RootStackParamList = {
             headerShown: false,
           }}
         >
+          <Stack.Screen name="Home" component={BottomTabs} />
           <Stack.Screen name="Launch" component={LaunchScreen} />
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />

@@ -31,6 +31,15 @@ import GreenScreenFP from '@/screens/Security/FingerPrint/FingerPrintDetails/Gre
 import GreenScreenSFP from '@/screens/Security/FingerPrint/AddFingerPrint/GreenScreenSFP/GreenScreenSFP';
 import OnBoardingNavigation from '@/navigation/onBoardingNavigation';
 import Theme from '@/theme';
+import LoginScreen from '@/screens/Authentication/LoginScreen';
+import LaunchScreen from '@/screens/LaunchScreen/launchScreen';
+import LoginFormScreen from '@/screens/Authentication/LoginForms/LoginFormScreen';
+import CreateAccountScreen from '@/screens/Authentication/LoginForms/CreateAccountScreen';
+import ForgotPasswordScreen from '@/screens/Authentication/LoginForms/ForgotPasswordScreen';
+import SecurityPinScreen from '@/screens/Authentication/LoginForms/SecurityPinScreen';
+import NewPasswordScreen from '@/screens/Authentication/LoginForms/NewPasswordScreen';
+import PasswordChangedScreen from '@/screens/Authentication/LoginForms/PasswordChangedScreen';
+import FingerprintScreen from '@/screens/Authentication/LoginForms/FingerprintScreen';
 
 const RootStack = createNativeStackNavigator();
 //there is nothing to push
@@ -73,6 +82,15 @@ export default function App() {
 
           {/* Screens outside BottomTabs */}
           <RootStack.Screen name="GreenScreen" component={GreenScreen} />
+          <RootStack.Screen name="Login" component={LoginScreen} />
+          <RootStack.Screen name="Launch" component={LaunchScreen} />
+          <RootStack.Screen name="LoginForm" component={LoginFormScreen} />
+          <RootStack.Screen name="CreateAccount" component={CreateAccountScreen} />
+          <RootStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+          <RootStack.Screen name="SecurityPin" component={SecurityPinScreen} />
+          <RootStack.Screen  name="NewPassword" component={NewPasswordScreen} />
+          <RootStack.Screen  name="PasswordChanged" component={PasswordChangedScreen} />
+          <RootStack.Screen  name="Fingerprint" component={FingerprintScreen}  />
           <RootStack.Screen name="GreenScreenFP" component={GreenScreenFP} />
           <RootStack.Screen name="GreenScreenSFP" component={GreenScreenSFP} />
           <RootStack.Screen name="OnBoarding" component={OnBoardingNavigation} />
