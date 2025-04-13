@@ -31,6 +31,7 @@ import GreenScreenFP from '@/screens/Security/FingerPrint/FingerPrintDetails/Gre
 import GreenScreenSFP from '@/screens/Security/FingerPrint/AddFingerPrint/GreenScreenSFP/GreenScreenSFP';
 import OnBoardingNavigation from '@/navigation/onBoardingNavigation';
 import Theme from '@/theme';
+
 import LoginScreen from '@/screens/Authentication/LoginScreen';
 import LaunchScreen from '@/screens/LaunchScreen/launchScreen';
 import LoginFormScreen from '@/screens/Authentication/LoginForms/LoginFormScreen';
@@ -41,8 +42,15 @@ import NewPasswordScreen from '@/screens/Authentication/LoginForms/NewPasswordSc
 import PasswordChangedScreen from '@/screens/Authentication/LoginForms/PasswordChangedScreen';
 import FingerprintScreen from '@/screens/Authentication/LoginForms/FingerprintScreen';
 
+import CategoriesScreen from '@/screens/Categories';
+import CategoryDetailScreen from '@/screens/CategoryDetails';
+import AddExpensesScreen from '@/screens/AddExpense';
+
+import { Provider } from 'react-redux';
+import { store } from '@/redux/store';
+
 const RootStack = createNativeStackNavigator();
-//there is nothing to push
+
 export default function App() {
   const [interLoaded] = useInterFonts({
     Inter_300Light,
@@ -67,36 +75,45 @@ export default function App() {
   if (!fontsLoaded) return null;
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar style="light" />
-      <NavigationContainer>
-        <RootStack.Navigator screenOptions={{ headerShown: false }}>
-          {/* Tab Navigator inside a stack screen */}
-          <RootStack.Screen name="MainApp">
-            {() => (
-              <View style={styles.container}>
-                <BottomTabs />
-              </View>
-            )}
-          </RootStack.Screen>
+    <Provider store={store}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <StatusBar style="light" />
+        <NavigationContainer>
+          <RootStack.Navigator screenOptions={{ headerShown: false }}>
+            {/* Tabs */}
+            <RootStack.Screen name="MainApp">
+              {() => (
+                <View style={styles.container}>
+                  <BottomTabs />
+                </View>
+              )}
+            </RootStack.Screen>
 
-          {/* Screens outside BottomTabs */}
-          <RootStack.Screen name="GreenScreen" component={GreenScreen} />
-          <RootStack.Screen name="Login" component={LoginScreen} />
-          <RootStack.Screen name="Launch" component={LaunchScreen} />
-          <RootStack.Screen name="LoginForm" component={LoginFormScreen} />
-          <RootStack.Screen name="CreateAccount" component={CreateAccountScreen} />
-          <RootStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-          <RootStack.Screen name="SecurityPin" component={SecurityPinScreen} />
-          <RootStack.Screen  name="NewPassword" component={NewPasswordScreen} />
-          <RootStack.Screen  name="PasswordChanged" component={PasswordChangedScreen} />
-          <RootStack.Screen  name="Fingerprint" component={FingerprintScreen}  />
-          <RootStack.Screen name="GreenScreenFP" component={GreenScreenFP} />
-          <RootStack.Screen name="GreenScreenSFP" component={GreenScreenSFP} />
-          <RootStack.Screen name="OnBoarding" component={OnBoardingNavigation} />
-        </RootStack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+            {/* Authentication & Onboarding */}
+            <RootStack.Screen name="Login" component={LoginScreen} />
+            <RootStack.Screen name="Launch" component={LaunchScreen} />
+            <RootStack.Screen name="LoginForm" component={LoginFormScreen} />
+            <RootStack.Screen name="CreateAccount" component={CreateAccountScreen} />
+            <RootStack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+            <RootStack.Screen name="SecurityPin" component={SecurityPinScreen} />
+            <RootStack.Screen name="NewPassword" component={NewPasswordScreen} />
+            <RootStack.Screen name="PasswordChanged" component={PasswordChangedScreen} />
+            <RootStack.Screen name="Fingerprint" component={FingerprintScreen} />
+            <RootStack.Screen name="OnBoarding" component={OnBoardingNavigation} />
+
+            {/* Security Screens */}
+            <RootStack.Screen name="GreenScreen" component={GreenScreen} />
+            <RootStack.Screen name="GreenScreenFP" component={GreenScreenFP} />
+            <RootStack.Screen name="GreenScreenSFP" component={GreenScreenSFP} />
+
+            {/* Category Flow */}
+            <RootStack.Screen name="Categories" component={CategoriesScreen} />
+            <RootStack.Screen name="CategoryDetail" component={CategoryDetailScreen} />
+            <RootStack.Screen name="AddExpenses" component={AddExpensesScreen} />
+          </RootStack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </Provider>
   );
 }
 

@@ -28,6 +28,7 @@ import styles from './BottomTabs.styles';
 import OnBoardingNavigation from '@/navigation/onBoardingNavigation';
 import OnboardingScreen from '@/screens/onboarding/OnboardingScreen';
 import LoginScreen from '@/screens/Authentication/LoginScreen';
+import CategoriesScreen from '@/screens/Categories';
 type ProfileStackParamList = {
   ProfileMain: undefined;
   EditProfile: undefined;
@@ -124,7 +125,7 @@ export default function BottomTabs() {
       <Tab.Screen name="Home" component={OnboardingScreen} />
       <Tab.Screen name="Stats" component={Stats} />
       <Tab.Screen name="Transactions" component={Transactions} />
-      <Tab.Screen name="Portfolio" component={Portfolio} />
+      <Tab.Screen name="Portfolio" component={CategoriesScreen} />
       <Tab.Screen name="Profile" component={ProfileStackScreen} />
     </Tab.Navigator>
   );
