@@ -1,13 +1,23 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, StyleSheet } from 'react-native';
-import BottomTabs from './src/componenets/BottomNav/BottomTabs';
-import GreenScreen from '@/screens/GreenScreen';
-
-const RootStack = createNativeStackNavigator();
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Inter_300Light,
+    Inter_500Medium,
+    Inter_700Bold,
+
+    Poppins_700Bold,
+    Poppins_600SemiBold,
+    Poppins_500Medium,
+    Poppins_400Regular,
+
+    LeagueSpartan_300Light,
+    LeagueSpartan_400Regular,
+  });
+
+  if (!fontsLoaded) return null;
+
   return (
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
@@ -30,6 +40,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F1FFF3',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
