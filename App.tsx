@@ -1,22 +1,32 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useFonts } from 'expo-font';
+import { Inter_300Light, Inter_500Medium, Inter_700Bold } from '@expo-google-fonts/inter';
+import { Poppins_700Bold, Poppins_600SemiBold, Poppins_500Medium, Poppins_400Regular } from '@expo-google-fonts/poppins';
+import { LeagueSpartan_300Light, LeagueSpartan_400Regular } from '@expo-google-fonts/league-spartan';
+
+import BottomTabs from '../Tharwa_Mobile/src/componenets/BottomNav/BottomTabs'; 
+import GreenScreen from '@/screens/GreenScreen'; 
+
+const RootStack = createNativeStackNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
     Inter_300Light,
     Inter_500Medium,
     Inter_700Bold,
-
     Poppins_700Bold,
     Poppins_600SemiBold,
     Poppins_500Medium,
     Poppins_400Regular,
-
     LeagueSpartan_300Light,
     LeagueSpartan_400Regular,
   });
 
-  if (!fontsLoaded) return null;
+  if (!fontsLoaded) return null; // Prevent rendering before fonts are loaded
 
   return (
     <NavigationContainer>
