@@ -17,6 +17,22 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const handleLogin = () => {
+    // Here be logic of validation 
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: 'MainApp',
+          state: {
+            routes: [{ name: 'Profile' }],
+          },
+        },
+      ],
+    });
+  };
+  
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -49,7 +65,7 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
           onEndIconPress={() => setShowPassword((show) => !show)}
         />
         
-        <TouchableOpacity style={styles.primaryButton} onPress={() => {}}>
+        <TouchableOpacity style={styles.primaryButton} onPress={() => {handleLogin()}}>
           <Text style={styles.primaryButtonText}>Log In</Text>
         </TouchableOpacity>
 

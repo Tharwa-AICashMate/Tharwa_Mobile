@@ -7,16 +7,19 @@ import {
   ScrollView, 
   TouchableOpacity,
   ActivityIndicator,
-  Dimensions
+  Dimensions,
+  StatusBar
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
-import { changePassword, resetPasswordChangeSuccess } from '../store/slices/settingsSlice';
+import { changePassword, resetPasswordChangeSuccess } from '../redux/slices/settingsSlice';
 import PasswordInput from '../componenets/PasswordInput';
 const { height, width } = Dimensions.get('window');
 import { Ionicons } from '@expo/vector-icons';
+import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+import Theme from '@/theme';
 
 type PasswordSettingsScreenNavigationProp = any; 
 
@@ -70,15 +73,8 @@ const PasswordSettingsScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-      <TouchableOpacity onPress={handleBack} >
-          <Ionicons name="chevron-back" size={24} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Password Settings</Text>
-        <TouchableOpacity>
-          <Ionicons name="notifications-outline" size={24} color="#333" />
-        </TouchableOpacity>
-      </View>
+         <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+         <Header title="Password Settings" />
       
       <ScrollView style={styles.scrollView}>
         <View style={styles.section}>

@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
-import { getSupportChannels } from '../store/slices/helpCenterSlice';
+import { getSupportChannels } from '../redux/slices/helpCenterSlice';
 import CategoryTabs from '@/componenets/CategoryTab';
 
 const SupportChannelsScreen: React.FC = () => {

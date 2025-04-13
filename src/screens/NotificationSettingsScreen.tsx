@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Dimensions, TouchableOpacity, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
-import { updateNotificationSettings } from '../store/slices/settingsSlice';
+import { updateNotificationSettings } from '../redux/slices/settingsSlice';
 import SettingsItem from '../componenets/SettingsItem';
 import ToggleSwitch from '../componenets/ToggleSwitch';
 import { NotificationSettings } from '../types/settings.types';
 const { height, width } = Dimensions.get('window');
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+import Theme from '@/theme';
 type SettingsScreenNavigationProp = any;
 
 const NotificationSettingsScreen: React.FC = () => {
@@ -45,15 +47,8 @@ const NotificationSettingsScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-      <TouchableOpacity onPress={handleBack} >
-          <Ionicons name="chevron-back" size={24} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Notification Settings</Text>
-        <TouchableOpacity>
-          <Ionicons name="notifications-outline" size={24} color="#333" />
-        </TouchableOpacity>
-      </View>
+       <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+       <Header title="Notification Settings" />
       
       <ScrollView style={styles.scrollView}>
         <View style={styles.section}>

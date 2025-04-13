@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   Pressable,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -16,8 +17,8 @@ import BalanceDisplay from "@/componenets/BalanceDisplay";
 import ProgressBar from "@/componenets/ProgressBar";
 import styles from "./style";
 import Theme from "@/theme";
-import Header from "@/componenets/Header";
-
+import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
+import Notification from '../Notification'
 type CategoriesScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "Categories"
@@ -26,9 +27,17 @@ type CategoriesScreenNavigationProp = NativeStackNavigationProp<
 const CategoriesScreen = () => {
   const navigation = useNavigation<CategoriesScreenNavigationProp>();
 
-  const budget = useAppSelector((state) => state.expenses.budget);
-  const categories = useAppSelector((state) => state.expenses.categories);
+  const expenses = useAppSelector((state) => state.expenses);
 
+if (!expenses) {
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={{ textAlign: 'center', marginTop: 50 }}>Loading...</Text>
+    </SafeAreaView>
+  );
+}
+
+const { budget, categories } = expenses;
   const navigateToCategory = (categoryName: string) => {
     navigation.navigate("CategoryDetail", { categoryName });
   };
@@ -40,7 +49,9 @@ const CategoriesScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
-      <Header name="Categories" navigateBack={() => navigation.goBack()} />
+      {/* <Header name="Categories" navigateBack={() => navigation.goBack()} /> */}
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+      <Header title="Categories"  />
 
       {/* Budget Summary */}
       <View style={styles.balanceContainer}>

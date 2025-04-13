@@ -29,6 +29,12 @@ import OnBoardingNavigation from '@/navigation/onBoardingNavigation';
 import OnboardingScreen from '@/screens/onboarding/OnboardingScreen';
 import LoginScreen from '@/screens/Authentication/LoginScreen';
 import CategoriesScreen from '@/screens/Categories';
+import SettingsScreen from '@/screens/SettingsScreen';
+import HelpCenterScreen from '@/screens/HelpCenterScreen';
+import PasswordSettingsScreen from '@/screens/PasswordSettingsScreen';
+import NotificationSettingsScreen from '@/screens/NotificationSettingsScreen';
+import DeleteAccountScreen from '@/screens/DeleteAccountScreen';
+import SupportChannelsScreen from '@/screens/SupportChannelsScreen';
 type ProfileStackParamList = {
   ProfileMain: undefined;
   EditProfile: undefined;
@@ -68,6 +74,12 @@ function ProfileStackScreen() {
       <ProfileStack.Screen name="TermsAndConditions" component={TermsAndConditions} />
       <ProfileStack.Screen name="FingerprintDetails" component={FingerprintDetails} />
       <ProfileStack.Screen name="AddFingerPrint" component={AddFingerPrint} />
+      <ProfileStack.Screen name="SettingsScreen" component={SettingsScreen} />
+      <ProfileStack.Screen name="HelpCenterScreen" component={HelpCenterScreen} />
+      <ProfileStack.Screen name="PasswordSettingsScreen" component={PasswordSettingsScreen} />
+      <ProfileStack.Screen name="NotificationSettingsScreen" component={NotificationSettingsScreen} />
+      <ProfileStack.Screen name="DeleteAccountScreen" component={DeleteAccountScreen} />
+      <ProfileStack.Screen name="SupportChannelsScreen" component={SupportChannelsScreen} />
     </ProfileStack.Navigator>
   );
 }

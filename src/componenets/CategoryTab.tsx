@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import { setCategory } from '../store/slices/helpCenterSlice';
+import { setCategory } from '../redux/slices/helpCenterSlice';
 
 const CategoryTabs: React.FC = () => {
   const dispatch = useDispatch();

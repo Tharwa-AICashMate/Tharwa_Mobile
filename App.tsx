@@ -47,13 +47,16 @@ import CategoryDetailScreen from '@/screens/CategoryDetails';
 import AddExpensesScreen from '@/screens/AddExpense';
 
 import { Provider } from 'react-redux';
-import { store } from './src/store/store';
+
+import { store } from './src/redux/store'
 import SettingsScreen from '@/screens/SettingsScreen';
 import HelpCenterScreen from '@/screens/HelpCenterScreen';
 import PasswordSettingsScreen from '@/screens/PasswordSettingsScreen';
 import NotificationSettingsScreen from '@/screens/NotificationSettingsScreen';
 import DeleteAccountScreen from '@/screens/DeleteAccountScreen';
 import SupportChannelsScreen from '@/screens/SupportChannelsScreen';
+import Notification from '@/screens/Notification';
+import Profile from '@/screens/Profile/Profile';
 
 const RootStack = createNativeStackNavigator();
 
@@ -82,7 +85,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <SafeAreaView style={{ flex: 1 }}>
+      {/* <SafeAreaView style={{ flex: 1 }}> */}
         <StatusBar style="light" />
         <NavigationContainer>
           <RootStack.Navigator screenOptions={{ headerShown: false }}>
@@ -112,6 +115,7 @@ export default function App() {
             <RootStack.Screen name="NotificationSettingsScreen" component={NotificationSettingsScreen} />
             <RootStack.Screen name="DeleteAccountScreen" component={DeleteAccountScreen} />
             <RootStack.Screen name="SupportChannelsScreen" component={SupportChannelsScreen} />
+            <RootStack.Screen name="Profile" component={Profile} />
 
             {/* Security Screens */}
             <RootStack.Screen name="GreenScreen" component={GreenScreen} />
@@ -122,9 +126,10 @@ export default function App() {
             <RootStack.Screen name="Categories" component={CategoriesScreen} />
             <RootStack.Screen name="CategoryDetail" component={CategoryDetailScreen} />
             <RootStack.Screen name="AddExpenses" component={AddExpensesScreen} />
+            <RootStack.Screen name="Notification" component={Notification} />
           </RootStack.Navigator>
         </NavigationContainer>
-      </SafeAreaView>
+      {/* </SafeAreaView> */}
     </Provider>
   );
 }

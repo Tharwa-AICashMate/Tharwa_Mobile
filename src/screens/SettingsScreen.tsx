@@ -1,14 +1,17 @@
 
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Dimensions, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
-import { fetchUserSettings } from '../store/slices/settingsSlice';
+import { fetchUserSettings } from '../redux/slices/settingsSlice';
 import SettingsItem from '../componenets/SettingsItem';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
+
+import Theme from '@/theme';
+import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 
 
 const { height, width } = Dimensions.get('window');
@@ -28,16 +31,8 @@ const SettingsScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        
-      <TouchableOpacity onPress={handleBack} >
-          <Ionicons name="chevron-back" size={24} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Settings</Text>
-        <TouchableOpacity>
-          <Ionicons name="notifications-outline" size={24} color="#333" />
-        </TouchableOpacity>
-      </View>
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+      <Header title="Settings" />
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.section}>

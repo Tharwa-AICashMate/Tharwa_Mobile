@@ -6,15 +6,18 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  StatusBar,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
-import { getFAQs } from '../store/slices/helpCenterSlice';
+import { getFAQs } from '../redux/slices/helpCenterSlice';
 import AccordionItem from '../componenets/AccordionItem';
 import CategoryTabs from '../componenets/CategoryTab';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+import Theme from '@/theme';
 
 const HelpCenterScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -40,15 +43,8 @@ const HelpCenterScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack} >
-          <Ionicons name="chevron-back" size={24} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Help & FAQs</Text>
-        <TouchableOpacity>
-          <Ionicons name="notifications-outline" size={24} color="#333" />
-        </TouchableOpacity>
-      </View>
+         <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+         <Header title="Help & FAQs" />
       <View style={styles.mainContent}>
           <Text style={styles.searchText}>How Can We Help You?</Text>
         <View style={styles.buttonContainer}>

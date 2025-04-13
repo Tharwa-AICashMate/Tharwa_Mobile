@@ -4,7 +4,8 @@ import {
   Text,  
   TouchableOpacity, 
   ScrollView,
-  SafeAreaView
+  SafeAreaView,
+  StatusBar
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -15,7 +16,7 @@ import BalanceDisplay from '@/componenets/BalanceDisplay';
 import ProgressBar from '@/componenets/ProgressBar';
 import Theme from '@/theme';
 import styles from './style';
-import Header from '@/componenets/Header';
+import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 
 
 type CategoryDetailProps = NativeStackScreenProps<RootStackParamList, 'CategoryDetail'>;
@@ -72,7 +73,9 @@ const CategoryDetailScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
-      <Header name={categoryName} navigateBack={navigateBack} />
+      {/* <Header name={categoryName} navigateBack={navigateBack} /> */}
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+      <Header title={categoryName} />
       {/* Budget Summary */}
       <View style={styles.balanceContainer}>
         <BalanceDisplay balance={budget.totalExpenses} expense={budget.totalIncome} />

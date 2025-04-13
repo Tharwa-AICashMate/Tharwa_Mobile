@@ -7,15 +7,18 @@ import {
   ActivityIndicator,
   Alert,
   Modal,
-  Dimensions
+  Dimensions,
+  StatusBar
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
-import { deleteAccount } from '../store/slices/settingsSlice';
+import { deleteAccount } from '../redux/slices/settingsSlice';
 import PasswordInput from '../componenets/PasswordInput';
+import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+import Theme from '@/theme';
 const { height, width } = Dimensions.get('window');
 
 type DeleteAccountScreenNavigationProp = any;
@@ -58,15 +61,8 @@ const DeleteAccountScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-      <TouchableOpacity onPress={handleBack} >
-          <Ionicons name="chevron-back" size={24} color="#333" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Delete Account</Text>
-        <TouchableOpacity>
-          <Ionicons name="notifications-outline" size={24} color="#333" />
-        </TouchableOpacity>
-      </View>
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+      <Header title="Delete Account" />
       
       <View style={styles.content}>
         <Text style={styles.warningTitle}>

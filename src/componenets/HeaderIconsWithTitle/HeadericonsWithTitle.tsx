@@ -1,15 +1,17 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import Theme from '@/theme';
-import styles from './HeadericonsWithTitle.styles'
+import styles from './HeadericonsWithTitle.styles';
+
 interface HeaderProps {
   title: string;
-  goBackTo?: string; 
+  goBackTo?: string;
+  bellNavigateTo?: string; 
 }
 
-export default function Header({ title, goBackTo }: HeaderProps) {
+export default function Header({ title, goBackTo, bellNavigateTo }: HeaderProps) {
   const navigation = useNavigation<NavigationProp<any>>();
 
   const handleBack = () => {
@@ -26,7 +28,7 @@ export default function Header({ title, goBackTo }: HeaderProps) {
         <Ionicons name="arrow-back" size={24} color={Theme.colors.secondery} />
       </TouchableOpacity>
       <Text style={styles.title}>{title}</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
+      <TouchableOpacity onPress={() => navigation.navigate(bellNavigateTo || 'Notification')}>
         <Ionicons
           name="notifications-outline"
           size={24}
@@ -37,5 +39,3 @@ export default function Header({ title, goBackTo }: HeaderProps) {
     </View>
   );
 }
-
-

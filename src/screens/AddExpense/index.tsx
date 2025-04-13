@@ -10,6 +10,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -18,7 +19,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { addTransaction } from "@/redux/slices/expenseSlice";
 import { RootStackParamList } from "App";
-import Header from "@/componenets/Header";
+import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import styles from "./style";
 import Theme from "@/theme";
 
@@ -95,8 +96,9 @@ const AddExpensesScreen = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView style={styles.container}>
           {/* Header */}
-          <Header name="Add Expenses" navigateBack={navigateBack} />
-
+          {/* <Header name="Add Expenses" navigateBack={navigateBack} /> */}
+          <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+          <Header title="Add Expenses" />
           {/* Form */}
           <ScrollView style={styles.formContainer} contentContainerStyle={{ paddingBottom: 20 }}>
             {/* Validation Error Message */}
