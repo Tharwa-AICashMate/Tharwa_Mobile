@@ -1,13 +1,13 @@
 {
   "userSettings": {
     "notificationSettings": {
-      "generalNotification": false,
+      "generalNotification": true,
       "sound": true,
       "soundCall": true,
       "vibrate": true,
-      "transactionUpdate": true,
+      "transactionUpdate": false,
       "expenseReminder": true,
-      "budgetNotifications": true,
+      "budgetNotifications": false,
       "lowBalanceAlerts": true
     },
     "language": "en",

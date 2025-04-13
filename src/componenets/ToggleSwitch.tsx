@@ -13,7 +13,8 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ value, onValueChange }) => 
       value={value}
       onValueChange={onValueChange}
       trackColor={{ false: '#d9d9d9', true: '#FECD3E' }}
-      thumbColor={'#ffffff'}
+      thumbColor="white"
+      ios_backgroundColor="#d9d9d9"
     />
   );
 };
