@@ -33,7 +33,7 @@ import OnBoardingNavigation from '@/navigation/onBoardingNavigation';
 import Theme from '@/theme';
 
 const RootStack = createNativeStackNavigator();
-
+//there is nothing to push
 export default function App() {
   const [interLoaded] = useInterFonts({
     Inter_300Light,
