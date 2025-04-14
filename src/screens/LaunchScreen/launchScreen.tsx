@@ -19,6 +19,7 @@ const LaunchScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [showLogin, setShowLogin] = useState(false);
   const logoOpacity = useRef(new Animated.Value(1)).current;
   const loginSlideUp = useRef(new Animated.Value(height)).current;
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       // Animated.timing(logoOpacity, {
@@ -38,13 +39,11 @@ const LaunchScreen: React.FC<navigationProps> = ({ navigation }) => {
     //   });
      }, 3000);
     
-
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-
       {showSplash && (
         <Animated.View style={[styles.splashScreen, { opacity: logoOpacity }]}>
           <View style={styles.ContentContainer}>
@@ -58,7 +57,7 @@ const LaunchScreen: React.FC<navigationProps> = ({ navigation }) => {
         <Animated.View
           style={[
             styles.loginContainer,
-            { transform: [{ translateY:  loginSlideUp }] },
+            { transform: [{ translateY: loginSlideUp }] },
           ]}
         >
           <View style={styles.loginScreenContainer}>

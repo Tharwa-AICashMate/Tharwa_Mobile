@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import Profile from '../../screens/Profile/Profile';
 import Home from '../../screens/Home';
 import Stats from '../../screens/Stats';
@@ -17,17 +17,11 @@ import Notification from '@/screens/Notification';
 import ChangePin from '@/screens/Security/ChangePin/ChangePin';
 import FingerPrint from '@/screens/Security/FingerPrint/FingerPrint';
 import TermsAndConditions from '@/screens/Security/TermsAndConditions/TermsAndConditions';
-import GreenScreen from '@/screens/Security/ChangePin/GreenScreen/GreenScreen';
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { StackScreenProps } from '@react-navigation/stack';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import FingerprintDetails from '@/screens/Security/FingerPrint/FingerPrintDetails/FingerPrintDetails';
 import AddFingerPrint from '@/screens/Security/FingerPrint/AddFingerPrint/AddFingerPrint';
 import Theme from '@/theme';
 import styles from './BottomTabs.styles';
-import OnBoardingNavigation from '@/navigation/onBoardingNavigation';
-import OnboardingScreen from '@/screens/onboarding/OnboardingScreen';
-import LoginScreen from '@/screens/Authentication/LoginScreen';
 import CategoriesScreen from '@/screens/Categories';
 import SettingsScreen from '@/screens/SettingsScreen';
 import HelpCenterScreen from '@/screens/HelpCenterScreen';
@@ -35,6 +29,7 @@ import PasswordSettingsScreen from '@/screens/PasswordSettingsScreen';
 import NotificationSettingsScreen from '@/screens/NotificationSettingsScreen';
 import DeleteAccountScreen from '@/screens/DeleteAccountScreen';
 import SupportChannelsScreen from '@/screens/SupportChannelsScreen';
+
 type ProfileStackParamList = {
   ProfileMain: undefined;
   EditProfile: undefined;
@@ -46,6 +41,14 @@ type ProfileStackParamList = {
   ChangePin: undefined;
   FingerPrint: undefined;
   TermsAndConditions: undefined;
+  FingerprintDetails: undefined;
+  AddFingerPrint: undefined;
+  SettingsScreen: undefined;
+  HelpCenterScreen: undefined;
+  PasswordSettingsScreen: undefined;
+  NotificationSettingsScreen: undefined;
+  DeleteAccountScreen: undefined;
+  SupportChannelsScreen: undefined;
 };
 
 type BottomTabParamList = {
@@ -131,10 +134,7 @@ export default function BottomTabs() {
         headerShown: false,
       })}
     >
-
-      {/* <Tab.Screen name="OnBoarding" component={OnboardingScreen} /> */}
-      {/* <Tab.Screen name="Login" component={LoginScreen} /> */}
-      <Tab.Screen name="Home" component={OnboardingScreen} />
+      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Stats" component={Stats} />
       <Tab.Screen name="Transactions" component={Transactions} />
       <Tab.Screen name="Portfolio" component={CategoriesScreen} />
@@ -142,5 +142,3 @@ export default function BottomTabs() {
     </Tab.Navigator>
   );
 }
-
-

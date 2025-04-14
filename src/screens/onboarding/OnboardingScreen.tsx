@@ -14,9 +14,6 @@ import {
 import styles from "./style";
 import { navigationProps } from "@/types";
 
-
-
-
 const { width } = Dimensions.get("window");
 
 interface Slide {
@@ -56,14 +53,14 @@ const OnboardingScreen: React.FC<navigationProps> = ({ navigation }) => {
 
   const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const index = Math.round(e.nativeEvent.contentOffset.x / width);
-    if( index == slides.length - 1 )
-     setTimeout(()=> navigation.navigate("Login") ,1000)
+    if (index === slides.length - 1) {
+      setTimeout(() => navigation.navigate("Login"), 1000);
+    }
     setCurrentIndex(index);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-
       <View style={styles.slideContainer}>
         <Text style={styles.title}>{slides[currentIndex].title}</Text>
         <View style={styles.slide}>
