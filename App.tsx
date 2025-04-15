@@ -27,9 +27,18 @@ import CategoryDetailScreen from '@/screens/CategoryDetails';
 import { Provider } from 'react-redux';
 import { store } from '@/redux/store';
 import AddExpensesScreen from "@/screens/AddExpense";
+import Savings from "@/screens/Savings";
+import SavingDetails from "@/screens/SavingDetails";
+import AddSavingsScreen from "@/screens/AddSavings";
 export type RootStackParamList = {
   Categories: undefined;
   CategoryDetail: { categoryName: string };
+  AddExpenses: undefined;
+  Savings: undefined;
+  SavingDetails: { categoryName: string };
+
+  AddSavings:undefined
+
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -70,6 +79,9 @@ export default function App() {
         <Stack.Screen name="Categories" component={CategoriesScreen} />
         <Stack.Screen name="CategoryDetail" component={CategoryDetailScreen} />
         <Stack.Screen name="AddExpenses" component={AddExpensesScreen} />
+        <Stack.Screen name="Savings" component={Savings} />
+        <Stack.Screen name="SavingDetails" component={SavingDetails} />
+        <Stack.Screen name="AddSavings" component={AddSavingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   </Provider>

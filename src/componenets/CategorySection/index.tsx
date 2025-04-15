@@ -1,25 +1,44 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {  Text, TouchableOpacity, Pressable } from "react-native";
 import styles from "./style";
 import Theme from "@/theme";
+import { Ionicons } from "@expo/vector-icons";
+
+type CategoryItem = {
+    id: string;
+  name: string;
+  icon: string;
+};
 
 type Props = {
-  name: string;
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  data: CategoryItem[];
+  onpress: (item: string) => void;
 };
 
-const CategorySection: React.FC<Props> = ({ name, icon }) => {
+const CategorySection: React.FC<Props> = ({ data, onpress }) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.categoryBox}>
-        <MaterialCommunityIcons name={icon}  size={Theme.typography.size.xxl} color={Theme.colors.background} />
-      </View>
-      <Text style={styles.categoryText}>{name}</Text>
-    </View>
+    
+        <>
+        {data.map((item) => (
+          <TouchableOpacity key={item.id} style={styles.categoryCard}>
+            <Pressable
+              onPress={() => onpress(item.name)}
+              style={({ pressed }) => [
+                styles.categoryIconContainer,
+                {
+                  backgroundColor: pressed
+                    ? Theme.colors.accentDark
+                    : Theme.colors.accentLight,
+                },
+              ]}
+            >
+              <Ionicons name={item.icon as any} size={40} color="white" />
+            </Pressable>
+            <Text style={styles.categoryName}>{item.name}</Text>
+          </TouchableOpacity>
+        ))}
+        </>
+    
   );
 };
-
-
-
 export default CategorySection;
