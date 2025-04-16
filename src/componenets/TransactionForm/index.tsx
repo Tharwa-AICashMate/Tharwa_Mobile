@@ -200,7 +200,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     />
                   </TouchableOpacity>
 
-                  {showCategoryPicker && (
+                  {/* {showCategoryPicker && (
                     <View style={styles.categoryPicker}>
                       {categories.map((cat) => (
                         <TouchableOpacity
@@ -229,7 +229,40 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                         </TouchableOpacity>
                       ))}
                     </View>
-                  )}
+                  )} */}
+                  {showCategoryPicker && (
+  <View style={[styles.categoryPicker, { maxHeight: 350 }]}>
+    <ScrollView>
+      {categories.map((cat) => (
+        <TouchableOpacity
+          key={cat.id}
+          style={styles.categoryOption}
+          onPress={() => {
+            setCategory(cat.name);
+            setShowCategoryPicker(false);
+          }}
+        >
+          <View
+            style={[
+              styles.categoryIcon,
+              { backgroundColor: cat.color || Theme.colors.accentLight },
+            ]}
+          >
+            <Ionicons
+              name={cat.icon as any}
+              size={16}
+              color="white"
+            />
+          </View>
+          <Text style={{ color: Theme.colors.text }}>
+            {cat.name}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
+  </View>
+)}
+
                 </>
               )}
             </View>
