@@ -47,6 +47,25 @@ import CategoryDetailScreen from '@/screens/CategoryDetails';
 import AddExpensesScreen from '@/screens/AddExpense';
 
 import { Provider } from 'react-redux';
+// import { store } from '@/redux/store';
+// import AddExpensesScreen from "@/screens/AddExpense";
+import Savings from "@/screens/Savings";
+import SavingDetails from "@/screens/SavingDetails";
+import AddSavingsScreen from "@/screens/AddSavings";
+export type RootStackParamList = {
+  Categories: undefined;
+  CategoryDetail: { categoryName: string };
+  AddExpenses: undefined;
+  Savings: undefined;
+  SavingDetails: { categoryName: string };
+  
+  AddSavings:undefined
+
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+
 
 import { store } from './src/redux/store'
 import SettingsScreen from '@/screens/SettingsScreen';
@@ -58,6 +77,7 @@ import SupportChannelsScreen from '@/screens/SupportChannelsScreen';
 import Notification from '@/screens/Notification';
 import Profile from '@/screens/Profile/Profile';
 import OnboardingScreen from '@/screens/onboarding/OnboardingScreen';
+import TransactionForm from '@/componenets/TransactionForm';
 
 const RootStack = createNativeStackNavigator();
 
@@ -105,6 +125,7 @@ export default function App() {
           <RootStack.Screen name="NewPassword" component={NewPasswordScreen} />
           <RootStack.Screen name="PasswordChanged" component={PasswordChangedScreen} />
           <RootStack.Screen name="Fingerprint" component={FingerprintScreen} />
+
           
           {/* Main App */}
           <RootStack.Screen name="MainApp">
@@ -132,11 +153,17 @@ export default function App() {
           {/* Category Flow */}
           <RootStack.Screen name="Categories" component={CategoriesScreen} />
           <RootStack.Screen name="CategoryDetail" component={CategoryDetailScreen} />
-          <RootStack.Screen name="AddExpenses" component={AddExpensesScreen} />
+          <RootStack.Screen name="AddExpensesScreen" component={AddExpensesScreen} />
+          <RootStack.Screen name="TransactionForm" component={TransactionForm} />
+          <RootStack.Screen name="Savings" component={Savings} />
+          <RootStack.Screen name="SavingDetails" component={SavingDetails} />
+          <RootStack.Screen name="AddSavings" component={AddSavingsScreen} />
           <RootStack.Screen name="Notification" component={Notification} />
+          <RootStack.Screen name="CategoryDetailScreen" component={CategoryDetailScreen} />
+
         </RootStack.Navigator>
       </NavigationContainer>
-    </Provider>
+    </Provider >
   );
 }
 

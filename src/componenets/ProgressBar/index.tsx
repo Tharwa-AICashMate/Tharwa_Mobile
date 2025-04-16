@@ -1,13 +1,15 @@
 import React from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import styles from './style';
+import Theme from '@/theme';
 
 interface ProgressBarProps {
   percentage: number;
   amount: number;
+  color?:string
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ percentage, amount }) => {
+const ProgressBar: React.FC<ProgressBarProps> = ({ percentage, amount ,color}) => {
   const containerWidth = Dimensions.get('window').width - 32; 
   const progressWidth = (percentage / 100) * containerWidth;
 
@@ -22,11 +24,11 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage, amount }) => {
           },
         ]}
       >
-        <Text style={styles.percentageText}>{`${percentage}%`}</Text>
+        <Text style={styles.percentageText}>{percentage>10?`${percentage}%`:""}</Text>
       </View>
 
     
-      <View style={styles.empty}>
+      <View style={[styles.empty, { backgroundColor: color||Theme.colors.background}]}>
         <Text style={styles.amountText}>
           ${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
         </Text>

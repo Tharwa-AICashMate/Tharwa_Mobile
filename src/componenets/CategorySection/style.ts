@@ -1,31 +1,47 @@
-import { StyleSheet } from "react-native";
 import Theme from "@/theme";
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 4,
-  },
-  categoryBox: {
-    marginTop:20,
-    backgroundColor: Theme.colors.accentLight ,
-    borderRadius: 20,
-    width: '100%',
-    aspectRatio: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  categoryText: {
-    color: Theme.colors?.text ,
-    fontWeight: "600",
-    textAlign: "center",
-    fontSize: 12,
-    marginTop: 2,
-    paddingHorizontal: 4,
-  },
-});
 
+  categoriesContainer: {
+    flex: 1,
+    backgroundColor: Theme.colors.background,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    paddingTop: 40,
+  },
+  categoriesGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+  },
+  categoryCard: {
+    width: "30%",
+    alignItems: "center",
+    marginBottom: 20,
+    margin:5
+  },
+  categoryIconContainer: {
+    width: 80,
+    height: 70,
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  categoryName: {
+    fontSize: 14,
+    color: Theme.colors.text,
+    fontWeight: "500",
+  },
+
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "white",
+  },
+
+});
 export default styles;

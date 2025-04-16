@@ -65,7 +65,15 @@ export type RootStackParamList = {
     };
   };
   Profile: undefined;
+  Home: undefined;
+  Category: { categoryId: string };
+  AddSavings: { categoryId?: string };
 };
+// export type RootStackParamList = {
+//   Home: undefined;
+//   Category: { categoryId: string };
+//   AddSavings: { categoryId?: string };
+// };
 
 // Proper navigation prop typing for the Login screen
 export type navigationProps = {
@@ -119,3 +127,50 @@ export interface SupportChannel {
   icon: string;
   link: string;
 }
+/////////////
+export interface Expense {
+  id: string;
+  date: string;
+  title: string;
+  amount: number;
+  message?: string;
+}
+
+export interface SavingsCategory {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+  goal: number;
+  saved: number;
+  expenses: Expense[];
+}
+
+export interface SavingsState {
+  totalSavings: number;
+  totalBalance: number;
+  targetAmount: number;
+  categories: SavingsCategory[];
+}
+
+
+
+
+
+interface SavingDeposit {
+  id: string;
+  amount: number;
+  date: string;
+  time: string;
+}
+
+interface SavingCategory {
+  goal: number;
+  deposits: SavingDeposit[];
+}
+
+// interface SavingsState {
+//   categories: {
+//     [key: string]: SavingCategory;
+//   };
+// }
