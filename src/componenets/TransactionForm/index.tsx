@@ -99,14 +99,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, minHeight: '100%' }} 
+      style={{ flex: 1, minHeight: '100%' }}
       keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
     >
       <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
         <View style={styles.formContainer}>
-          <ScrollView 
+          <ScrollView
             contentContainerStyle={{ paddingBottom: 20 }}
-            
+
             keyboardDismissMode="interactive"
             keyboardShouldPersistTaps="handled">
             {/* Validation Error Message */}
@@ -121,7 +121,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             {/* Date */}
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Date</Text>
-              
+
               {Platform.OS === "web" ? (
                 <input
                   type="date"
@@ -199,69 +199,38 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                       color={Theme.colors.textLight}
                     />
                   </TouchableOpacity>
-
-                  {/* {showCategoryPicker && (
-                    <View style={styles.categoryPicker}>
-                      {categories.map((cat) => (
-                        <TouchableOpacity
-                          key={cat.id}
-                          style={styles.categoryOption}
-                          onPress={() => {
-                            setCategory(cat.name);
-                            setShowCategoryPicker(false);
-                          }}
-                        >
-                          <View
-                            style={[
-                              styles.categoryIcon,
-                              { backgroundColor: cat.color || Theme.colors.accentLight },
-                            ]}
-                          >
-                            <Ionicons
-                              name={cat.icon as any}
-                              size={16}
-                              color="white"
-                            />
-                          </View>
-                          <Text style={{ color: Theme.colors.text }}>
-                            {cat.name}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                  )} */}
                   {showCategoryPicker && (
-  <View style={[styles.categoryPicker, { maxHeight: 350 }]}>
-    <ScrollView>
-      {categories.map((cat) => (
-        <TouchableOpacity
-          key={cat.id}
-          style={styles.categoryOption}
-          onPress={() => {
-            setCategory(cat.name);
-            setShowCategoryPicker(false);
-          }}
-        >
-          <View
-            style={[
-              styles.categoryIcon,
-              { backgroundColor: cat.color || Theme.colors.accentLight },
-            ]}
-          >
-            <Ionicons
-              name={cat.icon as any}
-              size={16}
-              color="white"
-            />
-          </View>
-          <Text style={{ color: Theme.colors.text }}>
-            {cat.name}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
-  </View>
-)}
+                    <View style={[styles.categoryPicker, { maxHeight: 350 }]}>
+                      <ScrollView>
+                        {categories.map((cat) => (
+                          <TouchableOpacity
+                            key={cat.id}
+                            style={styles.categoryOption}
+                            onPress={() => {
+                              setCategory(cat.name);
+                              setShowCategoryPicker(false);
+                            }}
+                          >
+                            <View
+                              style={[
+                                styles.categoryIcon,
+                                { backgroundColor: cat.color || Theme.colors.accentLight },
+                              ]}
+                            >
+                              <Ionicons
+                                name={cat.icon as any}
+                                size={16}
+                                color="white"
+                              />
+                            </View>
+                            <Text style={{ color: Theme.colors.text }}>
+                              {cat.name}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  )}
 
                 </>
               )}
