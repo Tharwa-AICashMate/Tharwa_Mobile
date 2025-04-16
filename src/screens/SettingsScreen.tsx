@@ -3,8 +3,13 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+<<<<<<< Updated upstream
 import { AppDispatch, RootState } from '../store/store';
 import { fetchUserSettings } from '../store/slices/settingsSlice';
+=======
+import { AppDispatch, RootState } from '@/redux/store';
+import { fetchUserSettings } from '../redux/slices/settingsSlice';
+>>>>>>> Stashed changes
 import SettingsItem from '../componenets/SettingsItem';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';

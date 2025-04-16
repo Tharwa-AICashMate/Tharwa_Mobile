@@ -105,5 +105,88 @@
       "icon": "instagram",
       "link": "https://instagram.com/example"
     }
-  ]
+  ],
+
+  "transactions": [
+    {
+      "id": "1",
+      "amount": 4000,
+      "type": "income",
+      "category": "salary",
+      "date": "2025-04-10T09:30:00",
+      "description": "Monthly Salary"
+    },
+    {
+      "id": "2",
+      "amount": 350,
+      "type": "expense",
+      "category": "groceries",
+      "date": "2025-04-24T13:15:00",
+      "description": "Weekly groceries"
+    },
+    {
+      "id": "3",
+      "amount": 500,
+      "type": "expense",
+      "category": "rent",
+      "date": "2025-04-22T08:45:00",
+      "description": "Monthly rent"
+    },
+    {
+      "id": "4",
+      "amount": 674.4,
+      "type": "expense",
+      "category": "rent",
+      "date": "2025-04-05T16:20:00",
+      "description": "Rent"
+    },
+    {
+      "id": "5",
+      "amount": 14.13,
+      "type": "expense",
+      "category": "transport",
+      "date": "2025-04-03T07:50:00",
+      "description": "Fuel"
+    },
+    {
+      "id": "6",
+      "amount": 120,
+      "type": "expense",
+      "category": "food",
+      "date": "2025-03-10T20:10:00",
+      "description": "Dinner"
+    },
+    {
+      "id": "7",
+      "amount": 574.4,
+      "type": "expense",
+      "category": "rent",
+      "date": "2025-03-05T10:05:00",
+      "description": "Rent"
+    },
+    {
+      "id": "8",
+      "amount": 4000,
+      "type": "income",
+      "category": "salary",
+      "date": "2025-03-11T09:00:00",
+      "description": "Monthly Salary"
+    },
+    {
+      "id": "9",
+      "amount": 340,
+      "type": "expense",
+      "category": "others",
+      "date": "2025-03-12T11:25:00",
+      "description": "Upwork"
+    },
+    {
+      "id": "10",
+      "amount": 340,
+      "type": "expense",
+      "category": "others",
+      "date": "2025-02-15T14:40:00",
+      "description": "Upwork"
+    }
+  ]  
 }

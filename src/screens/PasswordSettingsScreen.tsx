@@ -12,8 +12,13 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+<<<<<<< Updated upstream
 import { AppDispatch, RootState } from '../store/store';
 import { changePassword, resetPasswordChangeSuccess } from '../store/slices/settingsSlice';
+=======
+import { AppDispatch, RootState } from '../redux/store';
+import { changePassword, resetPasswordChangeSuccess } from '../redux/slices/settingsSlice';
+>>>>>>> Stashed changes
 import PasswordInput from '../componenets/PasswordInput';
 const { height, width } = Dimensions.get('window');
 import { Ionicons } from '@expo/vector-icons';
@@ -37,7 +42,6 @@ const PasswordSettingsScreen: React.FC = () => {
   const [localError, setLocalError] = useState<string | null>(null);
 
   const handleChangePassword = () => {
-    // Validate inputs
     if (!currentPassword || !newPassword || !confirmNewPassword) {
       setLocalError('All fields are required');
       return;
