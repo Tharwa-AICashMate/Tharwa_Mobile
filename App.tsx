@@ -49,6 +49,7 @@ import AddExpensesScreen from '@/screens/AddExpense';
 import { Provider } from 'react-redux';
 // import { store } from '@/redux/store';
 // import AddExpensesScreen from "@/screens/AddExpense";
+//there is nothing to push here 
 import Savings from "@/screens/Savings";
 import SavingDetails from "@/screens/SavingDetails";
 import AddSavingsScreen from "@/screens/AddSavings";
