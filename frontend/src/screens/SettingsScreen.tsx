@@ -39,22 +39,22 @@ const SettingsScreen: React.FC = () => {
             title=" Notifications Settings"
             icon={ <Ionicons name="notifications-outline" size={24} color="#FECD3E" />
           }
-            onPress={() => navigation.navigate('NotificationSettings')}
+            onPress={() => navigation.navigate('NotificationSettingsScreen')}
           />
           <SettingsItem
             title="Password Settings"
             icon={<Ionicons name="key-outline" size={20} color="#FECD3E" />}
-            onPress={() => navigation.navigate('PasswordSettings')}
+            onPress={() => navigation.navigate('PasswordSettingsScreen')}
           />
           <SettingsItem
             title="Delete Account"
             icon={<Ionicons name="trash-outline" size={20} color="#FECD3E" />}
-            onPress={() => navigation.navigate('DeleteAccount')}
+            onPress={() => navigation.navigate('DeleteAccountScreen')}
           />
             <SettingsItem
             title="Help Center"
             icon={<Ionicons name="help-circle-outline" size={20} color="#FECD3E" />}
-            onPress={() => navigation.navigate('HelpCenter')}
+            onPress={() => navigation.navigate('HelpCenterScreen')}
           />
           
         </View>
