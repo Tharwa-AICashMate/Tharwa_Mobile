@@ -8,7 +8,7 @@ import Settings from '../../screens/Settings';
 import Help from '../../screens/Help';
 import Login from '../../screens/Logout';
 import Profile from '@/screens/Profile/Profile';
-import Notification from '@/screens/Notification';
+import Notification from '@/screens/Notification/Notification';
 import SettingsScreen from '@/screens/SettingsScreen';
 import HelpCenterScreen from '@/screens/HelpCenterScreen';
 

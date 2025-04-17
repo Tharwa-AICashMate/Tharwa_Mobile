@@ -13,7 +13,7 @@ import Security from '../../screens/Security/Security';
 import Settings from '../../screens/Settings';
 import Help from '../../screens/Help';
 import Logout from '../../screens/Logout';
-import Notification from '@/screens/Notification';
+import Notification from '@/screens/Notification/Notification';
 import ChangePin from '@/screens/Security/ChangePin/ChangePin';
 import FingerPrint from '@/screens/Security/FingerPrint/FingerPrint';
 import TermsAndConditions from '@/screens/Security/TermsAndConditions/TermsAndConditions';
@@ -33,6 +33,7 @@ import AddExpensesScreen from '@/screens/AddExpense';
 import TransactionForm from '../TransactionForm';
 import Savings from '@/screens/Savings';
 import CategoryDetailScreen from '@/screens/CategoryDetails';
+import TransactionScreen from '@/screens/TransactionsScreen';
 
 type ProfileStackParamList = {
   ProfileMain: undefined;
@@ -142,7 +143,7 @@ export default function BottomTabs() {
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Stats" component={Stats} />
-      <Tab.Screen name="Transactions" component={Transactions} />
+      <Tab.Screen name="Transactions" component={TransactionScreen} />
       <Tab.Screen name="Portfolio" component={CategoriesScreen} />
       <Tab.Screen name="Profile" component={ProfileStackScreen} />
       

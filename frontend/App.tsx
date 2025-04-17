@@ -75,7 +75,7 @@ import PasswordSettingsScreen from '@/screens/PasswordSettingsScreen';
 import NotificationSettingsScreen from '@/screens/NotificationSettingsScreen';
 import DeleteAccountScreen from '@/screens/DeleteAccountScreen';
 import SupportChannelsScreen from '@/screens/SupportChannelsScreen';
-import Notification from '@/screens/Notification';
+import Notification from '@/screens/Notification/Notification';
 import Profile from '@/screens/Profile/Profile';
 import OnboardingScreen from '@/screens/onboarding/OnboardingScreen';
 import TransactionForm from '@/componenets/TransactionForm';
