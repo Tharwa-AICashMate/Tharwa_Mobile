@@ -1,5 +1,5 @@
 // components/AddCategoryModal.tsx
-
+//there is no edit in this project
 import React from "react";
 import {
   Modal,
