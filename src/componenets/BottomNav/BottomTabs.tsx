@@ -29,6 +29,10 @@ import PasswordSettingsScreen from '@/screens/PasswordSettingsScreen';
 import NotificationSettingsScreen from '@/screens/NotificationSettingsScreen';
 import DeleteAccountScreen from '@/screens/DeleteAccountScreen';
 import SupportChannelsScreen from '@/screens/SupportChannelsScreen';
+import AddExpensesScreen from '@/screens/AddExpense';
+import TransactionForm from '../TransactionForm';
+import Savings from '@/screens/Savings';
+import CategoryDetailScreen from '@/screens/CategoryDetails';
 
 type ProfileStackParamList = {
   ProfileMain: undefined;
@@ -83,6 +87,8 @@ function ProfileStackScreen() {
       <ProfileStack.Screen name="NotificationSettingsScreen" component={NotificationSettingsScreen} />
       <ProfileStack.Screen name="DeleteAccountScreen" component={DeleteAccountScreen} />
       <ProfileStack.Screen name="SupportChannelsScreen" component={SupportChannelsScreen} />
+      {/* <ProfileStack.Screen name="CategoryDetailScreen" component={CategoryDetailScreen} /> */}
+      <ProfileStack.Screen name="AddExpensesScreen" component={AddExpensesScreen} />
     </ProfileStack.Navigator>
   );
 }
@@ -139,6 +145,7 @@ export default function BottomTabs() {
       <Tab.Screen name="Transactions" component={Transactions} />
       <Tab.Screen name="Portfolio" component={CategoriesScreen} />
       <Tab.Screen name="Profile" component={ProfileStackScreen} />
+      
     </Tab.Navigator>
   );
 }

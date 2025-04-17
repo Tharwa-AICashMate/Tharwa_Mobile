@@ -25,7 +25,7 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
         {
           name: 'MainApp',
           state: {
-            routes: [{ name: 'Profile' }],
+            routes: [{ name: 'Home' }],
           },
         },
       ],
