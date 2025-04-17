@@ -1,7 +1,7 @@
 
 import axios from "axios";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "http://10.0.2.2:5000";
 
 interface NotificationSettings {
   generalNotification: boolean;

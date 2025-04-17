@@ -13,11 +13,10 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../store/store';
+import { AppDispatch, RootState } from '../redux/store';
 import { changePassword, resetPasswordChangeSuccess } from '../redux/slices/settingsSlice';
 import PasswordInput from '../componenets/PasswordInput';
 const { height, width } = Dimensions.get('window');
-import { Ionicons } from '@expo/vector-icons';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import Theme from '@/theme';
 
@@ -40,7 +39,6 @@ const PasswordSettingsScreen: React.FC = () => {
   const [localError, setLocalError] = useState<string | null>(null);
 
   const handleChangePassword = () => {
-    // Validate inputs
     if (!currentPassword || !newPassword || !confirmNewPassword) {
       setLocalError('All fields are required');
       return;
@@ -73,7 +71,7 @@ const PasswordSettingsScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-         <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+         <StatusBar barStyle="light-content" backgroundColor={Theme.colors.highlight} translucent={false} />
          <Header title="Password Settings" />
       
       <ScrollView style={styles.scrollView}>

@@ -3,12 +3,11 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../store/store';
+import { AppDispatch, RootState } from '../redux/store';
 import { fetchUserSettings } from '../redux/slices/settingsSlice';
 import SettingsItem from '../componenets/SettingsItem';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
 
 import Theme from '@/theme';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
@@ -31,7 +30,7 @@ const SettingsScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+      <StatusBar barStyle="light-content" backgroundColor={Theme.colors.highlight} translucent={false} />
       <Header title="Settings" />
 
       <ScrollView style={styles.scrollView}>

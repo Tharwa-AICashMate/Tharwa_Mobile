@@ -22,6 +22,8 @@ const Tab = createBottomTabNavigator();
 
 import { AccessibilityState } from "react-native";
 import SupportChannelsScreen from "@/screens/SupportChannelsScreen";
+import StatsScreen from "@/screens/StatsScreen";
+import AddTransactionScreen from "@/screens/AddTransactionScreen";
 
 interface CustomTabBarButtonProps {
   children: React.ReactNode;
@@ -63,6 +65,10 @@ const SettingsStackNavigator = () => {
       <Stack.Screen name="DeleteAccount" component={DeleteAccountScreen} />
       <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
       <Stack.Screen name="SupportChannels" component={SupportChannelsScreen} />
+      <Stack.Sceen name="TransactionsScreen" component={TransactionsScreen} />
+      <Stack.Screen name="StatsScreen" component={StatsScreen} />
+      <Stack.Screen name="AddTransactionScreen" comonent={AddTransactionScreen}/>
+      
     </Stack.Navigator>
   );
 };
