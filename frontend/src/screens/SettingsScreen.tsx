@@ -37,20 +37,25 @@ const SettingsScreen: React.FC = () => {
       <ScrollView style={styles.scrollView}>
         <View style={styles.section}>
           <SettingsItem
-            title="Application Settings"
-            onPress={() => navigation.navigate('NotificationSettingsScreen')}
+            title=" Notifications Settings"
+            icon={ <Ionicons name="notifications-outline" size={24} color="#FECD3E" />
+          }
+            onPress={() => navigation.navigate('NotificationSettings')}
           />
           <SettingsItem
             title="Password Settings"
-            onPress={() => navigation.navigate('PasswordSettingsScreen')}
+            icon={<Ionicons name="key-outline" size={20} color="#FECD3E" />}
+            onPress={() => navigation.navigate('PasswordSettings')}
           />
           <SettingsItem
             title="Delete Account"
-            onPress={() => navigation.navigate('DeleteAccountScreen')}
+            icon={<Ionicons name="trash-outline" size={20} color="#FECD3E" />}
+            onPress={() => navigation.navigate('DeleteAccount')}
           />
             <SettingsItem
             title="Help Center"
-            onPress={() => navigation.navigate('HelpCenterScreen')}
+            icon={<Ionicons name="help-circle-outline" size={20} color="#FECD3E" />}
+            onPress={() => navigation.navigate('HelpCenter')}
           />
           
         </View>
