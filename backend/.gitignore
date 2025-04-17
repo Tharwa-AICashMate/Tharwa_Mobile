@@ -1,0 +1,41 @@
+# Compiled object files, libraries, executables
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+*.dll
+
+# Editor/IDE specific files
+.idea/
+.vscode/
+*.iml
+*.pyc  # Python bytecode
+__pycache__/ # Python cache directory
+*.swp  # Vim swap files
+*.swo  # Vim swap files
+*.log  # Log files (consider if you want to track specific logs)
+
+# Dependency management
+node_modules/ # Node.js
+venv/         # Python virtual environment
+env/          # Python virtual environment (another common name)
+.gradle/      # Gradle
+target/       # Maven
+bin/          # Maven
+
+# Secrets and configuration (be very careful with these!)
+.env
+config/local.yaml
+config/development.json
+secrets.json
+*.key
+*.pem
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Test results and coverage
+coverage/
+test_results/
