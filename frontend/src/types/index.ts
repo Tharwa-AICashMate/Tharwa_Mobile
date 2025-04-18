@@ -25,7 +25,7 @@
 //   id: string;
 //   name: string;
 //   icon: string;
-  
+
 // }
 
 // export interface ExpenseState {
@@ -34,14 +34,13 @@
 //   categories: Category[];
 // }
 
-
 // export interface FAQItem {
 //     id: string;
 //     question: string;
 //     answer: string;
 //     category: 'general' | 'account' | 'services';
 //   }
-  
+
 //   export interface SupportChannel {
 //     id: string;
 //     name: string;
@@ -49,9 +48,8 @@
 //     link: string;
 //   }
 
-
 // types/index.ts
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export type RootStackParamList = {
   Login: undefined;
@@ -77,7 +75,7 @@ export type RootStackParamList = {
 
 // Proper navigation prop typing for the Login screen
 export type navigationProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, "Login">;
 };
 
 // Transaction type
@@ -118,7 +116,7 @@ export interface FAQItem {
   id: string;
   question: string;
   answer: string;
-  category: 'general' | 'account' | 'services';
+  category: "general" | "account" | "services";
 }
 
 export interface SupportChannel {
@@ -153,9 +151,13 @@ export interface SavingsState {
   categories: SavingsCategory[];
 }
 
-
-
-
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+  //to remove
+  password: string;
+};
 
 interface SavingDeposit {
   id: string;

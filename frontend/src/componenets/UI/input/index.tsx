@@ -1,5 +1,5 @@
-import React from 'react';
-import { TextInput, Text, View, StyleSheet, TextInputProps, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { TextInput, Text, View,  TextInputProps, TouchableOpacity } from 'react-native';
 import styles from './style';
 
 interface InputProps extends TextInputProps {
@@ -10,6 +10,7 @@ interface InputProps extends TextInputProps {
   inputStyle?: object;
   endIcon?: React.ReactNode; 
   onEndIconPress?: () => void;
+  validator?:(value: string)=>boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -19,9 +20,16 @@ const Input: React.FC<InputProps> = ({
   labelStyle,
   inputStyle,
   endIcon,
+  validator,
   onEndIconPress,
   ...props
 }) => {
+  const [error, setError] = useState<string>('')
+  const handelValidation = ()=>{
+    if(validator && !validator(props?.value!))
+      setError(errorMessage || 'Invalid input');
+  }
+
   return (
     <View style={[styles.container, containerStyle]}>
       <Text style={[styles.label, labelStyle]}>{label}</Text>
@@ -30,6 +38,8 @@ const Input: React.FC<InputProps> = ({
           {...props}
           style={[styles.input, inputStyle]}
           placeholder={props.placeholder || label}
+          onBlur={handelValidation}
+          onFocus={()=>setError('')}
         />
         {endIcon && (
           <TouchableOpacity onPress={onEndIconPress} style={styles.iconContainer}>
@@ -37,7 +47,7 @@ const Input: React.FC<InputProps> = ({
           </TouchableOpacity>
         )}
         </View>
-      {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
+      {error && <Text style={styles.errorText}>{errorMessage}</Text>}
     </View>
   );
 };

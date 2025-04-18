@@ -29,6 +29,7 @@ const Dark = {
 const Theme = {
   colors: currentTheme == "dark" ? Dark : Light,
   typography: {
+    direction:'left',
     fonts: {
       poppins: {
         regular: "Poppins_400Regular",
