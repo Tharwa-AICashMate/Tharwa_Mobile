@@ -81,11 +81,10 @@ const initialState: ExpenseState = {
     { id: '4', name: 'Groceries', icon: 'basket-outline' },
     { id: '5', name: 'Rent', icon: 'key-outline' },
     { id: '6', name: 'Gifts', icon: 'gift-outline' },
-    { id: '7', name: 'Savings', icon: 'cash-outline' },
+    { id: '7', name: 'Savings', icon: 'Savings' },
     { id: '8', name: 'Entertainment', icon: 'film-outline' },
   ],
 };
-
 const expenseSlice = createSlice({
   name: 'expenses',
   initialState,

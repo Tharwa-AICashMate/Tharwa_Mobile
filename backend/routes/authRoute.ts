@@ -6,13 +6,7 @@ import {
   signup,
 } from "../controllers/authController.js";
 
-const authRouter = express.Router();
-
-authRouter.get("/", (req, res) => {
-    console.log("Auth route is working!");
-    res.send("Auth route is working!");
-})
-
+const authRouter = express.Router();;
 authRouter.post("/signup", signup);
 authRouter.post("/provider_signin", signinWithProvider);
 authRouter.post("/login", login);

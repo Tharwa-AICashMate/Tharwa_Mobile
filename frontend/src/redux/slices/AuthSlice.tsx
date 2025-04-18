@@ -14,21 +14,23 @@ const initialState: AuthState = {
   token: null,
   loading: false,
   error: null,
-
 };
 
-const apiBase = 'https://localhost:3000/' 
+const apiBase = "http://192.168.1.6:3000";
 export const registerUser = createAsyncThunk(
   "auth/signup",
   async (payload: { user: User; password: string }, { rejectWithValue }) => {
+    console.log("payload", payload);
     const { user, password } = payload;
     try {
-        await axios.post(`${apiBase}/auth/signup`,{
-                        user: {...user, password}
-                    })
-        return {user};
+      await axios.post(`${apiBase}/auth/signup`, {
+        user: { ...user,dob:user.dob?.toISOString(), password },
+      });
+      console.log("User registered successfully",user);
+      return { ...user,dob:user.dob?.toISOString() };
     } catch (error) {
-      rejectWithValue("User Email already Registered");       
+      console.error("Error registering user:", error);
+      rejectWithValue("User Email already Registered");
     }
   }
 );
@@ -115,7 +117,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.user = action.payload!.user;
+        state.user = action.payload as User;
         state.error = null;
         state.loading = false;
       })
@@ -126,38 +128,38 @@ const authSlice = createSlice({
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
       });
-//       .addCase(loginUser.fulfilled, (state, action) => {
-//         state.user = action.payload.user;
-//         state.token = action.payload.token;
-//         state.error = null;
-//       })
-//       .addCase(loginUser.rejected, (state, action) => {
-//         state.error = action.payload as string;
-//       })
-//       .addCase(submitEmail.fulfilled, (state, action) => {
-//         state.pin = action.payload.pin;
-//         state.error = null;
-//         state.pinTimer = setTimeout(() => (state.pin = null), 10 * 60 * 1000);
-//       })
-//       .addCase(submitEmail.rejected, (state, action) => {
-//         state.error = action.payload as string;
-//       })
-//       .addCase(verifyPin.fulfilled, (state) => {
-//         state.pin = null;
-//         state.pinTimer = null;
-//         state.error = null;
-//       })
-//       .addCase(verifyPin.rejected, (state, action) => {
-//         state.error = action.payload as string;
-//       })
-//       .addCase(resetPassword.fulfilled, (state, action) => {
-//         state.users = action.payload.updatedUsers;
-//         state.error = null;
-//       })
-//       .addCase(resetPassword.rejected, (state, action) => {
-//         state.error = action.payload as string;
-//       });
-   },
+    //       .addCase(loginUser.fulfilled, (state, action) => {
+    //         state.user = action.payload.user;
+    //         state.token = action.payload.token;
+    //         state.error = null;
+    //       })
+    //       .addCase(loginUser.rejected, (state, action) => {
+    //         state.error = action.payload as string;
+    //       })
+    //       .addCase(submitEmail.fulfilled, (state, action) => {
+    //         state.pin = action.payload.pin;
+    //         state.error = null;
+    //         state.pinTimer = setTimeout(() => (state.pin = null), 10 * 60 * 1000);
+    //       })
+    //       .addCase(submitEmail.rejected, (state, action) => {
+    //         state.error = action.payload as string;
+    //       })
+    //       .addCase(verifyPin.fulfilled, (state) => {
+    //         state.pin = null;
+    //         state.pinTimer = null;
+    //         state.error = null;
+    //       })
+    //       .addCase(verifyPin.rejected, (state, action) => {
+    //         state.error = action.payload as string;
+    //       })
+    //       .addCase(resetPassword.fulfilled, (state, action) => {
+    //         state.users = action.payload.updatedUsers;
+    //         state.error = null;
+    //       })
+    //       .addCase(resetPassword.rejected, (state, action) => {
+    //         state.error = action.payload as string;
+    //       });
+  },
 });
 
 // export const { logout, startForgotPassword, cancelReset } = authSlice.actions;

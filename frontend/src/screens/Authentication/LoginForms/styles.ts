@@ -143,95 +143,15 @@ const styles = StyleSheet.create({
   char: {
     color: Theme.colors.textLight,
   },
+  errorText: {
+    color: Theme.colors.highlight,
+    fontFamily:Theme.typography.fonts.poppins.bold,
+    fontSize: 14,
+    marginLeft:20,
+    marginTop: 5,
+  },
 });
 
 export default styles;
 
-//   const styles = StyleSheet.create({
-//     container: {
-//       flex: 1,
-//       backgroundColor: '#FFCE3A',
-//     },
-//     header: {
-//       paddingTop: 60,
-//       paddingHorizontal: 20,
-//       paddingBottom: 20,
-//     },
-//     title: {
-//       fontSize: 24,
-//       fontWeight: 'bold',
-//       color: '#333',
-//     },
-//     form: {
-//       flex: 1,
-//       backgroundColor: '#fff',
-//       borderTopLeftRadius: 30,
-//       borderTopRightRadius: 30,
-//       paddingHorizontal: 20,
-//       paddingVertical: 30,
-//     },
-//     description: {
-//       color: '#666',
-//       marginBottom: 20,
-//       fontSize: 14,
-//     },
-//     inputContainer: {
-//       marginBottom: 20,
-//     },
-//     input: {
-//       backgroundColor: '#f1f1f1',
-//       borderRadius: 8,
-//       padding: 12,
-//       fontSize: 16,
-//     },
-//     nextButton: {
-//       backgroundColor: '#FFCE3A',
-//       borderRadius: 8,
-//       paddingVertical: 14,
-//       alignItems: 'center',
-//       marginBottom: 10,
-//     },
-//     nextButtonText: {
-//       color: '#fff',
-//       fontWeight: 'bold',
-//       fontSize: 16,
-//     },
-//     signUpButton: {
-//       backgroundColor: '#f1f1f1',
-//       borderRadius: 8,
-//       paddingVertical: 14,
-//       alignItems: 'center',
-//       marginTop: 10,
-//     },
-//     signUpButtonText: {
-//       color: '#333',
-//       fontWeight: '600',
-//       fontSize: 16,
-//     },
-//     socialIcons: {
-//       flexDirection: 'row',
-//       justifyContent: 'center',
-//       marginVertical: 20,
-//     },
-//     socialIcon: {
-//       width: 40,
-//       height: 40,
-//       borderRadius: 20,
-//       backgroundColor: '#f1f1f1',
-//       justifyContent: 'center',
-//       alignItems: 'center',
-//       marginHorizontal: 10,
-//     },
-//     signUpLink: {
-//       flexDirection: 'row',
-//       justifyContent: 'center',
-//       marginTop: 'auto',
-//     },
-//     signUpLinkText: {
-//       color: '#666',
-//     },
-//     signUpLinkButton: {
-//       color: '#FFCE3A',
-//       fontWeight: 'bold',
-//     }
-//   });
+
