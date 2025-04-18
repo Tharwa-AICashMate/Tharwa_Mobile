@@ -2,9 +2,7 @@ import { Request, Response } from "express";
 import AuthService from "../services/authService.js";
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
-  console.log("Request body:", req.body);
   const user = req.body;
-
   try {
     const result = await AuthService.signup(user.user);
     res.status(200).json({ message: "Signup successful", data: result });
@@ -13,22 +11,25 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const signinWithProvider = async (req: Request, res: Response): Promise<void> => {
+export const signinWithProvider = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { provider } = req.body;
-
   try {
     const result = await AuthService.signupWithProvider(provider);
-    res.status(200).json({ message: "Signup with provider successful", data: result });
+    res
+      .status(200)
+      .json({ message: "Signup with provider successful", data: result });
   } catch (error: any) {
     res.status(error.status || 500).json({ error: error.message });
   }
 };
 
 export const login = async (req: Request, res: Response): Promise<void> => {
-  const { email, password } = req.body;
-
+  console.log(req.body);
   try {
-    const result = await AuthService.login(email, password);
+    const result = await AuthService.login(req.body.userId);
     res.status(200).json({ message: "Login successful", data: result });
   } catch (error: any) {
     res.status(error.status || 500).json({ error: error.message });

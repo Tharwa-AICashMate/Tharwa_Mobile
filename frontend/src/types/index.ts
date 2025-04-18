@@ -152,6 +152,7 @@ export interface SavingsState {
 }
 
 export type User = {
+  username?: string;
   fullName: string;
   email: string;
   phone?:string,

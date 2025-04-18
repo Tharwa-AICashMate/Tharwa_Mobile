@@ -37,7 +37,6 @@ const OnBoardingNavigation: React.FC = () => {
       }}
     >
       <Stack.Screen name="Launch" component={LaunchScreen} />
-      <Stack.Screen name="Launch" component={LaunchScreen} /> */
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="LoginForm" component={LoginFormScreen} />

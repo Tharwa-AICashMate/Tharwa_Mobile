@@ -1,22 +1,45 @@
 import { User } from "@/types";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { supabase } from "@/utils/supabase";
+import { makeRedirectUri } from "expo-auth-session";
+import * as QueryParams from "expo-auth-session/build/QueryParams";
+import * as WebBrowser from "expo-web-browser";
+import { Provider } from "@supabase/supabase-js";
 
 interface AuthState {
   user: User | null;
-  token: string | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
-  token: null,
   loading: false,
   error: null,
 };
 
 const apiBase = "http://192.168.1.6:3000";
+
+WebBrowser.maybeCompleteAuthSession();
+const redirectTo = makeRedirectUri();
+export const createSessionFromUrl = async (url: string) => {
+  const { params, errorCode } = QueryParams.getQueryParams(url);
+  if (errorCode) throw new Error(errorCode);
+  console.log("Received params:", params);
+  const { access_token, refresh_token } = params;
+  if (!access_token || !refresh_token) {
+    console.log("Missing tokens", { access_token, refresh_token });
+    return;
+  }
+  const { data, error } = await supabase.auth.setSession({
+    access_token,
+    refresh_token,
+  });
+  if (error) throw error;
+  return data.session;
+};
+
 export const registerUser = createAsyncThunk(
   "auth/signup",
   async (payload: { user: User; password: string }, { rejectWithValue }) => {
@@ -24,10 +47,10 @@ export const registerUser = createAsyncThunk(
     const { user, password } = payload;
     try {
       await axios.post(`${apiBase}/auth/signup`, {
-        user: { ...user,dob:user.dob?.toISOString(), password },
+        user: { ...user, dob: user.dob?.toISOString(), password },
       });
-      console.log("User registered successfully",user);
-      return { ...user,dob:user.dob?.toISOString() };
+      console.log("User registered successfully", user);
+      return { ...user, dob: user.dob?.toISOString() };
     } catch (error) {
       console.error("Error registering user:", error);
       rejectWithValue("User Email already Registered");
@@ -35,23 +58,70 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// export const loginUser = createAsyncThunk(
-//   "auth/loginUser",
-//   async (
-//     payload: { loginEmail: string; password: string },
-//     { rejectWithValue }
-//   ) => {
-//     const { loginEmail, password } = payload;
-//     const user = Users.find(
-//       (user) => user.email === loginEmail && user.password === password
-//     );
-//     if (!user) {
-//       return rejectWithValue("Invalid email or password");
-//     }
-//     return { user, token: "xxxx" }; // Simulate token
-//   }
-// );
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async (payload: { email: string; password: string }, { rejectWithValue }) => {
+    const { email, password } = payload;
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) return rejectWithValue("Invalid email or password");
+      const { data: userData } = await axios.post(`${apiBase}/auth/login`, {
+        userId: data.user.id,
+      });
+      return userData.data;
+    } catch (error) {
+      console.error("Error registering user:", error);
+      return rejectWithValue("Invalid email or password");
+    }
+  }
+);
 
+export const logoutUser = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      let { error } = await supabase.auth.signOut();
+      if (error) return rejectWithValue("Logout failed");
+      return null;
+    } catch (error) {
+      console.error("Error logging out:", error);
+      return rejectWithValue("Logout failed");
+    }
+  }
+);
+
+export const loginWithProvider = createAsyncThunk(
+  "auth/loginWithProvider",
+  async (provider: Provider, { rejectWithValue }) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo,
+          skipBrowserRedirect: false,
+        },
+      });
+      if (error) return rejectWithValue("Login failed");
+      const res = await WebBrowser.openAuthSessionAsync(
+        data?.url ?? "",
+        redirectTo
+      );
+      if (res.type === "success") {
+        const session = await createSessionFromUrl(res.url);
+        const { data: userData } = await axios.post(`${apiBase}/auth/login`, {
+          userId: session?.user.id,
+        });
+        return userData.data;
+      }
+    } catch (error) {
+      console.error("Error logging in with provider:", error);
+      return rejectWithValue("Login failed");
+    }
+  }
+);
 // export const submitEmail = createAsyncThunk(
 //   "auth/submitEmail",
 //   async (email: string, { rejectWithValue }) => {
@@ -127,15 +197,37 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.user = action.payload as User;
+        state.error = null;
+        state.loading = false;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      })
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.user = null;
+        state.error = null;
+        state.loading = false;
+      })
+      .addCase(loginWithProvider.fulfilled, (state, action) => {
+        state.user = action.payload as User;
+        state.error = null;
+        state.loading = false;
+      })
+      .addCase(loginWithProvider.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      })
+      .addCase(loginWithProvider.pending, (state) => {
+        state.loading = true;
       });
-    //       .addCase(loginUser.fulfilled, (state, action) => {
-    //         state.user = action.payload.user;
-    //         state.token = action.payload.token;
-    //         state.error = null;
-    //       })
-    //       .addCase(loginUser.rejected, (state, action) => {
-    //         state.error = action.payload as string;
-    //       })
+
     //       .addCase(submitEmail.fulfilled, (state, action) => {
     //         state.pin = action.payload.pin;
     //         state.error = null;
@@ -162,6 +254,6 @@ const authSlice = createSlice({
   },
 });
 
-// export const { logout, startForgotPassword, cancelReset } = authSlice.actions;
-
+//export const {  } = authSlice.actions;
+//logout, startForgotPassword, cancelReset
 export default authSlice.reducer;

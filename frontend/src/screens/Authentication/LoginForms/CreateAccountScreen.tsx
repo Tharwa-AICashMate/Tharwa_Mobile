@@ -52,10 +52,8 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
     );
   
     if (registerUser.fulfilled.match(resultAction)) {
-      // registration succeeded
       navigation.navigate('LoginForm');
     } else {
-      // handle error
       console.log("Signup failed:", resultAction.error);
     }
   }

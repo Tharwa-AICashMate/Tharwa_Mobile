@@ -13,6 +13,9 @@ import Header from '../../componenets/HeaderIconsWithTitle/HeadericonsWithTitle'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Theme from '@/theme';
 import styles from './ProfileMenu.styles'; 
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/redux/store';
+import { logoutUser } from "@/redux/slices/AuthSlice";
 
 type RootStackParamList = {
   EditProfile: undefined;
@@ -33,7 +36,10 @@ interface MenuItemProps {
 
 const Profile: React.FC = () => {
   const navigation = useNavigation<ProfileNavigationProp>();
-
+  const dispatch = useDispatch<AppDispatch>();
+  const logout = async() =>{
+    dispatch(logoutUser())
+  }
   return (
     <View style={styles.container}>
       <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
@@ -47,7 +53,7 @@ const Profile: React.FC = () => {
             <MenuItem icon="shield-checkmark" label="Security" onPress={() => navigation.navigate('Security')} />
             <MenuItem icon="settings" label="Settings" onPress={() => navigation.navigate('SettingsScreen')} />
             <MenuItem icon="help-circle" label="Help" onPress={() => navigation.navigate('HelpCenterScreen')} />
-            <MenuItem icon="log-out-outline" label="Logout" onPress={() => navigation.navigate('Logout')} />
+            <MenuItem icon="log-out-outline" label="Logout" onPress={logout} />
           </View>
         </View>
       </ScrollView>

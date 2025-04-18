@@ -1,37 +1,24 @@
 import { navigationProps } from "@/types";
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "./styles";
 import Input from "@/componenets/UI/input";
-import { ScrollView } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { loginUser } from "@/redux/slices/AuthSlice";
+import { isStrongPassword, isValidEmail } from "@/utils/validators";
+import SocialSignIn from "@/componenets/Login/SocialSignIn";
 
 const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
-  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { error, loading } = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleLogin = () => {
-    // Here be logic of validation 
-    navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: 'MainApp',
-          state: {
-            routes: [{ name: 'Home' }],
-          },
-        },
-      ],
-    });
+  const handleLogin = async () => {
+    const resultAction = await dispatch(loginUser({ email, password }));
   };
-  
 
   return (
     <View style={styles.container}>
@@ -40,12 +27,15 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
       </View>
 
       <View style={styles.form}>
-        
+        {error && <Text style={styles.errorText}>{error}</Text>}
+
         <Input
-          label="Username or email"
-          value={username}
-          onChangeText={setUsername}
-          errorMessage={""}
+          label="Email"
+          value={email}
+          keyboardType="email-address"
+          onChangeText={setEmail}
+          errorMessage={"Invalid Email"}
+          validator={isValidEmail}
           autoCapitalize="none"
           placeholder="example@example.com"
         />
@@ -54,18 +44,25 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
           label="Password"
           value={password}
           onChangeText={setPassword}
-          errorMessage={""}
+          validator={isStrongPassword}
+          errorMessage={"Invalid Password"}
           autoCapitalize="none"
+          autoComplete="off"
+          secureTextEntry={showPassword}
           endIcon={
             <Image
-              source={showPassword? require("@/assets/Eye-icon-open.png") :require("@/assets/Eye-icon.png")}
-              style={{ width: 25, height:13 }}
+              source={
+                !showPassword
+                  ? require("@/assets/Eye-icon.png")
+                  : require("@/assets/Eye-icon-open.png")
+              }
+              style={{ width: 25, height: 13, objectFit: "contain" }}
             />
           }
           onEndIconPress={() => setShowPassword((show) => !show)}
         />
-        
-        <TouchableOpacity style={styles.primaryButton} onPress={() => {handleLogin()}}>
+
+        <TouchableOpacity style={styles.primaryButton} onPress={handleLogin}>
           <Text style={styles.primaryButtonText}>Log In</Text>
         </TouchableOpacity>
 
@@ -87,24 +84,7 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
           <Text style={styles.fingerprintText}>Use Fingerprint To Access</Text>
         </TouchableOpacity>
 
-        <Text style={styles.linkText}>or sign up with </Text>
-
-        <View style={styles.socialIcons}>
-          <TouchableOpacity style={styles.socialIcon}>
-            <Image
-              source={require("@/assets/Facebook-icon.png")}
-              style={{ width: 32, height: 32 }}
-            />
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.socialIcon}>
-            <Image
-              source={require("@/assets/Google-icon.png")}
-              style={{ width: 32, height: 32 }}
-            />
-          </TouchableOpacity>
-        </View>
-
+        <SocialSignIn/> 
         <View style={styles.link}>
           <Text style={styles.linkText}>Don't have an account? </Text>
           <TouchableOpacity
@@ -113,7 +93,6 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
             <Text style={styles.linkButton}> Sign Up</Text>
           </TouchableOpacity>
         </View>
-        
       </View>
     </View>
   );
