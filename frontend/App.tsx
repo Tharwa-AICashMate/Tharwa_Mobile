@@ -110,7 +110,7 @@ export default function App() {
       <StatusBar style="light" />
       <NavigationContainer>
         <RootStack.Navigator 
-          initialRouteName="Launch"
+          initialRouteName="Categories"
           screenOptions={{ headerShown: false }}
         >
           {/* Launch and Onboarding */}

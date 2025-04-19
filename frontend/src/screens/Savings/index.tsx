@@ -1,79 +1,93 @@
+import React, { useEffect } from 'react';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { RootStackParamList } from 'App';
+import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import BalanceDisplay from '@/componenets/BalanceDisplay';
 import ProgressBar from '@/componenets/ProgressBar';
 import Theme from '@/theme';
-import { RootStackParamList } from 'App';
-import React from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
-import { Ionicons } from "@expo/vector-icons";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
-import { useNavigation } from '@react-navigation/native';
-import { useAppSelector } from '@/redux/hook';
 import styles from './style';
-import CategorySection from '@/componenets/CategorySection';
+
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
+import { fetchUserGoals } from '@/redux/slices/savingSlice';
 
 type SavingsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  "Savings"
+  'Savings'
 >;
 
-const savingsGoals = [
-  { id: '1', name: 'Travel', icon: 'airplane', bgColor: Theme.colors.accentLight },
-  { id: '2', name: 'New House', icon: 'home', bgColor:Theme.colors.accentLight  },
-  { id: '3', name: 'Car', icon: 'car', bgColor: Theme.colors.accentLight  },
-  { id: '4', name: 'Wedding', icon: 'diamond-outline', bgColor: Theme.colors.accentLight  },
-];
-
-function Savings() {
+const Savings = () => {
   const navigation = useNavigation<SavingsScreenNavigationProp>();
-  const budget = useAppSelector((state) => state.expenses.budget);
-  
+  const dispatch = useAppDispatch();
+
+  const userId = '99a72ab5-85b7-484d-8102-adbcf68f6cde';
+  const { items: savingsGoals } = useAppSelector((state) => state.goals);
+
+  useEffect(() => {
+    dispatch(fetchUserGoals(userId));
+  }, [dispatch, userId]);
+
   const navigateToCategory = (categoryName: string) => {
-    navigation.navigate("SavingDetails", { categoryName });
+    navigation.navigate('SavingDetails', { categoryName });
   };
 
+  const renderGoalCard = ({ item }: { item: any }) => (
+    <TouchableOpacity
+      style={styles.categoryCard}
+      onPress={() => navigateToCategory(item.name)}
+    >
+      <View style={styles.categoryIconContainer}>
+        <Ionicons name={item.icon || 'wallet-outline'} size={45} color="white" />
+      </View>
+      <Text style={styles.categoryName}>{item.name}</Text>
+    </TouchableOpacity>
+  );
+
   return (
-    <>
-      <SafeAreaView style={styles.container}>
-        {/* Header */}
-        <Header title="Savings" />
-        
-        {/* Budget Summary */}
-        <View style={styles.balanceContainer}>
-          <BalanceDisplay
-            balance={budget.totalExpenses}
-            expense={budget.totalIncome}
-          />
-        </View>
-        <View style={styles.budgetContainer}>
-          <View style={styles.progressContainer}>
-            <ProgressBar
-              percentage={budget.percentageUsed}
-              amount={budget.budgetLimit}
-            />
-          </View>
-          
-          {/* Budget Status */}
-          <View style={styles.budgetStatus}>
-            <Ionicons
-              name="checkbox-outline"
-              size={16}
-              color={Theme.colors.text}
-            />
-            <Text style={styles.budgetStatusText}>
-              {budget.percentageUsed}% Of Your Expenses, Looks Good.
-            </Text>
-          </View>
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <Header title="Savings" />
+
+      {/* Budget Summary */}
+      <View style={styles.balanceContainer}>
+        <BalanceDisplay balance={200000} expense={1000} />
+      </View>
+
+      <View style={styles.budgetContainer}>
+        <View style={styles.progressContainer}>
+          <ProgressBar percentage={30} amount={122223} />
         </View>
 
-        <View style={styles.categoriesContainer}>
-          <ScrollView contentContainerStyle={styles.categoriesGrid}>
-            <CategorySection data={savingsGoals} onpress={navigateToCategory}/>
-          </ScrollView>
+        {/* Budget Status */}
+        <View style={styles.budgetStatus}>
+          <Ionicons name="checkbox-outline" size={16} color={Theme.colors.text} />
+          <Text style={styles.budgetStatusText}>
+            30% Of Your Expenses, Looks Good.
+          </Text>
         </View>
-      </SafeAreaView>
-    </>
+      </View>
+
+      {/* Goals List */}
+      <View style={styles.categoriesContainer}>
+        <FlatList
+          data={savingsGoals}
+          keyExtractor={(item) => item.id}
+          numColumns={3}
+          renderItem={renderGoalCard}
+          contentContainerStyle={styles.categoriesGrid}
+        />
+      </View>
+    </SafeAreaView>
   );
-}
+};
 
 export default Savings;

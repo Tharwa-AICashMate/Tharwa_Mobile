@@ -16,7 +16,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import styles from "./style";
 import ProgressBar from "@/componenets/ProgressBar";
 import ProgressCircle from "@/componenets/ProgressCircle";
-import { selectSavedAmount } from "@/redux/slices/savingSlice";
+// import { selectSavedAmount } from "@/redux/slices/savingSlice";
 import TransactionItem from "@/componenets/TransactionItem";
 
 type SavingDetailsProps = NativeStackScreenProps<
@@ -30,30 +30,30 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
   const route = useRoute<SavingDetailsRouteProp>();
   const navigation = useNavigation<SavingDetailsNavigationProp>();
   const { categoryName } = route.params;
-  const savingsData = useAppSelector(
-    (state) => state.savings.categories[categoryName]
-  );
+  // const savingsData = useAppSelector(
+  //   (state) => state.savings.categories[categoryName]
+  // );
 
-  const savedAmount = useAppSelector((state) =>
-    selectSavedAmount(state, categoryName)
-  );
+  // const savedAmount = useAppSelector((state) =>
+  //   selectSavedAmount(state, categoryName)
+  // );
 
   // Group deposits by month
-  const groupedDeposits = savingsData.deposits.reduce(
-    (groups: { [key: string]: typeof savingsData.deposits }, deposit) => {
-      // Extract month from deposit.date (assuming deposit.date is in a format that can be parsed)
-      const monthMatch = deposit.date.match(/([A-Za-z]+)/);
-      const month = monthMatch ? monthMatch[0] : "Unknown";
+  // const groupedDeposits = savingsData.deposits.reduce(
+  //   (groups: { [key: string]: typeof savingsData.deposits }, deposit) => {
+  //     // Extract month from deposit.date (assuming deposit.date is in a format that can be parsed)
+  //     const monthMatch = deposit.date.match(/([A-Za-z]+)/);
+  //     const month = monthMatch ? monthMatch[0] : "Unknown";
 
-      if (!groups[month]) {
-        groups[month] = [];
-      }
+  //     if (!groups[month]) {
+  //       groups[month] = [];
+  //     }
 
-      groups[month].push(deposit);
-      return groups;
-    },
-    {}
-  );
+  //     groups[month].push(deposit);
+  //     return groups;
+  //   },
+  //   {}
+  // );
 
   // Format currency
   const formatCurrency = (amount: number): string => {
@@ -74,7 +74,7 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
   const addSavings = () => {
     navigation.navigate("AddSavings", { categoryName });
   };
-  const percentage = Math.round((savedAmount / savingsData.goal) * 100);
+  // const percentage = Math.round((savedAmount / savingsData.goal) * 100);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -93,9 +93,9 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
             />
             <Text style={styles.infoLabel}>Goal</Text>
           </View>
-          <Text style={styles.goalAmount}>
+          {/* <Text style={styles.goalAmount}>
             {formatCurrency(savingsData.goal)}
-          </Text>
+          </Text> */}
 
           <View style={styles.infoRow}>
             <Ionicons
@@ -106,13 +106,13 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
             />
             <Text style={styles.infoLabel}>Amount Saved</Text>
           </View>
-          <Text style={styles.savedAmount}>{formatCurrency(savedAmount)}</Text>
+          {/* <Text style={styles.savedAmount}>{formatCurrency(savedAmount)}</Text> */}
 
           {/* Category Icon */}
           <View style={styles.categoryIconWrapper}>
             <View style={styles.categoryIconContainer}>
               <ProgressCircle
-                progress={percentage}
+                progress={7}
                 categoryName={categoryName}
               />
             </View>
@@ -121,11 +121,11 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
 
         {/* Progress bar */}
         <View style={styles.progressContainer}>
-          <ProgressBar
+          {/* <ProgressBar
             percentage={percentage}
             amount={savingsData.goal}
             color={Theme.colors.primary}
-          />
+          /> */}
 
           {/* Status */}
           <View style={styles.statusContainer}>
@@ -135,14 +135,14 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
               color={Theme.colors.text}
             />
             <Text style={styles.statusText}>
-              {percentage}% Of Your Goal, Looks Good.
+              {89}% Of Your Goal, Looks Good.
             </Text>
           </View>
         </View>
 
         {/* Deposits History */}
         <ScrollView style={styles.transactionList}>
-          {Object.keys(groupedDeposits).map((month) => (
+          {/* {Object.keys(groupedDeposits).map((month) => (
             <View key={month} style={styles.monthSection}>
               <Text style={styles.monthTitle}>{month}</Text>
 
@@ -168,8 +168,8 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
                   isDeposit={true}
                 />
               ))}
-            </View>
-          ))}
+            </View> */}
+          {/* ))} */}
         </ScrollView>
 
         {/* Add Savings Button */}

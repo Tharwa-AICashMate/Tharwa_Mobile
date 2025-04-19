@@ -1,5 +1,8 @@
 import Theme from "@/theme";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+
+const screenWidth = Dimensions.get("window").width;
+const cardWidth = screenWidth / 3 - 18; 
 
 const styles = StyleSheet.create({
   container: {
@@ -11,6 +14,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 7,
   },
+
   progressContainer: {
     marginBottom: 24,
   },
@@ -21,11 +25,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
   budgetStatusText: {
     marginLeft: 5,
     fontSize: Theme.typography.size.xs,
     color: Theme.colors?.text,
   },
+
   categoriesContainer: {
     flex: 1,
     backgroundColor: Theme.colors.background,
@@ -33,34 +39,34 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 50,
     paddingTop: 40,
   },
+
   categoriesGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
+    alignItems: "center", 
     paddingHorizontal: 20,
-    paddingBottom: 20,
-    
+    paddingBottom: 40,
   },
+
   categoryCard: {
-    width: "30%",
+    width: cardWidth,
     alignItems: "center",
     marginBottom: 20,
-    margin:5
-  
   },
+
   categoryIconContainer: {
-    width: 80,
-    height: 70,
-    borderRadius: 15,
+    width: 100,
+    height: 95,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 8,
-    backgroundColor: Theme.colors.accentLight
+    backgroundColor: Theme.colors.accentLight,
   },
+
   categoryName: {
     fontSize: 14,
     color: Theme.colors.text,
     fontWeight: "500",
+    textAlign: "center",
   },
 
   headerTitle: {
@@ -68,12 +74,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "white",
   },
+
   budgetContainer: {
     paddingHorizontal: 20,
     paddingBottom: 20,
   },
 });
+
 export default styles;
-
-
-
