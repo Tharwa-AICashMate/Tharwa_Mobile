@@ -7,11 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-<<<<<<< HEAD
-    "start": "node --loader ts-node/esm app.ts",
-=======
     "start": "tsx app.ts",
->>>>>>> HomePage
     "dev": "tsx watch app.ts",
     "build": "tsc",
     "serve": "node dist/app.js"
@@ -21,18 +17,12 @@
   "description": "",
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
-<<<<<<< HEAD
     "@types/express": "^5.0.1",
-=======
->>>>>>> HomePage
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^4.18.2"
   },
   "devDependencies": {
-<<<<<<< HEAD
-=======
     "@types/express": "^5.0.1",
->>>>>>> HomePage
     "@types/node": "^22.14.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
