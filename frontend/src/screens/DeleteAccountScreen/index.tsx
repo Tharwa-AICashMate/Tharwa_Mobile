@@ -14,9 +14,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../store/store';
-import { deleteAccount } from '../redux/slices/settingsSlice';
-import PasswordInput from '../componenets/PasswordInput';
+import { AppDispatch, RootState } from '@/redux/store';
+import { deleteAccount } from '@/redux/slices/settingsSlice';
+import PasswordInput from '@/componenets/PasswordInput';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import Theme from '@/theme';
 const { height, width } = Dimensions.get('window');
@@ -43,7 +43,7 @@ const DeleteAccountScreen: React.FC = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      await dispatch(deleteAccount(password)).unwrap();
+      await dispatch(deleteAccount()).unwrap();
       setShowModal(false);
       Alert.alert(
         'Account Deleted',

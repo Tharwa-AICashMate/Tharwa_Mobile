@@ -1,27 +1,29 @@
-
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { RouteProp } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { BottomTabBarButtonProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  BottomTabBarButtonProps,
+  createBottomTabNavigator,
+} from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 
-import SettingsScreen from "../screens/SettingsScreen";
-import NotificationSettingsScreen from "../screens/NotificationSettingsScreen";
+import SettingsScreen from "../screens/Settings";
+import NotificationSettingsScreen from "../screens/NotificationSettingsScreen/NotificationSettingsScreen";
 import PasswordSettingsScreen from "../screens/PasswordSettingsScreen";
-import PasswordChangeConfirmScreen from "../screens/PasswordChangeConfirmScreen";
+import PasswordChangeConfirmScreen from "../screens/PasswordChangeConfirm/PasswordChangeConfirmScreen";
 import DeleteAccountScreen from "../screens/DeleteAccountScreen";
 import LoginScreen from "@/screens/LoginScreen";
 import DashboardScreen from "../screens/DashboardScreen";
 import TransactionsScreen from "../screens/TransactionsScreen";
-import HelpCenterScreen from "../screens/HelpCenterScreen";
+import HelpCenterScreen from "../screens/EditProfile";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 import { AccessibilityState } from "react-native";
-import SupportChannelsScreen from "@/screens/SupportChannelsScreen";
+import SupportChannelsScreen from "@/screens/SupportChannelsScreen/SupportChannelsScreen";
 import StatsScreen from "@/screens/StatsScreen";
 import AddTransactionScreen from "@/screens/AddTransactionScreen";
 
@@ -31,7 +33,11 @@ interface CustomTabBarButtonProps {
   accessibilityState: AccessibilityState;
 }
 
-const CustomTabBarButton = ({ children, onPress, accessibilityState }: CustomTabBarButtonProps) => {
+const CustomTabBarButton = ({
+  children,
+  onPress,
+  accessibilityState,
+}: CustomTabBarButtonProps) => {
   const focused = accessibilityState.selected;
 
   return (
@@ -59,16 +65,27 @@ const SettingsStackNavigator = () => {
       }}
     >
       <Stack.Screen name="Settings" component={SettingsScreen} />
-      <Stack.Screen name="NotificationSettings" component={NotificationSettingsScreen} />
-      <Stack.Screen name="PasswordSettings" component={PasswordSettingsScreen} />
-      <Stack.Screen name="PasswordChangeConfirm" component={PasswordChangeConfirmScreen} />
+      <Stack.Screen
+        name="NotificationSettings"
+        component={NotificationSettingsScreen}
+      />
+      <Stack.Screen
+        name="PasswordSettings"
+        component={PasswordSettingsScreen}
+      />
+      <Stack.Screen
+        name="PasswordChangeConfirm"
+        component={PasswordChangeConfirmScreen}
+      />
       <Stack.Screen name="DeleteAccount" component={DeleteAccountScreen} />
       <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
       <Stack.Screen name="SupportChannels" component={SupportChannelsScreen} />
       <Stack.Sceen name="TransactionsScreen" component={TransactionsScreen} />
       <Stack.Screen name="StatsScreen" component={StatsScreen} />
-      <Stack.Screen name="AddTransactionScreen" comonent={AddTransactionScreen}/>
-      
+      <Stack.Screen
+        name="AddTransactionScreen"
+        comonent={AddTransactionScreen}
+      />
     </Stack.Navigator>
   );
 };
@@ -77,9 +94,24 @@ const SettingsStackNavigator = () => {
 const MainTabNavigator = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }: { route: RouteProp<Record<string, object | undefined>, string> }) => ({
+      screenOptions={({
+        route,
+      }: {
+        route: RouteProp<Record<string, object | undefined>, string>;
+      }) => ({
         tabBarIcon: ({ focused, size }: { focused: boolean; size: number }) => {
-          let iconName: "home" | "home-outline" | "search" | "search-outline" | "settings" | "settings-outline" | "repeat" | "repeat-outline" | "layers" | "layers-outline" | undefined;
+          let iconName:
+            | "home"
+            | "home-outline"
+            | "search"
+            | "search-outline"
+            | "settings"
+            | "settings-outline"
+            | "repeat"
+            | "repeat-outline"
+            | "layers"
+            | "layers-outline"
+            | undefined;
 
           if (route.name === "home") {
             iconName = focused ? "home" : "home-outline";
@@ -93,30 +125,45 @@ const MainTabNavigator = () => {
             iconName = focused ? "layers" : "layers-outline";
           }
 
-          return (
-            <Ionicons
-              name={iconName}
-              size={size}
-              color={ "black"}
-            />
-          );
+          return <Ionicons name={iconName} size={size} color={"black"} />;
         },
-        tabBarButton: (props: BottomTabBarButtonProps) => <CustomTabBarButton {...props} />,
+        tabBarButton: (props: BottomTabBarButtonProps) => (
+          <CustomTabBarButton {...props} />
+        ),
         headerShown: false,
         tabBarStyle: {
           backgroundColor: "rgb(250, 250, 249)",
           height: 60,
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
-        
         },
       })}
     >
-      <Tab.Screen name="home" component={DashboardScreen}    options={{ tabBarLabel: "" }} />
-      <Tab.Screen name="repeat" component={TransactionsScreen}    options={{ tabBarLabel: "" }} />
-      <Tab.Screen name="Search" component={TransactionsScreen}    options={{ tabBarLabel: "" }} />
-      <Tab.Screen name="layers" component={TransactionsScreen}   options={{ tabBarLabel: "" }}  />
-      <Tab.Screen name="SettingsTab" component={SettingsStackNavigator}   options={{ tabBarLabel: "" }} />
+      <Tab.Screen
+        name="home"
+        component={DashboardScreen}
+        options={{ tabBarLabel: "" }}
+      />
+      <Tab.Screen
+        name="repeat"
+        component={TransactionsScreen}
+        options={{ tabBarLabel: "" }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={TransactionsScreen}
+        options={{ tabBarLabel: "" }}
+      />
+      <Tab.Screen
+        name="layers"
+        component={TransactionsScreen}
+        options={{ tabBarLabel: "" }}
+      />
+      <Tab.Screen
+        name="SettingsTab"
+        component={SettingsStackNavigator}
+        options={{ tabBarLabel: "" }}
+      />
     </Tab.Navigator>
   );
 };

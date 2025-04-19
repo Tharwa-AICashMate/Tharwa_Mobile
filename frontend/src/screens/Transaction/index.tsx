@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../redux/store';
+import { RootState, AppDispatch } from '@/redux/store';
 import { fetchTransactionsAsync } from '@/redux/slices/transactionSlice';
 import { Ionicons } from '@expo/vector-icons';
-import TransactionSummary from '../componenets/TransactionSummary';
-import MonthSection from '../componenets/MonthSection';
+import TransactionSummary from '@/componenets/TransactionSummary';
+import MonthSection from '@/componenets/MonthSection';
 import { Transaction } from '@/types/transactionTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
