@@ -171,8 +171,4 @@ interface SavingCategory {
   deposits: SavingDeposit[];
 }
 
-// interface SavingsState {
-//   categories: {
-//     [key: string]: SavingCategory;
-//   };
-// }
+

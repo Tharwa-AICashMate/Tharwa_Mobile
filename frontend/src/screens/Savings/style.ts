@@ -1,6 +1,7 @@
 import Theme from "@/theme";
-import { StyleSheet } from "react-native";
-
+import { Dimensions, StyleSheet } from "react-native";
+const screenWidth = Dimensions.get("window").width;
+const cardWidth = screenWidth / 3 - 18; 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -43,5 +44,27 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     paddingHorizontal: 10,
     paddingBottom: 20,
+  },
+  categoryCard: {
+    width: cardWidth,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  categoryIconContainer: {
+    width: 100,
+    height: 95,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 8,
+    backgroundColor: Theme.colors.accentLight,
+  },
+
+  categoryName: {
+    fontSize: 14,
+    color: Theme.colors.text,
+    fontWeight: "500",
+    textAlign: "center",
   },})
   export default styles

@@ -4,14 +4,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import settingsReducer from './slices/settingsSlice';
 import helpCenterReducer from './slices/helpCenterSlice';
 import expenseReducer from './slices/expenseSlice';
-import savingsReducer from './slices/savingSlice';
+import goalsReducer from './slices/savingSlice';
 import transactionReducer from './slices/transactionSlice'
+import categoriesReducer from './slices/categoriesSlice'
 export const store = configureStore({
   reducer: {
+    categories: categoriesReducer,
     settings: settingsReducer,
     helpCenter: helpCenterReducer,
     expenses: expenseReducer,
-    savings: savingsReducer,
+    goals: goalsReducer,
     transactions: transactionReducer
   },
   middleware: (getDefaultMiddleware) =>

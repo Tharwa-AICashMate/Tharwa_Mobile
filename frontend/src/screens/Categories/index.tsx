@@ -1,161 +1,10 @@
-// import React ,{ useState } from "react";
-// import {
-//   View,
-//   Text,
-//   TouchableOpacity,
-//   SafeAreaView,
-//   ScrollView,
-//   Pressable,
-//   StatusBar,
-// } from "react-native";
-// import { useNavigation } from "@react-navigation/native";
-// import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-// import { Ionicons } from "@expo/vector-icons";
-// import { useAppSelector, useAppDispatch } from "@/redux/hook";
-// import { RootStackParamList } from "App";
-// import BalanceDisplay from "@/componenets/BalanceDisplay";
-// import ProgressBar from "@/componenets/ProgressBar";
-// import styles from "./style";
-// import Theme from "@/theme";
-// import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
-// import Notification from '../Notification'
-// import AddCategoryModal from "@/componenets/AddCategoryModal";
-// import CategorySection from "@/componenets/CategorySection";
-// import { addCategory } from "@/redux/slices/expenseSlice"; 
-// type CategoriesScreenNavigationProp = NativeStackNavigationProp<RootStackParamList,"Categories">;
-
-// const CategoriesScreen = () => {
-//   const navigation = useNavigation<CategoriesScreenNavigationProp>();
-//   const dispatch = useAppDispatch();
-//   const [modalVisible, setModalVisible] = useState(false);
-//   const [newCategoryName, setNewCategoryName] = useState("");
-//   // const budget = useAppSelector((state) => state.expenses.budget);
-//   // const categories = useAppSelector((state) => state.expenses.categories);
-//   const expenses = useAppSelector((state) => state.expenses); 
-
-// type CategoriesScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Categories">;
-
-// const CategoriesScreen = () => {
-//   const navigation = useNavigation<CategoriesScreenNavigationProp>();
-//   const dispatch = useAppDispatch();
-//   const [modalVisible, setModalVisible] = useState(false);
-//   const [newCategoryName, setNewCategoryName] = useState("");
-//   // const budget = useAppSelector((state) => state.expenses.budget);
-//   // const categories = useAppSelector((state) => state.expenses.categories);
-
-// if (!expenses) {
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       <Text style={{ textAlign: 'center', marginTop: 50 }}>Loading...</Text>
-//     </SafeAreaView>
-//   );
-// }
-
-// const { budget, categories } = expenses;
-//   const navigateToCategory = (categoryName: string) => {
-//     if (categoryName === "Savings") {
-//       navigation.navigate("Savings");
-//     } else {
-//       navigation.navigate("CategoryDetail", { categoryName });
-//     }
-//   };
-
-//   const openAddCategoryModal = () => {
-//     setModalVisible(true);
-//   };
-
-//   const handleAddCategory = () => {
-//     if (newCategoryName.trim()) {
-//       dispatch(
-//         addCategory({
-//           name: newCategoryName,
-//           icon: "wallet-outline",  
-//         })
-//       );
-//       setNewCategoryName("");
-//       setModalVisible(false);
-//     }
-//   };
-
-//   const handleCancel = () => {
-//     setNewCategoryName("");
-//     setModalVisible(false);
-//   };
-
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       {/* Header */}
-//       {/* <Header name="Categories" navigateBack={() => navigation.goBack()} /> */}
-//       <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
-//       <Header title="Categories"  />
-
-//       {/* Budget Summary */}
-//       <View style={styles.balanceContainer}>
-//         <BalanceDisplay balance={budget.totalExpenses} expense={budget.totalIncome} />
-//       </View>
-//       <View style={styles.budgetContainer}>
-//         <View style={styles.progressContainer}>
-//           <ProgressBar percentage={budget.percentageUsed} amount={budget.budgetLimit} />
-//         </View>
-
-//         {/* Budget Status */}
-//         <View style={styles.budgetStatus}>
-//           <Ionicons name="checkbox-outline" size={16} color={Theme.colors.text} />
-//           <Text style={styles.budgetStatusText}>
-//             {budget.percentageUsed}% Of Your Expenses, Looks Good.
-//           </Text>
-//         </View>
-//       </View>
-
-//       {/* Categories Grid */}
-//       <View style={styles.categoriesContainer}>
-//         <ScrollView contentContainerStyle={styles.categoriesGrid}>
-//           <CategorySection data={categories} onpress={navigateToCategory} />
-
-//           {/* More Category Card */}
-//           <TouchableOpacity style={styles.categoryCard}>
-//             <Pressable
-//               onPress={openAddCategoryModal}
-//               style={({ pressed }) => [
-//                 styles.categoryIconContainer,
-//                 {
-//                   backgroundColor: pressed
-//                     ? Theme.colors.accentDark
-//                     : Theme.colors.accentLight,
-//                 },
-//               ]}
-//             >
-//               <Ionicons name="add" size={40} color="white" />
-//             </Pressable>
-//             <Text style={styles.categoryName}>More</Text>
-//           </TouchableOpacity>
-//         </ScrollView>
-//       </View>
-
-//       {/* New Category Modal */}
-//       <AddCategoryModal
-//         visible={modalVisible}
-//         categoryName={newCategoryName}
-//         onChangeName={setNewCategoryName}
-//         onSave={handleAddCategory}
-//         onCancel={handleCancel}
-//       />
-//     </SafeAreaView>
-//   );
-// };
-// }
-// export default CategoriesScreen;
-
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   SafeAreaView,
-  ScrollView,
-  Pressable,
-  StatusBar,
+  FlatList,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -167,9 +16,8 @@ import ProgressBar from "@/componenets/ProgressBar";
 import styles from "./style";
 import Theme from "@/theme";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
+import { addNewCategory, fetchUserCategories } from "@/redux/slices/categoriesSlice";
 import AddCategoryModal from "@/componenets/AddCategoryModal";
-import CategorySection from "@/componenets/CategorySection";
-import { addCategory } from "@/redux/slices/expenseSlice";
 
 type CategoriesScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -179,40 +27,48 @@ type CategoriesScreenNavigationProp = NativeStackNavigationProp<
 const CategoriesScreen = () => {
   const navigation = useNavigation<CategoriesScreenNavigationProp>();
   const dispatch = useAppDispatch();
+  const userId = "99a72ab5-85b7-484d-8102-adbcf68f6cde";
+  const { items: categories } = useAppSelector((state) => state.categories);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
 
-  const expenses = useAppSelector((state) => state.expenses);
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        if (userId) {
+          const resultAction = await dispatch(fetchUserCategories(userId));
+          if (fetchUserCategories.rejected.match(resultAction)) {
+            console.error("Fetch error:", resultAction.payload || resultAction.error);
+          }
+        }
+      } catch (err) {
+        console.error("Uncaught error:", err);
+      }
+    };
 
-  if (!expenses) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={{ textAlign: "center", marginTop: 50 }}>Loading...</Text>
-      </SafeAreaView>
-    );
-  }
+    loadData();
+  }, [dispatch, userId]);
 
-  const { budget, categories } = expenses;
-
-  const navigateToCategory = (categoryName: string) => {
-    if (categoryName === "Savings") {
-      navigation.navigate("Savings");
-    } else {
-      navigation.navigate("CategoryDetail", { categoryName });
+  const handleCategoryPress = (item: any) => {
+    if (item.name.toLowerCase() === "more") {
+      setModalVisible(true);
+    } 
+    else if(item.name.toLowerCase() === "savings"){
+      navigation.navigate("Savings", { categoryName: item.name });
     }
-  };
-
-  const openAddCategoryModal = () => {
-    setModalVisible(true);
+    else {
+      navigation.navigate("CategoryDetail", { categoryName: item.name });
+    }
   };
 
   const handleAddCategory = () => {
     if (newCategoryName.trim()) {
       dispatch(
-        addCategory({
-          name: newCategoryName,
-          icon: "wallet-outline",
+        addNewCategory({
+          name: newCategoryName.trim(),
+          icon: "wallet-outline", 
+          user_id: userId,
         })
       );
       setNewCategoryName("");
@@ -225,58 +81,51 @@ const CategoriesScreen = () => {
     setModalVisible(false);
   };
 
+  const renderItem = ({ item }: { item: any }) => (
+    <TouchableOpacity style={styles.categoryCard} onPress={() => handleCategoryPress(item)}>
+      <View style={styles.categoryIconContainer}>
+        <Ionicons
+          name={item.name.toLowerCase() === "more" ? "add" : item.icon || "wallet-outline"}
+          size={45}
+          color="white"
+        />
+      </View>
+      <Text style={styles.categoryName}>{item.name}</Text>
+    </TouchableOpacity>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
-      
-      {/* Header */}
-      <Header title="Categories"  />
+      <Header title="Categories" />
 
-      {/* Budget Summary */}
       <View style={styles.balanceContainer}>
-        <BalanceDisplay balance={budget.totalExpenses} expense={budget.totalIncome} />
+        <BalanceDisplay balance={20000} expense={400000} />
       </View>
 
       <View style={styles.budgetContainer}>
         <View style={styles.progressContainer}>
-          <ProgressBar percentage={budget.percentageUsed} amount={budget.budgetLimit} />
+          <ProgressBar percentage={30} amount={40} />
         </View>
 
-        {/* Budget Status */}
         <View style={styles.budgetStatus}>
           <Ionicons name="checkbox-outline" size={16} color={Theme.colors.text} />
           <Text style={styles.budgetStatusText}>
-            {budget.percentageUsed}% Of Your Expenses, Looks Good.
+            {30}% Of Your Expenses, Looks Good.
           </Text>
         </View>
       </View>
 
-      {/* Categories Grid */}
       <View style={styles.categoriesContainer}>
-        <ScrollView contentContainerStyle={styles.categoriesGrid}>
-          <CategorySection data={categories} onpress={navigateToCategory} />
-
-          {/* More Category Card */}
-          <TouchableOpacity style={styles.categoryCard}>
-            <Pressable
-              onPress={openAddCategoryModal}
-              style={({ pressed }) => [
-                styles.categoryIconContainer,
-                {
-                  backgroundColor: pressed
-                    ? Theme.colors.accentDark
-                    : Theme.colors.accentLight,
-                },
-              ]}
-            >
-              <Ionicons name="add" size={40} color="white" />
-            </Pressable>
-            <Text style={styles.categoryName}>More</Text>
-          </TouchableOpacity>
-        </ScrollView>
+        <FlatList
+          data={[...categories, { name: "More" }]} 
+          numColumns={3}
+          keyExtractor={(item, index) => `item-${index}`}
+          renderItem={renderItem}
+          contentContainerStyle={styles.categoriesGrid}
+        />
       </View>
 
-      {/* New Category Modal */}
+      {/* Modal for Adding Category */}
       <AddCategoryModal
         visible={modalVisible}
         categoryName={newCategoryName}
@@ -289,3 +138,5 @@ const CategoriesScreen = () => {
 };
 
 export default CategoriesScreen;
+
+
