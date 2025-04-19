@@ -15,15 +15,7 @@ import styles from "./style";
 import { navigationProps } from "@/types";
 import axios from "axios";
 
-async function checkServer() {
-  console.log("Checking server status...");
-  try {
-    const res = await axios.get("http://192.168.1.6:3000/auth"); // adjust this URL
-    console.log("Server response:", res.data);
-  } catch (err) {
-    console.error("Error contacting server:", err.message);
-  }
-}
+
 const { width } = Dimensions.get("window");
 
 interface Slide {
@@ -48,14 +40,6 @@ const slides: Slide[] = [
 const OnboardingScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const flatListRef = useRef<ScrollView>(null);
-  useEffect(
-    () =>{
-      async function XXX() {
-        await checkServer();
-      }
-      XXX()},
-    []
-  );
 
   const handleNext = () => {
     if (currentIndex < slides.length - 1) {

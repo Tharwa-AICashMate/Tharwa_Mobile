@@ -19,3 +19,19 @@
 // authRouter.post("/logout", logout);
 
 // export default authRouter;
+import express from "express";
+import {
+  login,
+  signup,
+  forgetPassword,
+  verifyOtp,
+  resetPassword,
+} from "../controllers/authController.js";
+
+const authRouter = express.Router();;
+authRouter.post("/signup", signup);
+authRouter.post("/login", login);
+authRouter.post("/forgetPassword",forgetPassword);
+authRouter.post("/resetPassword", resetPassword);
+authRouter.post("/verifyotp", verifyOtp);
+export default authRouter;

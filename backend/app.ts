@@ -12,6 +12,10 @@ app.use(express.json());
 app.use("/auth", authRouter);
 app.use('/api', budgetRoutes);
 
+app.post("/", (req, res) => {
+  res.send("Welcome to the backend API!");
+});
+
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });

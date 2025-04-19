@@ -1,15 +1,13 @@
-import React from 'react';
-import { StyleSheet, View, SafeAreaView } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StatusBar } from 'expo-status-bar';
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 import {
   useFonts as useInterFonts,
   Inter_300Light,
   Inter_500Medium,
   Inter_700Bold,
-} from '@expo-google-fonts/inter';
+} from "@expo-google-fonts/inter";
 
 import {
   useFonts as usePoppinsFonts,
@@ -17,36 +15,19 @@ import {
   Poppins_600SemiBold,
   Poppins_500Medium,
   Poppins_400Regular,
-} from '@expo-google-fonts/poppins';
+} from "@expo-google-fonts/poppins";
 
 import {
   useFonts as useLeagueSpartanFonts,
   LeagueSpartan_300Light,
   LeagueSpartan_400Regular,
-} from '@expo-google-fonts/league-spartan';
+} from "@expo-google-fonts/league-spartan";
 
-import BottomTabs from './src/componenets/BottomNav/BottomTabs';
-import GreenScreen from '@/screens/Security/ChangePin/GreenScreen/GreenScreen';
-import GreenScreenFP from '@/screens/Security/FingerPrint/FingerPrintDetails/GreenScreenFP/GreenScreenFP';
-import GreenScreenSFP from '@/screens/Security/FingerPrint/AddFingerPrint/GreenScreenSFP/GreenScreenSFP';
-import OnBoardingNavigation from '@/navigation/onBoardingNavigation';
-import Theme from '@/theme';
-
-import LoginScreen from '@/screens/Authentication/LoginScreen';
-import LaunchScreen from '@/screens/LaunchScreen/launchScreen';
-import LoginFormScreen from '@/screens/Authentication/LoginForms/LoginFormScreen';
-import CreateAccountScreen from '@/screens/Authentication/LoginForms/CreateAccountScreen';
-import ForgotPasswordScreen from '@/screens/Authentication/LoginForms/ForgotPasswordScreen';
-import SecurityPinScreen from '@/screens/Authentication/LoginForms/SecurityPinScreen';
-import NewPasswordScreen from '@/screens/Authentication/LoginForms/NewPasswordScreen';
-import PasswordChangedScreen from '@/screens/Authentication/LoginForms/PasswordChangedScreen';
-import FingerprintScreen from '@/screens/Authentication/LoginForms/FingerprintScreen';
-
-import CategoriesScreen from '@/screens/Categories';
-import CategoryDetailScreen from '@/screens/CategoryDetails';
-import AddExpensesScreen from '@/screens/AddExpense';
-
-import { Provider } from 'react-redux';
+import { Provider } from "react-redux";
+import { NavigationContainer } from "@react-navigation/native";
+import { store } from "./src/redux/store";
+import MainNavigator from "@/navigation/MainNavigator";
+import { createStackNavigator } from "@react-navigation/stack";
 // import { store } from '@/redux/store';
 // import AddExpensesScreen from "@/screens/AddExpense";
 //there is nothing to push here 
@@ -56,6 +37,32 @@ import AddSavingsScreen from "@/screens/AddSavings";
 
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import SecurityPinScreen from "@/screens/Authentication/LoginForms/SecurityPinScreen";
+import CreateAccountScreen from "@/screens/Authentication/LoginForms/CreateAccountScreen";
+import LoginFormScreen from "@/screens/Authentication/LoginForms/LoginFormScreen";
+import LoginScreen from "@/screens/Authentication/LoginScreen";
+import NewPasswordScreen from "@/screens/Authentication/LoginForms/NewPasswordScreen";
+import PasswordChangedScreen from "@/screens/Authentication/LoginForms/PasswordChangedScreen";
+import FingerprintScreen from "@/screens/Authentication/LoginForms/FingerprintScreen";
+import ForgotPasswordScreen from "@/screens/Authentication/LoginForms/ForgotPasswordScreen";
+import OnboardingScreen from "@/screens/onboarding/OnboardingScreen";
+import BottomTabs from "@/componenets/BottomNav/BottomTabs";
+import CategoryDetailScreen from "@/screens/CategoryDetails";
+import AddExpensesScreen from "@/screens/AddExpense";
+import CategoriesScreen from "@/screens/Categories";
+import GreenScreenSFP from "@/screens/Security/FingerPrint/AddFingerPrint/GreenScreenSFP/GreenScreenSFP";
+import GreenScreen from "@/screens/Security/ChangePin/GreenScreen/GreenScreen";
+import GreenScreenFP from "@/screens/Security/FingerPrint/FingerPrintDetails/GreenScreenFP/GreenScreenFP";
+import styles from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle.styles";
+import TransactionForm from "@/componenets/TransactionForm";
+import DeleteAccountScreen from "@/screens/DeleteAccountScreen";
+import HelpCenterScreen from "@/screens/HelpCenterScreen";
+import LaunchScreen from "@/screens/LaunchScreen/launchScreen";
+import NotificationSettingsScreen from "@/screens/NotificationSettingsScreen";
+import PasswordSettingsScreen from "@/screens/PasswordSettingsScreen";
+import Profile from "@/screens/Profile/Profile";
+import SettingsScreen from "@/screens/SettingsScreen";
+import SupportChannelsScreen from "@/screens/SupportChannelsScreen";
 
 export type RootStackParamList = {
   Categories: undefined;
@@ -63,28 +70,9 @@ export type RootStackParamList = {
   AddExpenses: undefined;
   Savings: undefined;
   SavingDetails: { categoryName: string };
-  
-  AddSavings:undefined
-
+  AddSavings: undefined;
 };
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
-
-
-import { store } from './src/redux/store'
-import SettingsScreen from '@/screens/SettingsScreen';
-import HelpCenterScreen from '@/screens/HelpCenterScreen';
-import PasswordSettingsScreen from '@/screens/PasswordSettingsScreen';
-import NotificationSettingsScreen from '@/screens/NotificationSettingsScreen';
-import DeleteAccountScreen from '@/screens/DeleteAccountScreen';
-import SupportChannelsScreen from '@/screens/SupportChannelsScreen';
-import Notification from '@/screens/Notification/Notification';
-import Profile from '@/screens/Profile/Profile';
-import OnboardingScreen from '@/screens/onboarding/OnboardingScreen';
-import TransactionForm from '@/componenets/TransactionForm';
-
-const RootStack = createNativeStackNavigator();
+const RootStack = createStackNavigator();
 
 export default function App() {
   const [interLoaded] = useInterFonts({
@@ -136,7 +124,7 @@ export default function App() {
           {/* Main App */}
           <RootStack.Screen name="MainApp">
             {() => (
-              <View style={styles.container}>
+              <View style={{ flex: 1 }}>
                 <BottomTabs />
               </View>
             )}
@@ -172,11 +160,4 @@ export default function App() {
     </Provider >
     </GestureHandlerRootView>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Theme.colors.background,
-  },
-});
+  };

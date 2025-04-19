@@ -1,3 +1,4 @@
+import authReducer from "./slices/AuthSlice";
 
 
 import { configureStore } from '@reduxjs/toolkit';
@@ -19,8 +20,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['expenses/addTransaction'],
-        ignoredPaths: ['expenses.transactions'],
+        ignoredActions: ["expenses/addTransaction"],
+        ignoredPaths: ["expenses.transactions"],
       },
     }),
 });

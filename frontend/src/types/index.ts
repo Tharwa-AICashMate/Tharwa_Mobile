@@ -152,11 +152,11 @@ export interface SavingsState {
 }
 
 export type User = {
-  id: number;
-  name: string;
+  username?: string;
+  fullName: string;
   email: string;
-  //to remove
-  password: string;
+  phone?:string,
+  dob?:Date,  
 };
 
 interface SavingDeposit {
