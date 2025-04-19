@@ -1,15 +1,16 @@
 import express from "express";
 import {
   login,
-  logout,
-  signinWithProvider,
   signup,
+  forgetPassword,
+  verifyOtp,
+  resetPassword,
 } from "../controllers/authController.js";
 
 const authRouter = express.Router();;
 authRouter.post("/signup", signup);
-authRouter.post("/provider_signin", signinWithProvider);
 authRouter.post("/login", login);
-authRouter.post("/logout", logout);
-
+authRouter.post("/forgetPassword",forgetPassword);
+authRouter.post("/resetPassword", resetPassword);
+authRouter.post("/verifyotp", verifyOtp);
 export default authRouter;

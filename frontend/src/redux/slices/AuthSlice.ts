@@ -6,6 +6,7 @@ import { makeRedirectUri } from "expo-auth-session";
 import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
 import { Provider } from "@supabase/supabase-js";
+import { RootState } from "../store";
 
 interface AuthState {
   user: User | null;
@@ -100,6 +101,7 @@ export const loginWithProvider = createAsyncThunk(
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
+          scopes: "email",
           redirectTo,
           skipBrowserRedirect: false,
         },
@@ -122,68 +124,70 @@ export const loginWithProvider = createAsyncThunk(
     }
   }
 );
-// export const submitEmail = createAsyncThunk(
-//   "auth/submitEmail",
-//   async (email: string, { rejectWithValue }) => {
-//     const user = Users.findIndex((user) => user.email === email);
-//     if (user === -1) {
-//       return rejectWithValue("No user registered with the provided email");
-//     }
-//     // Simulate sending a pin to the email
-//     return { pin: "555555" }; // Simulated PIN
-//   }
-// );
 
-// export const verifyPin = createAsyncThunk(
-//   "auth/verifyPin",
-//   async (pin: string, { getState, rejectWithValue }) => {
-//     const state = getState() as { auth: AuthState };
-//     if (pin !== state.auth.pin) {
-//       return rejectWithValue("Incorrect PIN");
-//     }
-//     // Successfully verified, return empty
-//     return null;
-//   }
-// );
+export const forgetPassword = createAsyncThunk(
+  "auth/forgetPassword",
+  async (email: string, { rejectWithValue }) => {
+    try {
+      const {data} = await axios.post(`${apiBase}/auth/forgetPassword`, {
+        email,
+      });
+      console.log('-----------',data.data); 
+      if (data.data.status !== 200) {
+        return rejectWithValue(data.message);
+      }
+      return email;
+    } catch (error) {
+      console.error("Error sending otp:invalid email address can't send message", error);
+      return rejectWithValue("invalid email address can't send message");
+    }
+  }
+);
 
-// export const resetPassword = createAsyncThunk(
-//   "auth/resetPassword",
-//   async (
-//     payload: { password: string; confirm: string },
-//     { getState, rejectWithValue }
-//   ) => {
-//     const { password, confirm } = payload;
-//     if (password !== confirm) {
-//       return rejectWithValue("Passwords do not match");
-//     }
-//     const state = getState() as { auth: AuthState };
-//     // Update user password in Users array
-//     const updatedUsers = Users.map((user) =>
-//       user.email === state.auth.user?.email ? { ...user, password } : user
-//     );
-//     return { updatedUsers };
-//   }
-// );
+export const verifyPin = createAsyncThunk(
+  "auth/verifyotp",
+  async (payload:string , { getState, rejectWithValue }) => {
+    const state = getState() as RootState;
+    const email = state.auth.user!.email;
+    try {
+      console.log("payload", payload,email);
+      const { data } = await axios.post(`${apiBase}/auth/verifyotp`, {otp:payload,email});
+      console.log('-----------',data);
+      if (data.data.status !== 200) {
+        return rejectWithValue(data.message);
+      }
+    } catch (error) {
+      console.error("Error verifying pin:", error);
+      return rejectWithValue("Invalid OTP");
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async (payload: string , { getState, rejectWithValue }) => {
+    const state = getState() as RootState;
+    const email = state.auth.user!.email;
+    try {
+      const { data } = await axios.post(`${apiBase}/auth/resetPassword`, {
+        email,
+        password:payload,
+      });
+      console.log('-----------',data);
+      if (data.data.status !== 200) {
+        return rejectWithValue(data.message);
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      return rejectWithValue("Error resetting password");
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    // logout: (state) => {
-    //   state.user = null;
-    //   state.token = null;
-    // },
-    // startForgotPassword: (state) => {
-    //   state.error = null;
-    //   state.pin = null;
-    //   state.pinTimer = null;
-    // },
-    // cancelReset: (state) => {
-    //   state.error = null;
-    //   state.pin = null;
-    //   state.pinTimer = null;
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.fulfilled, (state, action) => {
@@ -225,6 +229,41 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(loginWithProvider.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(forgetPassword.fulfilled, (state, action) => {
+        state.user = {...state.user,email:action.payload} as User;
+        state.error = null;
+        state.loading = false;
+      })
+      .addCase(forgetPassword.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      })
+      .addCase(forgetPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(verifyPin.fulfilled, (state) => {
+        state.error = null;
+        state.loading = false;
+      })
+      .addCase(verifyPin.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      })
+      .addCase(verifyPin.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(resetPassword.fulfilled, (state) => {
+        state.user = null;
+        state.error = null;
+        state.loading = false;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      })
+      .addCase(resetPassword.pending, (state) => {
         state.loading = true;
       });
 

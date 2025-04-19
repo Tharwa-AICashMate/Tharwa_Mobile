@@ -3,10 +3,16 @@ import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
 
 import styles from "./styles";
 import { navigationProps } from "@/types";
+import SocialSignIn from "@/componenets/Login/SocialSignIn";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { verifyPin } from "@/redux/slices/AuthSlice";
 
 const SecurityPinScreen: React.FC<navigationProps> = ({navigation}) => {
   const [pin, setPin] = useState<String[]>([...Array(6)]);
   const inputs = useRef<(TextInput | null)[]>([]);
+  const { error, loading } = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handlePinChange = (num: string, index: number) => {
     if (index < 5 && !(num == "")) {
@@ -25,6 +31,15 @@ const SecurityPinScreen: React.FC<navigationProps> = ({navigation}) => {
       inputs.current[index - 1]?.focus();
     }
   };
+
+  const verifyOTP = async () => {
+      const resultAction = await dispatch(verifyPin(pin.join("")));
+      if (verifyPin.fulfilled.match(resultAction)) {
+        navigation.navigate("NewPassword");
+      } else {
+        console.log("Signup failed:", resultAction.error);
+      }
+  }
 
   return (
     <View style={styles.container}>
@@ -57,7 +72,7 @@ const SecurityPinScreen: React.FC<navigationProps> = ({navigation}) => {
         <View style={{ gap: 20 }}>
           <TouchableOpacity
             style={styles.primaryButton}
-            onPress={() => navigation.navigate("NewPassword")}
+            onPress={verifyOTP}
           >
             <Text style={styles.primaryButtonText}>Accept</Text>
           </TouchableOpacity>
@@ -67,23 +82,7 @@ const SecurityPinScreen: React.FC<navigationProps> = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.linkText}>or sign up with </Text>
-
-          <View style={styles.socialIcons}>
-            <TouchableOpacity style={styles.socialIcon}>
-              <Image
-                source={require("@/assets/Facebook-icon.png")}
-                style={{ width: 32, height: 32 }}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.socialIcon}>
-              <Image
-                source={require("@/assets/Google-icon.png")}
-                style={{ width: 32, height: 32 }}
-              />
-            </TouchableOpacity>
-          </View>
+          <SocialSignIn />
 
           <View style={styles.link}>
             <Text style={styles.linkText}>Don't have an account? </Text>

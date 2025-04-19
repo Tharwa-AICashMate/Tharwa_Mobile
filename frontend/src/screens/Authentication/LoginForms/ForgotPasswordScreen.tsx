@@ -3,12 +3,25 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "./styles";
 import Input from "@/componenets/UI/input";
 import { navigationProps } from "@/types";
+import SocialSignIn from "@/componenets/Login/SocialSignIn";
+import { useDispatch, useSelector } from "react-redux";
+import { isValidEmail } from "@/utils/validators";
+import { forgetPassword } from "@/redux/slices/AuthSlice";
+import { AppDispatch } from "@/redux/store";
 
-
-const ForgotPasswordScreen: React.FC<navigationProps> = ({
-  navigation,
-}) => {
+const ForgotPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [email, setEmail] = useState<string>("");
+  const { error, loading } = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+
+  async function handelForgetPassword() {
+    const resultAction = await dispatch(forgetPassword(email));
+    if (forgetPassword.fulfilled.match(resultAction)) {
+      navigation.navigate("SecurityPin");
+    } else {
+      console.log("Invalid Email:", resultAction.error);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -31,16 +44,20 @@ const ForgotPasswordScreen: React.FC<navigationProps> = ({
 
         <Input
           label="Enter Email Adress"
+          keyboardType="email-address"
           value={email}
+          validator={isValidEmail}
           onChangeText={setEmail}
-          errorMessage={""}
+          errorMessage={"please Enter a valid Email"}
           autoCapitalize="none"
           placeholder="example@example.com"
         />
 
+        {error && <Text style={styles.errorText}>{error}</Text>}
+
         <TouchableOpacity
           style={styles.primaryButton}
-          onPress={() => navigation.navigate("SecurityPin")}
+          onPress={handelForgetPassword}
         >
           <Text style={styles.primaryButtonText}>Next Step</Text>
         </TouchableOpacity>
@@ -52,23 +69,7 @@ const ForgotPasswordScreen: React.FC<navigationProps> = ({
           <Text style={styles.secondaryButtonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        <Text style={styles.linkText}>or sign up with </Text>
-
-        <View style={styles.socialIcons}>
-          <TouchableOpacity style={styles.socialIcon}>
-            <Image
-              source={require("@/assets/Facebook-icon.png")}
-              style={{ width: 32, height: 32 }}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.socialIcon}>
-            <Image
-              source={require("@/assets/Google-icon.png")}
-              style={{ width: 32, height: 32 }}
-            />
-          </TouchableOpacity>
-        </View>
+        <SocialSignIn />
 
         <View style={styles.link}>
           <Text style={styles.linkText}>Don't have an account? </Text>
