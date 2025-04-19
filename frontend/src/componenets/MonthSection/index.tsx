@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Transaction } from '@/types/transactionTypes';
-import TransactionItem from '../TransactionItem/index';
+import TransactionItem from '../TranscationItemPage/index';
 import Entypo from '@expo/vector-icons/Entypo';
 import Theme from '@/theme';
 interface MonthSectionProps {

@@ -17,7 +17,7 @@
   "include": [
     "**/*.ts",
     "**/*.tsx"
-, "src/navigation/HomeStackNavigator", "src/componenets/TranscationItem"  ],
+, "src/navigation/HomeStackNavigator", "src/componenets/TranscationItemPage"  ],
   "exclude": [
     "node_modules",
   ]

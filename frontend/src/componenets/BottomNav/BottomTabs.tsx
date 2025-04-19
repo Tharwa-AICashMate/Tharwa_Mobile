@@ -11,7 +11,7 @@ import EditProfile from "../../screens/EditProfile/EditProfile";
 import Security from "../../screens/Security/Security";
 import Settings from "../../screens/Settings";
 import Help from "../../screens/Help";
-// import Logout from "../../screens/Logout";
+import Logout from "../../screens/Logout";
 import Notification from "@/screens/Notification/Notification";
 import ChangePin from "@/screens/Security/ChangePin/ChangePin";
 import FingerPrint from "@/screens/Security/FingerPrint/FingerPrint";
@@ -75,7 +75,7 @@ function ProfileStackScreen() {
       <ProfileStack.Screen name="Security" component={Security} />
       <ProfileStack.Screen name="Settings" component={Settings} />
       <ProfileStack.Screen name="Help" component={Help} />
-      {/* <ProfileStack.Screen name="Logout" component={Logout} /> */}
+      <ProfileStack.Screen name="Logout" component={Logout} />
       <ProfileStack.Screen name="Notification" component={Notification} />
       <ProfileStack.Screen name="ChangePin" component={ChangePin} />
       <ProfileStack.Screen name="FingerPrint" component={FingerPrint} />
@@ -116,7 +116,7 @@ function ProfileStackScreen() {
       />
       <ProfileStack.Screen
         name="TransactionForm"
-        component={TransactionScreen}/>
+        component={Home}/>
     </ProfileStack.Navigator>
   );
 }

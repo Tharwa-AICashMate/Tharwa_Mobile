@@ -1,19 +1,31 @@
+// {
+//     "compilerOptions": {
+//       "target": "ES2020",
+//       "module": "ESNext",
+//       "moduleResolution": "Node",
+//       "outDir": "./dist",
+//       "rootDir": "./",
+//       "strict": true,
+//       "esModuleInterop": true,
+//       "skipLibCheck": true,
+//       "forceConsistentCasingInFileNames": true
+//     },
+//     "ts-node": {
+//       "esm": true
+//     },
+//     "include": ["**/*.ts", "routes/transactionRoutes.ts"],
+//     "exclude": ["node_modules", "dist"]
+//   }
 {
-    "compilerOptions": {
-      "target": "ES2020",
-      "module": "ESNext",
-      "moduleResolution": "Node",
-      "outDir": "./dist",
-      "rootDir": "./",
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
-    },
-    "ts-node": {
-      "esm": true
-    },
-    "include": ["**/*.ts"],
-    "exclude": ["node_modules", "dist"]
-  }
-  
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": true
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules"]
+}

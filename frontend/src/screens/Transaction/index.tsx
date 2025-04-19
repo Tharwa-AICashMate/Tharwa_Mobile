@@ -89,6 +89,9 @@ const TransactionScreen: React.FC = () => {
             keyExtractor={(item) => item[0]}
             renderItem={renderMonthSection}
             showsVerticalScrollIndicator={false}
+            initialNumToRender={3} 
+            windowSize={5} 
+            removeClippedSubviews={true}
           />
         </View>
         

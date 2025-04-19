@@ -1,5 +1,4 @@
-import { supabase } from '../utils/transaction';
-
+import { supabase } from '../utils/supabase';
 export const getAllTransactions = async (userId: string) => {
   const { data, error } = await supabase
     .from('transaction_with_category')
@@ -7,22 +6,21 @@ export const getAllTransactions = async (userId: string) => {
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
-  if (error) throw error;
+  if (error) throw new Error(error.message);
   return data;
 };
-
 export const createTransaction = async (transaction: {
   user_id: string;
   category_id: number;
-  category_name: string;
   amount: number;
   type: string;
   title: string;
 }) => {
   const { data, error } = await supabase
-    .from('transaction_with_category')
-    .insert([{ ...transaction }]);
+    .from('transactions')
+    .insert([transaction])
+    .select(); 
 
-  if (error) throw error;
-  return data;
+  if (error) throw new Error(error.message);
+  return data?.[0];
 };
