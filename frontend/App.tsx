@@ -53,6 +53,10 @@ import { Provider } from 'react-redux';
 import Savings from "@/screens/Savings";
 import SavingDetails from "@/screens/SavingDetails";
 import AddSavingsScreen from "@/screens/AddSavings";
+
+
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 export type RootStackParamList = {
   Categories: undefined;
   CategoryDetail: { categoryName: string };
@@ -106,6 +110,7 @@ export default function App() {
   if (!fontsLoaded) return null;
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <Provider store={store}>
       <StatusBar style="light" />
       <NavigationContainer>
@@ -165,6 +170,7 @@ export default function App() {
         </RootStack.Navigator>
       </NavigationContainer>
     </Provider >
+    </GestureHandlerRootView>
   );
 }
 
