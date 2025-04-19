@@ -90,7 +90,7 @@ function ProfileStackScreen() {
 export default function BottomTabs() {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({ route }: { route: { name: keyof BottomTabParamList } }) => ({
         tabBarIcon: ({ focused }: { focused: boolean }) => {
           let iconName: keyof typeof Ionicons.glyphMap;
 
