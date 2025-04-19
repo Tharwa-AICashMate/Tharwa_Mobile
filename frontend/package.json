@@ -15,8 +15,14 @@
     "@expo-google-fonts/poppins": "^0.3.0",
     "@expo/metro-runtime": "~4.0.1",
     "@fingerprintjs/fingerprintjs-pro-react-native": "^3.3.1",
+<<<<<<< HEAD:frontend/package.json
     "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-native-community/datetimepicker": "8.2.0",
+=======
+    "@react-native-async-storage/async-storage": "^2.1.2",
+    "@react-native-community/datetimepicker": "^8.2.0",
+    "@react-native-picker/picker": "2.9.0",
+>>>>>>> HomePage:package.json
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/native": "^7.1.6",
     "@react-navigation/native-stack": "^7.3.10",

@@ -8,8 +8,13 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
+<<<<<<< HEAD
 import ProfileHeader from '../../componenets/ProfileHeader/ProfileHeader';
 import Header from '../../componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+=======
+import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
+import Header from '../../components/HeaderIconsWithTitle/HeadericonsWithTitle';
+>>>>>>> HomePage
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Theme from '@/theme';
 import styles from './ProfileMenu.styles'; 
