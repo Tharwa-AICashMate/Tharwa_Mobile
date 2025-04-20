@@ -5,7 +5,7 @@ import Theme from "@/theme";
 import styles from "./style";
 
 interface TransactionItemProps {
-  id: string;
+  id?: string;
   title: string;
   subtitle: string;
   amount: number;

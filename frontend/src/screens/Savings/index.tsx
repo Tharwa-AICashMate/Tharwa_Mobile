@@ -19,6 +19,7 @@ import styles from './style';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { fetchUserGoals } from '@/redux/slices/savingSlice';
+import { Goal } from '@/types/goal';
 
 type SavingsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,17 +37,18 @@ const Savings = () => {
     dispatch(fetchUserGoals(userId));
   }, [dispatch, userId]);
 
-  const navigateToCategory = (categoryName: string) => {
-    navigation.navigate('SavingDetails', { categoryName });
+  const navigateToCategory = (categoryName: string ,goalID:string,Target:number,Icon:string) => {
+    navigation.navigate('SavingDetails', { categoryName,goalID,Target,Icon });
   };
 
-  const renderGoalCard = ({ item }: { item: any }) => (
+  const renderGoalCard = ({ item }: { item: Goal }) => (
     <TouchableOpacity
       style={styles.categoryCard}
-      onPress={() => navigateToCategory(item.name)}
+      onPress={() => navigateToCategory(item.name,item.id?? 'no-id',item.target_amount,item.icon??'wallet-outline') }
     >
       <View style={styles.categoryIconContainer}>
-        <Ionicons name={item.icon || 'wallet-outline'} size={45} color="white" />
+      <Ionicons name={(item.icon || 'wallet-outline') as any}  size={45} color="white" />
+
       </View>
       <Text style={styles.categoryName}>{item.name}</Text>
     </TouchableOpacity>
@@ -80,7 +82,7 @@ const Savings = () => {
       <View style={styles.categoriesContainer}>
         <FlatList
           data={savingsGoals}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item,index) => item.id?? index.toString()}
           numColumns={3}
           renderItem={renderGoalCard}
           contentContainerStyle={styles.categoriesGrid}

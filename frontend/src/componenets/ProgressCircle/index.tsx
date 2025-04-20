@@ -5,13 +5,15 @@ import { Ionicons } from "@expo/vector-icons";
 import Theme from '@/theme';
 
 interface TravelProgressCircleProps {
-  progress?: number;
-  categoryName?: string;
+  progress: number;
+  categoryName: string;
+  icon:string
 }
 
 const ProgressCircle: React.FC<TravelProgressCircleProps> = ({ 
-  progress = 40, 
-  categoryName = '' 
+  progress , 
+  categoryName,
+  icon
 }) => {
   const size = 80;
   const strokeWidth = 3;
@@ -19,20 +21,7 @@ const ProgressCircle: React.FC<TravelProgressCircleProps> = ({
   const circumference = 2 * Math.PI * radius;
   const dashOffset = circumference - (progress / 100) * circumference;
 
-  const getCategoryIcon = (categoryName: string): string => {
-    switch (categoryName) {
-      case "Travel":
-        return "airplane";
-      case "New House":
-        return "home";
-      case "Car":
-        return "car";
-      case "Wedding":
-        return "diamond-outline";
-      default:
-        return "save";
-    }
-  };
+
 
   return (
     <View style={{ alignItems: 'center' }}>
@@ -73,7 +62,7 @@ const ProgressCircle: React.FC<TravelProgressCircleProps> = ({
           alignItems: 'center'
         }}>
           <Ionicons
-            name={getCategoryIcon(categoryName) as any}
+            name={icon as any}
             size={34}
             color="#FFFFFF"
           />

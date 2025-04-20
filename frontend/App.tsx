@@ -58,7 +58,7 @@ export type RootStackParamList = {
   CategoryDetail: { categoryName: string };
   AddExpenses: undefined;
   Savings: undefined;
-  SavingDetails: { categoryName: string };
+  SavingDetails: { categoryName: string ,goalID:number,Target:number,Icon:string};
   
   AddSavings:undefined
 

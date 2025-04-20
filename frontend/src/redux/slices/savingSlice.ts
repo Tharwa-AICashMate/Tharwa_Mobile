@@ -1,16 +1,8 @@
-// src/redux/slices/goalsSlice.ts
 
+import { Goal } from "@/types/goal";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface Goal {
-  id: string;
-  user_id: string;
-  title: string;
-  amount: number;
-  saved: number;
-  deadline?: string;
-}
 
 interface GoalsState {
   items: Goal[];
