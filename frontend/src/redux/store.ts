@@ -15,7 +15,8 @@ export const store = configureStore({
     helpCenter: helpCenterReducer,
     expenses: expenseReducer,
     goals: goalsReducer,
-    transactions: transactionReducer
+    transactions: transactionReducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

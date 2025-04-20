@@ -27,20 +27,27 @@ const Home: React.FC = () => {
       />
       <Header title=" Hommmme" />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Budget Summary */}
-        <View style={styles.balanceContainer}>
-          <BalanceDisplay
-            balance={budget.totalExpenses}
-            expense={budget.totalIncome}
-          />
-        </View>
-        <FilterTabs onTabChange={function (tab: "daily" | "weekly" | "monthly"): void {
-          throw new Error("Function not implemented.");
-        } } />
-      </ScrollView>
+     
     </View>
   );
 };
 
 export default Home;
+
+
+
+
+//  <ScrollView contentContainerStyle={styles.scrollContent}>
+//    {/* Budget Summary */}
+//    <View style={styles.balanceContainer}>
+//      <BalanceDisplay
+//        balance={budget.totalExpenses}
+//        expense={budget.totalIncome}
+//      />
+//    </View>
+//    <FilterTabs
+//      onTabChange={function (tab: "daily" | "weekly" | "monthly"): void {
+//        throw new Error("Function not implemented.");
+//      }}
+//    />
+//  </ScrollView>;

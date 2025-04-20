@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { AppState } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import 'react-native-url-polyfill/auto'
+import "react-native-url-polyfill/auto";
 
 const supabaseUrl = "https://dojfpoupdhrpgvidugte.supabase.co";
 const supabaseAnonKey =
