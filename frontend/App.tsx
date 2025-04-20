@@ -69,8 +69,10 @@ export type RootStackParamList = {
   CategoryDetail: { categoryName: string };
   AddExpenses: undefined;
   Savings: undefined;
-  SavingDetails: { categoryName: string };
-  AddSavings: undefined;
+  SavingDetails: { categoryName: string ,goalID:number,Target:number,Icon:string};
+  
+  AddSavings:undefined
+
 };
 const RootStack = createStackNavigator();
 

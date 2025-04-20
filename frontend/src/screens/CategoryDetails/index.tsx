@@ -82,7 +82,7 @@ const CategoryDetailScreen = () => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       {/* <Header name={categoryName} navigateBack={navigateBack} /> */}
-      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+      {/* <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} /> */}
       <Header title={categoryName} />
       {/* Budget Summary */}
       <View style={styles.balanceContainer}>

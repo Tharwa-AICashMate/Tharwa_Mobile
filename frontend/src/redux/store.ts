@@ -7,7 +7,8 @@ import helpCenterReducer from './slices/helpCenterSlice';
 import expenseReducer from './slices/expenseSlice';
 import goalsReducer from './slices/savingSlice';
 import transactionReducer from './slices/transactionSlice'
-import categoriesReducer from './slices/categoriesSlice'
+import categoriesReducer from './slices/categoriesSlice';
+import depositReducer from './slices/depositSlice'
 export const store = configureStore({
   reducer: {
     categories: categoriesReducer,
@@ -17,6 +18,7 @@ export const store = configureStore({
     goals: goalsReducer,
     transactions: transactionReducer,
     auth: authReducer,
+    deposits: depositReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
