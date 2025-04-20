@@ -1,16 +1,16 @@
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import LoginScreen from "@/screens/Authentication/LoginScreen";
 import OnboardingScreen from "@/screens/onboarding/OnboardingScreen";
-import LaunchScreen from '@/screens/LaunchScreen/launchScreen';
-import LoginFormScreen from '@/screens/Authentication/LoginForms/LoginFormScreen';
-import FingerprintScreen from '@/screens/Authentication/LoginForms/FingerprintScreen';
-import PasswordChangedScreen from '@/screens/Authentication/LoginForms/PasswordChangedScreen';
-import NewPasswordScreen from '@/screens/Authentication/LoginForms/NewPasswordScreen';
-import SecurityPinScreen from '@/screens/Authentication/LoginForms/SecurityPinScreen';
-import ForgotPasswordScreen from '@/screens/Authentication/LoginForms/ForgotPasswordScreen';
-import CreateAccountScreen from '@/screens/Authentication/LoginForms/CreateAccountScreen';
+import LaunchScreen from "@/screens/LaunchScreen/launchScreen";
+import LoginFormScreen from "@/screens/Authentication/LoginForms/LoginFormScreen";
+import FingerprintScreen from "@/screens/Authentication/LoginForms/FingerprintScreen";
+import PasswordChangedScreen from "@/screens/Authentication/LoginForms/PasswordChangedScreen";
+import NewPasswordScreen from "@/screens/Authentication/LoginForms/NewPasswordScreen";
+import SecurityPinScreen from "@/screens/Authentication/LoginForms/SecurityPinScreen";
+import ForgotPasswordScreen from "@/screens/Authentication/LoginForms/ForgotPasswordScreen";
+import CreateAccountScreen from "@/screens/Authentication/LoginForms/CreateAccountScreen";
 
 type RootStackParamList = {
   Launch: undefined;
@@ -30,7 +30,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const OnBoardingNavigation: React.FC = () => {
   return (
-    <Stack.Navigator 
+    <Stack.Navigator
       initialRouteName="Launch"
       screenOptions={{
         headerShown: false,
@@ -48,6 +48,6 @@ const OnBoardingNavigation: React.FC = () => {
       <Stack.Screen name="Fingerprint" component={FingerprintScreen} />
     </Stack.Navigator>
   );
-}
+};
 
 export default OnBoardingNavigation;

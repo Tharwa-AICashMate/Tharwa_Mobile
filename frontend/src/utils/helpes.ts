@@ -1,10 +1,26 @@
 import { Transaction, TransactionSummary, TransactionsByMonth } from '@/types/transactionTypes';
+export const formatCurrency = (amount: number | undefined | null): string => {
+  if (amount === null || amount === undefined) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(0);
+  }
 
-export const formatCurrency = (amount: number): string => {
-  return `$${amount.toFixed(2)}`;
+  if (typeof amount !== 'number' || isNaN(amount)) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(0);
+  }
+
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(amount);
 };
 
-;
+
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
 

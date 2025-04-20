@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import SettingsScreen from "@/screens/SettingsScreen";
-import HelpCenterScreen from "@/screens/HelpCenterScreen";
+import SettingsScreen from "@/screens/Settings";
+import HelpCenterScreen from "@/screens/Help";
 import PasswordSettingsScreen from "@/screens/PasswordSettingsScreen";
-import NotificationSettingsScreen from "@/screens/NotificationSettingsScreen";
+import NotificationSettingsScreen from "@/screens/NotificationSettingsScreen/NotificationSettingsScreen";
 import DeleteAccountScreen from "@/screens/DeleteAccountScreen";
-import SupportChannelsScreen from "@/screens/SupportChannelsScreen";
+import SupportChannelsScreen from "@/screens/SupportChannelsScreen/SupportChannelsScreen";
 import Notification from "@/screens/Notification/Notification";
 import Profile from "@/screens/Profile/Profile";
 import TransactionForm from "@/componenets/TransactionForm";

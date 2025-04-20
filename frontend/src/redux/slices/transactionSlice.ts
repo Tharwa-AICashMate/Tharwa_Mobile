@@ -47,11 +47,16 @@ const transactionSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchTransactionsAsync.fulfilled, (state, action: PayloadAction<Transaction[]>) => {
+      .addCase(fetchTransactionsAsync.fulfilled, (state, action) => {
         state.loading = false;
-        state.transactions = action.payload;
-        state.transactionsByMonth = groupTransactionsByMonth(action.payload);
-        state.summary = calculateTransactionSummary(action.payload);
+        const validTransactions = action.payload.map(t => ({
+          ...t,
+          amount: Number(t.amount) || 0,
+          date: t.date || new Date().toISOString()
+        }));
+        state.transactions = validTransactions;
+        state.transactionsByMonth = groupTransactionsByMonth(validTransactions);
+        state.summary = calculateTransactionSummary(validTransactions);
       })
       .addCase(fetchTransactionsAsync.rejected, (state, action) => {
         state.loading = false;

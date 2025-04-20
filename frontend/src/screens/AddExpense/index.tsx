@@ -1,6 +1,4 @@
 
-
-// export default AddExpensesScreen;
 import React from "react";
 import { View, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -11,7 +9,6 @@ import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import TransactionForm from "@/componenets/TransactionForm";
 import Theme from "@/theme";
 
-// Define navigation type based on the actual stack params in App.tsx
 type AddExpensesScreenNavigationProp = NativeStackNavigationProp<{
   CategoryDetail: { categoryName: string };
   AddExpenses: undefined;
