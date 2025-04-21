@@ -11,12 +11,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-import {
-  changePassword,
-  resetPasswordChangeSuccess,
-} from "../../redux/slices/settingsSlice";
 import PasswordInput from "../../componenets/PasswordInput";
 const { height, width } = Dimensions.get("window");
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
@@ -26,18 +20,15 @@ type PasswordSettingsScreenNavigationProp = any;
 
 const PasswordSettingsScreen: React.FC = () => {
   const navigation = useNavigation<PasswordSettingsScreenNavigationProp>();
-  const dispatch = useDispatch<AppDispatch>();
-  const { loading, error, passwordChangeSuccess } = useSelector(
-    (state: RootState) => state.settings
-  );
 
-  const handleBack = () => {
-    navigation.goBack();
-  };
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [localError, setLocalError] = useState<string | null>(null);
+
+  const handleBack = () => {
+    navigation.goBack();
+  };
 
   const handleChangePassword = () => {
     if (!currentPassword || !newPassword || !confirmNewPassword) {
@@ -56,21 +47,9 @@ const PasswordSettingsScreen: React.FC = () => {
     }
 
     setLocalError(null);
-    dispatch(
-      changePassword({
-        currentPassword,
-        newPassword,
-        confirmNewPassword,
-      })
-    );
+    // Navigate to the PasswordChangeConfirmScreen after successful "change"
+    navigation.navigate("PasswordChangeConfirmScreen");
   };
-
-  React.useEffect(() => {
-    if (passwordChangeSuccess) {
-      navigation.navigate("PasswordChangeConfirm");
-      dispatch(resetPasswordChangeSuccess());
-    }
-  }, [passwordChangeSuccess, navigation, dispatch]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -98,22 +77,19 @@ const PasswordSettingsScreen: React.FC = () => {
             onChangeText={setConfirmNewPassword}
           />
 
-          {(error || localError) && (
-            <Text style={styles.errorText}>{error || localError}</Text>
+          {(localError) && (
+            <Text style={styles.errorText}>{localError}</Text>
           )}
 
           <TouchableOpacity
             style={styles.changeButton}
             onPress={handleChangePassword}
-            disabled={loading}
           >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.changeButtonText}>Change Password</Text>
-            )}
+            <Text style={styles.changeButtonText}>Change Password</Text>
           </TouchableOpacity>
         </View>
+
+        
       </ScrollView>
     </SafeAreaView>
   );
@@ -123,18 +99,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FECD3E",
-  },
-  header: {
-    padding: 16,
-    backgroundColor: "#FECD3E",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "white",
   },
   scrollView: {
     flex: 1,

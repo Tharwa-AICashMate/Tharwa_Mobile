@@ -1,22 +1,6 @@
 {
-  "userSettings": {
-    "notificationSettings": {
-      "generalNotification": true,
-      "sound": true,
-      "soundCall": true,
-      "vibrate": true,
-      "transactionUpdate": false,
-      "expenseReminder": true,
-      "budgetNotifications": false,
-      "lowBalanceAlerts": true
-    },
-    "language": "en",
-    "theme": "light",
-    "currency": "USD",
-    "biometricEnabled": false
-  },
   "password": {
-    "currentPassword": "123456789"
+    "currentPassword": "1234567890"
   },
   "faqs": [
     {
@@ -106,38 +90,38 @@
       "link": "https://instagram.com/example"
     }
   ],
-    "transactions": [
-      {
-        "id": "1",
-        "amount": 1500,
-        "type": "income",
-        "category": "salary",
-        "date": "2023-10-01T08:00:00Z",
-        "description": "Monthly Salary"
-      },
-      {
-        "id": "2",
-        "amount": -200,
-        "type": "expense",
-        "category": "groceries",
-        "date": "2023-10-02T12:30:00Z",
-        "description": "Supermarket Shopping"
-      },
-      {
-        "id": "3",
-        "amount": -500,
-        "type": "expense",
-        "category": "rent",
-        "date": "2023-10-03T10:00:00Z",
-        "description": "Monthly Rent"
-      },
-      {
-        "id": "4",
-        "amount": 300,
-        "type": "income",
-        "category": "freelance",
-        "date": "2023-10-04T15:45:00Z",
-        "description": "Web Development Project"
-      }
-    ]
-  }
+  "transactions": [
+    {
+      "id": "1",
+      "amount": 1500,
+      "type": "income",
+      "category": "salary",
+      "date": "2023-10-01T08:00:00Z",
+      "description": "Monthly Salary"
+    },
+    {
+      "id": "2",
+      "amount": -200,
+      "type": "expense",
+      "category": "groceries",
+      "date": "2023-10-02T12:30:00Z",
+      "description": "Supermarket Shopping"
+    },
+    {
+      "id": "3",
+      "amount": -500,
+      "type": "expense",
+      "category": "rent",
+      "date": "2023-10-03T10:00:00Z",
+      "description": "Monthly Rent"
+    },
+    {
+      "id": "4",
+      "amount": 300,
+      "type": "income",
+      "category": "freelance",
+      "date": "2023-10-04T15:45:00Z",
+      "description": "Web Development Project"
+    }
+  ]
+}

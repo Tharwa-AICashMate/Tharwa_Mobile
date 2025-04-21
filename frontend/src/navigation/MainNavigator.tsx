@@ -25,6 +25,7 @@ import { StyleSheet, View } from "react-native";
 import BottomTabs from "@/componenets/BottomNav/BottomTabs";
 import Theme from "@/theme";
 import { Session } from "@supabase/supabase-js";
+import PasswordChangeConfirmScreen from "@/screens/PasswordChangeConfirm/PasswordChangeConfirmScreen";
 
 const RootStack = createNativeStackNavigator();
 export default function MainNavigator() {
@@ -68,6 +69,7 @@ export default function MainNavigator() {
             name="PasswordSettingsScreen"
             component={PasswordSettingsScreen}
           />
+         
           <RootStack.Screen
             name="NotificationSettingsScreen"
             component={NotificationSettingsScreen}

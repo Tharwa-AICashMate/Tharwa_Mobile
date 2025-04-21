@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   StyleSheet, 
@@ -42,7 +41,7 @@ const PasswordChangeConfirmScreen: React.FC = () => {
         
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('Settings')}
+          onPress={() => navigation.navigate('SettingsScreen')}
         >
           <Text style={styles.buttonText}>Return to Settings</Text>
         </TouchableOpacity>

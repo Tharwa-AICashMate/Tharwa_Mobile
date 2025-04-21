@@ -128,10 +128,11 @@ import transactionRoutes from "./routes/transactionRoutes.js";
 const app = express();
 app.use(express.json());
 import cors from 'cors';
+import budgetRoutes from "./routes/budget.routes.js";
 
 app.use(cors());
 app.use("/auth", authRouter);
-// app.use('/api', budgetRoutes);
+app.use('/api', budgetRoutes);
 app.use('/transactions', transactionRoutes);
 app.post("/", (req, res) => {
   res.send("Welcome to the backend API!");

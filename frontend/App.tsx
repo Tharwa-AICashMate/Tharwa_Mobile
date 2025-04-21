@@ -358,6 +358,8 @@
 //     backgroundColor: "#fff", // You can use Theme.colors.background if needed
 //   },
 // });
+
+
 import React from "react";
 import { StyleSheet, View, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -467,7 +469,7 @@ export default function App() {
       <StatusBar style="light" />
       <NavigationContainer>
         <RootStack.Navigator
-          initialRouteName="MainApp"
+          initialRouteName="Onboarding"
           screenOptions={{ headerShown: false }}
         >
           {/* Launch and Onboarding */}

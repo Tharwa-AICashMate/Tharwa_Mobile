@@ -19,6 +19,7 @@ import DashboardScreen from "../screens/DashboardScreen";
 import TransactionsScreen from "../screens/TransactionsScreen/";
 import HelpCenterScreen from "../screens/EditProfile";
 
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -66,21 +67,20 @@ const SettingsStackNavigator = () => {
     >
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen
-        name="NotificationSettings"
+        name="NotificationSettingsScreen"
         component={NotificationSettingsScreen}
       />
       <Stack.Screen
-        name="PasswordSettings"
+        name="PasswordSettingsScreen"
         component={PasswordSettingsScreen}
       />
-      <Stack.Screen
-        name="PasswordChangeConfirm"
-        component={PasswordChangeConfirmScreen}
-      />
-      <Stack.Screen name="DeleteAccount" component={DeleteAccountScreen} />
-      <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
-      <Stack.Screen name="SupportChannels" component={SupportChannelsScreen} />
-      <Stack.Sceen name="TransactionsScreen" component={TransactionsScreen} />
+       
+
+      <Stack.Screen name="DeleteAccountScreen" component={DeleteAccountScreen} />
+      <Stack.Screen name="HelpCenterScreen" component={HelpCenterScreen} />
+      <Stack.Screen name="SupportChannelsScreen" component={SupportChannelsScreen} />
+      <Stack.Screen name="TransactionsScreen" component={TransactionsScreen} />
+      <Stack.Screen name="PasswordChangeConfirmScreen" component={PasswordChangeConfirmScreen} />
       <Stack.Screen name="StatsScreen" component={StatsScreen} />
       <Stack.Screen
         name="AddTransactionScreen"

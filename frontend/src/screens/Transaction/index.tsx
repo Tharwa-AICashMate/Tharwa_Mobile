@@ -9,6 +9,7 @@ import MonthSection from '@/componenets/MonthSection';
 import { Transaction } from '@/types/transactionTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 
 type FilterType = 'all' | 'income' | 'expense';
 
@@ -67,16 +68,7 @@ const TransactionScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={handleBack}>
-            <Ionicons name="chevron-back" size={24} color='white' />
-          </TouchableOpacity>
-          <Text style={styles.title}>Transaction</Text>
-          <TouchableOpacity>
-            <Ionicons name="notifications-outline" size={24} color='white' />
-          </TouchableOpacity>
-        </View>
-        
+        <Header title='Transaction' />
         <TransactionSummary 
           summary={summary} 
           onSelectTab={setActiveTab}
