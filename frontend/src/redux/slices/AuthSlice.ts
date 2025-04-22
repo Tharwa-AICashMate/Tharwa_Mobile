@@ -21,8 +21,6 @@ const initialState: AuthState = {
 };
 
 const apiBase = "http://192.168.1.6:3000";
-// const apiBase = "http://localhost:3000";
-
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri();
@@ -268,33 +266,8 @@ const authSlice = createSlice({
       .addCase(resetPassword.pending, (state) => {
         state.loading = true;
       });
-
-    //       .addCase(submitEmail.fulfilled, (state, action) => {
-    //         state.pin = action.payload.pin;
-    //         state.error = null;
-    //         state.pinTimer = setTimeout(() => (state.pin = null), 10 * 60 * 1000);
-    //       })
-    //       .addCase(submitEmail.rejected, (state, action) => {
-    //         state.error = action.payload as string;
-    //       })
-    //       .addCase(verifyPin.fulfilled, (state) => {
-    //         state.pin = null;
-    //         state.pinTimer = null;
-    //         state.error = null;
-    //       })
-    //       .addCase(verifyPin.rejected, (state, action) => {
-    //         state.error = action.payload as string;
-    //       })
-    //       .addCase(resetPassword.fulfilled, (state, action) => {
-    //         state.users = action.payload.updatedUsers;
-    //         state.error = null;
-    //       })
-    //       .addCase(resetPassword.rejected, (state, action) => {
-    //         state.error = action.payload as string;
-    //       });
-  },
+  }
 });
 
-//export const {  } = authSlice.actions;
-//logout, startForgotPassword, cancelReset
+
 export default authSlice.reducer;

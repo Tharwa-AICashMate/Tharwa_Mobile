@@ -16,7 +16,7 @@ import PasswordChangeConfirmScreen from "../screens/PasswordChangeConfirm/Passwo
 import DeleteAccountScreen from "../screens/DeleteAccountScreen";
 import LoginScreen from "@/screens/LoginScreen";
 import DashboardScreen from "../screens/DashboardScreen";
-import TransactionsScreen from "../screens/TransactionsScreen/";
+import TransactionsScreen from "../screens/Transaction/index";
 import HelpCenterScreen from "../screens/EditProfile";
 
 

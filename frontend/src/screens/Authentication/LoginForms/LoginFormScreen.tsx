@@ -14,6 +14,7 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const { error, loading } = useSelector((state: any) => state.auth);
+
   const dispatch = useDispatch<AppDispatch>();
 
   const handleLogin = async () => {

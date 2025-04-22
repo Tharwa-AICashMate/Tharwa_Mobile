@@ -1,5 +1,5 @@
 
-import { Goal } from "@/types/goal";
+import { Goal } from "@/types/goal.js";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 

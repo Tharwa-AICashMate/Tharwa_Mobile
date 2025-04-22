@@ -33,6 +33,7 @@ import TransactionForm from "../TransactionForm";
 import Savings from "@/screens/Savings";
 import CategoryDetailScreen from "@/screens/CategoryDetails";
 import TransactionScreen from "@/screens/Transaction";
+import StoreHome from "@/screens/StoreHome";
 // import TransactionScreen from "@/screens/Transaction";
 
 type ProfileStackParamList = {
@@ -89,6 +90,7 @@ function ProfileStackScreen() {
       />
       <ProfileStack.Screen name="AddFingerPrint" component={AddFingerPrint} />
       <ProfileStack.Screen name="SettingsScreen" component={SettingsScreen} />
+      <ProfileStack.Screen name="StoreHome" component={StoreHome} />
       <ProfileStack.Screen
         name="HelpCenterScreen"
         component={HelpCenterScreen}
@@ -173,7 +175,7 @@ export default function BottomTabs() {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Stats" component={Stats} />
+      <Tab.Screen name="StoreHome" component={StoreHome} />
       <Tab.Screen name="Transactions" component={TransactionScreen} />
       <Tab.Screen name="Portfolio" component={CategoriesScreen} />
       <Tab.Screen name="Profile" component={ProfileStackScreen} />

@@ -25,6 +25,7 @@ import BottomTabs from "@/componenets/BottomNav/BottomTabs";
 import Theme from "@/theme";
 import { Session } from "@supabase/supabase-js";
 import PasswordChangeConfirmScreen from "@/screens/PasswordChangeConfirm/PasswordChangeConfirmScreen";
+import { NavigationContainer } from "@react-navigation/native";
 
 const RootStack = createNativeStackNavigator();
 export default function MainNavigator() {
@@ -42,6 +43,7 @@ export default function MainNavigator() {
 
   return (
     <>
+    <NavigationContainer>
       {!session ? (
         <OnBoardingNavigation />
       ) : (
@@ -115,6 +117,7 @@ export default function MainNavigator() {
           />
         </RootStack.Navigator>
       )}
+      </NavigationContainer>
     </>
   );
 }

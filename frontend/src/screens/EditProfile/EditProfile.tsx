@@ -23,7 +23,7 @@ type RootStackParamList = {
 };
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
-
+//  "server": "json-server --watch server/db.json --port 5000" package.json
 const Profile: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
 
