@@ -106,38 +106,360 @@
       "link": "https://instagram.com/example"
     }
   ],
-    "transactions": [
-      {
-        "id": "1",
-        "amount": 1500,
-        "type": "income",
-        "category": "salary",
-        "date": "2023-10-01T08:00:00Z",
-        "description": "Monthly Salary"
-      },
-      {
-        "id": "2",
-        "amount": -200,
-        "type": "expense",
-        "category": "groceries",
-        "date": "2023-10-02T12:30:00Z",
-        "description": "Supermarket Shopping"
-      },
-      {
-        "id": "3",
-        "amount": -500,
-        "type": "expense",
-        "category": "rent",
-        "date": "2023-10-03T10:00:00Z",
-        "description": "Monthly Rent"
-      },
-      {
-        "id": "4",
-        "amount": 300,
-        "type": "income",
-        "category": "freelance",
-        "date": "2023-10-04T15:45:00Z",
-        "description": "Web Development Project"
-      }
-    ]
-  }
+  "transactions": [
+    {
+      "id": "1",
+      "amount": 1500,
+      "type": "income",
+      "category": "salary",
+      "date": "2023-10-01T08:00:00Z",
+      "description": "Monthly Salary"
+    },
+    {
+      "id": "2",
+      "amount": -200,
+      "type": "expense",
+      "category": "groceries",
+      "date": "2023-10-02T12:30:00Z",
+      "description": "Supermarket Shopping"
+    },
+    {
+      "id": "3",
+      "amount": -500,
+      "type": "expense",
+      "category": "rent",
+      "date": "2023-10-03T10:00:00Z",
+      "description": "Monthly Rent"
+    },
+    {
+      "id": "4",
+      "amount": 300,
+      "type": "income",
+      "category": "freelance",
+      "date": "2023-10-04T15:45:00Z",
+      "description": "Web Development Project"
+    }
+  ],
+  "stores": [
+    {
+      "id": "1",
+      "name": "Grocery Market A",
+      "lat": 25.4717003,
+      "lng": 30.5492898
+    },
+    {
+      "id": "2",
+      "name": "Super Grocery",
+      "lat": 31.9632,
+      "lng": 35.9304
+    },
+    {
+      "id": "3",
+      "name": "Local Mart",
+      "lat": 31.9765,
+      "lng": 35.8909
+    },
+    {
+      "id": "4",
+      "name": "Fresh Foods",
+      "lat": 31.938,
+      "lng": 35.9123
+    },
+    {
+      "id": "5",
+      "name": "City Grocers",
+      "lat": 31.955,
+      "lng": 35.9456
+    },
+    {
+      "id": "6",
+      "name": "Cairo Mart",
+      "lat": 29.8859868,
+      "lng": 31.3556982
+    },
+    {
+      "id": "1",
+      "name": "Grocery Market A",
+      "lat": 25.4717003,
+      "lng": 30.5492898
+    }
+  ],
+  "store_items": [
+    {
+      "id": "1",
+      "store_id": 1,
+      "item_name": "milk",
+      "price": 1.99
+    },
+    {
+      "id": "2",
+      "store_id": 1,
+      "item_name": "bread",
+      "price": 2.49
+    },
+    {
+      "id": "3",
+      "store_id": 1,
+      "item_name": "eggs",
+      "price": 3.29
+    },
+    {
+      "id": "4",
+      "store_id": 1,
+      "item_name": "apples",
+      "price": 4.99
+    },
+    {
+      "id": "5",
+      "store_id": 1,
+      "item_name": "chicken",
+      "price": 7.99
+    },
+    {
+      "id": "6",
+      "store_id": 2,
+      "item_name": "milk",
+      "price": 1.89
+    },
+    {
+      "id": "7",
+      "store_id": 2,
+      "item_name": "bread",
+      "price": 2.29
+    },
+    {
+      "id": "8",
+      "store_id": 2,
+      "item_name": "eggs",
+      "price": 3.49
+    },
+    {
+      "id": "9",
+      "store_id": 2,
+      "item_name": "apples",
+      "price": 5.29
+    },
+    {
+      "id": "10",
+      "store_id": 2,
+      "item_name": "chicken",
+      "price": 8.49
+    },
+    {
+      "id": "11",
+      "store_id": 3,
+      "item_name": "milk",
+      "price": 2.09
+    },
+    {
+      "id": "12",
+      "store_id": 3,
+      "item_name": "bread",
+      "price": 2.19
+    },
+    {
+      "id": "13",
+      "store_id": 3,
+      "item_name": "eggs",
+      "price": 2.99
+    },
+    {
+      "id": "14",
+      "store_id": 3,
+      "item_name": "apples",
+      "price": 4.49
+    },
+    {
+      "id": "15",
+      "store_id": 3,
+      "item_name": "chicken",
+      "price": 7.49
+    },
+    {
+      "id": "16",
+      "store_id": 4,
+      "item_name": "milk",
+      "price": 1.95
+    },
+    {
+      "id": "17",
+      "store_id": 4,
+      "item_name": "bread",
+      "price": 2.39
+    },
+    {
+      "id": "18",
+      "store_id": 4,
+      "item_name": "eggs",
+      "price": 3.19
+    },
+    {
+      "id": "19",
+      "store_id": 4,
+      "item_name": "apples",
+      "price": 4.79
+    },
+    {
+      "id": "20",
+      "store_id": 4,
+      "item_name": "chicken",
+      "price": 7.89
+    },
+    {
+      "id": "21",
+      "store_id": 5,
+      "item_name": "milk",
+      "price": 2.15
+    },
+    {
+      "id": "22",
+      "store_id": 5,
+      "item_name": "bread",
+      "price": 2.59
+    },
+    {
+      "id": "23",
+      "store_id": 5,
+      "item_name": "eggs",
+      "price": 3.09
+    },
+    {
+      "id": "24",
+      "store_id": 5,
+      "item_name": "apples",
+      "price": 4.89
+    },
+    {
+      "id": "25",
+      "store_id": 5,
+      "item_name": "chicken",
+      "price": 7.59
+    },
+    {
+      "id": "26",
+      "store_id": 1,
+      "item_name": "rice",
+      "price": 3.49
+    },
+    {
+      "id": "27",
+      "store_id": 1,
+      "item_name": "tomatoes",
+      "price": 2.99
+    },
+    {
+      "id": "28",
+      "store_id": 1,
+      "item_name": "potatoes",
+      "price": 3.79
+    },
+    {
+      "id": "29",
+      "store_id": 1,
+      "item_name": "onions",
+      "price": 1.59
+    },
+    {
+      "id": "30",
+      "store_id": 2,
+      "item_name": "rice",
+      "price": 3.29
+    },
+    {
+      "id": "31",
+      "store_id": 2,
+      "item_name": "tomatoes",
+      "price": 3.19
+    },
+    {
+      "id": "32",
+      "store_id": 2,
+      "item_name": "potatoes",
+      "price": 3.49
+    },
+    {
+      "id": "33",
+      "store_id": 2,
+      "item_name": "onions",
+      "price": 1.49
+    },
+    {
+      "id": "34",
+      "store_id": 3,
+      "item_name": "rice",
+      "price": 3.19
+    },
+    {
+      "id": "35",
+      "store_id": 3,
+      "item_name": "tomatoes",
+      "price": 2.89
+    },
+    {
+      "id": "36",
+      "store_id": 3,
+      "item_name": "potatoes",
+      "price": 3.29
+    },
+    {
+      "id": "37",
+      "store_id": 3,
+      "item_name": "onions",
+      "price": 1.29
+    },
+    {
+      "id": "38",
+      "store_id": 4,
+      "item_name": "rice",
+      "price": 3.59
+    },
+    {
+      "id": "39",
+      "store_id": 4,
+      "item_name": "tomatoes",
+      "price": 3.09
+    },
+    {
+      "id": "40",
+      "store_id": 4,
+      "item_name": "potatoes",
+      "price": 3.69
+    },
+    {
+      "id": "41",
+      "store_id": 4,
+      "item_name": "onions",
+      "price": 1.39
+    },
+    {
+      "id": "42",
+      "store_id": 5,
+      "item_name": "rice",
+      "price": 3.39
+    },
+    {
+      "id": "43",
+      "store_id": 5,
+      "item_name": "tomatoes",
+      "price": 3.29
+    },
+    {
+      "id": "44",
+      "store_id": 5,
+      "item_name": "potatoes",
+      "price": 3.59
+    },
+    {
+      "id": "45",
+      "store_id": 5,
+      "item_name": "onions",
+      "price": 1.69
+    },
+    {
+      "id": "264f",
+      "store_id": 6,
+      "item_name": "milk",
+      "price": 2.5
+    }
+  ]
+}

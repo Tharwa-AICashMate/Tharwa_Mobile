@@ -1,25 +1,30 @@
-
-export interface NotificationSettings {
-  generalNotification: boolean;
-  sound: boolean;
-  soundCall: boolean;
-  vibrate: boolean;
-  transactionUpdate: boolean;
-  expenseReminder: boolean;
-  budgetNotifications: boolean;
-  lowBalanceAlerts: boolean;
+export interface User {
+  id: string;
+  email: string;
+  created_at: string;
 }
-  
-  export interface PasswordData {
-    currentPassword: string;
-    newPassword: string;
-    confirmNewPassword: string;
-  }
-  
-  export interface UserSettings {
-    notificationSettings: NotificationSettings;
-    language: string;
-    theme: 'light' | 'dark' | 'system';
-    currency: string;
-    biometricEnabled: boolean;
-  }
+
+export interface GroceryItem {
+  id: string;
+  item_id: string;
+  user_id: string;
+  new_price?: number;
+  created_at: string;
+}
+
+export interface StoreItem {
+  id: string;
+  store_id: string;
+  item_name: string;
+  price: number;
+  updated_at: string;
+}
+
+export interface Store {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  address: string;
+  created_at: string;
+}
