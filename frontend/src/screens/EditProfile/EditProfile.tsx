@@ -32,7 +32,7 @@ const Profile: React.FC = () => {
   const [email, setEmail] = useState<string>('example@example.com');
   const [pushNotifications, setPushNotifications] = useState<boolean>(true);
   const [darkTheme, setDarkTheme] = useState<boolean>(false);
-
+//nothing to commit
   return (
     <View style={styles.container}>
       <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
