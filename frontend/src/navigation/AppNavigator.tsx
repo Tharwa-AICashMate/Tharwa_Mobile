@@ -27,6 +27,7 @@ import { AccessibilityState } from "react-native";
 import SupportChannelsScreen from "@/screens/SupportChannelsScreen/SupportChannelsScreen";
 import StatsScreen from "@/screens/StatsScreen";
 import AddTransactionScreen from "@/screens/AddTransactionScreen";
+import CategoryDetailScreen from "@/screens/CategoryDetails/index.js";
 
 interface CustomTabBarButtonProps {
   children: React.ReactNode;

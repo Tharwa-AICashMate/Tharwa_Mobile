@@ -89,7 +89,7 @@ const Profile: React.FC = () => {
               />
             </View>
 
-            <View style={styles.switchRow}>
+            {/* <View style={styles.switchRow}>
               <Text style={styles.switchLabel}>Turn Dark Theme</Text>
               <Switch
                 value={darkTheme}
@@ -97,7 +97,7 @@ const Profile: React.FC = () => {
                 trackColor={{ false: '#ccc', true: Theme.colors.highlight }}
                 thumbColor={darkTheme ? '#fff' : '#f4f3f4'}
               />
-            </View>
+            </View> */}
 
             <UpdateButton
               onPress={() => {

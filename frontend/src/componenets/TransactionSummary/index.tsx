@@ -1,60 +1,179 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { TransactionSummary as TransactionSummaryType } from '@/types/transactionTypes';
-import { formatCurrency } from '@/utils/helpes';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Modal, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { getCurrentUserId } from '@/utils/auth';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Theme from '@/theme';
+import { useNavigation } from '@react-navigation/native';
+
 interface TransactionSummaryProps {
-  summary: TransactionSummaryType;
+  activeTab: 'all' | 'income' | 'expense' | null;
   onSelectTab: (tab: 'all' | 'income' | 'expense') => void;
-  activeTab: 'all' | 'income' | 'expense';
 }
 
-const TransactionSummary: React.FC<TransactionSummaryProps> = ({ 
-  summary, 
-  onSelectTab,
-  activeTab
+const TransactionSummary: React.FC<TransactionSummaryProps> = ({
+  activeTab = null,
+  onSelectTab
 }) => {
-  const { totalBalance, income, expense } = summary;
-  
+  const [totalBalance, setTotalBalance] = useState(0);
+  const [income, setIncome] = useState(0);
+  const [expense, setExpense] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const navigation = useNavigation();
+
+  const fetchBalance = async () => {
+    try {
+      const user_id = await getCurrentUserId();
+      const response = await fetch(`http://192.168.1.6:3000/api/balances/user/${user_id}`);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch balance');
+      }
+
+      const data = await response.json();
+      setTotalBalance(data.balance_limit || 0);
+      setIncome(data.income || 0);
+      setExpense(data.expense || 0);
+    } catch (error) {
+      console.error('Error fetching balance:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBalance(); // جلب البيانات أول ما الكمبوننت يتحمّل
+  }, []);
+
+  const handleSaveBalance = async () => {
+    const parsed = parseFloat(inputValue);
+    if (isNaN(parsed)) return;
+
+    try {
+      const user_id = await getCurrentUserId();
+      const url = totalBalance
+        ? `http://192.168.1.6:3000/api/balances/user/${user_id}`
+        : 'http://192.168.1.6:3000/api/balances';
+      const method = totalBalance ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id,
+          balance_limit: parsed,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save balance');
+      }
+
+      const data = await response.json();
+      setTotalBalance(data.balance_limit || parsed);
+      setIncome(data.income || 0);
+      setExpense(data.expense || 0);
+    } catch (error) {
+      console.error('Error saving balance:', error);
+    } finally {
+      setModalVisible(false);
+    }
+  };
+
+  const handleTotalBalancePress = () => {
+    // Reset filter to show all transactions
+    if (onSelectTab) {
+      onSelectTab('all');
+    }
+    // Show the modal
+    setModalVisible(true);
+  };
+
+  const handleAddExpense = () => {
+    navigation.navigate('AddExpensesScreen');
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.balanceContainer}>
+      <TouchableOpacity style={styles.balanceContainer} onPress={handleTotalBalancePress}>
         <Text style={styles.balanceLabel}>Total Balance</Text>
-        <Text style={styles.balanceAmount}>{formatCurrency(totalBalance)}</Text>
-      </View>
-      
+        <Text style={styles.balanceAmount}>${totalBalance.toFixed(2)}</Text>
+      </TouchableOpacity>
+
       <View style={styles.tabsContainer}>
-        <View 
+        <TouchableOpacity
           style={[
-            styles.tab, 
+            styles.tab,
             activeTab === 'income' && styles.activeTab,
-            { borderTopLeftRadius: 16, borderBottomLeftRadius: 16 }
+            { borderTopLeftRadius: 16, borderBottomLeftRadius: 16 },
           ]}
-          onTouchEnd={() => onSelectTab('income')}
+          onPress={() => onSelectTab && onSelectTab('income')}
         >
-          <MaterialCommunityIcons name="arrow-top-right-bold-box-outline" size={24} color={Theme.colors.primary} />
-          <Text style={[styles.tabLabel,activeTab === 'income' && styles.activeTabText]}>Income</Text>
+          <MaterialCommunityIcons
+            name="arrow-top-right-bold-box-outline"
+            size={24}
+            color={activeTab === 'income' ? '#fff' : Theme.colors.primary}
+          />
+          <Text style={[styles.tabLabel, activeTab === 'income' && styles.activeTabText]}>
+            Income
+          </Text>
           <Text style={[styles.tabAmount, activeTab === 'income' && styles.activeTabText]}>
-            {formatCurrency(income)}
+            ${income.toFixed(2)}
           </Text>
-        </View>
-        
-        <View 
+        </TouchableOpacity>
+
+        <TouchableOpacity
           style={[
-            styles.tab, 
+            styles.tab,
             activeTab === 'expense' && styles.activeTab,
-            { borderTopRightRadius: 16, borderBottomRightRadius: 16 }
+            { borderTopRightRadius: 16, borderBottomRightRadius: 16 },
           ]}
-          onTouchEnd={() => onSelectTab('expense')}
+          onPress={() => onSelectTab && onSelectTab('expense')}
         >
-          <MaterialCommunityIcons name="arrow-bottom-left-bold-box-outline" size={24} color={'202063'} />
-          <Text style={[styles.tabLabel,activeTab === 'expense' && styles.activeTabText]}>Expense</Text>
-          <Text style={[styles.tabAmount, activeTab === 'expense' && styles.activeTabText]}>
-            {formatCurrency(expense)}
+          <MaterialCommunityIcons
+            name="arrow-bottom-left-bold-box-outline"
+            size={24}
+            color={activeTab === 'expense' ? '#fff' : '#202063'}
+          />
+          <Text style={[styles.tabLabel, activeTab === 'expense' && styles.activeTabText]}>
+            Expense
           </Text>
-        </View>
+          <Text style={[styles.tabAmount, activeTab === 'expense' && styles.activeTabText]}>
+            ${expense.toFixed(2)}
+          </Text>
+        </TouchableOpacity>
       </View>
+
+      {activeTab === 'expense' && (
+        <View style={styles.addExpenseContainer}>
+          <TouchableOpacity style={styles.addButton} onPress={handleAddExpense}>
+            <Text style={styles.addButtonText}>Add Expense</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Enter Total Balance</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              value={inputValue}
+              onChangeText={setInputValue}
+              placeholder="Enter amount"
+            />
+            <View style={styles.buttonRow}>
+              <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
+                <Text style={styles.cancelText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleSaveBalance} style={styles.saveButton}>
+                <Text style={styles.saveText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -64,45 +183,38 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   balanceContainer: {
-    width:330,
-    height:80,
-    backgroundColor:'white',
-    borderRadius:15,
-    display:'flex',
+    width: "97%",
+    height: 80,
+    backgroundColor: 'white',
+    borderRadius: 15,
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
     marginBottom: 24,
-    marginLeft:10,
-    padding:10
+    marginLeft: 10,
+    padding: 10,
   },
   balanceLabel: {
     fontSize: 14,
-    color: Theme.colors.textLight,
+    color: '#333',
     marginBottom: 4,
   },
   balanceAmount: {
     fontSize: 24,
     fontWeight: '600',
-    color: Theme.colors.textLight,
+    color: '#333',
   },
   tabsContainer: {
     flexDirection: 'row',
-    // backgroundColor: '#F6F8FA',
-    // overflow: 'hidden',
-    justifyContent:'space-between',
-    alignItems:'center',
-    // gap:10
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   tab: {
     flex: 1,
     paddingVertical: 12,
     alignItems: 'center',
-    marginLeft:10,
-    backgroundColor:Theme.colors.background,
+    marginHorizontal: 5,
+    backgroundColor: Theme.colors.background,
     borderRadius: 16,
-  },
-  activeTab: {
-    backgroundColor: '#32325D',
   },
   tabLabel: {
     fontSize: 14,
@@ -114,8 +226,82 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#32325D',
   },
+  activeTab: {
+    backgroundColor: '#32325D',
+  },
   activeTabText: {
     color: '#FFFFFF',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '85%',
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 16,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 16,
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  saveButton: {
+    backgroundColor: '#28a745',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  saveText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  cancelButton: {
+    backgroundColor: '#dc3545',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  cancelText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  addExpenseContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  addButton: {
+    backgroundColor: Theme.colors.primary,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
   },
 });
 

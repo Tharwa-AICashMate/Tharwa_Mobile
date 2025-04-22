@@ -39,21 +39,21 @@ const Security: React.FC<SecurityProps> = ({ navigation }) => {
       <View style={styles.contentBox}>
         <Text style={styles.title}>Security</Text>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.option}
           onPress={() => navigation.navigate('ChangePin')}
         >
           <Text style={styles.optionText}>Change Pin</Text>
           <Ionicons name="chevron-forward" size={20} color={Theme.colors.textLight} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.option}
           onPress={() => navigation.navigate('FingerPrint')}
         >
           <Text style={styles.optionText}>Fingerprint</Text>
           <Ionicons name="chevron-forward" size={20} color={Theme.colors.textLight} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={styles.option}

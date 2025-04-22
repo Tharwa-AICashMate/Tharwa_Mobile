@@ -2,22 +2,19 @@ import React from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  StatusBar
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
-import { useAppSelector } from '@/redux/hook';
-import { RootStackParamList } from 'App';
-import BalanceDisplay from '@/componenets/BalanceDisplay';
-import ProgressBar from '@/componenets/ProgressBar';
-import Theme from '@/theme';
+import { useAppSelector } from '../../redux/hook';
+import { RootStackParamList } from '../../App';
+import BalanceDisplay from '../../componenets/BalanceDisplay';
+import ProgressBar from '../../componenets/ProgressBar';
+import Theme from '../../theme';
 import styles from './style';
-import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
-import TransactionItem from "@/componenets/TransactionItem";
+import TransactionItem from "../../componenets/TransactionItem";
 
 type CategoryDetailProps = NativeStackScreenProps<
   RootStackParamList,
@@ -30,15 +27,15 @@ const CategoryDetailScreen = () => {
   const route = useRoute<CategoryDetailRouteProp>();
   const navigation = useNavigation<CategoryDetailNavigationProp>();
   const { categoryName } = route.params;
-  const budget = useAppSelector((state) => state.expenses.budget);
-  const transactions = useAppSelector((state) => state.expenses.transactions);
+  const budget = useAppSelector((state: any) => state.expenses.budget);
+  const transactions = useAppSelector((state: any) => state.expenses.transactions);
 
   const categoryTransactions = transactions.filter(
-    (transaction) => transaction.category === categoryName
+    (transaction: any) => transaction.category === categoryName
   );
 
   const groupedTransactions = categoryTransactions.reduce(
-    (groups: { [key: string]: typeof categoryTransactions }, transaction) => {
+    (groups: { [key: string]: typeof categoryTransactions }, transaction: any) => {
       const monthNames = [
         "January",
         "February",
@@ -69,78 +66,57 @@ const CategoryDetailScreen = () => {
     return date.getDate().toString().padStart(2, "0");
   };
 
-  const navigateBack = () => {
-    navigation.goBack();
-  };
-
-  const addExpense = () => {
-    // Navigate to the AddExpense screen
-    navigation.navigate("AddExpensesScreen");
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      {/* <Header name={categoryName} navigateBack={navigateBack} /> */}
-      {/* <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} /> */}
-      <Header title={categoryName} />
-      {/* Budget Summary */}
-      <View style={styles.balanceContainer}>
-        <BalanceDisplay
-          balance={budget.totalExpenses}
-          expense={budget.totalIncome}
-        />
-      </View>
-      <View style={styles.budgetContainer}>
-        <View style={styles.progressContainer}>
-          <ProgressBar
-            percentage={budget.percentageUsed}
-            amount={budget.budgetLimit}
+    <View style={{ flex: 1 }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.balanceContainer}>
+          <BalanceDisplay
+            balance={budget.totalExpenses}
+            expense={budget.totalIncome}
           />
         </View>
-
-        {/* Budget Status */}
-        <View style={styles.budgetStatus}>
-          <Ionicons
-            name="checkbox-outline"
-            size={16}
-            color={Theme.colors.text}
-          />
-          <Text style={styles.budgetStatusText}>
-            {budget.percentageUsed}% Of Your Expenses, Looks Good.
-          </Text>
-        </View>
-      </View>
-
-      {/* Transaction List */}
-      <ScrollView style={styles.transactionList}>
-        {Object.keys(groupedTransactions).map((month) => (
-          <View key={month} style={styles.monthSection}>
-            <Text style={styles.monthTitle}>{month}</Text>
-
-            {groupedTransactions[month].map((transaction) => (
-              <TransactionItem
-                key={transaction.id}
-                id={transaction.id}
-                title={transaction.category}
-                subtitle={`${transaction.time} - ${month} ${formatTransactionDate(transaction.date)}`}
-                amount={transaction.amount}
-                icon={transaction.icon}
-                iconBgColor={transaction.iconBgColor}
-                isDeposit={false}
-              />
-            ))}
+        <View style={styles.budgetContainer}>
+          <View style={styles.progressContainer}>
+            <ProgressBar
+              percentage={budget.percentageUsed}
+              amount={budget.budgetLimit}
+            />
           </View>
-        ))}
-      </ScrollView>
 
-      {/* Add Expense Button */}
-      <View style={styles.addExpenseContainer}>
-        <TouchableOpacity style={styles.addButton} onPress={addExpense}>
-          <Text style={styles.addButtonText}>Add Expenses</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          <View style={styles.budgetStatus}>
+            <Ionicons
+              name="checkbox-outline"
+              size={16}
+              color={Theme.colors.text}
+            />
+            <Text style={styles.budgetStatusText}>
+              {budget.percentageUsed}% Of Your Expenses, Looks Good.
+            </Text>
+          </View>
+        </View>
+
+        <ScrollView style={styles.transactionList}>
+          {Object.keys(groupedTransactions).map((month) => (
+            <View key={month} style={styles.monthSection}>
+              <Text style={styles.monthTitle}>{month}</Text>
+
+              {groupedTransactions[month].map((transaction: any) => (
+                <TransactionItem
+                  key={transaction.id}
+                  id={transaction.id}
+                  title={transaction.category}
+                  subtitle={`${transaction.time} - ${month} ${formatTransactionDate(transaction.date)}`}
+                  amount={transaction.amount}
+                  icon={transaction.icon}
+                  iconBgColor={transaction.iconBgColor}
+                  isDeposit={false}
+                />
+              ))}
+            </View>
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 };
 

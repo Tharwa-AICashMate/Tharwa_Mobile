@@ -8,7 +8,6 @@ import SupportChannelsScreen from "@/screens/SupportChannelsScreen/SupportChanne
 import Notification from "@/screens/Notification/Notification";
 import Profile from "@/screens/Profile/Profile";
 import TransactionForm from "@/componenets/TransactionForm";
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GreenScreen from "@/screens/Security/ChangePin/GreenScreen/GreenScreen";
 import GreenScreenFP from "@/screens/Security/FingerPrint/FingerPrintDetails/GreenScreenFP/GreenScreenFP";
@@ -42,7 +41,7 @@ export default function MainNavigator() {
   }, []);
 
   return (
-    <NavigationContainer>
+    <>
       {!session ? (
         <OnBoardingNavigation />
       ) : (
@@ -99,21 +98,24 @@ export default function MainNavigator() {
             name="AddExpensesScreen"
             component={AddExpensesScreen}
           />
-          <RootStack.Screen
-            name="TransactionForm"
-            component={TransactionForm}
-          />
+          <RootStack.Screen name="TransactionForm" component={TransactionForm} />
+
+          {/* Savings */}
           <RootStack.Screen name="Savings" component={Savings} />
           <RootStack.Screen name="SavingDetails" component={SavingDetails} />
           <RootStack.Screen name="AddSavings" component={AddSavingsScreen} />
+
+          {/* Notification */}
           <RootStack.Screen name="Notification" component={Notification} />
+
+          {/* Password Change Confirm */}
           <RootStack.Screen
-            name="CategoryDetailScreen"
-            component={CategoryDetailScreen}
+            name="PasswordChangeConfirm"
+            component={PasswordChangeConfirmScreen}
           />
         </RootStack.Navigator>
       )}
-    </NavigationContainer>
+    </>
   );
 }
 

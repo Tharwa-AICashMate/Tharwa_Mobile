@@ -13,6 +13,7 @@ import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 
 type FilterType = 'all' | 'income' | 'expense';
 
+
 const TransactionScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { transactionsByMonth, summary, loading, error } = useSelector(
@@ -59,6 +60,7 @@ const TransactionScreen: React.FC = () => {
         >
           <Text style={styles.retryButtonText}>Retry</Text>
         </TouchableOpacity>
+        
       </View>
     );
   }
@@ -70,9 +72,8 @@ const TransactionScreen: React.FC = () => {
       <View style={styles.container}>
         <Header title='Transaction' />
         <TransactionSummary 
-          summary={summary} 
-          onSelectTab={setActiveTab}
           activeTab={activeTab}
+          onSelectTab={setActiveTab}
         />
         
         <View style={styles.contentContainer}>
