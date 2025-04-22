@@ -34,4 +34,5 @@ authRouter.post("/login", login);
 authRouter.post("/forgetPassword",forgetPassword);
 authRouter.post("/resetPassword", resetPassword);
 authRouter.post("/verifyotp", verifyOtp);
+
 export default authRouter;
