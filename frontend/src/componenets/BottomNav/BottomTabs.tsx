@@ -18,6 +18,7 @@ import FingerPrint from "@/screens/Security/FingerPrint/FingerPrint";
 import TermsAndConditions from "@/screens/Security/TermsAndConditions/TermsAndConditions";
 import { NavigatorScreenParams } from "@react-navigation/native";
 import FingerprintDetails from "@/screens/Security/FingerPrint/FingerPrintDetails/FingerPrintDetails";
+import { StackScreenProps } from "@react-navigation/stack";
 import AddFingerPrint from "@/screens/Security/FingerPrint/AddFingerPrint/AddFingerPrint";
 import Theme from "@/theme";
 import styles from "./BottomTabs.styles";
@@ -34,6 +35,7 @@ import Savings from "@/screens/Savings";
 import CategoryDetailScreen from "@/screens/CategoryDetails";
 import TransactionScreen from "@/screens/Transaction";
 import StoreHome from "@/screens/StoreHome";
+import StoreScreen from "@/screens/StoreHome";
 // import TransactionScreen from "@/screens/Transaction";
 
 type ProfileStackParamList = {
@@ -55,6 +57,9 @@ type ProfileStackParamList = {
   NotificationSettingsScreen: undefined;
   DeleteAccountScreen: undefined;
   SupportChannelsScreen: undefined;
+  StoreHome: undefined;
+  AddExpensesScreen: undefined;
+  TransactionForm: undefined; // Added this line
 };
 
 type BottomTabParamList = {
@@ -63,6 +68,8 @@ type BottomTabParamList = {
   Transactions: undefined;
   Portfolio: undefined;
   Profile: NavigatorScreenParams<ProfileStackParamList>;
+  Store: undefined;
+  Categories: undefined; // Added this line
 };
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
@@ -126,7 +133,11 @@ function ProfileStackScreen() {
 export default function BottomTabs() {
   return (
     <Tab.Navigator
-      screenOptions={({ route }: { route: { name: keyof BottomTabParamList } }) => ({
+      screenOptions={({
+        route,
+      }: {
+        route: { name: keyof BottomTabParamList };
+      }) => ({
         tabBarIcon: ({ focused }: { focused: boolean }) => {
           let iconName: keyof typeof Ionicons.glyphMap;
 
@@ -175,9 +186,9 @@ export default function BottomTabs() {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="StoreHome" component={StoreHome} />
+      <Tab.Screen name="Store" component={StoreScreen} />
       <Tab.Screen name="Transactions" component={TransactionScreen} />
-      <Tab.Screen name="Portfolio" component={CategoriesScreen} />
+      <Tab.Screen name="Categories" component={CategoriesScreen} />
       <Tab.Screen name="Profile" component={ProfileStackScreen} />
     </Tab.Navigator>
   );

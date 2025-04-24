@@ -14,7 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Theme from '@/theme';
 import { useNavigation } from '@react-navigation/native';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
-const HomeScreen: React.FC = () => {
+
+const StoreScreen: React.FC = () => {
   const dispatch = useAppDispatch();  
   const [loading, setLoading] = React.useState(false); 
     const navigation = useNavigation();
@@ -109,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default StoreScreen;

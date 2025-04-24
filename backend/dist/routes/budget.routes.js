@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const budget_controller_js_1 = require("../controllers/budget.controller.js");
+const router = (0, express_1.Router)();
+router.get('/budgets', budget_controller_js_1.getAllBudgets);
+router.get('/budgets/:id', budget_controller_js_1.getBudgetById);
+router.post('/budgets', budget_controller_js_1.createNewBudget);
+router.put('/budgets/:id', budget_controller_js_1.updateBudget);
+router.delete('/budget/:id', budget_controller_js_1.deleteBudgetById);
+exports.default = router;

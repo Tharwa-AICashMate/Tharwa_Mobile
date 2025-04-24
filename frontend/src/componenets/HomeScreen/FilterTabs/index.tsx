@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useFonts, Inter_500Medium } from "@expo-google-fonts/inter";
+import theme from "@/theme";
 
 interface FilterTabsProps {
   onTabChange: (tab: "daily" | "weekly" | "monthly") => void;
@@ -75,10 +76,10 @@ const FilterTabs: React.FC<FilterTabsProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: "#E0E0E0",
-    borderRadius: 20,
+    backgroundColor: theme.colors.secondery,
+    borderRadius: 18,
     padding: 5,
-    marginVertical: 15,
+    margin: 15,
   },
   tab: {
     flex: 1,

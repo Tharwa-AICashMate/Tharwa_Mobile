@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Theme.colors.primary,
   },
-
   balanceContainer: {
     borderRadius: 12,
     padding: 7,

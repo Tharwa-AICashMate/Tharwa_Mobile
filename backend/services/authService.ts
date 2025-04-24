@@ -1,41 +1,24 @@
-// import { Provider } from "@supabase/supabase-js";
-// import { supabase } from "../config/supabase.js";
-
-// class AuthService {
-//   static async signup(email: string, password: string) {
-//     const { data, error } = await supabase.auth.signUp({ email, password });
-//     if (error) throw { status: 400, message: error.message };
-//     return data;
-//   }
-
-//   static async login(email: string, password: string) {
-//     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-//     if (error) throw { status: 400, message: error.message };
-//     return data;
-//   }
-
-//   static async signupWithProvider(provider: Provider) {
-//     const { data, error } = await supabase.auth.signInWithOAuth({ provider });
-//     if (error) throw { status: 400, message: error.message };
-//     return data;
-//   }
-
-//   static async logout() {
-//     const { error } = await supabase.auth.signOut();
-//     if (error) throw { status: 400, message: error.message };
-//   }
-// }
-
-// export default AuthService;
 import e from "express";
 import { supabase } from "../config/supabase.js";
 import { user } from "../utils/types.js";
 import mailjet from "node-mailjet";
+import { createCategory } from "./categoriesService.js";
 
 const mailjetClient = mailjet.apiConnect(
   process.env.MAILJET_API_KEY as string,
   process.env.MAILJET_API_SECRET as string
 );
+
+const intialCategories = [
+  { name: "Food", icon: "restaurant-outline" },
+  { name: "Transport", icon: "bus-outline" },
+  { name: "Medicine", icon: "medical-outline" },
+  { name: "Groceries", icon: "basket-outline" },
+  { name: "Rent", icon: "key-outline" },
+  { name: "Gifts", icon: "gift-outline" },
+  { name: "Savings", icon: "cash-outline" },
+  { name: "Entertainment", icon: "film-outline" },
+];
 
 class AuthService {
   static async signup(userData: user) {
@@ -59,6 +42,12 @@ class AuthService {
         mobile_num: profileData.mobile_num,
         DOB: profileData.DOB,
       });
+
+    if (data) {
+      intialCategories.forEach((category) => {
+        createCategory({ ...category, user_id: data.user!.id });
+      });
+    }
     return updatedUserData;
   }
 
@@ -89,11 +78,15 @@ class AuthService {
   }
 
   static async upadateUserProfile(email: string, profileData: any) {
-    const { data, error } = await supabase
+    const status = await supabase
       .from("users")
       .update(profileData)
       .eq("email", email);
-    if (error) throw { status: 400, message: error.message };
+    if (status.error) throw { status: 400, message: status.error };
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email);
     return { data, error };
   }
 
@@ -184,18 +177,19 @@ class AuthService {
       .update({ used: true })
       .eq("email", email)
       .eq("token", otp);
-   console.log("Token marked as used successfully");
+    console.log("Token marked as used successfully");
     return { status: 200, message: "OTP verified successfully" };
   }
 
   static async resetPassword(email: string, newPassword: string) {
-    const { data: user, error: userError } = await AuthService.getuserByEmail(email);
+    const { data: user, error: userError } = await AuthService.getuserByEmail(
+      email
+    );
     console.log("Tokens:", user, userError);
     const userId = user?.id;
-    const { data, error } = await supabase.auth.admin.updateUserById(
-      userId, 
-      { password: newPassword }
-    );
+    const { data, error } = await supabase.auth.admin.updateUserById(userId, {
+      password: newPassword,
+    });
 
     console.log("Password reset data:", data, error);
     if (error) {
@@ -210,8 +204,4 @@ function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-
-
 export default AuthService;
-
-
