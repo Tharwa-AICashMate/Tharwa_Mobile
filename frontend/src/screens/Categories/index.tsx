@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   FlatList,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppSelector, useAppDispatch } from "@/redux/hook";
@@ -18,6 +18,7 @@ import Theme from "@/theme";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import { addNewCategory, fetchUserCategories } from "@/redux/slices/categoriesSlice";
 import AddCategoryModal from "@/componenets/AddCategoryModal";
+import { getCurrentUserId } from '@/utils/auth';
 
 type CategoriesScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -81,6 +82,31 @@ const CategoriesScreen = () => {
     setModalVisible(false);
   };
 
+  const [totalBalance, setTotalBalance] = useState(0);
+
+  const fetchBalance = async () => {
+    try {
+      const user_id = await getCurrentUserId();
+      console.log("user_id", user_id);
+      const response = await fetch(`http://192.168.1.9:3000/api/balances/user/${user_id}`);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch balance');
+      }
+
+      const data = await response.json();
+      setTotalBalance(data.balance_limit || 0);
+    } catch (error) {
+      console.error('Error fetching balance:', error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchBalance(); // سيقوم هذا بالفيتش كلما دخلت على الشاشة
+    }, [])
+  );
+
   const renderItem = ({ item }: { item: any }) => (
     <TouchableOpacity style={styles.categoryCard} onPress={() => handleCategoryPress(item)}>
       <View style={styles.categoryIconContainer}>
@@ -99,7 +125,7 @@ const CategoriesScreen = () => {
       <Header title="Categories" />
 
       <View style={styles.balanceContainer}>
-        <BalanceDisplay balance={20000} expense={400000} />
+        <BalanceDisplay balance={totalBalance} expense={400000} />
       </View>
 
       <View style={styles.budgetContainer}>

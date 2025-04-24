@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,12 +9,14 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import axios from 'axios';
 
 import ProfileHeader from '../../componenets/ProfileHeader/ProfileHeader';
 import Header from '../../componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import UpdateButton from '@/componenets/Button/Button';
 import Theme from '@/theme';
 import styles from './Profile.styles';
+import { getCurrentUserId } from '@/utils/auth';
 
 type RootStackParamList = {
   Profile: undefined;
@@ -23,16 +25,59 @@ type RootStackParamList = {
 };
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
-//  "server": "json-server --watch server/db.json --port 5000" package.json
+
 const Profile: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
 
-  const [username, setUsername] = useState<string>('John Smith');
-  const [phone, setPhone] = useState<string>('+44 555 5555 55');
-  const [email, setEmail] = useState<string>('example@example.com');
+  const [full_name, setFullName] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [pushNotifications, setPushNotifications] = useState<boolean>(true);
   const [darkTheme, setDarkTheme] = useState<boolean>(false);
-//nothing to commit
+  const [userId, setUserId] = useState<string>('');
+  const [updateMessage, setUpdateMessage] = useState<string>(''); 
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const id = await getCurrentUserId();
+        setUserId(id);
+
+        const response = await axios.get(`http://192.168.1.9:3000/profile/users/${id}`);
+        const { full_name, mobile_num, email } = response.data;
+
+        setFullName(full_name);
+        setPhone(mobile_num);
+        setEmail(email);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleUpdateProfile = async () => {
+    try {
+      const response = await axios.put(`http://192.168.1.9:3000/profile/users/${userId}`, {
+        full_name,
+        mobile_num: phone,
+        email,
+      });
+      console.log('Updated user:', response.data);
+
+      // عرض رسالة التحديث الناجح أسفل الزر
+      setUpdateMessage('Data Updated Successfully');
+
+      // إخفاء الرسالة بعد 2 ثانية
+      setTimeout(() => {
+        setUpdateMessage('');
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
@@ -41,16 +86,16 @@ const Profile: React.FC = () => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.contentBox}>
           <View style={styles.profileContent}>
-            <ProfileHeader />
+            <ProfileHeader full_name={full_name} />
             <Text style={styles.sectionTitle}>Account Settings</Text>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Username</Text>
+              <Text style={styles.inputLabel}>Full Name</Text>
               <TextInput
                 style={styles.input}
-                value={username}
-                onChangeText={setUsername}
-                placeholder="Username"
+                value={full_name}
+                onChangeText={setFullName}
+                placeholder="Full Name"
                 placeholderTextColor="#999"
               />
             </View>
@@ -89,22 +134,14 @@ const Profile: React.FC = () => {
               />
             </View>
 
-            {/* <View style={styles.switchRow}>
-              <Text style={styles.switchLabel}>Turn Dark Theme</Text>
-              <Switch
-                value={darkTheme}
-                onValueChange={setDarkTheme}
-                trackColor={{ false: '#ccc', true: Theme.colors.highlight }}
-                thumbColor={darkTheme ? '#fff' : '#f4f3f4'}
-              />
-            </View> */}
-
             <UpdateButton
-              onPress={() => {
-                console.log('Profile updated');
-              }}
+              onPress={handleUpdateProfile}
               title="Update Profile"
             />
+
+            {updateMessage ? (
+              <Text style={styles.updateMessage}>{updateMessage}</Text>
+            ) : null}
           </View>
         </View>
       </ScrollView>
