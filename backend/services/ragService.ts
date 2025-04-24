@@ -33,11 +33,17 @@ class RagService {
 
   async initialize(
     userId: string,
-    coordinates: { latitude: number; longitude: number }
+    coordinates: { latitude: number; longitude: number },
+    mode: string,
+    distance: string,
+    unit: string
   ) {
     const exampleDocs = await dataFormaterService.getContext(
       userId,
-      coordinates
+      coordinates,
+      mode,
+      distance,
+      unit
     );
     await this.vectorStore.addDocuments(exampleDocs);
     console.log("✅ Embedded with HuggingFace & stored in memory");
@@ -81,18 +87,58 @@ class RagService {
     console.log("✅ RAG Graph compiled and ready.");
   }
 
-  static async askQuestion(
+  // static async askQuestion(
+  //   question: string,
+  //   userId: string,
+  //   coordinates: { latitude: number; longitude: number }
+  // ) {
+  //   const rag = new RagService();
+  //   console.log("Initializing RAG...");
+  //   await rag.initialize(userId, coordinates);
+  //   console.log("RAG initialized. Asking question...");
+  //   const result = await rag.graph.invoke({ question });
+  //   console.log("Question asked. Result:", result.answer,result.question);
+  //   return result.answer;
+  // }
+
+  static async analyzeData(
     question: string,
     userId: string,
-    coordinates: { latitude: number; longitude: number }
+    coordinates: { latitude: number; longitude: number },
+    mode: string = "walk",
+    distance: string = "5",
+    unit: string = "km"
   ) {
     const rag = new RagService();
     console.log("Initializing RAG...");
-    await rag.initialize(userId, coordinates);
+    await rag.initialize(userId, coordinates, mode, distance, unit);
     console.log("RAG initialized. Asking question...");
+    question +=
+    " return your answer as a detailed analysis with metrics and formated as a markdown.md";
+  
     const result = await rag.graph.invoke({ question });
-    console.log("Question asked. Result:", result.answer,result.question);
+    console.log("Question asked. Result:", result.answer, result.question);
     return result.answer;
+  }
+  static async findData(
+    question: string,
+    userId: string,
+    coordinates: { latitude: number; longitude: number },
+    mode: string = "walk",
+    distance: string = "5",
+    unit: string = "km"
+  ) {
+    const rag = new RagService();
+    console.log("Initializing RAG...");
+    await rag.initialize(userId, coordinates, mode, distance, unit);
+    console.log("RAG initialized. Asking question...");
+    question +=
+      " return your answer as a detailed json format including name,id,city , country, lat and lon, items if none found return an empty array";
+    const result = await rag.graph.invoke({ question });
+    console.log("Question asked. Result:", result.answer, result.question);
+    const answer = JSON.parse(result.answer.replace(/```(json)?/g, ""));
+    console.log(answer);
+    return answer;
   }
 }
 

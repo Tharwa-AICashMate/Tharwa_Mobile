@@ -11,6 +11,7 @@ import storeRoutes from "./routes/storeRoutes.js";
 import aiRouter from "./routes/aiRoute.js";
 import { validateEnv } from "./utils/validateEnv.js";
 import { supabase } from "./utils/supabaseClient.js";
+import RagService from "./services/ragService.js";
 // تحميل متغيرات البيئة من ملف .env
 dotenv.config();
 
@@ -63,6 +64,7 @@ supabase
 
 // تشغيل السيرفر على المنفذ المطلوب
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
+
 });

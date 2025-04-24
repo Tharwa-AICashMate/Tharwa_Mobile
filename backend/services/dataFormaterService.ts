@@ -6,16 +6,13 @@ import axios from "axios";
 import dotenv from "dotenv";
 
 dotenv.config();
-const ORS_API_KEY = "5b3ce3597851110001cf62484d35ebd4d8ac4c30844f94997fd5524d";
+const ORS_API_KEY = "5b3ce3597851110001cf6248d9ea8df6671a4be282ac4dc4d333108b";
 
 class dataFormaterService {
-  static async calculateDistance(
-    places: number[][],
-    method: string = "foot-walking"
-  ) {
+  static async calculateDistance(places: number[][], mode: string) {
     try {
       const response = await axios.post(
-        `https://api.openrouteservice.org/v2/matrix/${method}`,
+        `https://api.openrouteservice.org/v2/matrix/${mode}`,
         {
           locations: places,
           metrics: ["distance", "duration"],
@@ -39,7 +36,7 @@ class dataFormaterService {
     lat: string | number,
     lon: string | number,
     radius: string | number,
-    unit = "km"
+    unit: string
   ) {
     const { data, error } = await supabase
       .rpc("find_stores_nearby", {
@@ -135,8 +132,9 @@ class dataFormaterService {
       latitude: number;
       longitude: number;
     },
-    distance = 100,
-    unit = "km"
+    mode: string,
+    distance: string,
+    unit: string
   ) {
     const nearbyStores = await dataFormaterService.findStoresNearby(
       coordinates.latitude,
@@ -153,7 +151,7 @@ class dataFormaterService {
 
     if (error) return [];
 
-    const storeMenus:string[] = data.reduce(
+    const storeMenus: string[] = data.reduce(
       (acc, { store, city, item, price, created_at }) => {
         acc[store] = acc[store] || `In ${city}, store ${store} sells:\n`;
         acc[store] += `- ${item} for $${price}, recorded at ${created_at.substr(
@@ -169,19 +167,30 @@ class dataFormaterService {
       (pageContent) => new Document({ pageContent })
     );
 
-    const { data: stores } = await supabase.from("stores").select("*").in("id", storeIds);
-    const locations = stores?.map((s) => [s.latitude, s.longitude])||[];
-    const distanceData = await this.calculateDistance([
-      ...locations,
-      [coordinates.latitude, coordinates.longitude],
-    ]);
-    if (stores?.length)
+    const { data: stores } = await supabase
+      .from("stores")
+      .select("*")
+      .in("id", storeIds);
+
     docs.push(
-      dataFormaterService.formatMatrixResult(distanceData?.data, [
-        ...stores.map((s) => s.name),
-        "user",
-      ])
+      new Document({
+        pageContent: stores?.reduce((acc, store) => {
+          return (acc += JSON.stringify(store) + "\n");
+        }),
+      })
     );
+    const locations = stores?.map((s) => [s.longitude, s.latitude]) || [];
+    const distanceData = await this.calculateDistance(
+      [...locations, [coordinates.longitude, coordinates.latitude]],
+      mode == "walk" ? "foot-walking" : "driving-car"
+    );
+    if (stores?.length)
+      docs.push(
+        dataFormaterService.formatMatrixResult(distanceData?.data, [
+          ...stores.map((s) => s.name),
+          "user",
+        ])
+      );
     else docs.push(new Document({ pageContent: "No stores recorded nearby." }));
 
     return docs;
@@ -252,12 +261,16 @@ class dataFormaterService {
     }
 
     return new Document({
-      pageContent: `current user monthly budget limit is ${data[0].balance_limit}`});
+      pageContent: `current user monthly budget limit is ${data[0].balance_limit}`,
+    });
   }
 
   static async getContext(
     userId: string,
-    coordinates: { latitude: number; longitude: number }
+    coordinates: { latitude: number; longitude: number },
+    mode: string = "walk",
+    distance: string = "5",
+    unit: string = "km"
   ) {
     const allUsers = await supabase.from("users").select("id");
     const docs: Document[] = [];
@@ -268,18 +281,24 @@ class dataFormaterService {
       docs.push(
         ...(await this.getUserDataSummery(
           user.id,
-          user.id === userId ? "the user" : `another user ${i}`
+          user.id === userId ? "I" : `another user ${i}`
         ))
       );
     }
 
-    docs.push(...(await this.getNearbyStoresSummary(coordinates)));
-    docs.push(...(await this.getUserGoalsWithDeposits(userId)));
-    docs.push(await this.getUserBudgetLimit(userId));
+    docs.push(
+      ...(await dataFormaterService.getNearbyStoresSummary(
+        coordinates,
+        mode,
+        distance,
+        unit
+      ))
+    );
+    docs.push(...(await dataFormaterService.getUserGoalsWithDeposits(userId)));
+    docs.push(await dataFormaterService.getUserBudgetLimit(userId));
 
     return docs;
   }
-
 }
 
 export default dataFormaterService;
