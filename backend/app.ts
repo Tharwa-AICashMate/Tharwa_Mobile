@@ -1,5 +1,3 @@
-
-
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -10,13 +8,11 @@ import depositRouter from "./routes/depositRoute.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import balanceRoutes from "./routes/balance.routes.js";
 import storeRoutes from "./routes/storeRoutes.js";
-import profileRoutes from "./routes/profile.route.js";
-import incomeRoutes from './routes/income.route';
-import deleteAccount from './routes/deleteAccount.route.js';
-// import passwordRoutes from "./routes/password.route.js";
+import aiRouter from "./routes/aiRoute.js";
 import { validateEnv } from "./utils/validateEnv.js";
 import { supabase } from "./utils/supabaseClient.js";
-
+import RagService from "./services/ragService.js";
+// تحميل متغيرات البيئة من ملف .env
 dotenv.config();
 validateEnv();
 
@@ -26,39 +22,43 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRouter);
+app.use("/ai", aiRouter);
 app.use("/api", balanceRoutes);
 app.use("/transactions", transactionRoutes);
 app.use("/categories", categoryRouter);
 app.use("/goals", goalsRouter);
 app.use("/deposits", depositRouter);
 app.use("/api", storeRoutes);
-// app.use("/", passwordRoutes);
-app.use("/profile", profileRoutes);
-app.use('/', incomeRoutes);
-app.use('/delete', deleteAccount);
-
-
 
 app.post("/", (req, res) => {
   res.send("Welcome to the backend API!");
 });
 
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "Something broke!" });
-});
+// التعامل مع الأخطاء بشكل عام
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    console.error(err.stack);
+    res.status(500).json({ message: "Something broke!" });
+  }
+);
 
 supabase
   .from("stores")
   .select("*")
   .then(({ data, error }) => {
     if (error) console.error("Supabase Error:", error);
-    else console.log("Supabase Data:", data);
+    // else console.log('Supabase Data:', data);
   });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
+
 });
 
 
