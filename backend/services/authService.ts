@@ -43,11 +43,11 @@ class AuthService {
         DOB: profileData.DOB,
       });
 
-    if (data) {
-      intialCategories.forEach((category) => {
-        createCategory({ ...category, user_id: data.user!.id });
-      });
-    }
+
+     if(data){
+      intialCategories.forEach(category => {
+        createCategory({...category,user_id:data.user!.id})
+      }) }
     return updatedUserData;
   }
 
@@ -82,12 +82,9 @@ class AuthService {
       .from("users")
       .update(profileData)
       .eq("email", email);
-    if (status.error) throw { status: 400, message: status.error };
-    const { data, error } = await supabase
-      .from("users")
-      .select("*")
-      .eq("email", email);
-    return { data, error };
+    if (status.error) throw{ status: 400, message: status.error };
+    const {data,error} = await supabase.from("users").select("*").eq("email",email);
+    return {data,error};
   }
 
   static async forgetPassword(email: string) {

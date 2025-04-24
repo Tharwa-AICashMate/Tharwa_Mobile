@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppSelector } from '../../redux/hook';
@@ -15,6 +15,8 @@ import ProgressBar from '../../componenets/ProgressBar';
 import Theme from '../../theme';
 import styles from './style';
 import TransactionItem from "../../componenets/TransactionItem";
+import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
+import { getCurrentUserId } from '@/utils/auth';
 
 type CategoryDetailProps = NativeStackScreenProps<
   RootStackParamList,
@@ -66,12 +68,39 @@ const CategoryDetailScreen = () => {
     return date.getDate().toString().padStart(2, "0");
   };
 
+
+  const [totalBalance, setTotalBalance] = useState(0);
+
+  const fetchBalance = async () => {
+    try {
+      const user_id = await getCurrentUserId();
+      console.log("user_id", user_id);
+      const response = await fetch(`http://192.168.1.9:3000/api/balances/user/${user_id}`);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch balance');
+      }
+
+      const data = await response.json();
+      setTotalBalance(data.balance_limit || 0);
+    } catch (error) {
+      console.error('Error fetching balance:', error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchBalance(); 
+    }, [])
+  );
+
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
+        <Header title={categoryName} />
         <View style={styles.balanceContainer}>
           <BalanceDisplay
-            balance={budget.totalExpenses}
+            balance={totalBalance}
             expense={budget.totalIncome}
           />
         </View>
