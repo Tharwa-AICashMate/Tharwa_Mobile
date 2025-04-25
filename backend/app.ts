@@ -12,6 +12,9 @@ import aiRouter from "./routes/aiRoute.js";
 import { validateEnv } from "./utils/validateEnv.js";
 import { supabase } from "./utils/supabaseClient.js";
 import RagService from "./services/ragService.js";
+import incomeRoute from './routes/income.route.js'
+import profileRoutes from "./routes/profile.route.js";
+import deleteAccount from './routes/deleteAccount.route.js';
 // تحميل متغيرات البيئة من ملف .env
 dotenv.config();
 validateEnv();
@@ -29,6 +32,9 @@ app.use("/categories", categoryRouter);
 app.use("/goals", goalsRouter);
 app.use("/deposits", depositRouter);
 app.use("/api", storeRoutes);
+app.use("/", incomeRoute);
+app.use("/profile", profileRoutes);
+app.use('/delete', deleteAccount);
 
 app.post("/", (req, res) => {
   res.send("Welcome to the backend API!");

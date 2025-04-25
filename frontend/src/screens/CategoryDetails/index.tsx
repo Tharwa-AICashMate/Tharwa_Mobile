@@ -75,7 +75,7 @@ const CategoryDetailScreen = () => {
     try {
       const user_id = await getCurrentUserId();
       console.log("user_id", user_id);
-      const response = await fetch(`http://192.168.1.9:3000/api/balances/user/${user_id}`);
+      const response = await fetch(`http://192.168.1.5:3000/api/balances/user/${user_id}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch balance');
