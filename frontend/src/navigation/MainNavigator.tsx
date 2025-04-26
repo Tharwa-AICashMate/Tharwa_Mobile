@@ -30,23 +30,23 @@ import { NavigationContainer } from "@react-navigation/native";
 const RootStack = createNativeStackNavigator();
 export default function MainNavigator() {
   const [session, setSession] = useState<Session | null>(null);
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log(session);
-      setSession(session);
-    });
-    supabase.auth.onAuthStateChange((_event, session) => {
-      console.log(session);
-      setSession(session);
-    });
-  }, []);
+  // useEffect(() => {
+  //   supabase.auth.getSession().then(({ data: { session } }) => {
+  //     console.log(session);
+  //     setSession(session);
+  //   });
+  //   supabase.auth.onAuthStateChange((_event, session) => {
+  //     console.log(session);
+  //     setSession(session);
+  //   });
+  // }, []);
 
   return (
     <>
     <NavigationContainer>
-       {!session ? (
-        <OnBoardingNavigation />
-      ) : ( 
+       {/* {!session ? ( */}
+        {/* <OnBoardingNavigation /> */}
+      {/* ) : (  */}
         <RootStack.Navigator
           initialRouteName={"MainApp"}
           screenOptions={{ headerShown: false }}
@@ -100,11 +100,11 @@ export default function MainNavigator() {
             name="AddExpensesScreen"
             component={AddExpensesScreen}
           />
-          <RootStack.Screen name="TransactionForm" component={TransactionForm} />
+          {/* <RootStack.Screen name="TransactionForm" component={TransactionForm} /> */}
 
           {/* Savings */}
           <RootStack.Screen name="Savings" component={Savings} />
-          <RootStack.Screen name="SavingDetails" component={SavingDetails} />
+          {/* <RootStack.Screen name="SavingDetails" component={SavingDetails} /> */}
           <RootStack.Screen name="AddSavings" component={AddSavingsScreen} />
 
           {/* Notification */}
@@ -116,7 +116,7 @@ export default function MainNavigator() {
             component={PasswordChangeConfirmScreen}
           />
         </RootStack.Navigator>
-       )} 
+       {/* )}  */}
       </NavigationContainer>
     </>
   );

@@ -15,6 +15,10 @@ const LocationDisplay: React.FC = () => {
   const detectLocation = async () => {
     try {
       const location = await getCurrentLocation();
+      const roundedLocation = {
+        latitude: parseFloat(location.latitude.toFixed(6)),
+        longitude: parseFloat(location.longitude.toFixed(6)),
+      };
       dispatch(setUserLocation(location));
     } catch (error) {
       console.error('Error getting location:', error);
@@ -31,7 +35,7 @@ const LocationDisplay: React.FC = () => {
       <Text style={styles.label}>Your Location:</Text>
       <View style={styles.locationContainer}>
         <Text style={styles.locationText}>
-        Latitude: {userLocation?.latitude} | 
+        Latitude: {userLocation?.latitude} 
                 </Text>
                 <Text style={styles.locationText}>
                 Longitude: {userLocation?.longitude}
@@ -54,13 +58,12 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     backgroundColor:Theme.colors.background,
    display: 'flex',
-   flexDirection:'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width:250,
+   alignItems: 'center',
+   justifyContent:'center',
+    width:340,
     height:80,
     borderRadius:20,
-    marginLeft:70,
+    marginLeft:30,
   },
   label: {
     fontSize: 20,

@@ -1,70 +1,117 @@
 
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
+import { findBestStore, runAnalysis } from '@/redux/slices/storeThunk';
 import { RootState } from '@/redux/store';
-import { findBestStore } from '@/redux/slices/storeThunk';
 import LocationDisplay from '@/componenets/LocationDisplay';
 import GroceryInput from '@/componenets/GroceryInput';
 import GroceryList from '@/componenets/GroceryList';
 import StoreResult from '@/componenets/StoreResult';
 import SearchRadiusSelector from '@/componenets/SearchRadiusSelector';
-import { ActivityIndicator } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Theme from '@/theme';
-import { useNavigation } from '@react-navigation/native';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+import StoreSummary from '@/componenets/StoreSummary';
+import AnalysisContent from '@/componenets/AnalysisContent';
+import  AnalysisResult  from '@/componenets/AnalysisResult';
+import Theme from '@/theme';
+import { Store } from '@/types/store';
 
-const StoreScreen: React.FC = () => {
-  const dispatch = useAppDispatch();  
-  const [loading, setLoading] = React.useState(false); 
-    const navigation = useNavigation();
+type FilterType = 'findBestStore' | 'analysis';
+
+const HomeScreen: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
+  const { analysisResults, analysisStatus } = useAppSelector((state) => state.store);
+  
+  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<FilterType>('findBestStore');
   
   const { items } = useAppSelector((state) => state.grocery);
   const { userLocation, locationDetected, searchRadius } = useAppSelector((state) => state.store);
+  const user = useAppSelector((state) => state.auth.user);
+
+  const filtersmartGrocery = (Stores: Store[]): Store[] => {
+    if (activeTab === 'findBestStore') return Stores;
+    return Stores.filter((Store: Store) => Store.type === activeTab);
+  };
 
   const handleFindBestStore = async () => {
-    setLoading(true); 
-    await dispatch(findBestStore()); 
-    setLoading(false); 
+    setLoading(true);
+    await dispatch(findBestStore());
+    setLoading(false);
   };
-  const handleBack = () => {
-    navigation.goBack();
+
+  const handleAnalysis = async (message: string) => {
+    setLoading(true);
+    try {
+      const analysisData = {
+        userId: "d62929e0-adad-43ef-9157-9102d0b6875e",
+        coordinates: {
+          latitude: userLocation?.latitude,
+          longitude: userLocation?.longitude,
+        },
+        inputs: message,
+      };
+      console.log("Analysis Data:", analysisData);
+      await dispatch(runAnalysis(analysisData));
+    } catch (error) {
+      console.error("Analysis failed:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const canSearch = items.length > 0 && locationDetected;
 
   return (
     <SafeAreaView style={styles.safeArea}>
-            <Header title="Smart Grocery Offers" />
-            <LocationDisplay />
+      <Header title="Smart Grocery Offers" />
+      <LocationDisplay />
+      <StoreSummary
+        summary={{ findBestStore: [], analysis: [] }}
+        onSelectTab={setActiveTab}
+        activeTab={activeTab}
+      />
 
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View style={styles.container}>
-          
-          
-          <SearchRadiusSelector />
-          
-          <GroceryInput />
-          <GroceryList />
-          
-          <TouchableOpacity
-  style={[
-    styles.findButton,
-    !canSearch && styles.disabledButton
-  ]}
-  onPress={handleFindBestStore}
-  disabled={!canSearch || loading}
->
-  {loading ? (
-    <ActivityIndicator color="white" />
-  ) : (
-    <Text style={styles.findButtonText}>
-      Find Best Store ({searchRadius}km)
-    </Text>
-  )}
-</TouchableOpacity>          
-          <StoreResult />
+          {activeTab === 'findBestStore' ? (
+            <>
+              <SearchRadiusSelector />
+              <GroceryInput />
+              <GroceryList />
+              <TouchableOpacity
+                style={[styles.findButton, !canSearch && styles.disabledButton]}
+                onPress={handleFindBestStore}
+                disabled={!canSearch || loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <Text style={styles.findButtonText}>
+                    Find Best Store ({searchRadius}km)
+                  </Text>
+                )}
+              </TouchableOpacity>
+              <StoreResult />
+            </>
+          ) : (
+            <>
+              <AnalysisContent
+                onAnalyze={handleAnalysis}
+                isLoading={loading}
+              />
+              {analysisStatus === 'loading' && <ActivityIndicator size="large" />}
+              {analysisStatus === 'succeeded' && analysisResults && (
+                <AnalysisResult result={analysisResults} />
+              )}
+              {analysisStatus === 'failed' && (
+                <Text style={styles.errorText}>Failed to load analysis results</Text>
+              )}
+            </>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -108,6 +155,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+  errorText: {
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 10,
+  },
 });
 
-export default StoreScreen;
+export default HomeScreen;

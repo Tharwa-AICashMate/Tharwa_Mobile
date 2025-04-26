@@ -21,7 +21,15 @@ validateEnv();
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
+
+
+// السماح بجميع المصادر (لتطوير فقط)
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 app.use("/auth", authRouter);
@@ -31,7 +39,7 @@ app.use("/transactions", transactionRoutes);
 app.use("/categories", categoryRouter);
 app.use("/goals", goalsRouter);
 app.use("/deposits", depositRouter);
-app.use("/api", storeRoutes);
+app.use("/store", storeRoutes);
 app.use("/", incomeRoute);
 app.use("/profile", profileRoutes);
 app.use('/delete', deleteAccount);
