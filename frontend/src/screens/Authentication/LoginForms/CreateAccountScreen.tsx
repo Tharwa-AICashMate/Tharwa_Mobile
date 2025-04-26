@@ -7,6 +7,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
 } from "react-native";
 import styles from "./styles";
 import Input from "@/componenets/UI/input";
@@ -25,6 +26,7 @@ import {
   isValidPhoneNumber,
   isValidUsername,
 } from "@/utils/validators";
+import Theme from "@/theme";
 
 const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [fullName, setFullName] = useState<string>("");
@@ -65,6 +67,8 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Welcome</Text>

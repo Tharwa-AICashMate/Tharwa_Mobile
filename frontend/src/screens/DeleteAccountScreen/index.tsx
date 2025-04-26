@@ -635,7 +635,7 @@
 
 // type DeleteAccountScreenNavigationProp = any;
 
-// const API_BASE_URL = 'http://192.168.1.5:3000'; 
+// const API_BASE_URL = 'http://192.168.1.4:3000'; 
 
 // const DeleteAccountScreen: React.FC = () => {
 //   const navigation = useNavigation<DeleteAccountScreenNavigationProp>();
@@ -957,7 +957,7 @@ const { height, width } = Dimensions.get('window');
 
 type DeleteAccountScreenNavigationProp = any;
 
-const API_BASE_URL = 'http://192.168.1.5:3000'; 
+const API_BASE_URL = 'http://192.168.1.4:3000'; 
 
 const DeleteAccountScreen: React.FC = () => {
   const navigation = useNavigation<DeleteAccountScreenNavigationProp>();

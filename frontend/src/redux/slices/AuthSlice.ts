@@ -20,7 +20,7 @@ const initialState: AuthState = {
   error: null,
 };
 
-const apiBase = "http://192.168.1.5:3000";
+const apiBase = "http://192.168.1.4:3000";
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri();

@@ -36,6 +36,9 @@ import CategoryDetailScreen from "@/screens/CategoryDetails";
 import TransactionScreen from "@/screens/Transaction";
 import StoreHome from "@/screens/StoreHome";
 import StoreScreen from "@/screens/StoreHome";
+import { FinanceOverview } from "@/screens/FinanceOverview/FinanceOverview";
+import CalenderScreen from "@/screens/FinanceOverview/CalenderScreen/CalenderScreen";
+import SearchScreen from "@/screens/FinanceOverview/SearchScreen/SearchScreen";
 // import TransactionScreen from "@/screens/Transaction";
 
 type ProfileStackParamList = {
@@ -59,7 +62,8 @@ type ProfileStackParamList = {
   SupportChannelsScreen: undefined;
   StoreHome: undefined;
   AddExpensesScreen: undefined;
-  TransactionForm: undefined; // Added this line
+  TransactionForm: undefined; 
+
 };
 
 type BottomTabParamList = {
@@ -69,7 +73,9 @@ type BottomTabParamList = {
   Portfolio: undefined;
   Profile: NavigatorScreenParams<ProfileStackParamList>;
   Store: undefined;
-  Categories: undefined; // Added this line
+  Categories: undefined; 
+  FinanceOverview: undefined; 
+
 };
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
@@ -125,7 +131,8 @@ function ProfileStackScreen() {
       />
       <ProfileStack.Screen
         name="TransactionForm"
-        component={Home}/>
+        component={Home} />
+     
     </ProfileStack.Navigator>
   );
 }
@@ -149,7 +156,14 @@ export default function BottomTabs() {
             iconName = "swap-horizontal-outline";
           } else if (route.name === "Portfolio") {
             iconName = "layers-outline";
-          } else {
+          } else if (route.name === "FinanceOverview") {
+            iconName = "analytics-outline";
+          }else if(route.name === "Store"){
+            iconName='storefront-outline';
+          }else if (route.name ==="Categories"){
+            iconName='layers-outline'
+          }
+          else {
             iconName = "person-outline";
           }
 
@@ -186,6 +200,7 @@ export default function BottomTabs() {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="FinanceOverview" component={FinanceOverview} />
       <Tab.Screen name="Store" component={StoreScreen} />
       <Tab.Screen name="Transactions" component={TransactionScreen} />
       <Tab.Screen name="Categories" component={CategoriesScreen} />

@@ -26,6 +26,8 @@ import Theme from "@/theme";
 import { Session } from "@supabase/supabase-js";
 import PasswordChangeConfirmScreen from "@/screens/PasswordChangeConfirm/PasswordChangeConfirmScreen";
 import { NavigationContainer } from "@react-navigation/native";
+import CalenderScreen from "@/screens/FinanceOverview/CalenderScreen/CalenderScreen";
+import SearchScreen from "@/screens/FinanceOverview/SearchScreen/SearchScreen";
 
 const RootStack = createNativeStackNavigator();
 export default function MainNavigator() {
@@ -109,6 +111,8 @@ export default function MainNavigator() {
 
           {/* Notification */}
           <RootStack.Screen name="Notification" component={Notification} />
+          <RootStack.Screen name="CalenderScreen" component={CalenderScreen} />
+          <RootStack.Screen name="SearchScreen" component={SearchScreen} />
 
           {/* Password Change Confirm */}
           <RootStack.Screen

@@ -1,6 +1,6 @@
 import { navigationProps } from "@/types";
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, StatusBar } from "react-native";
 import styles from "./styles";
 import Input from "@/componenets/UI/input";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import { AppDispatch } from "@/redux/store";
 import { loginUser } from "@/redux/slices/AuthSlice";
 import { isStrongPassword, isValidEmail } from "@/utils/validators";
 import SocialSignIn from "@/componenets/Login/SocialSignIn";
+import Theme from "@/theme";
 
 const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [email, setEmail] = useState<string>("");
@@ -23,6 +24,8 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+
       <View style={styles.header}>
         <Text style={styles.title}>Welcome</Text>
       </View>
