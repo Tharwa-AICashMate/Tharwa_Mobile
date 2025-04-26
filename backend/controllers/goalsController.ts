@@ -71,3 +71,15 @@ export const deleteGoal = async (req: Request, res: Response): Promise<void> => 
         res.status(500).json({ message: "Error deleting goal" });
     }
 };
+
+
+export const fetchCurrentAmount = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const currentAmount = await goalService.getCurrentAmountByGoalId(Number(id));
+    res.json({ current_amount: currentAmount });
+  } catch (error) {
+    res.status(404).json({ error: (error as Error).message });
+  }
+};

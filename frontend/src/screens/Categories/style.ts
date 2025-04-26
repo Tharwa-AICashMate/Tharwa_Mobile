@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Theme.colors.primary,
   },
+
   balanceContainer: {
     borderRadius: 12,
     padding: 7,
@@ -17,7 +18,18 @@ const styles = StyleSheet.create({
   progressContainer: {
     marginBottom: 24,
   },
-
+  loadingSpinner: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 200,  
+  },
+  removeCategoryButton: {
+    position: "absolute",
+    top: 5,
+    right: 15,
+    zIndex: 1,
+  },
   budgetStatus: {
     marginTop: 5,
     flexDirection: "row",

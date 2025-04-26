@@ -16,10 +16,11 @@ import styles from "./style";
 import { Keyboard } from "react-native";
 
 interface Category {
-  id: string;
+  id?: number;
   name: string;
   icon: string;
-  color?: string;
+  user_id: string;
+  created_at?: Date;
 }
 
 interface TransactionFormProps {
@@ -27,10 +28,10 @@ interface TransactionFormProps {
   buttonText: string;
   categories: Category[];
   onSubmit: (data: {
-    date: Date;
     category: string;
     amount: string;
     title: string;
+    type:"expence";
     message: string;
   }) => void;
   initialCategory?: string;
@@ -79,16 +80,19 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       return;
     }
 
+
+
     onSubmit({
-      date,
+    
       category,
       amount,
       title: titleValue,
       message,
+      type:"expence"
     });
   };
 
-  // Format date for web input
+
   const formatDateForWebInput = (date: Date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -214,7 +218,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                             <View
                               style={[
                                 styles.categoryIcon,
-                                { backgroundColor: cat.color || Theme.colors.accentLight },
+                                { backgroundColor:  Theme.colors.accentLight },
                               ]}
                             >
                               <Ionicons

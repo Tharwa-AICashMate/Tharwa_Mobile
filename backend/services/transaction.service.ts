@@ -1,54 +1,5 @@
 import { supabase } from "../config/supabase.js";
 
-
-// import { supabase } from './supabaseClient';
-// import { Transaction } from '../types/transactions.js';
-
-
-// export class TransactionService {
-//   static async getAllTransactions() {
-//     const { data, error } = await supabase
-//       .from('transactions')
-//       .select('*')
-//       .order('created_at', { ascending: false });
-
-//     if (error) throw error;
-//     return data;
-//   }
-
-//   static async getTransactionsByCategory(categoryId: number) {
-//     const { data, error } = await supabase
-//       .from('transactions')
-//       .select('*')
-//       .eq('category_id', categoryId)
-//       .order('created_at', { ascending: false });
-
-//     if (error) throw error;
-//     return data;
-//   }
-
-//   static async getTransactionsByType(type: 'income' | 'expence') {
-//     const { data, error } = await supabase
-//       .from('transactions')
-//       .select('*')
-//       .eq('type', type)
-//       .order('created_at', { ascending: false });
-
-//     if (error) throw error;
-//     return data;
-//   }
-
-//   static async createTransaction(transaction: Omit<Transaction, 'id'>) {
-//     const { data, error } = await supabase
-//       .from('transactions')
-//       .insert(transaction)
-//       .select()
-//       .single();
-
-//     if (error) throw error;
-//     return data;
-//   }
-// }
 export const getAllTransactions = async (userId: string) => {
   const { data, error } = await supabase
     .from('transaction_with_category')
@@ -65,6 +16,9 @@ export const createTransaction = async (transaction: {
   amount: number;
   type: string;
   title: string;
+  
+  
+  
 }) => {
   const { data, error } = await supabase
     .from('transactions')
@@ -74,3 +28,19 @@ export const createTransaction = async (transaction: {
   if (error) throw new Error(error.message);
   return data?.[0];
 };
+
+export const getTransactionsByCategory = async (
+  userId: string,
+  categoryId: number
+) => {
+  const { data, error } = await supabase
+    .from('transaction_with_category')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('category_id', categoryId)
+    .order('created_at', { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+

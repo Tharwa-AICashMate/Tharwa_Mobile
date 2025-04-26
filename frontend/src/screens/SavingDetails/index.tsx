@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback } from "react";
 import {
   View,
   Text,
@@ -12,16 +12,18 @@ import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { RootStackParamList } from "App";
 import Theme from "@/theme";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import styles from "./style";
 import ProgressBar from "@/componenets/ProgressBar";
 import ProgressCircle from "@/componenets/ProgressCircle";
-// import { selectSavedAmount } from "@/redux/slices/savingSlice";
 import TransactionItem from "@/componenets/TransactionItem";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
-import { getDepositsByGoal } from "@/redux/slices/depositSlice";
+import { cleargoals, getDepositsByGoal } from "@/redux/slices/depositSlice";
 import { IDeposit } from "@/types/depositType";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import { fetchGoalCurrentAmount } from "@/redux/slices/savingSlice";
+
+dayjs.extend(utc);
 
 type SavingDetailsProps = NativeStackScreenProps<
   RootStackParamList,
@@ -34,54 +36,43 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
   const dispatch = useAppDispatch();
   const route = useRoute<SavingDetailsRouteProp>();
   const navigation = useNavigation<SavingDetailsNavigationProp>();
-  const { categoryName,goalID ,Target,Icon} = route.params;
+  const { categoryName, goalID, Target, Icon } = route.params;
+
+  const goalIdNumber = Number(goalID);
+
+  const currentAmount = useAppSelector(
+    (state) => state.goals.currentAmounts[goalIdNumber]
+  );
+
   const { deposits, loading } = useAppSelector((state) => state.deposits);
 
-  useEffect(() => {
-    dispatch(getDepositsByGoal(goalID));
-  }, [dispatch, goalID]);
-  // const savingsData = useAppSelector(
-  //   (state) => state.savings.categories[categoryName]
-  // );
+  useFocusEffect(
+    useCallback(() => {
+      if (goalIdNumber) {
+        dispatch(cleargoals());
+        dispatch(getDepositsByGoal(goalIdNumber));
+        dispatch(fetchGoalCurrentAmount(goalIdNumber));
+      }
+    }, [dispatch, goalIdNumber])
+  );
 
-  // const savedAmount = useAppSelector((state) =>
-  //   selectSavedAmount(state, categoryName)
-  // );
+  const groupedDeposits = deposits.reduce(
+    (groups: { [key: string]: IDeposit[] }, deposit) => {
+      const date = dayjs.utc(deposit.created_at || new Date());
+      const monthName = date.format("MMMM YYYY");
 
-  // Group deposits by month
-  // const groupedDeposits = savingsData.deposits.reduce(
-  //   (groups: { [key: string]: typeof savingsData.deposits }, deposit) => {
-  //     // Extract month from deposit.date (assuming deposit.date is in a format that can be parsed)
-  //     const monthMatch = deposit.date.match(/([A-Za-z]+)/);
-  //     const month = monthMatch ? monthMatch[0] : "Unknown";
+      if (!groups[monthName]) {
+        groups[monthName] = [];
+      }
 
-  //     if (!groups[month]) {
-  //       groups[month] = [];
-  //     }
+      groups[monthName].push(deposit);
+      return groups;
+    },
+    {}
+  );
 
-  //     groups[month].push(deposit);
-  //     return groups;
-  //   },
-  //   {}
-  // );
-
-
-
-  const groupedDeposits = deposits.reduce((groups: { [key: string]: IDeposit[] }, deposit) => {
-    const date = new Date(deposit.created_at || new Date());
-    const monthName = date.toLocaleString("default", { month: "long", year: "numeric" });
-  
-    if (!groups[monthName]) {
-      groups[monthName] = [];
-    }
-  
-    groups[monthName].push(deposit);
-    return groups;
-  }, {});
-  
-
-  // Format currency
-  const formatCurrency = (amount: number): string => {
+  const formatCurrency = (amount?: number): string => {
+    if (typeof amount !== "number") return "$0";
     return amount
       .toLocaleString("en-US", {
         style: "currency",
@@ -92,21 +83,23 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
       .replace(/\.00$/, "");
   };
 
+  const percentage =
+    currentAmount && Target
+      ? Math.min(Math.round((currentAmount / Target) * 100), 100)
+      : 0;
+
   const navigateBack = () => {
     navigation.goBack();
   };
 
   const addSavings = () => {
-    navigation.navigate("AddSavings", { categoryName });
+    navigation.navigate("AddSavings");
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <Header title={categoryName} />
 
-      {/* Goal Summary */}
       <View style={styles.goalContainer}>
         <View style={styles.goalCard}>
           <View style={styles.infoRow}>
@@ -131,13 +124,14 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
             />
             <Text style={styles.infoLabel}>Amount Saved</Text>
           </View>
-          <Text style={styles.savedAmount}>{formatCurrency(1233)}</Text>
+          <Text style={styles.savedAmount}>
+            {formatCurrency(currentAmount)}
+          </Text>
 
-          {/* Category Icon */}
           <View style={styles.categoryIconWrapper}>
             <View style={styles.categoryIconContainer}>
               <ProgressCircle
-                progress={7}
+                progress={percentage}
                 categoryName={categoryName}
                 icon={Icon}
               />
@@ -145,15 +139,13 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
           </View>
         </View>
 
-        {/* Progress bar */}
         <View style={styles.progressContainer}>
           <ProgressBar
-            percentage={12}
-            amount={10000}
+            percentage={percentage}
+            amount={Target || 0}
             color={Theme.colors.primary}
           />
 
-          {/* Status */}
           <View style={styles.statusContainer}>
             <Ionicons
               name="checkbox-outline"
@@ -161,41 +153,39 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
               color={Theme.colors.text}
             />
             <Text style={styles.statusText}>
-              {12}% Of Your Goal, Looks Good.
+              {percentage}% Of Your Goal,{" "}
+              {percentage < 50 ? "Keep Going!" : "Looks Good."}
             </Text>
           </View>
         </View>
 
-        {/* Deposits History */}
+        <ScrollView style={styles.transactionList}>
+          {Object.keys(groupedDeposits).map((month) => (
+            <View key={month} style={styles.monthSection}>
+              <Text style={styles.monthTitle}>{month}</Text>
 
+              {groupedDeposits[month].map((deposit: IDeposit) => {
+                const date = dayjs.utc(deposit.created_at).local();
+                const formattedDate = date.format("DD MMM");
+                const formattedTime = date.format("hh:mm A");
 
+                return (
+                  <TransactionItem
+                    key={deposit.id}
+                    id={deposit.id}
+                    title={`${deposit.title} `}
+                    subtitle={`${formattedDate} at ${formattedTime}`}
+                    amount={deposit.amount}
+                    icon={Icon}
+                    iconBgColor={Theme.colors.accentLight}
+                    isDeposit={true}
+                  />
+                );
+              })}
+            </View>
+          ))}
+        </ScrollView>
 
-
-              <ScrollView style={styles.transactionList}>
-  {Object.keys(groupedDeposits).map((month) => (
-    <View key={month} style={styles.monthSection}>
-      <Text style={styles.monthTitle}>{month}</Text>
-
-      {groupedDeposits[month].map((deposit: IDeposit) => (
-        <TransactionItem
-          key={deposit.id}
-          id={deposit.id}
-          title={`${deposit.title} Deposit`}
-          subtitle={`${deposit.message}`}
-          amount={deposit.amount}
-          icon={Icon}
-          iconBgColor={Theme.colors.accentLight}
-          isDeposit={true}
-        />
-      ))}
-    </View>
-  ))}
-</ScrollView>
-        
-          {/* ))}
-        
-
-        {/* Add Savings Button */}
         <View style={styles.addSavingContainer}>
           <TouchableOpacity style={styles.addButton} onPress={addSavings}>
             <Text style={styles.addButtonText}>Add Savings</Text>

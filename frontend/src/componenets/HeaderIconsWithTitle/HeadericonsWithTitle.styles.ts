@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
       borderRadius: 50,
       alignItems: 'center',
       justifyContent: 'center',
+      margin:2
     },
     title: {
       color: Theme.colors.textLight,

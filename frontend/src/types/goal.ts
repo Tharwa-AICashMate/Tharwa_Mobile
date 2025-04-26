@@ -1,6 +1,6 @@
 
 export interface Goal {
-  id?: string;
+  id?: number;
   user_id: string;
   name: string;
   target_amount: number;

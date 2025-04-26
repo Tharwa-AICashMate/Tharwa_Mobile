@@ -1,21 +1,21 @@
 import Theme from "@/theme";
 import { StyleSheet } from "react-native";
 
-export const modalStyles = StyleSheet.create(
+export const styles = StyleSheet.create(
   {
     centeredView: {
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalView: {
-      width: "80%",
-      backgroundColor: "white",
-      borderRadius: 10,
-      padding: 30,
-      alignItems: "center",
-      shadowColor: "#000",
+      width: '90%',
+      maxHeight: '80%',
+      backgroundColor: 'white',
+      borderRadius: 20,
+      padding: 20,
+      shadowColor: '#000',
       shadowOffset: {
         width: 0,
         height: 2,
@@ -25,44 +25,99 @@ export const modalStyles = StyleSheet.create(
       elevation: 5,
     },
     modalTitle: {
-      fontSize: 18,
-      fontWeight: "bold",
-      marginBottom: 15,
+      fontSize: 22,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      textAlign: 'center',
+      color: Theme.colors.text,
     },
-    inputContainer: {
-      width: "100%",
-      marginBottom: 15,
+    inputLabel: {
+      fontSize: 16,
+      fontWeight: '600',
+      marginBottom: 8,
+      color: Theme.colors.text,
     },
     input: {
-      width: "100%",
-      height: 40,
+      height: 50,
       borderWidth: 1,
-      borderColor: "#ccc",
-      borderRadius: 5,
-      paddingHorizontal: 10,
-      backgroundColor: "#f0f0f0",
-    },
-    saveButton: {
-      width: "100%",
-      backgroundColor: Theme.colors.primary,
-      borderRadius: 5,
+      borderColor: '#E0E0E0',
+      borderRadius: 8,
       padding: 10,
-      marginBottom: 10,
-      alignItems: "center",
+      marginBottom: 20,
+      fontSize: 16,
+      color: Theme.colors.text,
     },
-    saveButtonText: {
-      color: "white",
-      fontWeight: "bold",
+    iconPreviewContainer: {
+      alignItems: 'center',
+      marginBottom: 15,
+    },
+    selectedIconContainer: {
+      width: 70,
+      height: 70,
+      borderRadius: 35,
+      backgroundColor: Theme.colors.primary,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: 8,
+    },
+    selectedIconName: {
+      fontSize: 14,
+      color: Theme.colors.text,
+    },
+    iconsScrollView: {
+      maxHeight: 200,
+      marginBottom: 20,
+    },
+    iconsGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+    },
+    iconOption: {
+      width: 50,
+      height: 50,
+      margin: 5,
+      borderRadius: 25,
+      borderWidth: 1,
+      borderColor: '#E0E0E0',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    selectedIconOption: {
+      backgroundColor: Theme.colors.primary,
+      borderColor: Theme.colors.primary,
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    button: {
+      flex: 1,
+      height: 50,
+      borderRadius: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginHorizontal: 5,
     },
     cancelButton: {
-      width: "100%",
-      backgroundColor: "#f0f0f0",
-      borderRadius: 5,
-      padding: 10,
-      alignItems: "center",
+      backgroundColor: '#F0F0F0',
+    },
+    saveButton: {
+      backgroundColor: Theme.colors.primary,
+    },
+    disabledButton: {
+      backgroundColor: '#CCCCCC',
+      opacity: 0.7,
     },
     cancelButtonText: {
+      fontSize: 16,
+      fontWeight: '600',
       color: Theme.colors.text,
+    },
+    saveButtonText: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: 'white',
     },
   }
 ) 

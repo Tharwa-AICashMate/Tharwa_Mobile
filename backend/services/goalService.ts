@@ -55,6 +55,22 @@ export const deleteGoal = async (id: string): Promise<boolean> => {
     return !error;
 };
 
+
+
+export const getCurrentAmountByGoalId = async (goalId: number) => {
+  const { data, error } = await supabase
+    .from("goals_progress")
+    .select("current_amount")
+    .eq("id", goalId)
+    .single(); // Get one row only
+
+  if (error || !data) {
+    throw new Error("Goal not found or fetch error");
+  }
+
+  return data.current_amount;
+};
+
 // export const getGoalProgress = async (goalId: string): Promise<{ current: number; target: number } | null> => {
 //     const goal = await getGoal(goalId);
 //     if (!goal) return null;

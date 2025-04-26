@@ -19,14 +19,14 @@ export const getTransactions = async (req: Request, res: Response) => {
 };
 export const addTransaction = async (req: Request, res: Response) => {
   try {
-    const { user_id, category_id, amount, type, title } = req.body;
+    const { category_id, amount, type, title } = req.body;
     
-    if (!user_id || !category_id || !amount || !type || !title) {
+    if ( !category_id || !amount || !type || !title) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
     const newTransaction = await transactionService.createTransaction({
-      user_id,
+    
       category_id,
       amount,
       type,
@@ -39,6 +39,18 @@ export const addTransaction = async (req: Request, res: Response) => {
       message: 'Error creating transaction',
       error: err.message 
     });
+  }
+};
+
+
+export const getTransactionsByCategory = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+    const categoryId = Number(req.params.categoryId);
+    const transactions = await transactionService.getTransactionsByCategory(userId, categoryId);
+    res.json(transactions);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 };
 // import { TransactionService } from '../services/transaction.service.js';

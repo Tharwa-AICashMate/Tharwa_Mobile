@@ -1,22 +1,29 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
+  TouchableOpacity,
   ScrollView,
   SafeAreaView,
-} from 'react-native';
-import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Ionicons } from '@expo/vector-icons';
-import { useAppSelector } from '../../redux/hook';
-import { RootStackParamList } from '../../App';
-import BalanceDisplay from '../../componenets/BalanceDisplay';
-import ProgressBar from '../../componenets/ProgressBar';
-import Theme from '../../theme';
-import styles from './style';
-import TransactionItem from "../../componenets/TransactionItem";
+  ActivityIndicator,
+} from "react-native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Ionicons } from "@expo/vector-icons";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { RootStackParamList } from "App";
+import BalanceDisplay from "@/componenets/BalanceDisplay";
+import ProgressBar from "@/componenets/ProgressBar";
+import Theme from "@/theme";
+import styles from "./style";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
-import { getCurrentUserId } from '@/utils/auth';
+import TransactionItem from "@/componenets/TransactionItem";
+import { clearTransactions, fetchTransactionsByCategory } from "@/redux/slices/categoryTransactions";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import { getCurrentUserId } from "@/utils/auth";
+
+dayjs.extend(utc);
 
 type CategoryDetailProps = NativeStackScreenProps<
   RootStackParamList,
@@ -28,54 +35,17 @@ type CategoryDetailNavigationProp = CategoryDetailProps["navigation"];
 const CategoryDetailScreen = () => {
   const route = useRoute<CategoryDetailRouteProp>();
   const navigation = useNavigation<CategoryDetailNavigationProp>();
-  const { categoryName } = route.params;
-  const budget = useAppSelector((state: any) => state.expenses.budget);
-  const transactions = useAppSelector((state: any) => state.expenses.transactions);
+  const dispatch = useAppDispatch();
 
-  const categoryTransactions = transactions.filter(
-    (transaction: any) => transaction.category === categoryName
-  );
-
-  const groupedTransactions = categoryTransactions.reduce(
-    (groups: { [key: string]: typeof categoryTransactions }, transaction: any) => {
-      const monthNames = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
-      const month = monthNames[transaction.date.getMonth()];
-
-      if (!groups[month]) {
-        groups[month] = [];
-      }
-
-      groups[month].push(transaction);
-      return groups;
-    },
-    {}
-  );
-
-  const formatTransactionDate = (date: Date): string => {
-    return date.getDate().toString().padStart(2, "0");
-  };
-
-
+  const { categoryName, categoryId, UserId, Icon } = route.params;
+  const userId = UserId;
   const [totalBalance, setTotalBalance] = useState(0);
 
   const fetchBalance = async () => {
     try {
       const user_id = await getCurrentUserId();
       console.log("user_id", user_id);
-      const response = await fetch(`http://192.168.1.5:3000/api/balances/user/${user_id}`);
+      const response = await fetch(`http://192.168.1.105:3000/api/balances/user/${user_id}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch balance');
@@ -93,59 +63,112 @@ const CategoryDetailScreen = () => {
       fetchBalance(); 
     }, [])
   );
+  const {
+    loading: isLoading,
+    data: TransactionsOfCategory,
+  } = useAppSelector((state) => state.transactionsByCategory);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (categoryId && userId) {
+        dispatch(clearTransactions());
+        dispatch(fetchTransactionsByCategory({ userId, categoryId }));
+      }
+    }, [categoryId, userId, dispatch])
+  );
+
+  const groupedTransactions = TransactionsOfCategory.reduce(
+    (groups: { [key: string]: typeof TransactionsOfCategory }, transaction) => {
+      const date = dayjs.utc(transaction.created_at);
+      const monthName = date.format("MMMM YYYY");
+
+      if (!groups[monthName]) {
+        groups[monthName] = [];
+      }
+
+      groups[monthName].push(transaction);
+      return groups;
+    },
+    {}
+  );
+
+  const addExpense = () => {
+    navigation.navigate("AddExpensesScreen");
+  };
 
   return (
-    <View style={{ flex: 1 }}>
-      <SafeAreaView style={styles.container}>
-        <Header title={categoryName} />
-        <View style={styles.balanceContainer}>
-          <BalanceDisplay
-            balance={totalBalance}
-            expense={budget.totalIncome}
+    <SafeAreaView style={styles.container}>
+      <Header title={categoryName} />
+
+      <View style={styles.balanceContainer}>
+        <BalanceDisplay balance={totalBalance} expense={2000} />
+      </View>
+
+      <View style={styles.budgetContainer}>
+        <View style={styles.progressContainer}>
+          <ProgressBar percentage={20} amount={10} />
+        </View>
+
+        <View style={styles.budgetStatus}>
+          <Ionicons
+            name="checkbox-outline"
+            size={16}
+            color={Theme.colors.text}
           />
+          <Text style={styles.budgetStatusText}>
+            {30}% Of Your Budget Used
+          </Text>
         </View>
-        <View style={styles.budgetContainer}>
-          <View style={styles.progressContainer}>
-            <ProgressBar
-              percentage={budget.percentageUsed}
-              amount={budget.budgetLimit}
-            />
-          </View>
+      </View>
 
-          <View style={styles.budgetStatus}>
-            <Ionicons
-              name="checkbox-outline"
-              size={16}
-              color={Theme.colors.text}
-            />
-            <Text style={styles.budgetStatusText}>
-              {budget.percentageUsed}% Of Your Expenses, Looks Good.
-            </Text>
+      <ScrollView style={styles.transactionList}>
+        {isLoading ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: 200,
+              
+            }}
+          >
+            <ActivityIndicator size="large" color={Theme.colors.primary} />
           </View>
-        </View>
-
-        <ScrollView style={styles.transactionList}>
-          {Object.keys(groupedTransactions).map((month) => (
+        ) : (
+          Object.keys(groupedTransactions).map((month) => (
             <View key={month} style={styles.monthSection}>
               <Text style={styles.monthTitle}>{month}</Text>
 
-              {groupedTransactions[month].map((transaction: any) => (
-                <TransactionItem
-                  key={transaction.id}
-                  id={transaction.id}
-                  title={transaction.category}
-                  subtitle={`${transaction.time} - ${month} ${formatTransactionDate(transaction.date)}`}
-                  amount={transaction.amount}
-                  icon={transaction.icon}
-                  iconBgColor={transaction.iconBgColor}
-                  isDeposit={false}
-                />
-              ))}
+              {groupedTransactions[month].map((transaction) => {
+                const dateFormatted = dayjs
+                  .utc(transaction.created_at)
+                  .local()
+                  .format("D MMM YYYY, h:mm A");
+
+                return (
+                  <TransactionItem
+                    key={transaction.transaction_id as any}
+                    id={transaction.transaction_id as any}
+                    title={transaction.title || categoryName}
+                    subtitle={dateFormatted}
+                    amount={transaction.amount}
+                    isDeposit={transaction.type === "income"}
+                    icon={Icon}
+                    iconBgColor={Theme.colors.accentLight}
+                  />
+                );
+              })}
             </View>
-          ))}
-        </ScrollView>
-      </SafeAreaView>
-    </View>
+          ))
+        )}
+      </ScrollView>
+
+      <View style={styles.addExpenseContainer}>
+        <TouchableOpacity style={styles.addButton} onPress={addExpense}>
+          <Text style={styles.addButtonText}>Add Expense</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 

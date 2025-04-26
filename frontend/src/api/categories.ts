@@ -1,7 +1,7 @@
+import { API_BASE_URL } from "@/config/api";
 import { Category, CreateCategoryDTO } from "@/types/category";
 
-const API_BASE_URL = 'http://192.168.1.5:3000';
-// const API_BASE_URL = 'http://localhost:5000';
+// const API_BASE_URL = 'http://localhost:3000';
 
 
 
@@ -36,7 +36,7 @@ export const createCategory = async (
   return response.json();
 };
 
-export const deleteCategory = async (id: string): Promise<void> => {
+export const deleteCategory = async (id: number): Promise<void> => {
   const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
     method: 'DELETE',
   });

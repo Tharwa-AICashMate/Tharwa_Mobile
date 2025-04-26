@@ -8,7 +8,7 @@ export interface IDeposit {
 }
 
 export interface IDepositCreate {
-  goal_id: string;
+  goal_id: number;
   amount: number;
   message?: string;
   title: string;

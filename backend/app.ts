@@ -15,12 +15,13 @@ import RagService from "./services/ragService.js";
 import incomeRoute from './routes/income.route.js'
 import profileRoutes from "./routes/profile.route.js";
 import deleteAccount from './routes/deleteAccount.route.js';
-// تحميل متغيرات البيئة من ملف .env
+import invoiceRoutes from "./routes/invoiceRoutes";
+import bodyParser from 'body-parser';
 dotenv.config();
 validateEnv();
 
 const app = express();
-
+app.use(bodyParser.json({ limit: '10mb' }));
 app.use(cors());
 app.use(express.json());
 
@@ -39,7 +40,7 @@ app.use('/delete', deleteAccount);
 app.post("/", (req, res) => {
   res.send("Welcome to the backend API!");
 });
-
+app.use("/ocr", invoiceRoutes);
 // التعامل مع الأخطاء بشكل عام
 app.use(
   (
