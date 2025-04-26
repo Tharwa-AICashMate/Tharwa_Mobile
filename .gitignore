@@ -1,0 +1,45 @@
+# General project-level ignores
+
+# Node.js - should cover any stray top-level node_modules (though typically they are in backend/frontend)
+node_modules/
+
+# OS generated files that might appear at the root
+.DS_Store
+Thumbs.db
+
+# Editor/IDE specific files that might appear at the root
+.idea/
+.vscode/
+*.iml
+
+# Log files at the root (if any)
+*.log
+
+# Distribution or build folders at the root (if any)
+dist/
+build/
+
+# Environment files at the root (if any - you have specific ones in backend/frontend)
+.env
+*.env.local
+
+# Python related at the root (if any)
+*.pyc
+__pycache__/
+venv/
+env/
+
+# Gradle and Maven at the root (if any)
+.gradle/
+target/
+bin/
+
+# Coverage reports at the root (if any)
+coverage/
+
+# Test results at the root (if any)
+test_results/
+
+# Any other project-wide ignores you might need
+# Example: Documentation build output
+# docs/_build/
