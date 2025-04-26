@@ -1,11 +1,14 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, StatusBar } from "react-native";
 import { navigationProps } from "@/types";
 import styles from "./styles";
+import Theme from "@/theme";
 
 const LoginScreen: React.FC<navigationProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
+      <StatusBar style="light" backgroundColor={Theme.colors.background} translucent={false} />
+
       <View style={styles.loginScreenContainer}>
         <Image source={require("@/assets/logo2.png")} />
         <Text style={styles.title}>Tharwa</Text>

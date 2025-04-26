@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import TransactionSummary from '@/componenets/TransactionSummary';
+import Theme from '@/theme';
 
 type FilterType = 'all' | 'income' | 'expence';
 
@@ -103,7 +104,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#FFC107',
+    backgroundColor: Theme.colors.highlight,
+
   },
   header: {
     flexDirection: 'row',

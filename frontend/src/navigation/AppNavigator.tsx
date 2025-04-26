@@ -29,6 +29,8 @@ import StatsScreen from "@/screens/StatsScreen";
 import AddTransactionScreen from "@/screens/AddTransactionScreen";
 import CategoryDetailScreen from "@/screens/CategoryDetails/index.js";
 import LoginFormScreen from "@/screens/Authentication/LoginForms/LoginFormScreen";
+import SearchScreen from "@/screens/FinanceOverview/SearchScreen/SearchScreen";
+import CalenderScreen from "@/screens/FinanceOverview/CalenderScreen/CalenderScreen";
 
 interface CustomTabBarButtonProps {
   children: React.ReactNode;
@@ -87,7 +89,7 @@ const SettingsStackNavigator = () => {
       {/* <Stack.Screen name="LoginForm" component={LoginFormScreen} /> */}
       <Stack.Screen
         name="AddTransactionScreen"
-        comonent={AddTransactionScreen}
+        component={AddTransactionScreen}
       />
     </Stack.Navigator>
   );
@@ -167,6 +169,7 @@ const MainTabNavigator = () => {
         component={SettingsStackNavigator}
         options={{ tabBarLabel: "" }}
       />
+   
     </Tab.Navigator>
   );
 };

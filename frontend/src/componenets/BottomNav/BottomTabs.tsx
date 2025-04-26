@@ -38,6 +38,9 @@ import StoreHome from "@/screens/StoreHome";
 import StoreScreen from "@/screens/StoreHome";
 import SavingDetails from "@/screens/SavingDetails";
 import CameraScreen from "../Camera";
+import { FinanceOverview } from "@/screens/FinanceOverview/FinanceOverview";
+import CalenderScreen from "@/screens/FinanceOverview/CalenderScreen/CalenderScreen";
+import SearchScreen from "@/screens/FinanceOverview/SearchScreen/SearchScreen";
 // import TransactionScreen from "@/screens/Transaction";
 
 type ProfileStackParamList = {
@@ -62,7 +65,8 @@ type ProfileStackParamList = {
   StoreHome: undefined;
   AddExpensesScreen: undefined;
   TransactionForm: undefined; // Added this line
-  Camera:undefined
+  Camera: undefined;
+  SavingDetails: undefined; // Added this line
 };
 
 type BottomTabParamList = {
@@ -72,7 +76,8 @@ type BottomTabParamList = {
   Portfolio: undefined;
   Profile: NavigatorScreenParams<ProfileStackParamList>;
   Store: undefined;
-  Categories: undefined; // Added this line
+  Categories: undefined;
+  FinanceOverview: undefined;
 };
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
@@ -89,12 +94,9 @@ function ProfileStackScreen() {
       <ProfileStack.Screen name="Logout" component={Logout} />
       <ProfileStack.Screen name="Notification" component={Notification} />
       <ProfileStack.Screen name="ChangePin" component={ChangePin} />
-      <ProfileStack.Screen name="SavingDetails" component={SavingDetails} options={{ tabBarVisible: true }} />
+      <ProfileStack.Screen name="SavingDetails" component={SavingDetails} />
       <ProfileStack.Screen name="FingerPrint" component={FingerPrint} />
-      <ProfileStack.Screen
-        name="Camera"
-        component={CameraScreen}
-      />
+      <ProfileStack.Screen name="Camera" component={CameraScreen} />
       <ProfileStack.Screen
         name="TermsAndConditions"
         component={TermsAndConditions}
@@ -131,9 +133,7 @@ function ProfileStackScreen() {
         name="AddExpensesScreen"
         component={AddExpensesScreen}
       />
-      <ProfileStack.Screen
-        name="TransactionForm"
-        component={Home}/>
+      <ProfileStack.Screen name="TransactionForm" component={Home} />
     </ProfileStack.Navigator>
   );
 }
@@ -156,6 +156,12 @@ export default function BottomTabs() {
           } else if (route.name === "Transactions") {
             iconName = "swap-horizontal-outline";
           } else if (route.name === "Portfolio") {
+            iconName = "layers-outline";
+          } else if (route.name === "FinanceOverview") {
+            iconName = "analytics-outline";
+          } else if (route.name === "Store") {
+            iconName = "storefront-outline";
+          } else if (route.name === "Categories") {
             iconName = "layers-outline";
           } else {
             iconName = "person-outline";
@@ -194,6 +200,7 @@ export default function BottomTabs() {
       })}
     >
       <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="FinanceOverview" component={FinanceOverview} />
       <Tab.Screen name="Store" component={StoreScreen} />
       <Tab.Screen name="Transactions" component={TransactionScreen} />
       <Tab.Screen name="Categories" component={CategoriesScreen} />

@@ -164,7 +164,7 @@
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // // Base URL for API calls
-// const API_BASE_URL = "http://192.168.1.5:3000"; // Replace 3000 with your actual port number
+// const API_BASE_URL = "http://192.168.1.4:3000"; // Replace 3000 with your actual port number
 
 // // Function to get current user ID
 // const getCurrentUserId_1 = async () => {
@@ -403,7 +403,7 @@ import Theme from "@/theme";
 import { getCurrentUserId } from '@/utils/auth';
 
 // Base URL for API calls
-const API_BASE_URL = "http://192.168.1.5:3000"; // Replace 3000 with your actual port number
+const API_BASE_URL = "http://192.168.1.4:3000"; // Replace 3000 with your actual port number
 
 type PasswordSettingsScreenNavigationProp = any;
 

@@ -410,7 +410,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   const fetchBalance = async () => {
     try {
       const user_id = await getCurrentUserId();
-      const response = await fetch(`http://192.168.1.105:3000/api/balances/user/${user_id}`);
+      const response = await fetch(`http://192.168.1.4:3000/api/balances/user/${user_id}`);
       if (!response.ok) throw new Error('Failed to fetch balance');
       const data = await response.json();
       setTotalBalance(data.balance_limit || 0);
@@ -423,7 +423,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   const fetchIncome = async () => {
     try {
       const user_id = await getCurrentUserId();
-      const response = await fetch(`http://192.168.1.105:3000/income/${user_id}`);
+      const response = await fetch(`http://192.168.1.4:3000/income/${user_id}`);
       if (!response.ok) throw new Error('Failed to fetch income');
       const data = await response.json();
       setIncome(data.income || 0);
@@ -444,8 +444,8 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     try {
       const user_id = await getCurrentUserId();
       const url = totalBalance
-        ? `http://192.168.1.105:3000/api/balances/user/${user_id}`
-        : 'http://192.168.1.105:3000/api/balances';
+        ? `http://192.168.1.4:3000/api/balances/user/${user_id}`
+        : 'http://192.168.1.4:3000/api/balances';
       const method = totalBalance ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -474,8 +474,8 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     try {
       const user_id = await getCurrentUserId();
       const url = income == null
-        ? `http://192.168.1.105:3000/income/${user_id}`
-        : `http://192.168.1.105:3000/income/${user_id}`;
+        ? `http://192.168.1.4:3000/income/${user_id}`
+        : `http://192.168.1.4:3000/income/${user_id}`;
       const method = income == null ? 'POST' : 'PUT';
 
       const response = await fetch(url, {
@@ -725,7 +725,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   addButton: {
-    backgroundColor: Theme.colors.primary,
+    backgroundColor: Theme.colors.accentDark,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,

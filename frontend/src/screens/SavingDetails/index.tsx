@@ -25,12 +25,26 @@ import { fetchGoalCurrentAmount } from "@/redux/slices/savingSlice";
 
 dayjs.extend(utc);
 
+
+// import { StackScreenProps } from "@react-navigation/stack";
+// import { ProfileStackParamList } from "@/componenets/BottomNav/BottomTabs";
+
+// type SavingDetailsProps = StackScreenProps<
+//   ProfileStackParamList,
+//   "SavingDetails"
+// >;
+
+// const SavingDetails: React.FC<SavingDetailsProps> = ({ navigation, route }) => {
+//   // Component implementation
+// };
+
 type SavingDetailsProps = NativeStackScreenProps<
   RootStackParamList,
   "SavingDetails"
 >;
 type SavingDetailsRouteProp = SavingDetailsProps["route"];
 type SavingDetailsNavigationProp = SavingDetailsProps["navigation"];
+
 
 const SavingDetails: React.FC<SavingDetailsProps> = () => {
   const dispatch = useAppDispatch();

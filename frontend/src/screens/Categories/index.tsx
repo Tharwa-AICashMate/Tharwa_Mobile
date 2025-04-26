@@ -67,10 +67,9 @@ const CategoriesScreen = () => {
 
   const fetchBalance = async () => {
     try {
-      const currentUserId = await getCurrentUserId();
-      if (!currentUserId) return;
-
-      const response = await fetch(`http://192.168.1.5:3000/api/balances/user/${currentUserId}`);
+      const user_id = await getCurrentUserId();
+      console.log("user_id", user_id);
+      const response = await fetch(`http://192.168.1.4:3000/api/balances/user/${user_id}`);
       if (!response.ok) throw new Error('Failed to fetch balance');
 
       const data = await response.json();
@@ -218,8 +217,7 @@ const CategoriesScreen = () => {
         selectedIcon={selectedIcon}
         onSelectIcon={setSelectedIcon}
         onSave={handleAddCategory}
-        onCancel={handleCancel}
-      />
+        onCancel={handleCancel} targetAmount={""}      />
     </SafeAreaView>
   );
 };

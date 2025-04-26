@@ -9,11 +9,13 @@ import {
   NativeSyntheticEvent,
   ScrollView,
   SafeAreaView,
+  StatusBar,
 } from "react-native";
 
 import styles from "./style";
 import { navigationProps } from "@/types";
 import axios from "axios";
+import Theme from "@/theme";
 
 
 const { width } = Dimensions.get("window");
@@ -64,6 +66,7 @@ const OnboardingScreen: React.FC<navigationProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.slideContainer}>
+      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
         <Text style={styles.title}>{slides[currentIndex].title}</Text>
         <View style={styles.slide}>
           <View style={styles.scroll}>

@@ -27,6 +27,8 @@ import { Session } from "@supabase/supabase-js";
 import PasswordChangeConfirmScreen from "@/screens/PasswordChangeConfirm/PasswordChangeConfirmScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import CameraScreen from "@/componenets/Camera";
+import CalenderScreen from "@/screens/FinanceOverview/CalenderScreen/CalenderScreen";
+import SearchScreen from "@/screens/FinanceOverview/SearchScreen/SearchScreen";
 
 const RootStack = createNativeStackNavigator();
 export default function MainNavigator() {
@@ -44,81 +46,106 @@ export default function MainNavigator() {
 
   return (
     <>
-    <NavigationContainer>
-       {!session ? (
-        <OnBoardingNavigation />
-      ) : ( 
-        <RootStack.Navigator
-          initialRouteName={"MainApp"}
-          screenOptions={{ headerShown: false }}
-        >
-          {/* Main App */}
-          <RootStack.Screen name="MainApp">
-            {() => (
-              <View style={styles.container}>
-                <BottomTabs />
-              </View>
-            )}
-          </RootStack.Screen>
+      <NavigationContainer>
+        {!session ? (
+          <OnBoardingNavigation />
+        ) : (
+          <RootStack.Navigator
+            initialRouteName={"MainApp"}
+            screenOptions={{ headerShown: false }}
+          >
+            {/* Main App */}
+            <RootStack.Screen name="MainApp">
+              {() => (
+                <View style={styles.container}>
+                  <BottomTabs />
+                </View>
+              )}
+            </RootStack.Screen>
 
-          {/* Settings & Profile */}
-          <RootStack.Screen name="SettingsScreen" component={SettingsScreen} />
-          <RootStack.Screen
-            name="HelpCenterScreen"
-            component={HelpCenterScreen}
-          />
-          <RootStack.Screen
-            name="PasswordSettingsScreen"
-            component={PasswordSettingsScreen}
-          />
-         
-          <RootStack.Screen
-            name="NotificationSettingsScreen"
-            component={NotificationSettingsScreen}
-          />
-          <RootStack.Screen
-            name="DeleteAccountScreen"
-            component={DeleteAccountScreen}
-          />
-          <RootStack.Screen
-            name="SupportChannelsScreen"
-            component={SupportChannelsScreen}
-          />
-          <RootStack.Screen name="Profile" component={Profile} />
+            {/* Settings & Profile */}
+            <RootStack.Screen
+              name="SettingsScreen"
+              component={SettingsScreen}
+            />
+            <RootStack.Screen
+              name="HelpCenterScreen"
+              component={HelpCenterScreen}
+            />
+            <RootStack.Screen
+              name="PasswordSettingsScreen"
+              component={PasswordSettingsScreen}
+            />
 
-          {/* Security Screens */}
-          <RootStack.Screen name="GreenScreen" component={GreenScreen} />
-          <RootStack.Screen name="GreenScreenFP" component={GreenScreenFP} />
-          <RootStack.Screen name="GreenScreenSFP" component={GreenScreenSFP} />
+            <RootStack.Screen
+              name="NotificationSettingsScreen"
+              component={NotificationSettingsScreen}
+            />
+            <RootStack.Screen
+              name="DeleteAccountScreen"
+              component={DeleteAccountScreen}
+            />
+            <RootStack.Screen
+              name="SupportChannelsScreen"
+              component={SupportChannelsScreen}
+            />
+            <RootStack.Screen name="Profile" component={Profile} />
 
-          {/* Category Flow */}
-          <RootStack.Screen name="Categories" component={CategoriesScreen} />
-          <RootStack.Screen
-            name="CategoryDetail"
-            component={CategoryDetailScreen}
-          />
-          <RootStack.Screen
-            name="AddExpensesScreen"
-            component={AddExpensesScreen}
-          />
-          <RootStack.Screen name="TransactionForm" component={TransactionForm} />
-          <RootStack.Screen name="Camera" component={CameraScreen}   />
+            {/* Security Screens */}
+            <RootStack.Screen name="GreenScreen" component={GreenScreen} />
+            <RootStack.Screen name="GreenScreenFP" component={GreenScreenFP} />
+            <RootStack.Screen
+              name="GreenScreenSFP"
+              component={GreenScreenSFP}
+            />
 
-          {/* Savings */}
-          <RootStack.Screen name="Savings" component={Savings} />
-          <RootStack.Screen name="SavingDetails" component={SavingDetails} />
-          <RootStack.Screen name="AddSavings" component={AddSavingsScreen} />
+            {/* Category Flow */}
+            <RootStack.Screen name="Categories" component={CategoriesScreen} />
+            <RootStack.Screen
+              name="CategoryDetail"
+              component={CategoryDetailScreen}
+            />
+            <RootStack.Screen
+              name="AddExpensesScreen"
+              component={AddExpensesScreen}
+            />
+            {/* <RootStack.Screen
+              name="TransactionForm"
+              component={TransactionForm}
+            /> */}
+            <RootStack.Screen
+              name="TransactionForm"
+              children={() => (
+                <TransactionForm
+                  title="Transaction Title"
+                  buttonText="Submit"
+                  categories={[]}
+                  onSubmit={() => console.log("Submitted")}
+                />
+              )}
+            />
+            <RootStack.Screen name="Camera" component={CameraScreen} />
 
-          {/* Notification */}
-          <RootStack.Screen name="Notification" component={Notification} />
+            {/* Savings */}
+            <RootStack.Screen name="Savings" component={Savings} />
+            <RootStack.Screen name="SavingDetails" component={SavingDetails} />
+            <RootStack.Screen name="AddSavings" component={AddSavingsScreen} />
 
-          {/* Password Change Confirm */}
-          <RootStack.Screen
-            name="PasswordChangeConfirm"
-            component={PasswordChangeConfirmScreen}
-          />
-        </RootStack.Navigator>
-       )} 
+            {/* Notification */}
+            <RootStack.Screen name="Notification" component={Notification} />
+            <RootStack.Screen
+              name="CalenderScreen"
+              component={CalenderScreen}
+            />
+            <RootStack.Screen name="SearchScreen" component={SearchScreen} />
+
+            {/* Password Change Confirm */}
+            <RootStack.Screen
+              name="PasswordChangeConfirm"
+              component={PasswordChangeConfirmScreen}
+            />
+          </RootStack.Navigator>
+        )}
       </NavigationContainer>
     </>
   );

@@ -5,6 +5,7 @@
 // import { API_BASE_URL } from "../config/api";
 
 
+// // const API_URL = 'http://192.168.1.4:3000'; 
 // const API_URL = API_BASE_URL; 
 
 // const userId = 'f955350c-5e5b-4410-907d-37985313e386'; 
@@ -44,6 +45,9 @@ import { getCurrentUserId } from '../utils/auth';
 
 const API_URL = API_BASE_URL;
 
+// const API_URL = 'http://192.168.1.4:3000'; 
+// const API_URL = 'http://localhost:3000'; 
+const userId = 'f955350c-5e5b-4410-907d-37985313e386'; 
 export const fetchTransactions = async (): Promise<Transaction[]> => {
   try {
     const userId = await getCurrentUserId();
