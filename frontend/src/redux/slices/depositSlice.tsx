@@ -22,7 +22,7 @@ export const getDepositById = createAsyncThunk(
 
 export const getDepositsByGoal = createAsyncThunk(
   'deposits/getDepositsByGoal',
-  async (goalId: string) => {
+  async (goalId: number) => {
     const response = await axios.get<IDeposit[]>(`${API_URL}/goal/${goalId}`);
     return response.data;
   }
@@ -43,7 +43,11 @@ const initialState: DepositState = {
 const depositSlice = createSlice({
   name: 'deposits',
   initialState,
-  reducers: {},
+  reducers: {
+    cleargoals: (state) => {
+      state.deposits = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createDeposit.pending, (state) => {
@@ -86,5 +90,5 @@ const depositSlice = createSlice({
       });
   },
 });
-
+export const { cleargoals } = depositSlice.actions;
 export default depositSlice.reducer;

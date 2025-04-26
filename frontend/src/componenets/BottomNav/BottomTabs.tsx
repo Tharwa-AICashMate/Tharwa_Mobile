@@ -36,6 +36,8 @@ import CategoryDetailScreen from "@/screens/CategoryDetails";
 import TransactionScreen from "@/screens/Transaction";
 import StoreHome from "@/screens/StoreHome";
 import StoreScreen from "@/screens/StoreHome";
+import SavingDetails from "@/screens/SavingDetails";
+import CameraScreen from "../Camera";
 // import TransactionScreen from "@/screens/Transaction";
 
 type ProfileStackParamList = {
@@ -60,6 +62,7 @@ type ProfileStackParamList = {
   StoreHome: undefined;
   AddExpensesScreen: undefined;
   TransactionForm: undefined; // Added this line
+  Camera:undefined
 };
 
 type BottomTabParamList = {
@@ -86,7 +89,12 @@ function ProfileStackScreen() {
       <ProfileStack.Screen name="Logout" component={Logout} />
       <ProfileStack.Screen name="Notification" component={Notification} />
       <ProfileStack.Screen name="ChangePin" component={ChangePin} />
+      <ProfileStack.Screen name="SavingDetails" component={SavingDetails} options={{ tabBarVisible: true }} />
       <ProfileStack.Screen name="FingerPrint" component={FingerPrint} />
+      <ProfileStack.Screen
+        name="Camera"
+        component={CameraScreen}
+      />
       <ProfileStack.Screen
         name="TermsAndConditions"
         component={TermsAndConditions}

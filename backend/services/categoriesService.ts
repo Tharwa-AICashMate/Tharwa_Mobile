@@ -35,34 +35,3 @@ export const deleteCategory = async (id: number): Promise<boolean> => {
     return !error;
 };
 
-// interface CategoryData {
-//   user_id: string;
-//   name: string;
-//   icon: string;
-// }
-
-// const getAllCategories = async () => {
-//   const { data, error } = await supabase.from('categories').select('*');
-//   if (error) {
-//     throw new Error(error.message);
-//   }
-//   return data;
-// };
-
-
-// const createCategory = async (data: CategoryData) => {
-//   const { data: newCategory, error } = await supabase.from('categories').insert([data]);
-//   if (error) {
-//     throw new Error(error.message);
-//   }
-//   return newCategory;
-// };
-
-// const deleteCategory = async (id: string) => {
-//   const { error } = await supabase.from('categories').delete().eq('id', id);
-//   if (error) {
-//     throw new Error(error.message);
-//   }
-// };
-
-// export { getAllCategories, createCategory, deleteCategory };

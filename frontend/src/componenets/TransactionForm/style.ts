@@ -20,6 +20,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     
   },
+  disabledButton: {
+    opacity: 0.5,
+    backgroundColor: Theme.colors.primary,
+  },
   label: {
     fontSize: 14,
     color: '#555',

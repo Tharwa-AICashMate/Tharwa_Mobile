@@ -4,9 +4,14 @@ import express from "express";
 const router = express.Router();
 
 
+
+
+
+
 router.get('/:userId', transactionController.getTransactions as any);
 
 router.post('/', transactionController.addTransaction as any);
+router.get("/:userId/category/:categoryId", transactionController.getTransactionsByCategory as any);
 
 export default router;
 

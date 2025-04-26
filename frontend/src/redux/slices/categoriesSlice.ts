@@ -42,17 +42,17 @@ export const addNewCategory = createAsyncThunk(
   }
 );
 
-// export const removeCategory = createAsyncThunk(
-//   'categories/removeCategory',
-//   async (id: number, { rejectWithValue }) => {
-//     try {
-//       await deleteCategory(id);
-//       return id;
-//     } catch (error:any) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
+export const removeCategory = createAsyncThunk(
+  'categories/removeCategory',
+  async (id: number, { rejectWithValue }) => {
+    try {
+      await deleteCategory(id);
+      return id;
+    } catch (error:any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const categoriesSlice = createSlice({
   name: 'categories',
@@ -90,18 +90,18 @@ const categoriesSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      // .addCase(removeCategory.pending, (state) => {
-      //   state.loading = true;
-      //   state.error = null;
-      // })
-      // .addCase(removeCategory.fulfilled, (state, action) => {
-      //   state.loading = false;
-      //   state.items = state.items.filter(item => item.id !== action.payload);
-      // })
-      // .addCase(removeCategory.rejected, (state, action) => {
-      //   state.loading = false;
-      //   state.error = action.payload as string;
-      // });
+      .addCase(removeCategory.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(removeCategory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = state.items.filter(item => item.id !== action.payload);
+      })
+      .addCase(removeCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 

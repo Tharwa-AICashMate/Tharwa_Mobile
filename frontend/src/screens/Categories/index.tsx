@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -5,6 +6,9 @@ import {
   TouchableOpacity,
   SafeAreaView,
   FlatList,
+  ActivityIndicator,
+  Alert,
+  ScrollView,
 } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -16,9 +20,13 @@ import ProgressBar from "@/componenets/ProgressBar";
 import styles from "./style";
 import Theme from "@/theme";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
-import { addNewCategory, fetchUserCategories } from "@/redux/slices/categoriesSlice";
+import {
+  addNewCategory,
+  fetchUserCategories,
+  removeCategory,
+} from "@/redux/slices/categoriesSlice";
 import AddCategoryModal from "@/componenets/AddCategoryModal";
-import { getCurrentUserId } from '@/utils/auth';
+import { getCurrentUserId } from "@/utils/auth";
 
 type CategoriesScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -28,17 +36,23 @@ type CategoriesScreenNavigationProp = NativeStackNavigationProp<
 const CategoriesScreen = () => {
   const navigation = useNavigation<CategoriesScreenNavigationProp>();
   const dispatch = useAppDispatch();
-  const userId = "99a72ab5-85b7-484d-8102-adbcf68f6cde";
-  const { items: categories } = useAppSelector((state) => state.categories);
+  const { items: categories, loading } = useAppSelector(
+    (state) => state.categories
+  );
 
+  const [userId, setUserId] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [selectedIcon, setSelectedIcon] = useState("wallet-outline");
+  const [totalBalance, setTotalBalance] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        if (userId) {
-          const resultAction = await dispatch(fetchUserCategories(userId));
+        const currentUserId = await getCurrentUserId();
+        if (currentUserId) {
+          setUserId(currentUserId);
+          const resultAction = await dispatch(fetchUserCategories(currentUserId));
           if (fetchUserCategories.rejected.match(resultAction)) {
             console.error("Fetch error:", resultAction.payload || resultAction.error);
           }
@@ -49,50 +63,15 @@ const CategoriesScreen = () => {
     };
 
     loadData();
-  }, [dispatch, userId]);
-
-  const handleCategoryPress = (item: any) => {
-    if (item.name.toLowerCase() === "more") {
-      setModalVisible(true);
-    } 
-    else if(item.name.toLowerCase() === "savings"){
-      navigation.navigate("Savings", { categoryName: item.name });
-    }
-    else {
-      navigation.navigate("CategoryDetail", { categoryName: item.name });
-    }
-  };
-
-  const handleAddCategory = () => {
-    if (newCategoryName.trim()) {
-      dispatch(
-        addNewCategory({
-          name: newCategoryName.trim(),
-          icon: "wallet-outline", 
-          user_id: userId,
-        })
-      );
-      setNewCategoryName("");
-      setModalVisible(false);
-    }
-  };
-
-  const handleCancel = () => {
-    setNewCategoryName("");
-    setModalVisible(false);
-  };
-
-  const [totalBalance, setTotalBalance] = useState(0);
+  }, [dispatch]);
 
   const fetchBalance = async () => {
     try {
-      const user_id = await getCurrentUserId();
-      console.log("user_id", user_id);
-      const response = await fetch(`http://192.168.1.5:3000/api/balances/user/${user_id}`);
+      const currentUserId = await getCurrentUserId();
+      if (!currentUserId) return;
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch balance');
-      }
+      const response = await fetch(`http://192.168.1.5:3000/api/balances/user/${currentUserId}`);
+      if (!response.ok) throw new Error('Failed to fetch balance');
 
       const data = await response.json();
       setTotalBalance(data.balance_limit || 0);
@@ -103,20 +82,93 @@ const CategoriesScreen = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchBalance(); 
+      fetchBalance();
     }, [])
   );
 
+  const handleCategoryPress = (item: any) => {
+    if (!userId) return;
+
+    if (item.name.toLowerCase() === "more") {
+      setModalVisible(true);
+    } else if (item.name.toLowerCase() === "savings") {
+      navigation.navigate("Savings", { categoryName: item.name });
+    } else {
+      navigation.navigate("CategoryDetail", {
+        categoryName: item.name,
+        categoryId: item.id,
+        UserId: userId,
+        Icon: item.icon,
+      });
+    }
+  };
+
+  const handleAddCategory = () => {
+    if (newCategoryName.trim() && userId) {
+      dispatch(
+        addNewCategory({
+          name: newCategoryName.trim(),
+          icon: selectedIcon,
+          user_id: userId,
+        })
+      );
+      resetModalState();
+    }
+  };
+
+  const resetModalState = () => {
+    setNewCategoryName("");
+    setSelectedIcon("wallet-outline");
+    setModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    resetModalState();
+  };
+
+  const handleRemoveCategory = (categoryId: number, categoryName: string) => {
+    Alert.alert(
+      "Delete Category",
+      `Are you sure you want to delete the category "${categoryName}"?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => dispatch(removeCategory(categoryId)),
+        },
+      ]
+    );
+  };
+
   const renderItem = ({ item }: { item: any }) => (
-    <TouchableOpacity style={styles.categoryCard} onPress={() => handleCategoryPress(item)}>
+    <TouchableOpacity
+      style={styles.categoryCard}
+      onPress={() => handleCategoryPress(item)}
+    >
       <View style={styles.categoryIconContainer}>
         <Ionicons
-          name={item.name.toLowerCase() === "more" ? "add" : item.icon || "wallet-outline"}
+          name={
+            item.name.toLowerCase() === "more"
+              ? "add"
+              : item.icon || "wallet-outline"
+          }
           size={45}
           color="white"
         />
       </View>
       <Text style={styles.categoryName}>{item.name}</Text>
+      {item.name.toLowerCase() !== "more" && (
+        <TouchableOpacity
+          style={styles.removeCategoryButton}
+          onPress={() => handleRemoveCategory(item.id, item.name)}
+        >
+          <Ionicons name="close" size={15} color={"white"} />
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 
@@ -142,20 +194,29 @@ const CategoriesScreen = () => {
       </View>
 
       <View style={styles.categoriesContainer}>
-        <FlatList
-          data={[...categories, { name: "More" }]} 
-          numColumns={3}
-          keyExtractor={(item, index) => `item-${index}`}
-          renderItem={renderItem}
-          contentContainerStyle={styles.categoriesGrid}
-        />
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color={Theme.colors.primary}
+            style={styles.loadingSpinner}
+          />
+        ) : (
+          <FlatList
+            data={[...categories, { name: "More" }]}
+            numColumns={3}
+            keyExtractor={(item, index) => `item-${index}`}
+            renderItem={renderItem}
+            contentContainerStyle={styles.categoriesGrid}
+          />
+        )}
       </View>
 
-      {/* Modal for Adding Category */}
       <AddCategoryModal
         visible={modalVisible}
         categoryName={newCategoryName}
         onChangeName={setNewCategoryName}
+        selectedIcon={selectedIcon}
+        onSelectIcon={setSelectedIcon}
         onSave={handleAddCategory}
         onCancel={handleCancel}
       />
@@ -164,5 +225,3 @@ const CategoriesScreen = () => {
 };
 
 export default CategoriesScreen;
-
-

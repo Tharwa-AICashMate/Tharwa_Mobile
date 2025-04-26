@@ -29,14 +29,27 @@ export default function Header({ title, goBackTo, bellNavigateTo }: HeaderProps)
         <Ionicons name="arrow-back" size={24} color={Theme.colors.secondery} />
       </TouchableOpacity>
       <Text style={styles.title}>{title}</Text>
-      <TouchableOpacity onPress={() => navigation.navigate(bellNavigateTo || 'Notification')}>
+      <View style={{flexDirection:"row"}}>
+    <TouchableOpacity onPress={() => navigation.navigate('Camera')}>
         <Ionicons
-          name="notifications-outline"
-          size={24}
+          name="camera-outline"
+          size={20}
           color="black"
           style={styles.bellIcon}
         />
       </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate(bellNavigateTo || 'Notification')}>
+        <Ionicons
+          name="notifications-outline"
+          size={20}
+          color="black"
+          style={styles.bellIcon}
+        />
+      </TouchableOpacity>
+
+
+      
+    </View>
     </View>
   );
 }

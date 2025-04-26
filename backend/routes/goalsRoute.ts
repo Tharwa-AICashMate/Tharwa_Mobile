@@ -1,4 +1,3 @@
-
 import * as goalsController from "../controllers/goalsController.js";
 import express from "express";
 const router = express.Router();
@@ -9,4 +8,5 @@ router.get("/user/:userId", goalsController.getUserGoals);
 router.put("/:id", goalsController.updateGoal);
 router.delete("/:id", goalsController.deleteGoal);
 
+router.get("/:id/current-amount", goalsController.fetchCurrentAmount);
 export default router;

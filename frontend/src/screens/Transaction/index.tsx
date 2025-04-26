@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@/redux/store';
 import { fetchTransactionsAsync } from '@/redux/slices/transactionSlice';
 import { Ionicons } from '@expo/vector-icons';
-import TransactionSummary from '@/componenets/TransactionSummary';
 import MonthSection from '@/componenets/MonthSection';
 import { Transaction } from '@/types/transactionTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+import TransactionSummary from '@/componenets/TransactionSummary';
 
-type FilterType = 'all' | 'income' | 'expense';
+type FilterType = 'all' | 'income' | 'expence';
 
 
 const TransactionScreen: React.FC = () => {
@@ -22,9 +22,11 @@ const TransactionScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState<FilterType>('all');
     const navigation = useNavigation();
   
-  useEffect(() => {
-    dispatch(fetchTransactionsAsync());
-  }, [dispatch]);
+    useFocusEffect(
+      useCallback(() => {
+        dispatch(fetchTransactionsAsync());
+      }, [dispatch])
+    );
   
   const filterTransactions = (transactions: Transaction[]): Transaction[] => {
     if (activeTab === 'all') return transactions;
@@ -71,9 +73,10 @@ const TransactionScreen: React.FC = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <Header title='Transaction' />
-        <TransactionSummary 
+        <TransactionSummary
           activeTab={activeTab}
           onSelectTab={setActiveTab}
+          transactions={filterTransactions(Object.values(transactionsByMonth).flat())} 
         />
         
         <View style={styles.contentContainer}>

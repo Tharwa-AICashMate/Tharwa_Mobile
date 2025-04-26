@@ -26,6 +26,7 @@ import Theme from "@/theme";
 import { Session } from "@supabase/supabase-js";
 import PasswordChangeConfirmScreen from "@/screens/PasswordChangeConfirm/PasswordChangeConfirmScreen";
 import { NavigationContainer } from "@react-navigation/native";
+import CameraScreen from "@/componenets/Camera";
 
 const RootStack = createNativeStackNavigator();
 export default function MainNavigator() {
@@ -101,6 +102,7 @@ export default function MainNavigator() {
             component={AddExpensesScreen}
           />
           <RootStack.Screen name="TransactionForm" component={TransactionForm} />
+          <RootStack.Screen name="Camera" component={CameraScreen}   />
 
           {/* Savings */}
           <RootStack.Screen name="Savings" component={Savings} />

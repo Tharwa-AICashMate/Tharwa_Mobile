@@ -32,12 +32,12 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export type RootStackParamList = {
   Categories: undefined;
-  CategoryDetail: { categoryName: string };
-  AddExpenses: undefined;
-  Savings: undefined;
-  SavingDetails: { categoryName: string };
-  AddSavings: undefined;
-};
+  CategoryDetail: { categoryName: string ,categoryId: number, UserId:string ,Icon:string};
+  AddExpensesScreen: undefined;
+  Savings: { categoryName: string};
+  SavingDetails: { categoryName: string , goalID: number, Target: number, Icon:string};
+  Camera:undefined;
+  AddSavings: undefined;}
 
 const RootStack = createStackNavigator();
 
