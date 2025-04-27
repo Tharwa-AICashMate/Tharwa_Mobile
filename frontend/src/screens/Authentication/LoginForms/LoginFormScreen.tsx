@@ -13,7 +13,7 @@ import Theme from "@/theme";
 const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(true);
   const { error, loading } = useSelector((state: any) => state.auth);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -56,7 +56,7 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
           endIcon={
             <Image
               source={
-                !showPassword
+                showPassword
                   ? require("@/assets/Eye-icon.png")
                   : require("@/assets/Eye-icon-open.png")
               }

@@ -14,7 +14,7 @@ export const isValidEmail = (email: string): boolean => {
   };
 
   export const isValidName = (username: string): boolean => {
-    const regex = /^[a-zA-Z]{3,20} [a-zA-Z]{3,20}$/;
+    const regex = /^[a-zA-Z]{3,20}( [a-zA-Z]{3,20}){1,}$/;
     return regex.test(username);
   };
   
