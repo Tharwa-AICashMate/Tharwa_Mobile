@@ -6,51 +6,33 @@ import {
   ScrollView,
   SafeAreaView,
 } from "react-native";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Ionicons } from "@expo/vector-icons";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@/navigation/types";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { RootStackParamList } from "App";
-import Theme from "@/theme";
+import { cleargoals, getDepositsByGoal } from "@/redux/slices/depositSlice";
+import { fetchGoalCurrentAmount } from "@/redux/slices/savingSlice";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
-import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
-import styles from "./style";
 import ProgressBar from "@/componenets/ProgressBar";
 import ProgressCircle from "@/componenets/ProgressCircle";
 import TransactionItem from "@/componenets/TransactionItem";
-import { cleargoals, getDepositsByGoal } from "@/redux/slices/depositSlice";
-import { IDeposit } from "@/types/depositType";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { fetchGoalCurrentAmount } from "@/redux/slices/savingSlice";
+import styles from "./style";
+import { Ionicons } from "@expo/vector-icons";
+import Theme from "@/theme";
+import { useFocusEffect } from "@react-navigation/native";
+import { IDeposit } from "@/types/depositType";
 
 dayjs.extend(utc);
-
-
-// import { StackScreenProps } from "@react-navigation/stack";
-// import { ProfileStackParamList } from "@/componenets/BottomNav/BottomTabs";
-
-// type SavingDetailsProps = StackScreenProps<
-//   ProfileStackParamList,
-//   "SavingDetails"
-// >;
-
-// const SavingDetails: React.FC<SavingDetailsProps> = ({ navigation, route }) => {
-//   // Component implementation
-// };
 
 type SavingDetailsProps = NativeStackScreenProps<
   RootStackParamList,
   "SavingDetails"
 >;
-type SavingDetailsRouteProp = SavingDetailsProps["route"];
-type SavingDetailsNavigationProp = SavingDetailsProps["navigation"];
 
-
-const SavingDetails: React.FC<SavingDetailsProps> = () => {
-  const dispatch = useAppDispatch();
-  const route = useRoute<SavingDetailsRouteProp>();
-  const navigation = useNavigation<SavingDetailsNavigationProp>();
+const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
   const { categoryName, goalID, Target, Icon } = route.params;
+  const dispatch = useAppDispatch();
 
   const goalIdNumber = Number(goalID);
 
@@ -71,7 +53,7 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
   );
 
   const groupedDeposits = deposits.reduce(
-    (groups: { [key: string]: IDeposit[] }, deposit) => {
+    (groups: { [key: string]: any[] }, deposit) => {
       const date = dayjs.utc(deposit.created_at || new Date());
       const monthName = date.format("MMMM YYYY");
 
@@ -102,10 +84,6 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
       ? Math.min(Math.round((currentAmount / Target) * 100), 100)
       : 0;
 
-  const navigateBack = () => {
-    navigation.goBack();
-  };
-
   const addSavings = () => {
     navigation.navigate("AddSavings");
   };
@@ -125,9 +103,7 @@ const SavingDetails: React.FC<SavingDetailsProps> = () => {
             />
             <Text style={styles.infoLabel}>Goal</Text>
           </View>
-          <Text style={styles.goalAmount}>
-            {formatCurrency(Target)}
-          </Text>
+          <Text style={styles.goalAmount}>{formatCurrency(Target)}</Text>
 
           <View style={styles.infoRow}>
             <Ionicons

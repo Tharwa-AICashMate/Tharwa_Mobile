@@ -1,0 +1,30 @@
+export type RootStackParamList = {
+  MainApp: undefined;
+  SettingsScreen: undefined;
+  HelpCenterScreen: undefined;
+  PasswordSettingsScreen: undefined;
+  NotificationSettingsScreen: undefined;
+  DeleteAccountScreen: undefined;
+  SupportChannelsScreen: undefined;
+  Profile: undefined;
+  GreenScreen: undefined;
+  GreenScreenFP: undefined;
+  GreenScreenSFP: undefined;
+  Categories: undefined;
+  CategoryDetail: undefined;
+  AddExpensesScreen: undefined;
+  TransactionForm: undefined;
+  Camera: undefined;
+  Savings: undefined;
+  SavingDetails: {
+    categoryName: string;
+    goalID: string;
+    Target: number;
+    Icon: string;
+  };
+  AddSavings: undefined;
+  Notification: undefined;
+  CalenderScreen: undefined;
+  SearchScreen: undefined;
+  PasswordChangeConfirm: undefined;
+};

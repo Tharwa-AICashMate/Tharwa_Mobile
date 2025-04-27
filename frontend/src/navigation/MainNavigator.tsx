@@ -29,8 +29,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import CameraScreen from "@/componenets/Camera";
 import CalenderScreen from "@/screens/FinanceOverview/CalenderScreen/CalenderScreen";
 import SearchScreen from "@/screens/FinanceOverview/SearchScreen/SearchScreen";
+import { RootStackParamList } from "@/navigation/types";
 
-const RootStack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator<RootStackParamList>();
+
 export default function MainNavigator() {
   const [session, setSession] = useState<Session | null>(null);
   // useEffect(() => {
@@ -46,7 +48,6 @@ export default function MainNavigator() {
 
   return (
     <>
-<<<<<<< HEAD
       <NavigationContainer>
         {!session ? (
           <OnBoardingNavigation />
@@ -63,24 +64,6 @@ export default function MainNavigator() {
                 </View>
               )}
             </RootStack.Screen>
-=======
-    <NavigationContainer>
-       {/* {!session ? ( */}
-        {/* <OnBoardingNavigation /> */}
-      {/* ) : (  */}
-        <RootStack.Navigator
-          initialRouteName={"MainApp"}
-          screenOptions={{ headerShown: false }}
-        >
-          {/* Main App */}
-          <RootStack.Screen name="MainApp">
-            {() => (
-              <View style={styles.container}>
-                <BottomTabs />
-              </View>
-            )}
-          </RootStack.Screen>
->>>>>>> 0aae993ffeb24265690a2e2e8393590110f6dfed
 
             {/* Settings & Profile */}
             <RootStack.Screen
@@ -110,7 +93,6 @@ export default function MainNavigator() {
             />
             <RootStack.Screen name="Profile" component={Profile} />
 
-<<<<<<< HEAD
             {/* Security Screens */}
             <RootStack.Screen name="GreenScreen" component={GreenScreen} />
             <RootStack.Screen name="GreenScreenFP" component={GreenScreenFP} />
@@ -145,31 +127,12 @@ export default function MainNavigator() {
               )}
             />
             <RootStack.Screen name="Camera" component={CameraScreen} />
-=======
-          {/* Category Flow */}
-          <RootStack.Screen name="Categories" component={CategoriesScreen} />
-          <RootStack.Screen
-            name="CategoryDetail"
-            component={CategoryDetailScreen}
-          />
-          <RootStack.Screen
-            name="AddExpensesScreen"
-            component={AddExpensesScreen}
-          />
-          {/* <RootStack.Screen name="TransactionForm" component={TransactionForm} /> */}
-
-          {/* Savings */}
-          <RootStack.Screen name="Savings" component={Savings} />
-          {/* <RootStack.Screen name="SavingDetails" component={SavingDetails} /> */}
-          <RootStack.Screen name="AddSavings" component={AddSavingsScreen} />
->>>>>>> 0aae993ffeb24265690a2e2e8393590110f6dfed
 
             {/* Savings */}
             <RootStack.Screen name="Savings" component={Savings} />
             <RootStack.Screen name="SavingDetails" component={SavingDetails} />
             <RootStack.Screen name="AddSavings" component={AddSavingsScreen} />
 
-<<<<<<< HEAD
             {/* Notification */}
             <RootStack.Screen name="Notification" component={Notification} />
             <RootStack.Screen
@@ -185,15 +148,6 @@ export default function MainNavigator() {
             />
           </RootStack.Navigator>
         )}
-=======
-          {/* Password Change Confirm */}
-          <RootStack.Screen
-            name="PasswordChangeConfirm"
-            component={PasswordChangeConfirmScreen}
-          />
-        </RootStack.Navigator>
-       {/* )}  */}
->>>>>>> 0aae993ffeb24265690a2e2e8393590110f6dfed
       </NavigationContainer>
     </>
   );

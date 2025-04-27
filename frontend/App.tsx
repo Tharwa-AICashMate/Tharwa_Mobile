@@ -28,16 +28,27 @@ import { NavigationContainer } from "@react-navigation/native";
 import { store } from "./src/redux/store";
 import MainNavigator from "@/navigation/MainNavigator";
 import { createStackNavigator } from "@react-navigation/stack";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export type RootStackParamList = {
   Categories: undefined;
-  CategoryDetail: { categoryName: string ,categoryId: number, UserId:string ,Icon:string};
+  CategoryDetail: {
+    categoryName: string;
+    categoryId: number;
+    UserId: string;
+    Icon: string;
+  };
   AddExpensesScreen: undefined;
-  Savings: { categoryName: string};
-  SavingDetails: { categoryName: string , goalID: number, Target: number, Icon:string};
-  Camera:undefined;
-  AddSavings: undefined;}
+  Savings: { categoryName: string };
+  SavingDetails: {
+    categoryName: string;
+    goalID: number;
+    Target: number;
+    Icon: string;
+  };
+  Camera: undefined;
+  AddSavings: undefined;
+};
 
 const RootStack = createStackNavigator();
 
@@ -68,7 +79,7 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         {/* <NavigationContainer> */}
-          <MainNavigator />
+        <MainNavigator />
         {/* </NavigationContainer> */}
       </Provider>
     </GestureHandlerRootView>
