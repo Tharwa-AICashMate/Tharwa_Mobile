@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import SettingsScreen from "@/screens/Settings";
-import HelpCenterScreen from "@/screens/Help";
 import PasswordSettingsScreen from "@/screens/PasswordSettingsScreen";
 import NotificationSettingsScreen from "@/screens/NotificationSettingsScreen/NotificationSettingsScreen";
 import DeleteAccountScreen from "@/screens/DeleteAccountScreen";
@@ -30,6 +29,7 @@ import CameraScreen from "@/componenets/Camera";
 import CalenderScreen from "@/screens/FinanceOverview/CalenderScreen/CalenderScreen";
 import SearchScreen from "@/screens/FinanceOverview/SearchScreen/SearchScreen";
 import { RootStackParamList } from "@/navigation/types";
+import HelpCenterScreen from "@/screens/EditProfile/HelpCenterScreen";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 

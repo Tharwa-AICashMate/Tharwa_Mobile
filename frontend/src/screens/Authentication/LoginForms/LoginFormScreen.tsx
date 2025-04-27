@@ -24,7 +24,7 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+      <StatusBar barStyle="light-content" backgroundColor={Theme.colors.highlight} translucent={false} />
 
       <View style={styles.header}>
         <Text style={styles.title}>Welcome</Text>

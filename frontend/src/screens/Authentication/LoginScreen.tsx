@@ -7,7 +7,7 @@ import Theme from "@/theme";
 const LoginScreen: React.FC<navigationProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <StatusBar style="light" backgroundColor={Theme.colors.background} translucent={false} />
+      <StatusBar barStyle="light-content" backgroundColor={Theme.colors.background} translucent={false} />
 
       <View style={styles.loginScreenContainer}>
         <Image source={require("@/assets/logo2.png")} />
@@ -18,7 +18,7 @@ const LoginScreen: React.FC<navigationProps> = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.primaryButton}
-          onPress={() => navigation.navigate("LoginForm")}
+          onPress={() => navigation.navigate("Login")}
         >
           <Text style={styles.primaryButtonText}>Log In</Text>
         </TouchableOpacity>

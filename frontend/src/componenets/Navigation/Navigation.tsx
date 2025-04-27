@@ -10,7 +10,7 @@ import Login from "../../screens/Logout";
 import Profile from "@/screens/Profile/Profile";
 import Notification from "@/screens/Notification/Notification";
 import SettingsScreen from "@/screens/Settings";
-import HelpCenterScreen from "@/screens/EditProfile";
+import HelpCenterScreen from "@/screens/EditProfile/HelpCenterScreen";
 
 export type RootStackParamList = {
   MainApp: undefined;

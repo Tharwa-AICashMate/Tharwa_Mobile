@@ -25,7 +25,7 @@ const LaunchScreen: React.FC<navigationProps> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <Animated.View style={[styles.splashScreen, { opacity: logoOpacity }]}>
         <View style={styles.ContentContainer}>
-      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+      <StatusBar barStyle="light-content" backgroundColor={Theme.colors.highlight} translucent={false} />
 
           <Image source={require("@/assets/logo.png")} style={styles.logo} />
           <Text style={styles.logoText}>Tharwa</Text>

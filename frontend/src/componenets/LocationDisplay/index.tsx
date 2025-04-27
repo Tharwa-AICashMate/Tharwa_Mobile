@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
-import { setUserLocation } from '@/redux/slices/storeSlice';
-import { getCurrentLocation } from '@/utils/locationutils';
-import Theme from '@/theme';
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { setUserLocation } from "@/redux/slices/storeSlice";
+import { getCurrentLocation } from "@/utils/locationUtils";
+import Theme from "@/theme";
 
 const LocationDisplay: React.FC = () => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const LocationDisplay: React.FC = () => {
       };
       dispatch(setUserLocation(location));
     } catch (error) {
-      console.error('Error getting location:', error);
+      console.error("Error getting location:", error);
       // Handle location error
     }
   };
@@ -35,11 +35,11 @@ const LocationDisplay: React.FC = () => {
       <Text style={styles.label}>Your Location:</Text>
       <View style={styles.locationContainer}>
         <Text style={styles.locationText}>
-        Latitude: {userLocation?.latitude} 
-                </Text>
-                <Text style={styles.locationText}>
-                Longitude: {userLocation?.longitude}
-                </Text>
+          Latitude: {userLocation?.latitude}
+        </Text>
+        <Text style={styles.locationText}>
+          Longitude: {userLocation?.longitude}
+        </Text>
         {!locationDetected && (
           <TouchableOpacity
             style={styles.refreshButton}
@@ -56,37 +56,37 @@ const LocationDisplay: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     marginVertical: 10,
-    backgroundColor:Theme.colors.background,
-   display: 'flex',
-   alignItems: 'center',
-   justifyContent:'center',
-    width:340,
-    height:80,
-    borderRadius:20,
-    marginLeft:30,
+    backgroundColor: Theme.colors.background,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 340,
+    height: 80,
+    borderRadius: 20,
+    marginLeft: 30,
   },
   label: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   locationContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   locationText: {
     fontSize: 14,
-    color: '#444',
+    color: "#444",
   },
   refreshButton: {
     marginLeft: 10,
     padding: 5,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: "#e0e0e0",
     borderRadius: 5,
   },
   refreshButtonText: {
-    color: '#333',
+    color: "#333",
   },
 });
 

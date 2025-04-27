@@ -140,7 +140,7 @@ const Profile: React.FC = () => {
             />
 
             {updateMessage ? (
-              <Text style={styles.updateMessage}>{updateMessage}</Text>
+              <Text>{updateMessage}</Text>
             ) : null}
           </View>
         </View>

@@ -12,29 +12,25 @@ import aiRouter from "./routes/aiRoute.js";
 import { validateEnv } from "./utils/validateEnv.js";
 import { supabase } from "./utils/supabaseClient.js";
 import RagService from "./services/ragService.js";
-import incomeRoute from './routes/income.route.js'
+import incomeRoute from "./routes/income.route.js";
 import profileRoutes from "./routes/profile.route.js";
-import deleteAccount from './routes/deleteAccount.route.js';
+import deleteAccount from "./routes/deleteAccount.route.js";
 import invoiceRoutes from "./routes/invoiceRoutes";
-import bodyParser from 'body-parser';
+import bodyParser from "body-parser";
 dotenv.config();
 validateEnv();
 
 const app = express();
-app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.json({ limit: "10mb" }));
 
-<<<<<<< HEAD
-=======
-// app.use(cors());
-
-
->>>>>>> 0aae993ffeb24265690a2e2e8393590110f6dfed
 // السماح بجميع المصادر (لتطوير فقط)
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 
 app.use("/auth", authRouter);
@@ -47,7 +43,7 @@ app.use("/deposits", depositRouter);
 app.use("/store", storeRoutes);
 app.use("/", incomeRoute);
 app.use("/profile", profileRoutes);
-app.use('/delete', deleteAccount);
+app.use("/delete", deleteAccount);
 
 app.post("/", (req, res) => {
   res.send("Welcome to the backend API!");
@@ -77,24 +73,7 @@ supabase
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
-
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // // console.log("Starting server...");
 // // import express from "express";
@@ -160,8 +139,6 @@ app.listen(PORT, async () => {
 // // app.listen(PORT, () => {
 // //   console.log(`Server running on port ${PORT}`);
 // // });
-
-
 
 // import express from "express";
 // import cors from "cors";

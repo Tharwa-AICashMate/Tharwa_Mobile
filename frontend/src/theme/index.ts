@@ -1,4 +1,4 @@
-const currentTheme = "light";
+const currentTheme: "light" | "dark" = "light";
 
 const Light = {
   highlight: "#FECD3E",
@@ -27,7 +27,7 @@ const Dark = {
 };
 
 const Theme = {
-  colors: currentTheme == "dark" ? Dark : Light,
+  colors: currentTheme == "light" ? Light : Dark,
   typography: {
     direction:'left',
     fonts: {

@@ -1,7 +1,14 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Transaction, TransactionSummary, TransactionsByMonth } from '@/types/transactionTypes';
-import * as api from '@/api/transactionApi';
-import { groupTransactionsByMonth, calculateTransactionSummary } from '../../utils/helpes';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  Transaction,
+  TransactionSummary,
+  TransactionsByMonth,
+} from "@/types/transactionTypes";
+import * as api from "@/api/transactionApi";
+import {
+  groupTransactionsByMonth,
+  calculateTransactionSummary,
+} from "../../utils/helpers";
 
 interface TransactionState {
   transactions: Transaction[];
@@ -24,21 +31,21 @@ const initialState: TransactionState = {
 };
 
 export const fetchTransactionsAsync = createAsyncThunk(
-  'transactions/fetchTransactions',
+  "transactions/fetchTransactions",
   async () => {
     return await api.fetchTransactions();
   }
 );
 
 export const addTransactionAsync = createAsyncThunk(
-  'transactions/addTransaction',
-  async (transaction: Omit<Transaction, 'id'>) => {
+  "transactions/addTransaction",
+  async (transaction: Omit<Transaction, "id">) => {
     return await api.addTransaction(transaction);
   }
 );
 
 const transactionSlice = createSlice({
-  name: 'transactions',
+  name: "transactions",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -49,10 +56,10 @@ const transactionSlice = createSlice({
       })
       .addCase(fetchTransactionsAsync.fulfilled, (state, action) => {
         state.loading = false;
-        const validTransactions = action.payload.map(t => ({
+        const validTransactions = action.payload.map((t) => ({
           ...t,
           amount: Number(t.amount) || 0,
-          date: t.date || new Date().toISOString()
+          date: t.date || new Date().toISOString(),
         }));
         state.transactions = validTransactions;
         state.transactionsByMonth = groupTransactionsByMonth(validTransactions);
@@ -60,13 +67,18 @@ const transactionSlice = createSlice({
       })
       .addCase(fetchTransactionsAsync.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to fetch transactions';
+        state.error = action.error.message || "Failed to fetch transactions";
       })
-      .addCase(addTransactionAsync.fulfilled, (state, action: PayloadAction<Transaction>) => {
-        state.transactions.push(action.payload);
-        state.transactionsByMonth = groupTransactionsByMonth(state.transactions);
-        state.summary = calculateTransactionSummary(state.transactions);
-      });
+      .addCase(
+        addTransactionAsync.fulfilled,
+        (state, action: PayloadAction<Transaction>) => {
+          state.transactions.push(action.payload);
+          state.transactionsByMonth = groupTransactionsByMonth(
+            state.transactions
+          );
+          state.summary = calculateTransactionSummary(state.transactions);
+        }
+      );
   },
 });
 

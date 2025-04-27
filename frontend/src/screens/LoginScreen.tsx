@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { login } from '../api/authApi';
+import { login } from '@/api/auth';
+// تأكد من أن لديك دالة تسجيل الدخول في ملف api/auth.ts
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -100,3 +101,4 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
+

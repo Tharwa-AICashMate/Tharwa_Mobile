@@ -34,7 +34,7 @@ const slides: Slide[] = [
   },
   {
     id: "2",
-    title: "¿Are You Ready To\nTake Control Of\nYour Finances?",
+    title: "Are You Ready To\nTake Control Of\nYour Finances?",
     image: require("@/assets/phone-hand.png"),
   },
 ];
@@ -66,7 +66,7 @@ const OnboardingScreen: React.FC<navigationProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.slideContainer}>
-      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
+      <StatusBar barStyle="light-content" backgroundColor={Theme.colors.highlight} translucent={false} />
         <Text style={styles.title}>{slides[currentIndex].title}</Text>
         <View style={styles.slide}>
           <View style={styles.scroll}>

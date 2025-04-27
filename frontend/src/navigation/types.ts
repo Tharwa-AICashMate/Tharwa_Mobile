@@ -27,4 +27,14 @@ export type RootStackParamList = {
   CalenderScreen: undefined;
   SearchScreen: undefined;
   PasswordChangeConfirm: undefined;
+  Onboarding: undefined;
+  Login: undefined;
+  CreateAccount: undefined;
+  ForgotPassword: undefined;
+  Fingerprint: undefined;
+  FingerprintDetails: undefined;
+  AddFingerPrint: undefined;
+  TermsAndConditions: undefined;
+  StoreHome: undefined;
+  StoreScreen: undefined;
 };

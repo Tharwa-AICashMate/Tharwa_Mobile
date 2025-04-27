@@ -17,8 +17,7 @@ import DeleteAccountScreen from "../screens/DeleteAccountScreen";
 import LoginScreen from "@/screens/LoginScreen";
 import DashboardScreen from "../screens/DashboardScreen";
 import TransactionsScreen from "../screens/Transaction/index";
-import HelpCenterScreen from "../screens/EditProfile";
-
+import HelpCenterScreen from "../screens/EditProfile/HelpCenterScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -78,13 +77,21 @@ const SettingsStackNavigator = () => {
         name="PasswordSettingsScreen"
         component={PasswordSettingsScreen}
       />
-       
 
-      <Stack.Screen name="DeleteAccountScreen" component={DeleteAccountScreen} />
+      <Stack.Screen
+        name="DeleteAccountScreen"
+        component={DeleteAccountScreen}
+      />
       <Stack.Screen name="HelpCenterScreen" component={HelpCenterScreen} />
-      <Stack.Screen name="SupportChannelsScreen" component={SupportChannelsScreen} />
+      <Stack.Screen
+        name="SupportChannelsScreen"
+        component={SupportChannelsScreen}
+      />
       <Stack.Screen name="TransactionsScreen" component={TransactionsScreen} />
-      <Stack.Screen name="PasswordChangeConfirmScreen" component={PasswordChangeConfirmScreen} />
+      <Stack.Screen
+        name="PasswordChangeConfirmScreen"
+        component={PasswordChangeConfirmScreen}
+      />
       <Stack.Screen name="StatsScreen" component={StatsScreen} />
       {/* <Stack.Screen name="LoginForm" component={LoginFormScreen} /> */}
       <Stack.Screen
@@ -169,7 +176,6 @@ const MainTabNavigator = () => {
         component={SettingsStackNavigator}
         options={{ tabBarLabel: "" }}
       />
-   
     </Tab.Navigator>
   );
 };
