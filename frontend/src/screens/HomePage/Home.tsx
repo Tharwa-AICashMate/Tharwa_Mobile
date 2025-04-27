@@ -19,6 +19,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { fetchTransactionsAsync } from "@/redux/slices/transactionSlice";
+import FinancialCategories from "@/componenets/HomeScreen/FinancialCategories";
 
 const Home: React.FC = () => {
   const [totalBalance, setTotalBalance] = useState(0);
@@ -31,7 +32,7 @@ const Home: React.FC = () => {
   const totalExpences = transactions?.reduce(
     (total, ele) => (total += ele.type == "expence" ? ele.amount : 0),
     0
-  )
+  );
   const fetchBalance = async () => {
     try {
       const user_id = user!.id;
@@ -69,8 +70,15 @@ const Home: React.FC = () => {
       />
       <Header title=" Home" />
 
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.contentBox}>
+          <Text>hiiiiii</Text>
+          <FinancialCategories />
+        </View>
+      </ScrollView>
+
       {/* budget */}
-      <View style={styles.budgetContainer}>
+      {/* <View style={styles.budgetContainer}>
         <BalanceDisplay
           balance={totalBalance}
           expense={totalExpences}
@@ -91,24 +99,22 @@ const Home: React.FC = () => {
             {30}% Of Your Expenses, Looks Good.
           </Text>
         </View>
-      </View>
+      </View> */}
 
-      <ScrollView style={styles.contentContainer}>
-        {/* quick stats */}
-        <QuickStatsCard
+      {/* quick stats */}
+      {/* <QuickStatsCard
           savingsProgress={30}
           revenueLastWeek={2000}
           foodLastWeek={500}
-        />
+        /> */}
 
-        {/* filter tabs */}
-        <FilterTabs
+      {/* filter tabs */}
+      {/* <FilterTabs
           onTabChange={function (tab: "daily" | "weekly" | "monthly"): void {
             //throw new Error("Function not implemented.");
           }}
-        />
-        <TransactionList />
-      </ScrollView>
+        /> */}
+      {/* <TransactionList /> */}
     </ScrollView>
   );
 };
