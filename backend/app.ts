@@ -40,7 +40,7 @@ app.use("/transactions", transactionRoutes);
 app.use("/categories", categoryRouter);
 app.use("/goals", goalsRouter);
 app.use("/deposits", depositRouter);
-app.use("/store", storeRoutes);
+app.use("/api", storeRoutes);
 app.use("/", incomeRoute);
 app.use("/profile", profileRoutes);
 app.use("/delete", deleteAccount);

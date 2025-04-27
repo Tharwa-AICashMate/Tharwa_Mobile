@@ -7,13 +7,11 @@ import {
   BestStoreResult,
   AnalysisPayload,
 } from "../../types/store";
-import {
-  calculateDistance,
-  isWithinSearchRadius,
-} from "../../utils/locationUtils";
+
 import axios from "axios";
 
 import { API_ENDPOINTS } from "../../api/aiApi";
+import { calculateDistance } from "@/utils/locationUtils";
 
 export const runAnalysis = createAsyncThunk(
   "store/runAnalysis",

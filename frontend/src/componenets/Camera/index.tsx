@@ -30,7 +30,7 @@ import { RootState } from "@/redux/store";
 import { getCurrentUserId } from "@/utils/auth";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
-import { API_BASE_URL } from "@/config/api";
+import { apiBase } from "@/utils/axiosInstance";
 
 LogBox.ignoreLogs(["Possible Unhandled Promise Rejection"]);
 
@@ -53,7 +53,7 @@ export default function CameraScreen() {
   const [isCreatingTransaction, setIsCreatingTransaction] = useState(false);
   const [facing, setFacing] = useState<"front" | "back">("back");
   const [permission, requestPermission] = useCameraPermissions();
-  const [apiEndpoint] = useState(`${API_BASE_URL}/ocr/process-receipt`);
+  const [apiEndpoint] = useState(`${apiBase}/ocr/process-receipt`);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [newCategoryModalVisible, setNewCategoryModalVisible] = useState(false);

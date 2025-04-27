@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/config/api";
+import { apiBase } from "@/utils/axiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -37,7 +37,7 @@ export const fetchTransactionsByCategory = createAsyncThunk(
   ) => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/transactions/${userId}/category/${categoryId}`
+        `${apiBase}/transactions/${userId}/category/${categoryId}`
       );
       return response.data;
     } catch (error: any) {
@@ -60,7 +60,7 @@ export const createTransaction = createAsyncThunk(
   ) => {
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/transactions`,
+        `${apiBase}/transactions`,
         transaction
       );
       return response.data;

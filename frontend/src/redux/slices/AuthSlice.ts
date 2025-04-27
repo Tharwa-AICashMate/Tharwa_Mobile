@@ -7,6 +7,7 @@ import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
 import { Provider } from "@supabase/supabase-js";
 import { RootState } from "../store";
+import { apiBase } from "@/utils/axiosInstance";
 
 interface AuthState {
   user: User | null;
@@ -20,7 +21,6 @@ const initialState: AuthState = {
   error: null,
 };
 
-const apiBase = "http://192.168.1.2:3000";
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri();
@@ -72,7 +72,8 @@ export const loginUser = createAsyncThunk(
       const { data: userData } = await axios.post(`${apiBase}/auth/login`, {
         userId: data.user.id,
       });
-      return userData.data;
+      console.log('userData', userData);
+      return {...userData.data, id:data.user.id};
     } catch (error) {
       console.error("Error registering user:", error);
       return rejectWithValue("Invalid email or password");

@@ -14,6 +14,7 @@ import ProgressBar from "@/componenets/ProgressBar";
 import QuickStatsCard from "@/componenets/HomeScreen/QuickStatsCard";
 import TransactionList from "@/componenets/TransactionList";
 import { getCurrentUserId } from '@/utils/auth';
+import { apiBase } from "@/utils/axiosInstance";
 
 
 
@@ -26,7 +27,7 @@ const Home: React.FC = () => {
     try {
       const user_id = await getCurrentUserId();
       console.log("user_id", user_id);
-      const response = await fetch(`http://192.168.1.4:3000/api/balances/user/${user_id}`);
+      const response = await fetch(`${apiBase}/api/balances/user/${user_id}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch balance');
@@ -90,7 +91,7 @@ const Home: React.FC = () => {
         {/* filter tabs */}
         <FilterTabs
           onTabChange={function (tab: "daily" | "weekly" | "monthly"): void {
-            throw new Error("Function not implemented.");
+            //throw new Error("Function not implemented.");
           }}
         />
         <TransactionList />

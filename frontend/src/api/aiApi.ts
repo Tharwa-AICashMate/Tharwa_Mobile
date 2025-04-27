@@ -1,6 +1,7 @@
-export const API_BASE_URL = "http://192.168.1.4:3000"; 
+import { apiBase } from "@/utils/axiosInstance";
+
 
 export const API_ENDPOINTS = {
-  analyze: `${API_BASE_URL}/ai/analyze`,
+  analyze: `${apiBase}/ai/analyze`,
 //   findStores: `${API_BASE_URL}/store/find`,
 };

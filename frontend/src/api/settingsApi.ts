@@ -1,8 +1,8 @@
 import axios from "axios";
-import { API_BASE_URL } from "../config/api";
+import { apiBase } from "@/utils/axiosInstance";
 
 // const API_URL = "http://localhost:5000";
-const API_URL = API_BASE_URL;
+const API_URL = apiBase;
 
 interface NotificationSettings {
   generalNotification: boolean;

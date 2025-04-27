@@ -27,6 +27,7 @@ import {
 } from "@/redux/slices/categoriesSlice";
 import AddCategoryModal from "@/componenets/AddCategoryModal";
 import { getCurrentUserId } from "@/utils/auth";
+import { apiBase } from "@/utils/axiosInstance";
 
 type CategoriesScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -69,7 +70,7 @@ const CategoriesScreen = () => {
     try {
       const user_id = await getCurrentUserId();
       console.log("user_id", user_id);
-      const response = await fetch(`http://192.168.1.4:3000/api/balances/user/${user_id}`);
+      const response = await fetch(`${apiBase}/api/balances/user/${user_id}`);
       if (!response.ok) throw new Error('Failed to fetch balance');
 
       const data = await response.json();

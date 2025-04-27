@@ -33,6 +33,8 @@ const styles = StyleSheet.create({
   transactionAmount: {
     fontSize: 14,
     fontWeight: '600',
+    width:10,
+    overflow:'hidden',
     color: Theme.colors.accentDark,
   }
   ,

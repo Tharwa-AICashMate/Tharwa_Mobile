@@ -1,16 +1,11 @@
-import { API_BASE_URL } from "@/config/api";
 import { Category, CreateCategoryDTO } from "@/types/category";
+import { apiBase } from "@/utils/axiosInstance";
 
-// const API_BASE_URL = 'http://localhost:3000';
-// const API_BASE_URL = 'http://192.168.1.4:3000';
-//const API_BASE_URL = 'http://192.168.1.4:3000';
-// const API_BASE_URL = 'http://192.168.1.4:3000';
-// const API_BASE_URL = 'http://localhost:5000';
 
 export const fetchCategories = async (userId?: string): Promise<Category[]> => {
   const url = userId
-    ? `${API_BASE_URL}/categories?user_id=${userId}`
-    : `${API_BASE_URL}/categories`;
+    ? `${apiBase}/categories?user_id=${userId}`
+    : `${apiBase}/categories`;
 
   const response = await fetch(url);
   if (!response.ok) {
@@ -23,7 +18,7 @@ export const fetchCategories = async (userId?: string): Promise<Category[]> => {
 export const createCategory = async (
   categoryData: CreateCategoryDTO
 ): Promise<Category> => {
-  const response = await fetch(`${API_BASE_URL}/categories`, {
+  const response = await fetch(`${apiBase}/categories`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,7 +34,8 @@ export const createCategory = async (
 };
 
 export const deleteCategory = async (id: number): Promise<void> => {
-  const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
+  console.log(id);
+  const response = await fetch(`${apiBase}/categories/${id}`, {
     method: "DELETE",
   });
 

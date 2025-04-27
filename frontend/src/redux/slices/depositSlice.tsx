@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { IDeposit, IDepositCreate, IDepositUpdate } from'@/types/depositType';
+import { apiBase } from '@/utils/axiosInstance';
 
-const API_URL = 'http://localhost:3000/deposits'; 
+const API_URL = `${apiBase}/deposits`; 
 
 export const createDeposit = createAsyncThunk(
   'deposits/createDeposit',
