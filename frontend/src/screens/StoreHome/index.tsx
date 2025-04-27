@@ -1,39 +1,49 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { findBestStore, runAnalysis } from "@/redux/slices/storeThunk";
+import { RootState } from "@/redux/store";
+import LocationDisplay from "@/componenets/LocationDisplay";
+import GroceryInput from "@/componenets/GroceryInput";
+import GroceryList from "@/componenets/GroceryList";
+import StoreResult from "@/componenets/StoreResult";
+import SearchRadiusSelector from "@/componenets/SearchRadiusSelector";
+import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
+import StoreSummary from "@/componenets/StoreSummary";
+import AnalysisContent from "@/componenets/AnalysisContent";
+import AnalysisResult from "@/componenets/AnalysisResult";
+import Theme from "@/theme";
+import { Store } from "@/types/store";
 
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { useAppDispatch, useAppSelector } from '@/redux/hook';
-import { findBestStore, runAnalysis } from '@/redux/slices/storeThunk';
-import { RootState } from '@/redux/store';
-import LocationDisplay from '@/componenets/LocationDisplay';
-import GroceryInput from '@/componenets/GroceryInput';
-import GroceryList from '@/componenets/GroceryList';
-import StoreResult from '@/componenets/StoreResult';
-import SearchRadiusSelector from '@/componenets/SearchRadiusSelector';
-import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
-import StoreSummary from '@/componenets/StoreSummary';
-import AnalysisContent from '@/componenets/AnalysisContent';
-import  AnalysisResult  from '@/componenets/AnalysisResult';
-import Theme from '@/theme';
-import { Store } from '@/types/store';
-
-type FilterType = 'findBestStore' | 'analysis';
+type FilterType = "findBestStore" | "analysis";
 
 const HomeScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
-  const { analysisResults, analysisStatus } = useAppSelector((state) => state.store);
-  
+  const { analysisResults, analysisStatus } = useAppSelector(
+    (state) => state.store
+  );
+
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<FilterType>('findBestStore');
-  
+  const [activeTab, setActiveTab] = useState<FilterType>("findBestStore");
+
   const { items } = useAppSelector((state) => state.grocery);
-  const { userLocation, locationDetected, searchRadius } = useAppSelector((state) => state.store);
+  const { userLocation, locationDetected, searchRadius } = useAppSelector(
+    (state) => state.store
+  );
   const user = useAppSelector((state) => state.auth.user);
 
   const filtersmartGrocery = (Stores: Store[]): Store[] => {
-    if (activeTab === 'findBestStore') return Stores;
+    if (activeTab === "findBestStore") return Stores;
     return Stores.filter((Store: Store) => Store.type === activeTab);
   };
 
@@ -47,10 +57,10 @@ const HomeScreen: React.FC = () => {
     setLoading(true);
     try {
       const analysisData = {
-        userId: "d62929e0-adad-43ef-9157-9102d0b6875e",
-        coordinates: {
-          latitude: userLocation?.latitude,
-          longitude: userLocation?.longitude,
+        userId: user?.id || "", // Assuming user has an 'id' property
+        userCoordinates: {
+          latitude: userLocation?.latitude || 0, // Provide default values if undefined
+          longitude: userLocation?.longitude || 0,
         },
         inputs: message,
       };
@@ -77,7 +87,7 @@ const HomeScreen: React.FC = () => {
 
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View style={styles.container}>
-          {activeTab === 'findBestStore' ? (
+          {activeTab === "findBestStore" ? (
             <>
               <SearchRadiusSelector />
               <GroceryInput />
@@ -99,16 +109,17 @@ const HomeScreen: React.FC = () => {
             </>
           ) : (
             <>
-              <AnalysisContent
-                onAnalyze={handleAnalysis}
-                isLoading={loading}
-              />
-              {analysisStatus === 'loading' && <ActivityIndicator size="large" />}
-              {analysisStatus === 'succeeded' && analysisResults && (
+              <AnalysisContent onAnalyze={handleAnalysis} isLoading={loading} />
+              {analysisStatus === "loading" && (
+                <ActivityIndicator size="large" />
+              )}
+              {analysisStatus === "succeeded" && analysisResults && (
                 <AnalysisResult result={analysisResults} />
               )}
-              {analysisStatus === 'failed' && (
-                <Text style={styles.errorText}>Failed to load analysis results</Text>
+              {analysisStatus === "failed" && (
+                <Text style={styles.errorText}>
+                  Failed to load analysis results
+                </Text>
               )}
             </>
           )}
@@ -136,28 +147,28 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginVertical: 20,
   },
   findButton: {
     backgroundColor: Theme.colors.primary,
     padding: 15,
     borderRadius: 5,
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 15,
   },
   disabledButton: {
-    backgroundColor: '#cccccc',
+    backgroundColor: "#cccccc",
   },
   findButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
     fontSize: 16,
   },
   errorText: {
-    color: 'red',
-    textAlign: 'center',
+    color: "red",
+    textAlign: "center",
     marginTop: 10,
   },
 });

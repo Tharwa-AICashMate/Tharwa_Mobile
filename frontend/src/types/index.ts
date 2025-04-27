@@ -156,7 +156,8 @@ export type User = {
   fullName: string;
   email: string;
   phone?:string,
-  dob?:Date,  
+  dob?: Date,  
+  id: string;
 };
 
 interface SavingDeposit {

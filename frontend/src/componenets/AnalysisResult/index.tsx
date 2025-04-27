@@ -10,7 +10,7 @@ import Markdown from 'react-native-markdown-display';
     return (
       <View style={styles.container}>
         <Markdown>
-          {result}
+          {result.replace(/```(markdown)?/,"")}
         </Markdown>
       </View>
     );
