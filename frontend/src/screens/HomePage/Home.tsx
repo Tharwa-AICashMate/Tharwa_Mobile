@@ -16,27 +16,27 @@ import TransactionList from "@/componenets/TransactionList";
 import { getCurrentUserId } from '@/utils/auth';
 import { apiBase } from "@/utils/axiosInstance";
 import { useAppSelector } from "@/redux/hook";
+import axios from "axios";
 
 
 
 const Home: React.FC = () => {
 
   const [totalBalance, setTotalBalance] = useState(0);
-
+  const user = useAppSelector(state =>state.auth.user);
   const fetchBalance = async () => {
     try {
-      const user_id = await getCurrentUserId();
+      const user_id = user!.id;
       console.log("user_id", user_id);
-      const response = await fetch(`${apiBase}/api/balances/user/${user_id}`);
+      const respons = await axios.get(`${apiBase}/api/balances/user/${user_id}`);
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch balance');
-      }
+      console.log('---------------------------',respons.data);
 
-      const data = await response.json();
-      setTotalBalance(data.balance_limit || 0);
+      
+      setTotalBalance(respons.data?.balance_limit);
     } catch (error) {
-      console.error('Error fetching balance:', error);
+      // show the balance model to enter balanace
+      console.log('Error fetching balance:', error);
     }
   };
 
