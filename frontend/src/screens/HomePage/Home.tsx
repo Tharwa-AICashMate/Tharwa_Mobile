@@ -15,11 +15,11 @@ import QuickStatsCard from "@/componenets/HomeScreen/QuickStatsCard";
 import TransactionList from "@/componenets/TransactionList";
 import { getCurrentUserId } from '@/utils/auth';
 import { apiBase } from "@/utils/axiosInstance";
+import { useAppSelector } from "@/redux/hook";
 
 
 
 const Home: React.FC = () => {
-
 
   const [totalBalance, setTotalBalance] = useState(0);
 

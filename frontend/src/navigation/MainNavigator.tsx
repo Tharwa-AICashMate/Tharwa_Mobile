@@ -30,19 +30,24 @@ import CalenderScreen from "@/screens/FinanceOverview/CalenderScreen/CalenderScr
 import SearchScreen from "@/screens/FinanceOverview/SearchScreen/SearchScreen";
 import { RootStackParamList } from "@/navigation/types";
 import HelpCenterScreen from "@/screens/EditProfile/HelpCenterScreen";
+import { useDispatch } from "react-redux";
+import { fetchCurrentUser } from "@/redux/slices/AuthSlice";
+import { AppDispatch } from "@/redux/store";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export default function MainNavigator() {
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log(session);
-      setSession(session);
-    });
+    dispatch(fetchCurrentUser()).then(res => {
+      if (fetchCurrentUser.fulfilled.match(res)) 
+        setSession(true);
+    })
+    
     supabase.auth.onAuthStateChange((_event, session) => {
-      console.log(session);
-      setSession(session);
+      setSession(session ? true : false);
     });
   }, []);
 
