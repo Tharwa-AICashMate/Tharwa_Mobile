@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserLocation, BestStoreResult, Store } from '../../types/store';
-import { findBestStore } from './storeThunk';
+import { findBestStore ,runAnalysis} from './storeThunk';
 
 interface StoreState {
   userLocation: UserLocation | null;
@@ -9,7 +9,10 @@ interface StoreState {
   bestStoreResult: BestStoreResult | null;
   loading: boolean;
   error: string | null;
-  searchRadius: number; // نطاق البحث بالكيلومتر
+  searchRadius: number; 
+  analysisStatus: 'idle' | 'loading' | 'succeeded' | 'failed'; // Add analysisStatus property
+  analysisResults: any; 
+
 }
 
 const initialState: StoreState = {
@@ -19,7 +22,9 @@ const initialState: StoreState = {
   bestStoreResult: null,
   loading: false,
   error: null,
-  searchRadius: 5, // افتراضيًا 5 كيلومتر
+  searchRadius: 5, 
+  analysisStatus: 'idle',
+  analysisResults: null, 
 };
 
 export const storeSlice = createSlice({
@@ -51,6 +56,16 @@ export const storeSlice = createSlice({
       .addCase(findBestStore.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string || 'Failed to find the best store';
+      }).addCase(runAnalysis.pending, (state) => {
+        state.analysisStatus = 'loading';
+      })
+      .addCase(runAnalysis.fulfilled, (state, action) => {
+        state.analysisStatus = 'succeeded';
+        state.analysisResults = action.payload;
+      })
+      .addCase(runAnalysis.rejected, (state, action) => {
+        state.analysisStatus = 'failed';
+        state.error = action.error.message || 'An unknown error occurred';
       });
   },
 });

@@ -31,7 +31,8 @@
     "esbuild-wasm": "^0.25.3",
     "express": "^5.1.0",
     "langchain": "^0.3.23",
-    "node-mailjet": "^6.0.8"
+    "node-mailjet": "^6.0.8",
+    "react-native-markdown-display": "^7.0.2"
   },
   "devDependencies": {
     "@supabase/supabase-js": "^2.39.0",

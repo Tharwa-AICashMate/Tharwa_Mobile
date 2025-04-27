@@ -10,6 +10,7 @@ export interface Store {
   longitude: number;
   city?: string;
   country?: string;
+  type: 'findBestStore' | 'analysis';
 
 }
 
@@ -36,4 +37,12 @@ export interface BestStoreResult {
     price: number;
   }>;
   score: number;
+}
+export interface AnalysisPayload {
+  userId: string;
+  userCoordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  inputs: string;
 }

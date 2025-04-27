@@ -33,16 +33,16 @@ import SearchScreen from "@/screens/FinanceOverview/SearchScreen/SearchScreen";
 const RootStack = createNativeStackNavigator();
 export default function MainNavigator() {
   const [session, setSession] = useState<Session | null>(null);
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log(session);
-      setSession(session);
-    });
-    supabase.auth.onAuthStateChange((_event, session) => {
-      console.log(session);
-      setSession(session);
-    });
-  }, []);
+  // useEffect(() => {
+  //   supabase.auth.getSession().then(({ data: { session } }) => {
+  //     console.log(session);
+  //     setSession(session);
+  //   });
+  //   supabase.auth.onAuthStateChange((_event, session) => {
+  //     console.log(session);
+  //     setSession(session);
+  //   });
+  // }, []);
 
   return (
     <>
