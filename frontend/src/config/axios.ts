@@ -1,7 +1,8 @@
+import { apiBase } from '@/utils/axiosInstance';
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: "http://192.168.1.4:3000/api",
+  baseURL: `${apiBase}/api`,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

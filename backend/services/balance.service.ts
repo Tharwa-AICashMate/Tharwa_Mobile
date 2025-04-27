@@ -12,7 +12,7 @@ export const getBalanceByUserIdService = async (user_id: string) => {
     .select('*')
     .eq('user_id', user_id)
     .single();
-
+  console.log(data, error);
   if (error) throw error;
   return data;
 };

@@ -18,7 +18,7 @@ const LoginScreen: React.FC<navigationProps> = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.primaryButton}
-          onPress={() => navigation.navigate("Login")}
+          onPress={() => navigation.navigate("LoginForm")}
         >
           <Text style={styles.primaryButtonText}>Log In</Text>
         </TouchableOpacity>

@@ -17,6 +17,7 @@ import UpdateButton from '@/componenets/Button/Button';
 import Theme from '@/theme';
 import styles from './Profile.styles';
 import { getCurrentUserId } from '@/utils/auth';
+import { apiBase } from '@/utils/axiosInstance';
 
 type RootStackParamList = {
   Profile: undefined;
@@ -43,7 +44,7 @@ const Profile: React.FC = () => {
         const id = await getCurrentUserId();
         setUserId(id);
 
-        const response = await axios.get(`http://192.168.1.4:3000/profile/users/${id}`);
+        const response = await axios.get(`${apiBase}/profile/users/${id}`);
         const { full_name, mobile_num, email } = response.data;
 
         setFullName(full_name);
@@ -59,7 +60,7 @@ const Profile: React.FC = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      const response = await axios.put(`http://192.168.1.4:3000/profile/users/${userId}`, {
+      const response = await axios.put(`${apiBase}/profile/users/${userId}`, {
         full_name,
         mobile_num: phone,
         email,

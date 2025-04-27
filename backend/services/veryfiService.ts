@@ -1,9 +1,5 @@
 import axios from 'axios';
 
-const VERYFI_CLIENT_ID = "vrfdpK5HGM1JPem9nh0Lg1akSl2HF8LUwniYjeC";
-const VERYFI_API_KEY = "300e602880830fcc65d2563d4e379a9e";
-const VERYFI_USERNAME = "de3393100";
-
 // Define the expected response type for Veryfi API
 export interface InvoiceResult {
   supplier_name: string;
@@ -38,8 +34,8 @@ async function getVeryfiCategories(): Promise<string[]> {
       'https://api.veryfi.com/api/v8/partner/categories',
       {
         headers: {
-          'Client-Id': VERYFI_CLIENT_ID,
-          'Authorization': `apikey ${VERYFI_USERNAME}:${VERYFI_API_KEY}`
+          'Client-Id': process.env.VERYFI_CLIENT_ID,
+          'Authorization': `apikey ${process.env.VERYFI_USERNAME}:${process.env.VERYFI_API_KEY}`
         }
       }
     );
@@ -91,8 +87,8 @@ export async function processInvoice(imageBase64: string, fileName?: string): Pr
       },
       {
         headers: {
-          'Client-Id': VERYFI_CLIENT_ID,
-          'Authorization': `apikey ${VERYFI_USERNAME}:${VERYFI_API_KEY}`,
+          'Client-Id': process.env.VERYFI_CLIENT_ID,
+          'Authorization': `apikey ${process.env.VERYFI_USERNAME}:${process.env.VERYFI_API_KEY}`,
           'Content-Type': 'application/json'
         },
         timeout: 30000

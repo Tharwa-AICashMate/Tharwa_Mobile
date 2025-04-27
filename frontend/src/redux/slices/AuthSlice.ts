@@ -7,6 +7,7 @@ import * as QueryParams from "expo-auth-session/build/QueryParams";
 import * as WebBrowser from "expo-web-browser";
 import { Provider } from "@supabase/supabase-js";
 import { RootState } from "../store";
+import { apiBase } from "@/utils/axiosInstance";
 
 interface AuthState {
   user: User | null;
@@ -19,8 +20,6 @@ const initialState: AuthState = {
   loading: false,
   error: null,
 };
-
-const apiBase = "http://192.168.1.2:3000";
 
 WebBrowser.maybeCompleteAuthSession();
 const redirectTo = makeRedirectUri();
@@ -72,7 +71,8 @@ export const loginUser = createAsyncThunk(
       const { data: userData } = await axios.post(`${apiBase}/auth/login`, {
         userId: data.user.id,
       });
-      return userData.data;
+      console.log("userData", userData);
+      return { ...userData.data, id: data.user.id };
     } catch (error) {
       console.error("Error registering user:", error);
       return rejectWithValue("Invalid email or password");
@@ -90,6 +90,35 @@ export const logoutUser = createAsyncThunk(
     } catch (error) {
       console.error("Error logging out:", error);
       return rejectWithValue("Logout failed");
+    }
+  }
+);
+
+export const fetchCurrentUser = createAsyncThunk(
+  "auth/fetchCurrentUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+      if (error || !session) return rejectWithValue("No active session");
+
+      const userId = session.user.id;
+
+      const { data: userData, error: fetchError } = await axios.post(
+        `${apiBase}/auth/login`,
+        {
+          userId,
+        }
+      );
+
+      if (fetchError) return rejectWithValue("Failed to fetch user data");
+
+      return { ...userData.data, id: userId };
+    } catch (err) {
+      console.error("Error fetching current user:", err);
+      return rejectWithValue("Failed to fetch user data");
     }
   }
 );
@@ -129,16 +158,19 @@ export const forgetPassword = createAsyncThunk(
   "auth/forgetPassword",
   async (email: string, { rejectWithValue }) => {
     try {
-      const {data} = await axios.post(`${apiBase}/auth/forgetPassword`, {
+      const { data } = await axios.post(`${apiBase}/auth/forgetPassword`, {
         email,
       });
-      console.log('-----------',data.data); 
+      console.log("-----------", data.data);
       if (data.data.status !== 200) {
         return rejectWithValue(data.message);
       }
       return email;
     } catch (error) {
-      console.error("Error sending otp:invalid email address can't send message", error);
+      console.error(
+        "Error sending otp:invalid email address can't send message",
+        error
+      );
       return rejectWithValue("invalid email address can't send message");
     }
   }
@@ -146,13 +178,16 @@ export const forgetPassword = createAsyncThunk(
 
 export const verifyPin = createAsyncThunk(
   "auth/verifyotp",
-  async (payload:string , { getState, rejectWithValue }) => {
+  async (payload: string, { getState, rejectWithValue }) => {
     const state = getState() as RootState;
     const email = state.auth.user!.email;
     try {
-      console.log("payload", payload,email);
-      const { data } = await axios.post(`${apiBase}/auth/verifyotp`, {otp:payload,email});
-      console.log('-----------',data);
+      console.log("payload", payload, email);
+      const { data } = await axios.post(`${apiBase}/auth/verifyotp`, {
+        otp: payload,
+        email,
+      });
+      console.log("-----------", data);
       if (data.data.status !== 200) {
         return rejectWithValue(data.message);
       }
@@ -165,15 +200,15 @@ export const verifyPin = createAsyncThunk(
 
 export const resetPassword = createAsyncThunk(
   "auth/resetPassword",
-  async (payload: string , { getState, rejectWithValue }) => {
+  async (payload: string, { getState, rejectWithValue }) => {
     const state = getState() as RootState;
     const email = state.auth.user!.email;
     try {
       const { data } = await axios.post(`${apiBase}/auth/resetPassword`, {
         email,
-        password:payload,
+        password: payload,
       });
-      console.log('-----------',data);
+      console.log("-----------", data);
       if (data.data.status !== 200) {
         return rejectWithValue(data.message);
       }
@@ -214,6 +249,18 @@ const authSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
       })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.user = action.payload as User;
+        state.error = null;
+        state.loading = false;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      })
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.error = null;
@@ -232,7 +279,7 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(forgetPassword.fulfilled, (state, action) => {
-        state.user = {...state.user,email:action.payload} as User;
+        state.user = { ...state.user, email: action.payload } as User;
         state.error = null;
         state.loading = false;
       })
@@ -266,8 +313,7 @@ const authSlice = createSlice({
       .addCase(resetPassword.pending, (state) => {
         state.loading = true;
       });
-  }
+  },
 });
-
 
 export default authSlice.reducer;

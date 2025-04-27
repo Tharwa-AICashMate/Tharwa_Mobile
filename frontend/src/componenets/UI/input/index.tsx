@@ -26,7 +26,7 @@ const Input: React.FC<InputProps> = ({
 }) => {
   const [error, setError] = useState<string>('')
   const handelValidation = ()=>{
-    if(validator && !validator(props?.value!))
+    if(validator && !validator(props?.value?.trim()!))
       setError(errorMessage || 'Invalid input');
   }
 

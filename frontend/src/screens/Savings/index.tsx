@@ -20,6 +20,7 @@ import { fetchUserGoals, createGoal } from '@/redux/slices/savingSlice';
 import { Goal } from '@/types/goal';
 import AddCategoryModal from '@/componenets/AddCategoryModal';
 import { getCurrentUserId } from '@/utils/auth';
+import { apiBase } from '@/utils/axiosInstance';
 
 type SavingsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -90,7 +91,7 @@ const Savings = () => {
       const currentUserId = await getCurrentUserId();
       if (!currentUserId) return;
 
-      const response = await fetch(`http://192.168.1.105:3000/api/balances/user/${currentUserId}`);
+      const response = await fetch(`${apiBase}/api/balances/user/${currentUserId}`);
       if (!response.ok) throw new Error('Failed to fetch balance');
 
       const data = await response.json();

@@ -22,6 +22,7 @@ import { clearTransactions, fetchTransactionsByCategory } from "@/redux/slices/c
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { getCurrentUserId } from "@/utils/auth";
+import { apiBase } from "@/utils/axiosInstance";
 
 dayjs.extend(utc);
 
@@ -45,8 +46,7 @@ const CategoryDetailScreen = () => {
     try {
       const user_id = await getCurrentUserId();
       console.log("user_id", user_id);
-      // const response = await fetch(`http://192.168.1.105:3000/api/balances/user/${user_id}`);
-      const response = await fetch(`http://192.168.1.4:3000/api/balances/user/${user_id}`);
+      const response = await fetch(`${apiBase}/api/balances/user/${user_id}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch balance');

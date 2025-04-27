@@ -1,4 +1,5 @@
 import { Goal } from "@/types/goal";
+import { apiBase } from "@/utils/axiosInstance";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -18,7 +19,7 @@ const initialState: GoalsState = {
   goalLoading: {},
 };
 
-const BASE_URL = "http://192.168.1.105:3000/goals";
+const BASE_URL = `${apiBase}/goals`;
 
 // === Async Thunks ===
 

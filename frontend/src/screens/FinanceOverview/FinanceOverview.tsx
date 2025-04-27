@@ -13,6 +13,7 @@ import Theme from "@/theme";
 import { useFocusEffect } from "@react-navigation/native";
 import { getCurrentUserId } from '@/utils/auth';
 import { Ionicons } from "@expo/vector-icons";
+import { apiBase } from "@/utils/axiosInstance";
 
 const Container = styled.View`
   flex: 1;
@@ -76,7 +77,7 @@ export const FinanceOverview: React.FC = () => {
     try {
       const user_id = await getCurrentUserId();
       console.log("user_id", user_id);
-      const response = await fetch(`http://192.168.1.4:3000/api/balances/user/${user_id}`);
+      const response = await fetch(`${apiBase}/api/balances/user/${user_id}`);
       
       if (!response.ok) {
         throw new Error('Failed to fetch balance');

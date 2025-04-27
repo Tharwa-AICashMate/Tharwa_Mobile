@@ -13,35 +13,46 @@ import FilterTabs from "@/componenets/HomeScreen/FilterTabs";
 import ProgressBar from "@/componenets/ProgressBar";
 import QuickStatsCard from "@/componenets/HomeScreen/QuickStatsCard";
 import TransactionList from "@/componenets/TransactionList";
-import { getCurrentUserId } from '@/utils/auth';
-
-
+import { apiBase } from "@/utils/axiosInstance";
+import { useAppSelector } from "@/redux/hook";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { fetchTransactionsAsync } from "@/redux/slices/transactionSlice";
 
 const Home: React.FC = () => {
-
-
   const [totalBalance, setTotalBalance] = useState(0);
-
+  const user = useAppSelector((state) => state.auth.user);
+  const dispatch = useDispatch<AppDispatch>();
+  const transactions = useAppSelector(
+    (state) => state.transactions.transactions
+  );
+  console.log(transactions);
+  const totalExpences = transactions?.reduce(
+    (total, ele) => (total += ele.type == "expence" ? ele.amount : 0),
+    0
+  )
   const fetchBalance = async () => {
     try {
-      const user_id = await getCurrentUserId();
+      const user_id = user!.id;
       console.log("user_id", user_id);
-      const response = await fetch(`http://192.168.1.4:3000/api/balances/user/${user_id}`);
+      const respons = await axios.get(
+        `${apiBase}/api/balances/user/${user_id}`
+      );
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch balance');
-      }
+      //console.log(respons.data);
 
-      const data = await response.json();
-      setTotalBalance(data.balance_limit || 0);
+      setTotalBalance(respons.data?.balance_limit || 0);
     } catch (error) {
-      console.error('Error fetching balance:', error);
+      // show the balance model to enter balanace
+      console.log("Error fetching balance:", error);
     }
   };
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchBalance(); 
+      fetchBalance();
+      dispatch(fetchTransactionsAsync());
     }, [])
   );
   const budget = {
@@ -60,12 +71,15 @@ const Home: React.FC = () => {
 
       {/* budget */}
       <View style={styles.budgetContainer}>
-        <BalanceDisplay balance={totalBalance} expense={400000} />
+        <BalanceDisplay
+          balance={totalBalance}
+          expense={totalExpences}
+        />
       </View>
 
       <View style={styles.budgetContainer}>
         <View style={styles.progressContainer}>
-          <ProgressBar percentage={30} amount={40} />
+          <ProgressBar percentage={totalExpences/totalBalance*100} amount={totalBalance} />
         </View>
         <View style={styles.budgetStatus}>
           <Ionicons
@@ -90,7 +104,7 @@ const Home: React.FC = () => {
         {/* filter tabs */}
         <FilterTabs
           onTabChange={function (tab: "daily" | "weekly" | "monthly"): void {
-            throw new Error("Function not implemented.");
+            //throw new Error("Function not implemented.");
           }}
         />
         <TransactionList />

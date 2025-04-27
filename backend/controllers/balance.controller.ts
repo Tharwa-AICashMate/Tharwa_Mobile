@@ -22,7 +22,7 @@ export const getBalanceByUserId = async (req: Request, res: Response) => {
     const balance = await getBalanceByUserIdService(user_id);
 
     if (!balance) {
-      return res.status(404).json({ message: 'Balance not found' });
+      return res.status(200).json(0);
     }
 
     res.status(200).json(balance);

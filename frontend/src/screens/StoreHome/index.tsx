@@ -23,6 +23,7 @@ import AnalysisContent from "@/componenets/AnalysisContent";
 import AnalysisResult from "@/componenets/AnalysisResult";
 import Theme from "@/theme";
 import { Store } from "@/types/store";
+import { useSelector } from "react-redux";
 
 type FilterType = "findBestStore" | "analysis";
 
@@ -41,7 +42,7 @@ const HomeScreen: React.FC = () => {
     (state) => state.store
   );
   const user = useAppSelector((state) => state.auth.user);
-
+ console.log(user)
   const filtersmartGrocery = (Stores: Store[]): Store[] => {
     if (activeTab === "findBestStore") return Stores;
     return Stores.filter((Store: Store) => Store.type === activeTab);
@@ -57,10 +58,10 @@ const HomeScreen: React.FC = () => {
     setLoading(true);
     try {
       const analysisData = {
-        userId: user?.id || "", // Assuming user has an 'id' property
-        userCoordinates: {
-          latitude: userLocation?.latitude || 0, // Provide default values if undefined
-          longitude: userLocation?.longitude || 0,
+        userId: user?.id || "e808a0ca-a984-4363-b110-fe8f86766bd6",
+        coordinates: {
+          latitude: userLocation?.latitude || '31.03', 
+          longitude: userLocation?.longitude || '31.37',
         },
         inputs: message,
       };

@@ -36,7 +36,7 @@ const TransactionList: React.FC = () => {
 
     if (filteredTransactions.length === 0) return null;
 
-    return <MonthSection month={month} transactions={filteredTransactions} />;
+    return <MonthSection key={month} month={month} transactions={filteredTransactions} />;
   };
 
   if (loading) {
@@ -61,6 +61,7 @@ const TransactionList: React.FC = () => {
       keyExtractor={(item) => item[0]}
       renderItem={renderMonthSection}
       showsVerticalScrollIndicator={false}
+      scrollEnabled={false}
       initialNumToRender={3}
       windowSize={5}
       removeClippedSubviews={true}

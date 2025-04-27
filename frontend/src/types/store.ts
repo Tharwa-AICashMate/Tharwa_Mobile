@@ -40,7 +40,7 @@ export interface BestStoreResult {
 }
 export interface AnalysisPayload {
   userId: string;
-  userCoordinates: {
+  coordinates: {
     latitude: number;
     longitude: number;
   };

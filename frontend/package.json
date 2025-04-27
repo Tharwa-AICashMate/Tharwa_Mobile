@@ -7,8 +7,7 @@
     "start": "expo start --lan",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "server": "json-server --host 192.168.1.6 --port 3000 --watch server/db.json"
+    "web": "expo start --web"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.3.0",

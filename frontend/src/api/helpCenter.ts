@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { FAQItem, SupportChannel } from '../types';
-import { API_BASE_URL } from '../config/api';
+import { apiBase } from '@/utils/axiosInstance';
 
-const BASE_URL = API_BASE_URL;
+const BASE_URL = apiBase;
 // const BASE_URL = 'http://localhost:5000';
 
 export const fetchFAQs = async (category: 'general' | 'account' | 'services') => {
