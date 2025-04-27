@@ -17,6 +17,7 @@ const MonthSection: React.FC<MonthSectionProps> = ({ month, transactions }) => {
       <Entypo name="calendar" size={24} color={Theme.colors.primary} style={{marginRight:20}} />
       </View>
       {transactions.map(transaction => (
+        
         <TransactionItem key={transaction.id} transaction={transaction} />
       ))}
     </View>

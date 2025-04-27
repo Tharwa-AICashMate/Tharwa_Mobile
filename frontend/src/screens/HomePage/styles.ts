@@ -4,7 +4,20 @@ import Theme from "@/theme";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Theme.colors.primary,
+    backgroundColor: Theme.colors.highlight,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingTop: 50,
+  },
+  contentBox: {
+    flex: 1,
+    backgroundColor: Theme.colors.background,
+    borderTopLeftRadius: 60,
+    borderTopRightRadius: 60,
+    alignItems: "center",
+    paddingVertical: 20,
+    paddingHorizontal: 10,
   },
   budgetContainer: {
     borderRadius: 12,

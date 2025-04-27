@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   transactionDetails: {
-    flex: 1,
+    flex: 3,
+    marginRight:10
   },
   transactionCategory: {
     fontSize: 14,
@@ -33,7 +34,12 @@ const styles = StyleSheet.create({
   transactionAmount: {
     fontSize: 14,
     fontWeight: '600',
-    width:10,
+    flex:1,
+    height:30,
+    lineHeight:30,
+    borderLeftColor:Theme.colors.highlight,
+    borderLeftWidth:2, 
+    paddingLeft:15, 
     overflow:'hidden',
     color: Theme.colors.accentDark,
   }

@@ -4,6 +4,7 @@ import { CategoryType, Transaction } from "@/types/transactionTypes";
 import CategoryTransaction from "../CategoryTransaction";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import Theme from "@/theme";
+import styles from "./styles";
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -25,9 +26,12 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
         <Text style={styles.description}>{title}</Text>
         <Text style={styles.date}>{formatDate(date)}</Text>
       </View>
-      <View>
+      
+      <View style={styles.seperator}>
         <Text style={styles.category}>{category}</Text>
       </View>
+   
+
       <View style={styles.amountContainer}>
         <Text
           style={[
@@ -42,52 +46,5 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    justifyContent: "space-between",
-  },
-  details: {
-    marginRight: 30,
-  },
-  category: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "black",
-    marginRight: 20,
-  },
-  description: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#32325D",
-  },
-  date: {
-    fontSize: 14,
-    color: "rgb(32, 32, 99)",
-    marginTop: 2,
-  },
-  amountContainer: {
-    alignItems: "flex-end",
-  },
-  amount: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  expenseAmount: {
-    color: "rgb(32, 32, 99)",
-  },
-  incomeAmount: {
-    color: Theme.colors.textDark,
-  },
-  type: {
-    fontSize: 12,
-    color: "#A7B0BA",
-    marginTop: 2,
-  },
-});
 
 export default TransactionItem;
