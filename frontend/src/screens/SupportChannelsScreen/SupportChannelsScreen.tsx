@@ -54,7 +54,6 @@ const staticSupportChannels = [
     category: "contact",
   },
 ];
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 const SupportChannelsScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [searchQuery, setSearchQuery] = useState("");
