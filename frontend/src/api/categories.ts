@@ -1,9 +1,13 @@
 import { API_BASE_URL } from "@/config/api";
 import { Category, CreateCategoryDTO } from "@/types/category";
 
+<<<<<<< HEAD
 // const API_BASE_URL = 'http://localhost:3000';
 // const API_BASE_URL = 'http://192.168.1.4:3000';
 //const API_BASE_URL = 'http://192.168.1.4:3000';
+=======
+const API_BASE_URL = 'http://192.168.1.4:3000';
+>>>>>>> 0aae993ffeb24265690a2e2e8393590110f6dfed
 // const API_BASE_URL = 'http://localhost:5000';
 
 

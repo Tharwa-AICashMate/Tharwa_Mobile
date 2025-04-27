@@ -23,6 +23,12 @@ validateEnv();
 const app = express();
 app.use(bodyParser.json({ limit: '10mb' }));
 
+<<<<<<< HEAD
+=======
+// app.use(cors());
+
+
+>>>>>>> 0aae993ffeb24265690a2e2e8393590110f6dfed
 // السماح بجميع المصادر (لتطوير فقط)
 app.use(cors({
   origin: '*',
