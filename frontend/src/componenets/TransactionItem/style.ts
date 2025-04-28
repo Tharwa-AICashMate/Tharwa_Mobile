@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   transactionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: Theme.colors.secondery,
@@ -13,17 +13,30 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 15,
+    justifyContent: "center",
+    alignItems: "center",
   },
   transactionDetails: {
-    flex: 3,
-    marginRight:10
+    flex: 1,
+    marginHorizontal: 10,
+  },
+  seperator: {
+    borderRightWidth: 2,
+    borderRightColor: Theme.colors.highlight,
+    borderLeftColor: Theme.colors.highlight,
+    borderLeftWidth: 2,
+    width: 100,
+    paddingHorizontal: 10,
+  },
+  category: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "black",
+    textAlign: "center",
   },
   transactionCategory: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
     color: Theme.colors.textDark,
   },
   transactionTime: {
@@ -33,17 +46,14 @@ const styles = StyleSheet.create({
   },
   transactionAmount: {
     fontSize: 14,
-    fontWeight: '600',
-    flex:1,
-    height:30,
-    lineHeight:30,
-    borderLeftColor:Theme.colors.highlight,
-    borderLeftWidth:2, 
-    paddingLeft:15, 
-    overflow:'hidden',
+    fontWeight: "600",
+    width: 80,
+    height: 30,
+    lineHeight: 30,
+    paddingLeft: 15,
+    overflow: "hidden",
     color: Theme.colors.accentDark,
-  }
-  ,
+  },
   transactionList: {
     flex: 1,
     backgroundColor: Theme.colors.background,
@@ -52,7 +62,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 30,
   },
-  
+
   transactionTitle: {
     fontSize: 16,
     fontWeight: "500",
@@ -63,9 +73,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Theme.colors.textLight,
   },
-  
+
   depositAmount: {
     color: Theme.colors.text,
   },
 });
-export default styles
+export default styles;

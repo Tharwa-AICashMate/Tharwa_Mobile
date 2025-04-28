@@ -45,16 +45,15 @@ export const getMonthName = (month: number): string => {
 };
 
 export const groupTransactionsByMonth = (transactions: Transaction[]): TransactionsByMonth => {
-  const sorted = [...transactions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sorted = [...transactions].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   return sorted.reduce((acc: TransactionsByMonth, transaction) => {
-    const date = new Date(transaction.date);
+    const date = new Date(transaction.created_at);
     // const monthYear = `${getMonthName(date.getMonth())} ${date.getFullYear()}`;
-        const monthYear = `${getMonthName(date.getMonth())} `;
+     const monthYear = `${getMonthName(date.getMonth())} `;
     
     if (!acc[monthYear]) {
       acc[monthYear] = [];
     }
-    
     acc[monthYear].push(transaction);
     return acc;
   }, {});

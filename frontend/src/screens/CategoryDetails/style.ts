@@ -25,15 +25,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 30,
   },
-  // monthSection: {
-  //   marginBottom: 20,
-  // },
-  // monthTitle: {
-  //   fontSize: 16,
-  //   fontWeight: 'bold',
-  //   marginBottom: 10,
-  //   color: Theme.colors.text,
-  // },
   transactionItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -131,16 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  monthSection: {
-    marginBottom: 20,
-  },
-  monthTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: Theme.colors.text,
-    marginBottom: 10,
-    paddingHorizontal: 15,
-  },
+ 
   noTransactions: {
     flex: 1,
     justifyContent: 'center',

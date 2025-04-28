@@ -1,15 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Transaction } from '@/types/transactionTypes';
-import TransactionItem from '../TranscationItemPage/index';
 import Entypo from '@expo/vector-icons/Entypo';
 import Theme from '@/theme';
+import TransactionItem from "@/componenets/TransactionItem";
 interface MonthSectionProps {
   month: string;
   transactions: Transaction[];
+  showCategory:boolean
 }
 
-const MonthSection: React.FC<MonthSectionProps> = ({ month, transactions }) => {
+const MonthSection: React.FC<MonthSectionProps> = ({ month, transactions,showCategory }) => {
   console.log(transactions)
   return (
     <View style={styles.container}>
@@ -17,28 +18,37 @@ const MonthSection: React.FC<MonthSectionProps> = ({ month, transactions }) => {
       <Text style={styles.monthTitle}>{month}</Text>
       <Entypo name="calendar" size={24} color={Theme.colors.primary} style={{marginRight:20}} />
       </View>
-      {transactions.map(transaction => (
-        
-        <TransactionItem key={transaction.id} transaction={transaction} />
-      ))}
+      {transactions.map(transaction => {
+            console.log(transaction);
+            return (
+              <TransactionItem
+                  key={transaction.transaction_id}
+                  transaction={transaction}
+                  iconBgColor={Theme.colors.accentLight}
+                  showCategory ={showCategory}
+              />)
+      })}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
-  },
+    width:"100%",
+    paddingHorizontal:20,
+    marginBottom: 20,
+    boxShadow:'0 1 3 #ccc'
+    },
   containerTitle:{
     flexDirection:'row',
     justifyContent:'space-between'
   },
   monthTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
-    color: '#32325D',
-    marginVertical: 8,
-    paddingHorizontal: 16,
+    color: Theme.colors.text,
+    marginBottom: 10,
+    paddingHorizontal: 15,
   },
 });
 

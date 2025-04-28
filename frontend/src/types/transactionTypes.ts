@@ -14,12 +14,13 @@ export type Transaction = {
   id: number;
   userId: string;
   categoryId: number;
-  categoryName: string;
+  category_name: string;
   amount: number;
   created_at: string;
-  type: 'income' | 'expence';
+  type: 'income' | 'expense';
   title: string; 
   description?: string; 
+  icon:string;
 };
 export interface TransactionSummary {
   totalBalance: number;
@@ -31,23 +32,3 @@ export interface TransactionsByMonth {
   [month: string]: Transaction[];
 }
 
-// export interface Transaction {
-//   id: string;
-//   category_id: number;
-//   amount: number;
-//   description: string;
-//   created_at: string;
-//   title: string;
-//   type: 'income' | 'expense';
-//   user_id: string;
-// }
-
-// export interface TransactionSummary {
-//   totalBalance: number;
-//   income: number;
-//   expense: number;
-// }
-
-// export interface TransactionsByMonth {
-//   [monthYear: string]: Transaction[];
-// }

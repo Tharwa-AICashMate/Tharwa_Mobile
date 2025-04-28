@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { getCurrentUserId } from "@/utils/auth";
 import { apiBase } from "@/utils/axiosInstance";
+import MonthSection from "@/componenets/MonthSection";
 
 dayjs.extend(utc);
 
@@ -137,30 +138,7 @@ const CategoryDetailScreen = () => {
           </View>
         ) : (
           Object.keys(groupedTransactions).map((month) => (
-            <View key={month} style={styles.monthSection}>
-              <Text style={styles.monthTitle}>{month}</Text>
-
-              {groupedTransactions[month].map((transaction) => {
-                console.log(new Date(transaction.created_at));
-                const dateFormatted = dayjs
-                  .utc(new Date(transaction.created_at))
-                  .local()
-                  .format("D MMM YYYY, h:mm A");
-
-                return (
-                  <TransactionItem
-                    key={transaction.transaction_id as any}
-                    id={transaction.transaction_id as any}
-                    title={transaction.title || categoryName}
-                    subtitle={dateFormatted}
-                    amount={transaction.amount}
-                    isDeposit={transaction.type === "income"}
-                    icon={Icon}
-                    iconBgColor={Theme.colors.accentLight}
-                  />
-                );
-              })}
-            </View>
+            <MonthSection key={month} month={month} transactions={groupedTransactions[month]} showCategory={false}/>
           ))
         )}
       </ScrollView>
