@@ -3,23 +3,22 @@ import { View, Text, Modal, TextInput, TouchableOpacity } from "react-native";
 import { getCurrentUserId } from "@/utils/auth";
 import { apiBase } from "@/utils/axiosInstance";
 import styles from "./styles";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { setUserBalance } from "@/redux/slices/AuthSlice";
 
 interface BalanceModalProps {
-  totalBalance: number | null;  // assuming it could be null initially
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  setTotalBalance: (balance: number) => void;
 }
 
 const BalanceModal: React.FC<BalanceModalProps> = ({
-  totalBalance,
   isOpen = false,
   setIsOpen,
-  setTotalBalance,
 }) => {
+  const totalBalance = useAppSelector(state => state.auth.user?.balance);
   const [inputValue, setInputValue] = useState<string>("");
   const [error, setError] = useState<string>("");
-
+  const dispatch = useAppDispatch()
   const handleSaveBalance = async () => {
     const parsed = parseFloat(inputValue);
     if (isNaN(parsed)) {
@@ -41,7 +40,7 @@ const BalanceModal: React.FC<BalanceModalProps> = ({
       });
 
       const data = await response.json();
-      setTotalBalance(data.balance_limit ?? parsed);
+      dispatch(setUserBalance(data.balance_limit ?? parsed));
     } catch (error) {
       console.error("Error saving balance:", error);
     } finally {

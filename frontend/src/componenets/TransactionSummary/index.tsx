@@ -6,6 +6,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Theme from '@/theme';
 import { useNavigation } from '@react-navigation/native';
 import { apiBase } from '@/utils/axiosInstance';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
+import { setUserBalance } from '@/redux/slices/AuthSlice';
 
 interface TransactionSummaryProps {
   activeTab: 'all' | 'income' | 'expence' | null;
@@ -18,7 +20,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   onSelectTab,
   transactions,  
 }) => {
-  const [totalBalance, setTotalBalance] = useState(0);
+  const totalBalance = useAppSelector(state => state.auth.user?.balance);
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
@@ -26,6 +28,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   const [inputValue, setInputValue] = useState('');
   const [inputIncomeValue, setInputIncomeValue] = useState('');
   const navigation = useNavigation();
+  const dispatch = useAppDispatch()
 
   // Calculate the sum of expenses
   const calculateTotalExpense = (transactions: { type: string; amount: number; }[]) => {
@@ -39,18 +42,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     setExpense(totalExpense);  
   }, [transactions]); 
 
-  const fetchBalance = async () => {
-    try {
-      const user_id = await getCurrentUserId();
-      const response = await fetch(`${apiBase}/api/balances/user/${user_id}`);
-      if (!response.ok) throw new Error('Failed to fetch balance');
-      const data = await response.json();
-      setTotalBalance(data.balance_limit || 0);
-      setIncome(data.income || 0);
-    } catch (error) {
-      console.error('Error fetching balance:', error);
-    }
-  };
+  
 
   const fetchIncome = async () => {
     try {
@@ -65,7 +57,6 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   };
 
   useEffect(() => {
-    fetchBalance();
     fetchIncome();
   }, []);
 
@@ -89,7 +80,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
       if (!response.ok) throw new Error('Failed to save balance');
 
       const data = await response.json();
-      setTotalBalance(data.balance_limit || parsed);
+      dispatch(setUserBalance(data.balance_limit || parsed));
       setIncome(data.income || 0);
       setExpense(data.expense || 0);
     } catch (error) {

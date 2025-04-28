@@ -21,6 +21,7 @@ import { Goal } from '@/types/goal';
 import AddCategoryModal from '@/componenets/AddCategoryModal';
 import { getCurrentUserId } from '@/utils/auth';
 import { apiBase } from '@/utils/axiosInstance';
+import ExpenseBrief from '@/componenets/expenceBrief';
 
 type SavingsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -37,7 +38,6 @@ const Savings = () => {
   const [newGoalName, setNewGoalName] = useState("");
   const [targetAmount, setTargetAmount] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("wallet-outline");
-  const [totalBalance, setTotalBalance] = useState(0);
 
   useEffect(() => {
     const loadUserIdAndGoals = async () => {
@@ -86,26 +86,6 @@ const Savings = () => {
     }
   };
 
-  const fetchBalance = async () => {
-    try {
-      const currentUserId = await getCurrentUserId();
-      if (!currentUserId) return;
-
-      const response = await fetch(`${apiBase}/api/balances/user/${currentUserId}`);
-      if (!response.ok) throw new Error('Failed to fetch balance');
-
-      const data = await response.json();
-      setTotalBalance(data.balance_limit || 0);
-    } catch (error) {
-      console.error('Error fetching balance:', error);
-    }
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchBalance();
-    }, [])
-  );
 
   const handleCancel = () => {
     setNewGoalName('');
@@ -147,22 +127,7 @@ const Savings = () => {
     <SafeAreaView style={styles.container}>
       <Header title="Savings" />
 
-      <View style={styles.balanceContainer}>
-        <BalanceDisplay balance={totalBalance} expense={1000} />
-      </View>
-
-      <View style={styles.budgetContainer}>
-        <View style={styles.progressContainer}>
-          <ProgressBar percentage={30} amount={122223} />
-        </View>
-
-        <View style={styles.budgetStatus}>
-          <Ionicons name="checkbox-outline" size={16} color={Theme.colors.text} />
-          <Text style={styles.budgetStatusText}>
-            30% Of Your Expenses, Looks Good.
-          </Text>
-        </View>
-      </View>
+      <ExpenseBrief/>
 
       <View style={styles.categoriesContainer}>
         <FlatList

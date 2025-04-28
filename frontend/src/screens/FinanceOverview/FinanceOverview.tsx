@@ -14,6 +14,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { getCurrentUserId } from '@/utils/auth';
 import { Ionicons } from "@expo/vector-icons";
 import { apiBase } from "@/utils/axiosInstance";
+import ExpenseBrief from "@/componenets/expenceBrief";
 
 const Container = styled.View`
   flex: 1;
@@ -71,30 +72,7 @@ const yearlyData = [
 
 export const FinanceOverview: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<"Daily" | "Weekly" | "Monthly" | "Year">("Daily");
-  const [totalBalance, setTotalBalance] = useState(0);
 
-  const fetchBalance = async () => {
-    try {
-      const user_id = await getCurrentUserId();
-      console.log("user_id", user_id);
-      const response = await fetch(`${apiBase}/api/balances/user/${user_id}`);
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch balance');
-      }
-      
-      const data = await response.json();
-      setTotalBalance(data.balance_limit || 0);
-    } catch (error) {
-      console.error('Error fetching balance:', error);
-    }
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchBalance();
-    }, [])
-  );
 
   const totalIncome = (selectedPeriod === "Daily" ? dailyData : selectedPeriod === "Weekly" ? weeklyData : selectedPeriod === "Monthly" ? monthlyData : yearlyData)
     .reduce((sum, item) => sum + (item.income || 0), 0);
@@ -105,22 +83,7 @@ export const FinanceOverview: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <Header title="Analysis" />
 
-      <View style={styles.balanceContainer}>
-        <BalanceDisplay balance={totalBalance} expense={400000} />
-      </View>
-
-      <View style={styles.budgetContainer}>
-        <View style={styles.progressContainer}>
-          <ProgressBar percentage={30} amount={40} />
-        </View>
-
-        <View style={styles.budgetStatus}>
-          <Ionicons name="checkbox-outline" size={16} color={Theme.colors.text} />
-          <Text style={styles.budgetStatusText}>
-            {30}% Of Your Expenses, Looks Good.
-          </Text>
-        </View>
-      </View>
+     <ExpenseBrief/>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.categoriesContainer}>

@@ -4,6 +4,7 @@ import { Transaction } from '@/types/transactionTypes';
 import Entypo from '@expo/vector-icons/Entypo';
 import Theme from '@/theme';
 import TransactionItem from "@/componenets/TransactionItem";
+import styles from './styles';
 interface MonthSectionProps {
   month: string;
   transactions: Transaction[];
@@ -31,25 +32,5 @@ const MonthSection: React.FC<MonthSectionProps> = ({ month, transactions,showCat
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width:"100%",
-    paddingHorizontal:20,
-    marginBottom: 20,
-    boxShadow:'0 1 3 #ccc'
-    },
-  containerTitle:{
-    flexDirection:'row',
-    justifyContent:'space-between'
-  },
-  monthTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: Theme.colors.text,
-    marginBottom: 10,
-    paddingHorizontal: 15,
-  },
-});
 
 export default MonthSection;

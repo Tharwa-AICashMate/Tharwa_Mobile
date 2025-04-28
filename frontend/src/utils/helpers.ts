@@ -1,23 +1,23 @@
 import { Transaction, TransactionSummary, TransactionsByMonth } from '@/types/transactionTypes';
 export const formatCurrency = (amount: number | undefined | null): string => {
-  if (amount === null || amount === undefined) {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(0);
-  }
-
   if (typeof amount !== 'number' || isNaN(amount)) {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD'
     }).format(0);
   }
+  let suffix =  ["", "K", "M", "B", "T"]
+  let index = 0;
 
+  while (amount >= 1000 && index < suffix.length - 1) {
+    amount /= 1000;
+    index++;
+  }
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD'
-  }).format(amount);
+    currency: 'USD',
+    notation: "compact"
+  }).format(amount) + suffix[index]
 };
 
 
@@ -48,9 +48,8 @@ export const groupTransactionsByMonth = (transactions: Transaction[]): Transacti
   const sorted = [...transactions].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   return sorted.reduce((acc: TransactionsByMonth, transaction) => {
     const date = new Date(transaction.created_at);
-    // const monthYear = `${getMonthName(date.getMonth())} ${date.getFullYear()}`;
-     const monthYear = `${getMonthName(date.getMonth())} `;
-    
+     const monthYear = `${getMonthName(date.getMonth())} ${date.getFullYear()}`;
+     
     if (!acc[monthYear]) {
       acc[monthYear] = [];
     }

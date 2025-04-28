@@ -19,7 +19,6 @@ import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import Theme from '@/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getCurrentUserId } from '@/utils/auth';
-import { supabase } from 'config/supabase';
 import { apiBase } from '@/utils/axiosInstance';
 
 const { height, width } = Dimensions.get('window');

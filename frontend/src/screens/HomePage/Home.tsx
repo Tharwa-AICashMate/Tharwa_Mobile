@@ -21,8 +21,10 @@ import { AppDispatch } from "@/redux/store";
 import { fetchTransactionsAsync } from "@/redux/slices/transactionSlice";
 import FinancialCategories from "@/componenets/HomeScreen/FinancialCategories";
 import BalanceModal from "@/componenets/EditBalanceModal";
+import { setUserBalance } from "@/redux/slices/AuthSlice";
+import ExpenseBrief from "@/componenets/expenceBrief";
 const Home: React.FC = () => {
-  const [totalBalance, setTotalBalance] = useState(0);
+  const totalBalance = useAppSelector(state => state.auth.user?.balance);
   const [openModal,setOpenModal] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useDispatch<AppDispatch>();
@@ -30,9 +32,11 @@ const Home: React.FC = () => {
     (state) => state.transactions.transactions
   );
   const totalExpences = transactions?.reduce(
-    (total, ele) => (total += ele.type == "expence" ? ele.amount : 0),
+    (total, ele) => (total += ele.type == "expense" ? ele.amount : 0),
     0
   )
+
+  const precentage = totalBalance ? totalExpences/totalBalance*100 : 0;
   const fetchBalance = async () => {
     try {
       const user_id = user!.id;
@@ -40,9 +44,9 @@ const Home: React.FC = () => {
       const respons = await axios.get(
         `${apiBase}/api/balances/user/${user_id}`
       );
+      dispatch(setUserBalance(respons.data?.balance_limit || 0));
 
-
-      setTotalBalance(respons.data?.balance_limit || 0);
+     
     } catch (error) {
       // show the balance model to enter balanace
       setOpenModal(true);
@@ -55,7 +59,7 @@ const Home: React.FC = () => {
     React.useCallback(() => {
       fetchBalance();
       dispatch(fetchTransactionsAsync());
-    }, [user])
+    }, [])
   );
   const budget = {
     totalExpenses: 0, // Replace with actual value or logic
@@ -72,39 +76,18 @@ const Home: React.FC = () => {
       />
       <Header title=" Home" />
       {/* budget */}
-      <View style={styles.budgetContainer}>
-        <BalanceDisplay
-          balance={totalBalance}
-          expense={totalExpences}
-        />
-      </View>
-
-      <View style={styles.budgetContainer}>
-        <View style={styles.progressContainer}>
-          <ProgressBar percentage={totalBalance ? totalExpences/totalBalance*100 : 0} amount={totalBalance} />
-        </View>
-        <View style={styles.budgetStatus}>
-          <Ionicons
-            name="checkbox-outline"
-            size={16}
-            color={Theme.colors.text}
-          />
-          <Text style={styles.budgetStatusText}>
-            {30}% Of Your Expenses, Looks Good.
-          </Text>
-        </View>
-      </View>
+      <ExpenseBrief />
 
       {/* <ScrollView style={styles.contentContainer}> */}
+     
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+         <View style={styles.contentBox}>
         {/* quick stats */}
         <QuickStatsCard
           savingsProgress={30}
           revenueLastWeek={2000}
           foodLastWeek={500}
         />
-     
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-         <View style={styles.contentBox}>
            <Text>hiiiiii</Text>
            <FinancialCategories />
          </View>
@@ -119,7 +102,7 @@ const Home: React.FC = () => {
         <TransactionList />
       </ScrollView> */}
     </ScrollView>
-    {!totalBalance && <BalanceModal setTotalBalance={setTotalBalance} totalBalance={totalBalance} isOpen={openModal} setIsOpen={setOpenModal}/>}
+    {!totalBalance && <BalanceModal isOpen={openModal} setIsOpen={setOpenModal}/>}
     
     </>
   );
