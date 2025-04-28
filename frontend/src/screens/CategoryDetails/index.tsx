@@ -141,8 +141,9 @@ const CategoryDetailScreen = () => {
               <Text style={styles.monthTitle}>{month}</Text>
 
               {groupedTransactions[month].map((transaction) => {
+                console.log(new Date(transaction.created_at));
                 const dateFormatted = dayjs
-                  .utc(transaction.created_at)
+                  .utc(new Date(transaction.created_at))
                   .local()
                   .format("D MMM YYYY, h:mm A");
 

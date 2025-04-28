@@ -54,7 +54,7 @@ export const createTransaction = createAsyncThunk(
       amount: number;
       type: "income" | "expence";
       title: string;
-      
+      created_at:Date
     },
     { rejectWithValue }
   ) => {
@@ -63,8 +63,10 @@ export const createTransaction = createAsyncThunk(
         `${apiBase}/transactions`,
         transaction
       );
+      console.log('---------------------------------',response.data);
       return response.data;
     } catch (error: any) {
+      console.log('------------------------',error)
       return rejectWithValue(error.message);
     }
   }

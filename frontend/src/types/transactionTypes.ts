@@ -16,7 +16,7 @@ export type Transaction = {
   categoryId: number;
   categoryName: string;
   amount: number;
-  date: string;
+  created_at: string;
   type: 'income' | 'expence';
   title: string; 
   description?: string; 

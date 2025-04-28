@@ -10,6 +10,7 @@ interface MonthSectionProps {
 }
 
 const MonthSection: React.FC<MonthSectionProps> = ({ month, transactions }) => {
+  console.log(transactions)
   return (
     <View style={styles.container}>
       <View style={styles.containerTitle}>

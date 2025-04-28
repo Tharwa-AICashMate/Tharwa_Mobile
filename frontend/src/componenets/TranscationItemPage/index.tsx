@@ -15,7 +15,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
     amount = 0,
     type = "expense",
     category = "fv",
-    date = new Date().toISOString(),
+    created_at = new Date().toISOString(),
     title = "No description",
   } = transaction;
 
@@ -24,7 +24,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
       <CategoryTransaction category={transaction.category as CategoryType} />
       <View style={styles.details}>
         <Text style={styles.description}>{title}</Text>
-        <Text style={styles.date}>{formatDate(date)}</Text>
+        <Text style={styles.date}>{formatDate(created_at)}</Text>
       </View>
       
       <View style={styles.seperator}>

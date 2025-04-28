@@ -23,7 +23,7 @@ export const formatCurrency = (amount: number | undefined | null): string => {
 
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
-
+  console.log(date);
   const day = date.getDate();
   const month = getMonthAbbreviation(date.getMonth());
 

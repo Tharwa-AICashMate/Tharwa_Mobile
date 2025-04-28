@@ -16,6 +16,7 @@ export const createTransaction = async (transaction: {
   amount: number;
   type: string;
   title: string;
+  created_at:Date
   
   
   
