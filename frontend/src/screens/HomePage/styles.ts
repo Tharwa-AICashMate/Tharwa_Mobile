@@ -7,8 +7,7 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.highlight,
   },
   scrollContent: {
-    flexGrow: 1,
-    paddingTop: 50,
+    flex:1
   },
   contentBox: {
     flex: 1,
