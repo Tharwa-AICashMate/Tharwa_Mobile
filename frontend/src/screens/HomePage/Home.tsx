@@ -20,14 +20,15 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { fetchTransactionsAsync } from "@/redux/slices/transactionSlice";
 import FinancialCategories from "@/componenets/HomeScreen/FinancialCategories";
+import BalanceModal from "@/componenets/EditBalanceModal";
 const Home: React.FC = () => {
   const [totalBalance, setTotalBalance] = useState(0);
+  const [openModal,setOpenModal] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
   const dispatch = useDispatch<AppDispatch>();
   const transactions = useAppSelector(
     (state) => state.transactions.transactions
   );
-  console.log(transactions);
   const totalExpences = transactions?.reduce(
     (total, ele) => (total += ele.type == "expence" ? ele.amount : 0),
     0
@@ -40,11 +41,12 @@ const Home: React.FC = () => {
         `${apiBase}/api/balances/user/${user_id}`
       );
 
-      //console.log(respons.data);
 
       setTotalBalance(respons.data?.balance_limit || 0);
     } catch (error) {
       // show the balance model to enter balanace
+      setOpenModal(true);
+      console.log(openModal);
       console.log("Error fetching balance:", error);
     }
   };
@@ -53,7 +55,7 @@ const Home: React.FC = () => {
     React.useCallback(() => {
       fetchBalance();
       dispatch(fetchTransactionsAsync());
-    }, [])
+    }, [user])
   );
   const budget = {
     totalExpenses: 0, // Replace with actual value or logic
@@ -61,6 +63,7 @@ const Home: React.FC = () => {
   };
 
   return (
+      <>
     <ScrollView style={styles.container}>
       <StatusBar
         style="light"
@@ -78,7 +81,7 @@ const Home: React.FC = () => {
 
       <View style={styles.budgetContainer}>
         <View style={styles.progressContainer}>
-          <ProgressBar percentage={totalExpences/totalBalance*100} amount={totalBalance} />
+          <ProgressBar percentage={totalBalance ? totalExpences/totalBalance*100 : 0} amount={totalBalance} />
         </View>
         <View style={styles.budgetStatus}>
           <Ionicons
@@ -116,6 +119,9 @@ const Home: React.FC = () => {
         <TransactionList />
       </ScrollView> */}
     </ScrollView>
+    {!totalBalance && <BalanceModal setTotalBalance={setTotalBalance} totalBalance={totalBalance} isOpen={openModal} setIsOpen={setOpenModal}/>}
+    
+    </>
   );
 };
 
