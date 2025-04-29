@@ -38,8 +38,8 @@ const Amount = styled.Text<{ isIncome?: boolean }>`
 
 const formatCurrency = (amount: number) => {
   return `$${amount.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
   })}`;
 };
 

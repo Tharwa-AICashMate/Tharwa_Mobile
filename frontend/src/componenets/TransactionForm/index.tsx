@@ -31,7 +31,7 @@ interface TransactionFormProps {
     category: string;
     amount: string;
     title: string;
-    type:"expence";
+    type:"expense";
     message: string;
   }) => void;
   initialCategory?: string;
@@ -88,7 +88,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       amount,
       title: titleValue,
       message,
-      type:"expence"
+      type:"expense",
+
     });
   };
 

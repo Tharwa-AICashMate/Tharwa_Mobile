@@ -73,7 +73,7 @@ import styled from "styled-components/native";
 import { StyleSheet } from "react-native";
 import Theme from "@/theme";
 
-type Period = "Daily" | "Weekly" | "Monthly" | "Year";
+type Period =  "Weekly" | "Monthly" | "Year";
 
 interface PeriodSelectorProps {
   selectedPeriod: Period;
@@ -100,7 +100,7 @@ const PeriodText = styled.Text<{ isSelected: boolean }>`
   font-weight: ${(props) => (props.isSelected ? "600" : "400")};
 `;
 
-const periods: Period[] = ["Daily", "Weekly", "Monthly", "Year"];
+const periods: Period[] = [ "Weekly", "Monthly", "Year"];
 
 export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
   selectedPeriod,
@@ -133,5 +133,7 @@ const styles = StyleSheet.create({
     margin: -2,
     marginBlock: 2,
     marginLeft: 3,
+    marginRight:"10%",
+
   },
 });
