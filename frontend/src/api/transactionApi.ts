@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { Transaction } from '../types';
 import { getCurrentUserId } from '../utils/auth';
 import { apiBase } from '@/utils/axiosInstance';
+import { Transaction } from '@/types/transactionTypes';
 
 const API_URL = apiBase;
 const userId = 'f955350c-5e5b-4410-907d-37985313e386'; 
@@ -16,8 +16,8 @@ export const fetchTransactions = async (): Promise<Transaction[]> => {
       ...transaction,
       amount: Number(transaction.amount) || 0,
       category: transaction.category_name.toLowerCase(),
-      date: transaction.date || new Date().toISOString(),
-    }));
+      created_at: transaction.created_at || new Date().toISOString(),
+    } as Transaction));
   } catch (error) {
     console.error('API Error:', error);
     throw new Error('Failed to fetch transactions');

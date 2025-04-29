@@ -56,11 +56,7 @@ const transactionSlice = createSlice({
       })
       .addCase(fetchTransactionsAsync.fulfilled, (state, action) => {
         state.loading = false;
-        const validTransactions = action.payload.map((t) => ({
-          ...t,
-          amount: Number(t.amount) || 0,
-          date: t.date || new Date().toISOString(),
-        }));
+        const validTransactions = action.payload as Transaction[];
         state.transactions = validTransactions;
         state.transactionsByMonth = groupTransactionsByMonth(validTransactions);
         state.summary = calculateTransactionSummary(validTransactions);

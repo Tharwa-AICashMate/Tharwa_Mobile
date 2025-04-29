@@ -43,6 +43,7 @@ const AddExpensesScreen = () => {
     title: string;
     type: "expence";
     message: string;
+    created_at:Date;
   }) => {
     const selectedCategory = categories.find((cat) => cat.name === data.category);
     if (!selectedCategory || !userId) {
@@ -55,6 +56,7 @@ const AddExpensesScreen = () => {
       amount: parseFloat(data.amount),
       type: data.type,
       title: data.title || data.category,
+      created_at:data.created_at
     };
 
     dispatch(createTransaction(newTransaction)).then((res) => {

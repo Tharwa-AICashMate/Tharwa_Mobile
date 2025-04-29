@@ -222,7 +222,13 @@ export const resetPassword = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setUserBalance: (state, action) => {
+      if (state.user) {
+        state.user = { ...state.user, balance: action.payload }; // Update balance
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.fulfilled, (state, action) => {
@@ -315,5 +321,8 @@ const authSlice = createSlice({
       });
   },
 });
+
+
+export const { setUserBalance } = authSlice.actions;
 
 export default authSlice.reducer;

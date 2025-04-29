@@ -1,29 +1,29 @@
 import { Transaction, TransactionSummary, TransactionsByMonth } from '@/types/transactionTypes';
 export const formatCurrency = (amount: number | undefined | null): string => {
-  if (amount === null || amount === undefined) {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(0);
-  }
-
   if (typeof amount !== 'number' || isNaN(amount)) {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD'
     }).format(0);
   }
+  let suffix =  ["", "K", "M", "B", "T"]
+  let index = 0;
 
+  while (amount >= 1000 && index < suffix.length - 1) {
+    amount /= 1000;
+    index++;
+  }
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD'
-  }).format(amount);
+    currency: 'USD',
+    notation: "compact"
+  }).format(amount) + suffix[index]
 };
 
 
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
-
+  console.log(date);
   const day = date.getDate();
   const month = getMonthAbbreviation(date.getMonth());
 
@@ -45,16 +45,14 @@ export const getMonthName = (month: number): string => {
 };
 
 export const groupTransactionsByMonth = (transactions: Transaction[]): TransactionsByMonth => {
-  const sorted = [...transactions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sorted = [...transactions].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   return sorted.reduce((acc: TransactionsByMonth, transaction) => {
-    const date = new Date(transaction.date);
-    // const monthYear = `${getMonthName(date.getMonth())} ${date.getFullYear()}`;
-        const monthYear = `${getMonthName(date.getMonth())} `;
-    
+    const date = new Date(transaction.created_at);
+     const monthYear = `${getMonthName(date.getMonth())} ${date.getFullYear()}`;
+     
     if (!acc[monthYear]) {
       acc[monthYear] = [];
     }
-    
     acc[monthYear].push(transaction);
     return acc;
   }, {});

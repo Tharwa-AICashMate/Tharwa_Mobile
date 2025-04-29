@@ -33,6 +33,7 @@ interface TransactionFormProps {
     title: string;
     type:"expence";
     message: string;
+    created_at:Date
   }) => void;
   initialCategory?: string;
   initialAmount?: string;
@@ -61,7 +62,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const [message, setMessage] = useState(initialMessage);
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
   const [validationError, setValidationError] = useState("");
-
+  let pressed = false;
   const handleDateChange = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(Platform.OS === "ios");
@@ -73,22 +74,23 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   };
 
   const handleSubmit = () => {
+    if(pressed) return;
     setValidationError("");
 
     if (!category || !amount) {
       setValidationError("Please fill in category and amount fields");
       return;
     }
-
+    pressed = true;
 
 
     onSubmit({
-    
       category,
       amount,
       title: titleValue,
       message,
-      type:"expence"
+      type:"expence",
+      created_at:date
     });
   };
 
