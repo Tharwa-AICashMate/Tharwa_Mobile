@@ -29,6 +29,7 @@ import { store } from "./src/redux/store";
 import MainNavigator from "@/navigation/MainNavigator";
 import { createStackNavigator } from "@react-navigation/stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
 import { Transaction } from "@/types/transactionTypes";
 
 export type RootStackParamList = {
@@ -81,6 +82,7 @@ export default function App() {
       <Provider store={store}>
         <MainNavigator />
       </Provider>
+      <Toast />
     </GestureHandlerRootView>
   );
 }
@@ -88,6 +90,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff", // You can use Theme.colors.background if needed
+    backgroundColor: "#fff", 
   },
 });

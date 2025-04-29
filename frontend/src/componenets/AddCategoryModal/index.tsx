@@ -11,7 +11,8 @@
 // import { Ionicons } from '@expo/vector-icons';
 // import Theme from '@/theme';
 // import { styles } from './style';
-
+//there is nothing to git add . 
+//thtere re=s-d[ispdofpos]
 // // Common icons that might be useful for categories
 // const CATEGORY_ICONS = [
 //   'wallet-outline',

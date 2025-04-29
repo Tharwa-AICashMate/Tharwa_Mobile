@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     color: Theme.colors.text,
   },
   menuIcon: {
-    marginLeft: 10,
+    
     padding: 5,
   },
   dropdownMenu: {

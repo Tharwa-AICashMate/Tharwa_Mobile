@@ -2,22 +2,7 @@ import axios from 'axios';
 import * as Location from 'expo-location';
 
 const ORS_API_KEY = '5b3ce3597851110001cf6248f38ae8dea5244702abb8b73a56c15a69';
-// export const calculateDistance = (
-//   lat1: number,
-//   lon1: number,
-//   lat2: number,
-//   lon2: number
-// ): number => {
-//   const R = 6371; // Earth radius in kilometers
-//   const dLat = deg2rad(lat2 - lat1);
-//   const dLon = deg2rad(lon2 - lon1);
-//   const a =
-//     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-//     Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-//     Math.sin(dLon / 2) * Math.sin(dLon / 2);
-//   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//   return R * c; // Distance in kilometers
-// };
+
   
 export const calculateDistance = async (
   lat1: number,

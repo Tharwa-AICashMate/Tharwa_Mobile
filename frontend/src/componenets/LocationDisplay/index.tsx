@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { setUserLocation } from "@/redux/slices/storeSlice";
-import { getCurrentLocation } from "@/utils/locationUtils";
 import Theme from "@/theme";
+import { getCurrentLocation } from "@/utils/locationutils";
 
 const LocationDisplay: React.FC = () => {
   const dispatch = useDispatch();

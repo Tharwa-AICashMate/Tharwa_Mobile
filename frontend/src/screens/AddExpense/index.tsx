@@ -65,7 +65,7 @@ const AddExpensesScreen = () => {
     category: string;
     amount: string;
     title: string;
-    type: "expence";
+    type: "expense";
     message: string;
     created_at: Date;
   }) => {

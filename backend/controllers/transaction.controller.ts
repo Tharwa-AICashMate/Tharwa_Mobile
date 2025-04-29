@@ -86,7 +86,7 @@ export const deleteTransaction = async (req: Request, res: Response) => {
   try {
     const transactionId = req.params.transactionId;
     
-    const newTransaction = await transactionService.deleteTransaction(transactionId);
+    await transactionService.deleteTransaction(transactionId);
 
     res.status(201).json('deleted sucessesfully');
   } catch (err: any) {

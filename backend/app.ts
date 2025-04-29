@@ -16,6 +16,9 @@ import incomeRoute from "./routes/income.route.js";
 import profileRoutes from "./routes/profile.route.js";
 import deleteAccount from "./routes/deleteAccount.route.js";
 import invoiceRoutes from "./routes/invoiceRoutes";
+import transactionWithCats from './routes/transwcat.route.js'
+import goalRoutes from './routes/goal.route.js'
+import searchRoutes from './routes/search.route.js'
 import bodyParser from "body-parser";
 dotenv.config();
 validateEnv();
@@ -44,6 +47,9 @@ app.use("/api", storeRoutes);
 app.use("/", incomeRoute);
 app.use("/profile", profileRoutes);
 app.use("/delete", deleteAccount);
+app.use("/", transactionWithCats);
+app.use("/", goalRoutes);
+app.use("/", searchRoutes);
 
 app.post("/", (req, res) => {
   res.send("Welcome to the backend API!");

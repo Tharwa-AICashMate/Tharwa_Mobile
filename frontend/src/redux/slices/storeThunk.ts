@@ -11,7 +11,7 @@ import {
 import axios from "axios";
 
 import { API_ENDPOINTS } from "../../api/aiApi";
-import { calculateDistance } from "@/utils/locationUtils";
+import { calculateDistance } from "@/utils/locationutils";
 
 export const runAnalysis = createAsyncThunk(
   "store/runAnalysis",
