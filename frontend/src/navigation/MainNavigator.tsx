@@ -41,7 +41,6 @@ export default function MainNavigator() {
   const [session, setSession] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const user = useAppSelector((state) => state.auth.user);
-  const userExist = user !== null;
   console.log("from nav", user);
   useEffect(() => {
     dispatch(fetchCurrentUser()).then((res) => {
@@ -51,20 +50,8 @@ export default function MainNavigator() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session ? true : false);
     });
-  }, [userExist]);
-  if (!user)
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#FFFFFF",
-        }}
-      >
-        <ActivityIndicator size="large" color="#FFC107" />
-      </View>
-    );
+  }, []);
+
   return (
     <>
       <NavigationContainer>

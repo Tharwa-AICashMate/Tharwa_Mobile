@@ -8,7 +8,8 @@ import { Request, Response } from 'express';
 export const getTransactions = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
-    const transactions = await transactionService.getAllTransactions(userId);
+    const page = parseInt(req.query.page as string) || 1;
+    const transactions = await transactionService.getAllTransactions(userId,page);
     res.json(transactions);
   } catch (err: any) {
     res.status(500).json({ 
@@ -46,7 +47,9 @@ export const getTransactionsByCategory = async (req: Request, res: Response) => 
   try {
     const userId = req.params.userId;
     const categoryId = Number(req.params.categoryId);
-    const transactions = await transactionService.getTransactionsByCategory(userId, categoryId);
+    const page = parseInt(req.query.page as string) || 1;
+    
+    const transactions = await transactionService.getTransactionsByCategory(userId, categoryId, page);
     res.json(transactions);
   } catch (error: any) {
     res.status(500).json({ error: error.message });

@@ -1,11 +1,15 @@
 import { supabase } from "../config/supabase.js";
 
-export const getAllTransactions = async (userId: string) => {
+export const getAllTransactions = async (userId: string, page = 1) => {
+  const from = (page - 1) * 20;
+  const to = from + 20 - 1;
+
   const { data, error } = await supabase
     .from("transaction_with_category")
     .select("*")
     .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
   if (error) throw new Error(error.message);
   return data;
@@ -28,14 +32,19 @@ export const createTransaction = async (transaction: {
 
 export const getTransactionsByCategory = async (
   userId: string,
-  categoryId: number
+  categoryId: number,
+  page = 1,
 ) => {
+  const from = (page - 1) * 20;
+  const to = from + 20 - 1;
+
   const { data, error } = await supabase
     .from("transaction_with_category")
     .select("*")
     .eq("user_id", userId)
     .eq("category_id", categoryId)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
   if (error) throw new Error(error.message);
   return data;

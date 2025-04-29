@@ -16,7 +16,6 @@ const MonthSection: React.FC<MonthSectionProps> = ({
   transactions,
   showCategory,
 }) => {
-  console.log(transactions);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
   const handleToggleMenu = (id: string) => {

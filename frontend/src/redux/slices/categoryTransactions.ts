@@ -2,6 +2,7 @@ import { Transaction } from "@/types/transactionTypes";
 import { apiBase } from "@/utils/axiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { addTransaction } from "./financeSlice";
 
 interface TransactionState {
   data: Transaction[];
@@ -22,14 +23,21 @@ const initialState: TransactionState = {
 export const fetchTransactionsByCategory = createAsyncThunk(
   "transactions/fetchByCategory",
   async (
-    { userId, categoryId }: { userId: string; categoryId: number },
+    {
+      userId,
+      categoryId,
+      page = 1,
+    }: { userId: string; categoryId: number; page?: number },
     { rejectWithValue }
   ) => {
     try {
       const response = await axios.get(
-        `${apiBase}/transactions/${userId}/category/${categoryId}`
+        `${apiBase}/transactions/${userId}/category/${categoryId}?page=${page}`
       );
-      return response.data;
+      return {
+        transactions: response.data,
+        page,
+      };
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -42,15 +50,21 @@ export const createTransaction = createAsyncThunk(
     transaction: {
       category_id: number;
       amount: number;
-      type: "income" | "expence";
+      type: "income" | "expense";
       title: string;
       created_at: Date;
     },
-    { rejectWithValue }
+    { rejectWithValue, dispatch }
   ) => {
     try {
       console.log(transaction);
       const response = await axios.post(`${apiBase}/transactions`, transaction);
+      dispatch(
+        addTransaction({
+          type: transaction.type , 
+          amount: transaction.amount,
+        })
+      );
       console.log("---------------------------------", response.data);
       return response.data;
     } catch (error: any) {
@@ -75,6 +89,7 @@ const transactionSlice = createSlice({
     },
     updateCategoryTransactions: (state, action) => {
       console.log(state.data[0]);
+      console.log(action.payload);
       state.data = state.data.map((item) =>
         item.transaction_id == action.payload.id ? action.payload.item : item
       );
@@ -89,7 +104,22 @@ const transactionSlice = createSlice({
       })
       .addCase(fetchTransactionsByCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        const { transactions, page } = action.payload;
+
+        if (page === 1) {
+          state.data = transactions;
+        } else {
+          const existingIds = new Set(state.data.map((t) => t.transaction_id));
+          const newTransactions = transactions.filter(
+            (t) => !existingIds.has(t.transaction_id)
+          );
+
+          state.data = [...state.data, ...newTransactions];
+        }
+
+        console.log(
+          `Total transactions after page ${page}: ${state.data.length}`
+        );
       })
       .addCase(fetchTransactionsByCategory.rejected, (state, action) => {
         state.loading = false;
@@ -110,5 +140,9 @@ const transactionSlice = createSlice({
       });
   },
 });
-export const { clearTransactions,deleteCategoryTransactions,updateCategoryTransactions } = transactionSlice.actions;
+export const {
+  clearTransactions,
+  deleteCategoryTransactions,
+  updateCategoryTransactions,
+} = transactionSlice.actions;
 export default transactionSlice.reducer;

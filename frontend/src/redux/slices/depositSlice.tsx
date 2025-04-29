@@ -2,13 +2,15 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { IDeposit, IDepositCreate, IDepositUpdate } from'@/types/depositType';
 import { apiBase } from '@/utils/axiosInstance';
+import { addSavings } from './financeSlice';
 
 const API_URL = `${apiBase}/deposits`; 
 
 export const createDeposit = createAsyncThunk(
   'deposits/createDeposit',
-  async (data: IDepositCreate) => {
+  async (data: IDepositCreate,{dispatch}) => {
     const response = await axios.post<IDeposit>(`${API_URL}`, data);
+    dispatch(addSavings(response.data.amount));
     return response.data;
   }
 );

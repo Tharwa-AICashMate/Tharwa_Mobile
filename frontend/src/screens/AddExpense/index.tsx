@@ -38,24 +38,23 @@ const AddExpensesScreen = () => {
   const { items: categories } = useAppSelector((state) => state.categories);
   const route = useRoute<editRouteProp>();
 
-  //const [userId, setUserId] = useState<string | null>(null);
-  const userId = useAppSelector((state) => state.auth.user?.id);
+  const [userId, setUserId] = useState<string | null>(null);
   const data = route.params;
   const transaction = data?.transaction;
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     const fetchUserId = async () => {
-  //       try {
-  //         const id = await getCurrentUserId();
-  //         setUserId(id);
-  //       } catch (error) {
-  //         console.error("Failed to get user ID:", error);
-  //       }
-  //     };
+  useFocusEffect(
+    useCallback(() => {
+      const fetchUserId = async () => {
+        try {
+          const id = await getCurrentUserId();
+          setUserId(id);
+        } catch (error) {
+          console.error("Failed to get user ID:", error);
+        }
+      };
 
-  //     fetchUserId();
-  //   }, [])
-  // );
+      fetchUserId();
+    }, [])
+  );
 
   useEffect(() => {
     if (!categories.length && userId) dispatch(fetchUserCategories(userId));
@@ -92,9 +91,9 @@ const AddExpensesScreen = () => {
           id: transaction.transaction_id,
         })
       ).then((res) => {
-        if (res.meta.requestStatus === "fulfilled") {
+        
           navigation.goBack();
-        }
+        
       });
     } else
       dispatch(createTransaction(newTransaction)).then((res) => {

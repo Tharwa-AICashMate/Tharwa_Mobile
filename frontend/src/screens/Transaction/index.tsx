@@ -18,22 +18,55 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import TransactionSummary from "@/componenets/TransactionSummary";
 import Theme from "@/theme";
+import { groupTransactionsByMonth } from "@/utils/helpers";
 
 type FilterType = "all" | "income" | "expence";
 
 const TransactionScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { transactionsByMonth, summary, loading, error } = useSelector(
+  const { transactions, summary, loading, error } = useSelector(
     (state: RootState) => state.transactions
   );
   const [activeTab, setActiveTab] = useState<FilterType>("all");
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const navigation = useNavigation();
+
+  const loadTransactions = async (reset = false) => {
+    try {
+      const newPage = reset ? 1 : page + 1;
+      console.log("Fetching page:", newPage);
+      
+      const result = await dispatch(fetchTransactionsAsync({ page: newPage }));
+      const payload = result.payload.transactions;
+      
+      if (reset) {
+        setPage(1);
+      } else {
+        setPage(newPage);
+      }
+      
+      if (!payload || payload.length < 20) {
+        console.log("No more transactions to load");
+        setHasMore(false);
+      }
+    } catch (err) {
+      console.error("Error loading transactions:", err);
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(fetchTransactionsAsync());
+      loadTransactions(true);
     }, [dispatch])
   );
+
+  const handleLoadMore = () => {
+    if (hasMore && !loading) {
+      console.log("Loading more transactions, current page:", page);
+      loadTransactions(false);
+    }
+  };
 
   const filterTransactions = (transactions: Transaction[]): Transaction[] => {
     if (activeTab === "all") return transactions;
@@ -56,13 +89,17 @@ const TransactionScreen: React.FC = () => {
     );
   };
 
-  // if (loading) {
-  //   return (
-  //     <View style={styles.loadingContainer}>
-  //       <ActivityIndicator size="large" color="#FFC107" />
-  //     </View>
-  //   );
-  // }
+  const renderFooter = () => {
+    if (loading && page > 1) {
+      return (
+        <View style={styles.footerLoadingContainer}>
+          <ActivityIndicator size="large" color="#FFC107" />
+          <Text style={styles.loadingText}>Loading more transactions...</Text>
+        </View>
+      );
+    }
+    return null;
+  };
 
   if (error) {
     return (
@@ -80,6 +117,7 @@ const TransactionScreen: React.FC = () => {
   const handleBack = () => {
     navigation.goBack();
   };
+  console.log(page)
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -87,24 +125,27 @@ const TransactionScreen: React.FC = () => {
         <TransactionSummary
           activeTab={activeTab}
           onSelectTab={setActiveTab}
-          transactions={Object.values(transactionsByMonth).flat()}
         />
-        {loading ? (
+        {loading && transactions.length == 0 ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#FFC107" />
           </View>
         ) : (
           <View style={styles.contentContainer}>
             <FlatList
-              data={Object.entries(transactionsByMonth)}
+              data={Object.entries(groupTransactionsByMonth(transactions))}
               keyExtractor={(item) => item[0]}
               renderItem={renderMonthSection}
               showsVerticalScrollIndicator={false}
               initialNumToRender={3}
               windowSize={5}
               removeClippedSubviews={true}
+              onEndReached={handleLoadMore}
+              onEndReachedThreshold={0.8}
+              ListFooterComponent={renderFooter}
             />
           </View>
+
         )}
       </View>
     </SafeAreaView>
@@ -190,6 +231,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  footerLoadingContainer: {
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  loadingText: {
+    marginLeft: 10,
+    fontSize: 14,
+    color: '#666',
+  }
 });
 
 export default TransactionScreen;

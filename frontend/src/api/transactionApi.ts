@@ -5,12 +5,12 @@ import { Transaction } from "@/types/transactionTypes";
 
 const API_URL = apiBase;
 const userId = "f955350c-5e5b-4410-907d-37985313e386";
-export const fetchTransactions = async (): Promise<Transaction[]> => {
+export const fetchTransactions = async (page = 1): Promise<Transaction[]> => {
   try {
     const userId = await getCurrentUserId();
     if (!userId) throw new Error("User ID not found");
 
-    const response = await axios.get(`${API_URL}/transactions/${userId}`);
+    const response = await axios.get(`${API_URL}/transactions/${userId}?page=${page}`);
 
     return response.data.map(
       (transaction: any) =>

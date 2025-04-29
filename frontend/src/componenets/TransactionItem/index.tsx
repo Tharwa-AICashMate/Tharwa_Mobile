@@ -50,7 +50,6 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
   const handleDelete = () => {
     onToggleMenu(null);
     dispatch(deleteTransactionsAsync(transaction.transaction_id))
-   // onDelete?.(transaction);
   };
 
   return (

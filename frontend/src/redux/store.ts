@@ -8,6 +8,7 @@ import categoriesReducer from './slices/categoriesSlice';
 import depositReducer from './slices/depositSlice'
 import groceryReducer from './slices/grocerySlice';
 import storeReducer from './slices/storeSlice';
+import financeReducer from './slices/financeSlice';
 import  categoryTransactionReducer from './slices/categoryTransactions'
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     deposits: depositReducer,
     grocery: groceryReducer,
     store: storeReducer,
+    finance:financeReducer,
     transactionsByCategory: categoryTransactionReducer,
   },
   middleware: (getDefaultMiddleware) =>

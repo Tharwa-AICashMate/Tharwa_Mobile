@@ -3,7 +3,6 @@ import {
   fetchCategories,
   createCategory,
   deleteCategory,
-
 } from '@/api/categories';
 import { Category } from '@/types/category';
 import { CreateCategoryDTO } from '@/types/category';

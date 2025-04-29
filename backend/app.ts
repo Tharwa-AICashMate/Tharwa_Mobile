@@ -11,14 +11,14 @@ import storeRoutes from "./routes/storeRoutes.js";
 import aiRouter from "./routes/aiRoute.js";
 import { validateEnv } from "./utils/validateEnv.js";
 import { supabase } from "./utils/supabaseClient.js";
-import RagService from "./services/ragService.js";
 import incomeRoute from "./routes/income.route.js";
 import profileRoutes from "./routes/profile.route.js";
 import deleteAccount from "./routes/deleteAccount.route.js";
 import invoiceRoutes from "./routes/invoiceRoutes";
 import transactionWithCats from './routes/transwcat.route.js'
 import goalRoutes from './routes/goal.route.js'
-import searchRoutes from './routes/search.route.js'
+import searchRoutes from './routes/search.route.js';
+import financeRoutes from './routes/financeRoute.js';
 import bodyParser from "body-parser";
 dotenv.config();
 validateEnv();
@@ -50,6 +50,8 @@ app.use("/delete", deleteAccount);
 app.use("/", transactionWithCats);
 app.use("/", goalRoutes);
 app.use("/", searchRoutes);
+app.use('/finance', financeRoutes);
+
 
 app.post("/", (req, res) => {
   res.send("Welcome to the backend API!");
