@@ -14,6 +14,9 @@ import { formatCurrency, formatDate } from "@/utils/helpers";
 import { Transaction } from "@/types/transactionTypes";
 import { deleteTransactionsAsync } from "@/redux/slices/transactionSlice";
 import { useAppDispatch } from "@/redux/hook";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "App";
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -23,6 +26,10 @@ interface TransactionItemProps {
   onToggleMenu: (id: string) => void;
 }
 
+type navProps = NativeStackScreenProps<
+  RootStackParamList,
+  "CategoryDetail"
+>;
 const TransactionItem: React.FC<TransactionItemProps> = ({
   transaction,
   iconBgColor = Theme.colors.accentLight,
@@ -32,10 +39,12 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
 }) => {
   const menuVisible = isMenuVisible;
   const dispatch = useAppDispatch()
+  const navigation = useNavigation<navProps>();
+  
 
   const handleEdit = () => {
     onToggleMenu(null);
-   // onEdit?.(transaction);
+    navigation.navigate("AddExpensesScreen",{transaction});
   };
 
   const handleDelete = () => {

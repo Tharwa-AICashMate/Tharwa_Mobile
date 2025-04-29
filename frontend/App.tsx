@@ -29,6 +29,7 @@ import { store } from "./src/redux/store";
 import MainNavigator from "@/navigation/MainNavigator";
 import { createStackNavigator } from "@react-navigation/stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Transaction } from "@/types/transactionTypes";
 
 export type RootStackParamList = {
   Categories: undefined;
@@ -38,7 +39,7 @@ export type RootStackParamList = {
     UserId: string;
     Icon: string;
   };
-  AddExpensesScreen: undefined;
+  AddExpensesScreen: { transaction: Transaction|undefined};
   Savings: { categoryName: string };
   SavingDetails: {
     categoryName: string;
@@ -78,9 +79,7 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
-        {/* <NavigationContainer> */}
         <MainNavigator />
-        {/* </NavigationContainer> */}
       </Provider>
     </GestureHandlerRootView>
   );

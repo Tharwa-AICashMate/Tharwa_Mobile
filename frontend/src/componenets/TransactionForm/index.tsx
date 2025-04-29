@@ -14,6 +14,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Theme from "@/theme";
 import styles from "./style";
 import { Keyboard } from "react-native";
+import { Transaction } from "@/types/transactionTypes";
 
 interface Category {
   id?: number;
@@ -83,7 +84,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     }
     pressed = true;
 
-
+    console.log({
+      category,
+      amount,
+      title: titleValue,
+      message,
+      type:"expense",
+      created_at:date
+    })
     onSubmit({
       category,
       amount,

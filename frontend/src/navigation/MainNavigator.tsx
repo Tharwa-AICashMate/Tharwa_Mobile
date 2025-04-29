@@ -19,7 +19,7 @@ import { supabase } from "@/utils/supabase";
 import Savings from "@/screens/Savings";
 import SavingDetails from "@/screens/SavingDetails";
 import AddSavingsScreen from "@/screens/AddSavings";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import BottomTabs from "@/componenets/BottomNav/BottomTabs";
 import Theme from "@/theme";
 import { Session } from "@supabase/supabase-js";
@@ -40,19 +40,31 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 export default function MainNavigator() {
   const [session, setSession] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
-  const user = useAppSelector(state => state.auth.user)
-  console.log(user)
+  const user = useAppSelector((state) => state.auth.user);
+  const userExist = user !== null;
+  console.log("from nav", user);
   useEffect(() => {
-    dispatch(fetchCurrentUser()).then(res => {
-      if (fetchCurrentUser.fulfilled.match(res)) 
-        setSession(true);
-    })
-    
+    dispatch(fetchCurrentUser()).then((res) => {
+      if (fetchCurrentUser.fulfilled.match(res)) setSession(true);
+    });
+
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session ? true : false);
     });
-  }, []);
-
+  }, [userExist]);
+  if (!user)
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#FFFFFF",
+        }}
+      >
+        <ActivityIndicator size="large" color="#FFC107" />
+      </View>
+    );
   return (
     <>
       <NavigationContainer>

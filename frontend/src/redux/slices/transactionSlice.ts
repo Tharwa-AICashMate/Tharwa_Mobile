@@ -9,7 +9,7 @@ import {
   groupTransactionsByMonth,
   calculateTransactionSummary,
 } from "../../utils/helpers";
-import { deleteCategoryTransactions } from "./categoryTransactions";
+import { deleteCategoryTransactions, updateCategoryTransactions } from "./categoryTransactions";
 
 interface TransactionState {
   transactions: Transaction[];
@@ -56,8 +56,12 @@ export const deleteTransactionsAsync = createAsyncThunk(
 
 export const editTransactionsAsync = createAsyncThunk(
   "transactions/editTransactions",
-  async () => {
-    return await api.editTransactions();
+  async (transaction:Transaction,thunkAPI) => {
+    console.log(transaction)
+    const res =  await api.editTransactions(transaction);
+    thunkAPI.dispatch(updateCategoryTransactions({id:transaction.id,item:transaction}))
+    console.log(res)
+    return res
   }
 );
 const transactionSlice = createSlice({

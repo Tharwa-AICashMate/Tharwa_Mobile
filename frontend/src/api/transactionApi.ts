@@ -54,9 +54,10 @@ export const deleteTransactions = async (
   }
 };
 
-export const editTransaction = async (
+export const editTransactions = async (
   transaction: Transaction
 ): Promise<Transaction> => {
+  console.log(transaction);
   try {
     const response = await axios.put(
       `${API_URL}/transactions/${transaction.id}`,

@@ -48,22 +48,23 @@ export const deleteTransaction = async (transactionId: string) => {
     .eq("id", transactionId);
 
   if (error) throw new Error(error.message);
-  return ;
+  return;
 };
 export const editTransaction = async (transaction: {
-  user_id: string;
   category_id: number;
   amount: number;
   type: string;
   title: string;
   created_at: Date;
-  transactionId: string;
+  id: string;
 }) => {
   const { data, error } = await supabase
     .from("transactions")
-    .insert([transaction])
-    .select();
-
+    .update(transaction)
+    .eq("id", transaction.id)
+    .select()
+    .single();
+  console.log(transaction, data,error);
   if (error) throw new Error(error.message);
   return data?.[0];
 };
