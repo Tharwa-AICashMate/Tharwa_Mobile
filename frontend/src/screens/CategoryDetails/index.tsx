@@ -59,7 +59,7 @@ const CategoryDetailScreen = () => {
 
   const groupedTransactions = groupTransactionsByMonth(TransactionsOfCategory);
   const addExpense = () => {
-    navigation.navigate("AddExpensesScreen");
+    navigation.replace("AddExpensesScreen");
   };
 
   return (

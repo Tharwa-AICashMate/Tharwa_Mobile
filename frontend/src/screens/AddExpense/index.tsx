@@ -61,7 +61,7 @@ const AddExpensesScreen = () => {
 
     dispatch(createTransaction(newTransaction)).then((res) => {
       if (res.meta.requestStatus === "fulfilled") {
-        navigation.navigate("CategoryDetail", {
+        navigation.replace("CategoryDetail", {
           categoryName: selectedCategory.name,
           categoryId: selectedCategory.id as number,
           UserId: userId,

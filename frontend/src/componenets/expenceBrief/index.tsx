@@ -26,7 +26,7 @@ const ExpenseBrief: React.FC = () => {
 
       <View style={styles.budgetContainer}>
         <View style={styles.progressContainer}>
-          <ProgressBar percentage={percentage} amount={balance || 0} />
+          <ProgressBar percentage={percentage?.toFixed(2)} amount={balance || 0} />
         </View>
         <View style={styles.budgetStatus}>
           <Ionicons
@@ -35,7 +35,7 @@ const ExpenseBrief: React.FC = () => {
             color={Theme.colors.text}
           />
           <Text style={styles.budgetStatusText}>
-            {percentage}% Of Your Expenses, Looks{" "}
+            {percentage?.toFixed(2)}% Of Your Expenses, Looks{" "}
             {percentage < 50 ? "Good" : "Bad"}.
           </Text>
         </View>
