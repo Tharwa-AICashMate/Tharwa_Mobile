@@ -33,13 +33,15 @@ import HelpCenterScreen from "@/screens/EditProfile/HelpCenterScreen";
 import { useDispatch } from "react-redux";
 import { fetchCurrentUser } from "@/redux/slices/AuthSlice";
 import { AppDispatch } from "@/redux/store";
+import { useAppSelector } from "@/redux/hook";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export default function MainNavigator() {
   const [session, setSession] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
-
+  const user = useAppSelector(state => state.auth.user)
+  console.log(user)
   useEffect(() => {
     dispatch(fetchCurrentUser()).then(res => {
       if (fetchCurrentUser.fulfilled.match(res)) 

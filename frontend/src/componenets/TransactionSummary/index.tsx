@@ -20,7 +20,8 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   onSelectTab,
   transactions,  
 }) => {
-  const totalBalance = useAppSelector(state => state.auth.user?.balance);
+  const totalBalance = useAppSelector(state => state.auth.user?.balance) || 0;
+  console.log('-------------------------',totalBalance)
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
@@ -33,13 +34,21 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   // Calculate the sum of expenses
   const calculateTotalExpense = (transactions: { type: string; amount: number; }[]) => {
     return transactions
-      .filter(transaction => transaction.type === 'expence')
+      .filter(transaction => transaction.type === 'expense')
       .reduce((sum, transaction) => sum + transaction.amount, 0);
   };
 
+  const calculateTotaIncome = (transactions: { type: string; amount: number; }[]) => {
+    return transactions
+      .filter(transaction => transaction.type === 'income')
+      .reduce((sum, transaction) => sum + transaction.amount, 0);
+  };
   useEffect(() => {
     const totalExpense = calculateTotalExpense(transactions);
+    const totalIncome = calculateTotaIncome(transactions);
+
     setExpense(totalExpense);  
+    setIncome(totalIncome)
   }, [transactions]); 
 
   
@@ -48,7 +57,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     try {
       const user_id = await getCurrentUserId();
       const response = await fetch(`${apiBase}/income/${user_id}`);
-      if (!response.ok) throw new Error('Failed to fetch income');
+     // if (!response.ok) throw new Error('Failed to fetch income');
       const data = await response.json();
       setIncome(data.income || 0);
     } catch (error) {
@@ -56,9 +65,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     }
   };
 
-  useEffect(() => {
-    fetchIncome();
-  }, []);
+
 
   const handleSaveBalance = async () => {
     const parsed = parseFloat(inputValue);
@@ -127,7 +134,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     <View style={styles.container}>
       <TouchableOpacity style={styles.balanceContainer} onPress={() => onSelectTab('all')}>
         <Text style={styles.balanceLabel}>Total Balance</Text>
-        <Text style={styles.balanceAmount}>${totalBalance.toFixed(2)}</Text>
+        <Text style={styles.balanceAmount}>${(totalBalance + income - expense)?.toFixed(2)}</Text>
       </TouchableOpacity>
 
       <View style={styles.tabsContainer}>
@@ -147,16 +154,16 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.tab, activeTab === 'expence' && styles.activeTab]}
-          onPress={() => onSelectTab('expence')}
+          style={[styles.tab, activeTab === 'expense' && styles.activeTab]}
+          onPress={() => onSelectTab('expense')}
         >
           <MaterialCommunityIcons
             name="arrow-bottom-left-bold-box-outline"
             size={24}
-            color={activeTab === 'expence' ? '#fff' : '#202063'}
+            color={activeTab === 'expense' ? '#fff' : '#202063'}
           />
-          <Text style={[styles.tabLabel, activeTab === 'expence' && styles.activeTabText]}>Expense</Text>
-          <Text style={[styles.tabAmount, activeTab === 'expence' && styles.activeTabText]}>
+          <Text style={[styles.tabLabel, activeTab === 'expense' && styles.activeTabText]}>Expense</Text>
+          <Text style={[styles.tabAmount, activeTab === 'expense' && styles.activeTabText]}>
             ${expense.toFixed(2)}  
           </Text>
         </TouchableOpacity>

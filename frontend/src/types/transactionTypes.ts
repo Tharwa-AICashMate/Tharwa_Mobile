@@ -11,7 +11,7 @@ export type CategoryType =
   | 'gifts'
   | 'others';
 export type Transaction = {
-  id: number;
+  transaction_id: number;
   userId: string;
   categoryId: number;
   category_name: string;

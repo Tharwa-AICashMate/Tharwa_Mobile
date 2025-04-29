@@ -37,7 +37,7 @@ interface BalanceInput {
 export const createBalanceService = async (balance: BalanceInput) => {
   const { data, error } = await supabase
     .from('balance')
-    .insert([balance])
+    .upsert([balance], {  onConflict: 'user_id'})
     .select()
     .single();
 

@@ -2,7 +2,6 @@ import authReducer from "./slices/AuthSlice";
 import { configureStore } from '@reduxjs/toolkit';
 import settingsReducer from './slices/settingsSlice';
 import helpCenterReducer from './slices/helpCenterSlice';
-import expenseReducer from './slices/expenseSlice';
 import goalsReducer from './slices/savingSlice';
 import transactionReducer from './slices/transactionSlice'
 import categoriesReducer from './slices/categoriesSlice';
@@ -15,7 +14,6 @@ export const store = configureStore({
     categories: categoriesReducer,
     settings: settingsReducer,
     helpCenter: helpCenterReducer,
-    expenses: expenseReducer,
     goals: goalsReducer,
     transactions: transactionReducer,
     auth: authReducer,

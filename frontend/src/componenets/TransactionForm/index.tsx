@@ -89,7 +89,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       amount,
       title: titleValue,
       message,
-      type:"expence",
+      type:"expense",
       created_at:date
     });
   };

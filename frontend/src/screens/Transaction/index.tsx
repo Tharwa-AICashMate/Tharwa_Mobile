@@ -41,7 +41,7 @@ const TransactionScreen: React.FC = () => {
     if (filteredTransactions.length === 0) return null;
     
     return (
-      <MonthSection key={month} month={month} transactions={filteredTransactions}  />
+      <MonthSection key={month} month={month} transactions={filteredTransactions} showCategory={true} />
     );
   };
   
@@ -77,7 +77,7 @@ const TransactionScreen: React.FC = () => {
         <TransactionSummary
           activeTab={activeTab}
           onSelectTab={setActiveTab}
-          transactions={filterTransactions(Object.values(transactionsByMonth).flat())} 
+          transactions={Object.values(transactionsByMonth).flat()} 
         />
         
         <View style={styles.contentContainer}>

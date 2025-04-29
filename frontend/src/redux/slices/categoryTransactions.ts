@@ -3,7 +3,6 @@ import { apiBase } from "@/utils/axiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
 interface TransactionState {
   data: Transaction[];
   loading: boolean;
@@ -45,19 +44,17 @@ export const createTransaction = createAsyncThunk(
       amount: number;
       type: "income" | "expence";
       title: string;
-      created_at:Date
+      created_at: Date;
     },
     { rejectWithValue }
   ) => {
     try {
-      const response = await axios.post(
-        `${apiBase}/transactions`,
-        transaction
-      );
-      console.log('---------------------------------',response.data);
+      console.log(transaction);
+      const response = await axios.post(`${apiBase}/transactions`, transaction);
+      console.log("---------------------------------", response.data);
       return response.data;
     } catch (error: any) {
-      console.log('------------------------',error)
+      console.log("------------------------", error);
       return rejectWithValue(error.message);
     }
   }
@@ -69,6 +66,18 @@ const transactionSlice = createSlice({
   reducers: {
     clearTransactions: (state) => {
       state.data = [];
+    },
+    deleteCategoryTransactions: (state, action) => {
+      console.log(state.data[0]);
+      state.data = state.data.filter(
+        (item) => item.transaction_id !== action.payload
+      );
+    },
+    updateCategoryTransactions: (state, action) => {
+      console.log(state.data[0]);
+      state.data = state.data.map((item) =>
+        item.transaction_id == action.payload.id ? action.payload.item : item
+      );
     },
   },
   extraReducers: (builder) => {
@@ -101,5 +110,5 @@ const transactionSlice = createSlice({
       });
   },
 });
-export const { clearTransactions } = transactionSlice.actions;
+export const { clearTransactions,deleteCategoryTransactions,updateCategoryTransactions } = transactionSlice.actions;
 export default transactionSlice.reducer;
