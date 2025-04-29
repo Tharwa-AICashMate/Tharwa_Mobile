@@ -55,7 +55,11 @@ class AuthService {
   static async login(userId: string) {
     const { data: userData, error } = await supabase
       .from("users")
-      .select("*")
+      .select(`*,
+          balance (
+            balance_limit
+          )`
+        )
       .eq("id", userId)
       .single();
     console.log("User data:", userData, error);
@@ -66,6 +70,7 @@ class AuthService {
       fullName: userData.full_name,
       phone: userData.mobile_num,
       dob: userData.DOB,
+      balance: userData.balance?.[0]?.balance_limit ?? 0
     };
   }
 

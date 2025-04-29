@@ -88,6 +88,7 @@ export type User = {
   phone?:string,
   dob?: Date,  
   id: string;
+  balance:number|null;
 };
 
 interface SavingDeposit {

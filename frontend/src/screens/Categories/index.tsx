@@ -28,6 +28,7 @@ import {
 import AddCategoryModal from "@/componenets/AddCategoryModal";
 import { getCurrentUserId } from "@/utils/auth";
 import { apiBase } from "@/utils/axiosInstance";
+import ExpenseBrief from "@/componenets/expenceBrief";
 
 type CategoriesScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -45,7 +46,6 @@ const CategoriesScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("wallet-outline");
-  const [totalBalance, setTotalBalance] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
@@ -66,25 +66,7 @@ const CategoriesScreen = () => {
     loadData();
   }, [dispatch]);
 
-  const fetchBalance = async () => {
-    try {
-      const user_id = await getCurrentUserId();
-      console.log("user_id", user_id);
-      const response = await fetch(`${apiBase}/api/balances/user/${user_id}`);
-      if (!response.ok) throw new Error('Failed to fetch balance');
 
-      const data = await response.json();
-      setTotalBalance(data.balance_limit || 0);
-    } catch (error) {
-      console.error('Error fetching balance:', error);
-    }
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      fetchBalance();
-    }, [])
-  );
 
   const handleCategoryPress = (item: any) => {
     if (!userId) return;
@@ -176,22 +158,7 @@ const CategoriesScreen = () => {
     <SafeAreaView style={styles.container}>
       <Header title="Categories" />
 
-      <View style={styles.balanceContainer}>
-        <BalanceDisplay balance={totalBalance} expense={400000} />
-      </View>
-
-      <View style={styles.budgetContainer}>
-        <View style={styles.progressContainer}>
-          <ProgressBar percentage={30} amount={40} />
-        </View>
-
-        <View style={styles.budgetStatus}>
-          <Ionicons name="checkbox-outline" size={16} color={Theme.colors.text} />
-          <Text style={styles.budgetStatusText}>
-            {30}% Of Your Expenses, Looks Good.
-          </Text>
-        </View>
-      </View>
+     <ExpenseBrief/>
 
       <View style={styles.categoriesContainer}>
         {loading ? (

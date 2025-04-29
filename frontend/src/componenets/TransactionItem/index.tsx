@@ -3,61 +3,48 @@ import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/theme";
 import styles from "./style";
+import { formatCurrency, formatDate } from "@/utils/helpers";
+import { Transaction } from "@/types/transactionTypes";
 
 interface TransactionItemProps {
-  id?: string;
-  title: string;
-  subtitle: string;
-  amount: number;
-  icon: string;
+  transaction:Transaction
   iconBgColor?: string;
-  isDeposit?: boolean;
+  showCategory:boolean,
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({
-  title,
-  subtitle,
-  amount,
-  icon,
+  transaction,
   iconBgColor = Theme.colors.accentLight,
-  isDeposit = false,
+  showCategory = true,
 }) => {
-  // Format currency
-  const formatCurrency = (amount: number): string => {
-    return amount
-      .toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
-      .replace(/\.00$/, "");
-  };
-
   return (
     <View style={styles.transactionItem}>
       <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
-        <Ionicons name={icon as any} size={20} color="white" />
+        <Ionicons name={transaction.icon} size={20} color="white" />
       </View>
 
       <View style={styles.transactionDetails}>
-        <Text style={styles.transactionTitle}>{title}</Text>
-        <Text style={styles.transactionSubtitle}>{subtitle}</Text>
+        <Text style={styles.transactionTitle} ellipsizeMode="tail" numberOfLines={1}>{transaction.title || transaction.category_name}</Text>
+        <Text style={styles.transactionSubtitle}>{formatDate(transaction.created_at)}</Text>
       </View>
+      
+      {showCategory && (
+        <View style={styles.seperator}>
+          <Text style={styles.category} ellipsizeMode="tail" numberOfLines={1}>{transaction.category_name}</Text>
+        </View>
+      )}
 
       <Text
         style={[
           styles.transactionAmount,
-          isDeposit && styles.depositAmount,
+          transaction.type === "expense" && styles.depositAmount,
         ]}
       >
-        {isDeposit ? "+" : "-"}
-        {formatCurrency(amount)}
+        {transaction.type === "expense" ? "-" : "+"}
+        {formatCurrency(transaction.amount)}
       </Text>
     </View>
   );
 };
-
-
 
 export default TransactionItem;

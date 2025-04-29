@@ -1,17 +1,8 @@
+import { Transaction } from "@/types/transactionTypes";
 import { apiBase } from "@/utils/axiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface Transaction {
-  transaction_id: number;
-  user_id: string;
-  title: string;
-  amount: number;
-  type: "income" | "expence";
-  category_id: number;
-  category_name: string;
-  created_at: string;
-}
 
 interface TransactionState {
   data: Transaction[];
@@ -54,7 +45,7 @@ export const createTransaction = createAsyncThunk(
       amount: number;
       type: "income" | "expence";
       title: string;
-      
+      created_at:Date
     },
     { rejectWithValue }
   ) => {
@@ -63,8 +54,10 @@ export const createTransaction = createAsyncThunk(
         `${apiBase}/transactions`,
         transaction
       );
+      console.log('---------------------------------',response.data);
       return response.data;
     } catch (error: any) {
+      console.log('------------------------',error)
       return rejectWithValue(error.message);
     }
   }
