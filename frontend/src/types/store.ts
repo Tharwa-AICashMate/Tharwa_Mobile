@@ -11,7 +11,7 @@ export interface Store {
   city?: string;
   country?: string;
   type: 'findBestStore' | 'analysis';
-
+  added_by?: string;
 }
 
 export interface StoreItem {

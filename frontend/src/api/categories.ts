@@ -1,6 +1,5 @@
-import { Category, CreateCategoryDTO } from "@/types/category";
+import { Category, CreateCategoryDTO, UpdateCategoryDTO } from "@/types/category";
 import { apiBase } from "@/utils/axiosInstance";
-
 
 export const fetchCategories = async (userId?: string): Promise<Category[]> => {
   const url = userId
@@ -33,8 +32,26 @@ export const createCategory = async (
   return response.json();
 };
 
+export const updateCategory = async (
+  id: number,
+  updates: UpdateCategoryDTO
+): Promise<Category> => {
+  const response = await fetch(`${apiBase}/categories/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updates),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Failed to update category");
+  }
+  return response.json();
+};
+
 export const deleteCategory = async (id: number): Promise<void> => {
-  console.log(id);
   const response = await fetch(`${apiBase}/categories/${id}`, {
     method: "DELETE",
   });

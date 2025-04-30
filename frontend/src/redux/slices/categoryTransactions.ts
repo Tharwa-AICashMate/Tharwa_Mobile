@@ -1,8 +1,8 @@
-import { Transaction } from "@/types/transactionTypes";
+import { DescriptionItem, Transaction } from "@/types/transactionTypes";
 import { apiBase } from "@/utils/axiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
+import { addTransaction } from "./financeSlice";
 
 interface TransactionState {
   data: Transaction[];
@@ -11,6 +11,16 @@ interface TransactionState {
   createLoading: boolean;
   createError: string | null;
 }
+
+interface CreateTransactionPayload {
+  categoryId: number;
+  amount: number;
+  type: "income" | "expense";
+  title: string;
+  created_at: Date;
+  details?: DescriptionItem[];
+}
+
 
 const initialState: TransactionState = {
   data: [],
@@ -23,45 +33,49 @@ const initialState: TransactionState = {
 export const fetchTransactionsByCategory = createAsyncThunk(
   "transactions/fetchByCategory",
   async (
-    { userId, categoryId }: { userId: string; categoryId: number },
+    {
+      userId,
+      categoryId,
+      page = 1,
+    }: { userId: string; categoryId: number; page?: number },
     { rejectWithValue }
   ) => {
     try {
       const response = await axios.get(
-        `${apiBase}/transactions/${userId}/category/${categoryId}`
+        `${apiBase}/transactions/${userId}/category/${categoryId}?page=${page}`
       );
-      return response.data;
+      return {
+        transactions: response.data,
+        page,
+      };
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
   }
 );
 
+
 export const createTransaction = createAsyncThunk(
   "transactions/create",
-  async (
-    transaction: {
-      category_id: number;
-      amount: number;
-      type: "income" | "expence";
-      title: string;
-      created_at:Date
-    },
-    { rejectWithValue }
-  ) => {
+  async (transaction: CreateTransactionPayload, { rejectWithValue,dispatch }) => {
     try {
-      const response = await axios.post(
-        `${apiBase}/transactions`,
-        transaction
+      console.log(transaction);
+      const response = await axios.post(`${apiBase}/transactions`, transaction);
+      dispatch(
+        addTransaction({
+          type: transaction.type , 
+          amount: transaction.amount,
+        })
       );
-      console.log('---------------------------------',response.data);
+      console.log("Transaction created:", response.data);
       return response.data;
     } catch (error: any) {
-      console.log('------------------------',error)
+      console.error("Create transaction error:", error);
       return rejectWithValue(error.message);
     }
   }
 );
+
 
 const transactionSlice = createSlice({
   name: "transactions",
@@ -70,17 +84,44 @@ const transactionSlice = createSlice({
     clearTransactions: (state) => {
       state.data = [];
     },
+    deleteCategoryTransactions: (state, action) => {
+      console.log(state.data[0]);
+      state.data = state.data.filter(
+        (item) => item.transaction_id !== action.payload
+      );
+    },
+    updateCategoryTransactions: (state, action) => {
+      console.log(state.data[0]);
+      console.log(action.payload);
+      state.data = state.data.map((item) =>
+        item.transaction_id == action.payload.id ? action.payload.item : item
+      );
+    },
   },
   extraReducers: (builder) => {
     builder
-      // 🟦 Fetch
       .addCase(fetchTransactionsByCategory.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchTransactionsByCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        const { transactions, page } = action.payload;
+
+        if (page === 1) {
+          state.data = transactions;
+        } else {
+          const existingIds = new Set(state.data.map((t) => t.transaction_id));
+          const newTransactions = transactions.filter(
+            (t) => !existingIds.has(t.transaction_id)
+          );
+
+          state.data = [...state.data, ...newTransactions];
+        }
+
+        console.log(
+          `Total transactions after page ${page}: ${state.data.length}`
+        );
       })
       .addCase(fetchTransactionsByCategory.rejected, (state, action) => {
         state.loading = false;
@@ -93,7 +134,7 @@ const transactionSlice = createSlice({
       })
       .addCase(createTransaction.fulfilled, (state, action) => {
         state.createLoading = false;
-        state.data.push(action.payload); // add new transaction to state
+        state.data.push(action.payload);
       })
       .addCase(createTransaction.rejected, (state, action) => {
         state.createLoading = false;
@@ -101,5 +142,9 @@ const transactionSlice = createSlice({
       });
   },
 });
-export const { clearTransactions } = transactionSlice.actions;
+export const {
+  clearTransactions,
+  deleteCategoryTransactions,
+  updateCategoryTransactions,
+} = transactionSlice.actions;
 export default transactionSlice.reducer;

@@ -9,6 +9,7 @@ export interface Store {
     phone?: string;
     working_hours?: string;
     distance?: number; 
+    added_by?: string;
   }
   
   export interface StoreItem {

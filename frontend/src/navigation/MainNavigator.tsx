@@ -19,7 +19,7 @@ import { supabase } from "@/utils/supabase";
 import Savings from "@/screens/Savings";
 import SavingDetails from "@/screens/SavingDetails";
 import AddSavingsScreen from "@/screens/AddSavings";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import BottomTabs from "@/componenets/BottomNav/BottomTabs";
 import Theme from "@/theme";
 import { Session } from "@supabase/supabase-js";
@@ -33,19 +33,25 @@ import HelpCenterScreen from "@/screens/EditProfile/HelpCenterScreen";
 import { useDispatch } from "react-redux";
 import { fetchCurrentUser } from "@/redux/slices/AuthSlice";
 import { AppDispatch } from "@/redux/store";
+import AddIncomeScreen from "@/screens/AddIncome";
+import { useAppSelector } from "@/redux/hook";
+import SettingsStore from "@/screens/SettingsStores";
+import AllStoresPage from "@/screens/AllStore";
+import FavoriteStores from "@/screens/FavoriteStores";
+import AddStorePage from "@/screens/AddStore";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export default function MainNavigator() {
   const [session, setSession] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
-
+  const user = useAppSelector((state) => state.auth.user);
+  console.log("from nav", user);
   useEffect(() => {
-    dispatch(fetchCurrentUser()).then(res => {
-      if (fetchCurrentUser.fulfilled.match(res)) 
-        setSession(true);
-    })
-    
+    dispatch(fetchCurrentUser()).then((res) => {
+      if (fetchCurrentUser.fulfilled.match(res)) setSession(true);
+    });
+
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session ? true : false);
     });
@@ -69,6 +75,17 @@ export default function MainNavigator() {
                 </View>
               )}
             </RootStack.Screen>
+            <RootStack.Screen
+              name="AllStores"
+              component={AllStoresPage}
+            />
+             <RootStack.Screen
+              name="FavoriteStores"
+              component={FavoriteStores}
+            />
+            <RootStack.Screen
+              name="AddStore"
+              component={AddStorePage}/>
 
             {/* Settings & Profile */}
             <RootStack.Screen
@@ -137,6 +154,7 @@ export default function MainNavigator() {
             <RootStack.Screen name="Savings" component={Savings} />
             <RootStack.Screen name="SavingDetails" component={SavingDetails} />
             <RootStack.Screen name="AddSavings" component={AddSavingsScreen} />
+            <RootStack.Screen name="AddIncome" component={AddIncomeScreen} />
 
             {/* Notification */}
             <RootStack.Screen name="Notification" component={Notification} />

@@ -2,26 +2,26 @@ import authReducer from "./slices/AuthSlice";
 import { configureStore } from '@reduxjs/toolkit';
 import settingsReducer from './slices/settingsSlice';
 import helpCenterReducer from './slices/helpCenterSlice';
-import expenseReducer from './slices/expenseSlice';
 import goalsReducer from './slices/savingSlice';
 import transactionReducer from './slices/transactionSlice'
 import categoriesReducer from './slices/categoriesSlice';
 import depositReducer from './slices/depositSlice'
 import groceryReducer from './slices/grocerySlice';
 import storeReducer from './slices/storeSlice';
+import financeReducer from './slices/financeSlice';
 import  categoryTransactionReducer from './slices/categoryTransactions'
 export const store = configureStore({
   reducer: {
     categories: categoriesReducer,
     settings: settingsReducer,
     helpCenter: helpCenterReducer,
-    expenses: expenseReducer,
     goals: goalsReducer,
     transactions: transactionReducer,
     auth: authReducer,
     deposits: depositReducer,
     grocery: groceryReducer,
     store: storeReducer,
+    finance:financeReducer,
     transactionsByCategory: categoryTransactionReducer,
   },
   middleware: (getDefaultMiddleware) =>

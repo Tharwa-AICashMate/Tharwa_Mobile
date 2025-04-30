@@ -119,6 +119,23 @@ export const styles = StyleSheet.create(
       fontWeight: '600',
       color: 'white',
     },
+    inputError: {
+      borderColor: 'red',
+    },
+    iconOptionError: {
+      borderColor: 'red',
+    },
+    errorText: {
+      color: 'red',
+      fontSize: 12,
+      marginBottom: 8,
+    },
+    charCounter: {
+      fontSize: 12,
+      color: Theme.colors.textLight,
+      alignSelf: 'flex-end',
+      marginBottom: 8,
+    },
   }
 ) 
 

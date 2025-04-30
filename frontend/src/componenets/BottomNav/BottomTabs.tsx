@@ -39,6 +39,10 @@ import CameraScreen from "../Camera";
 import { FinanceOverview } from "@/screens/FinanceOverview/FinanceOverview";
 import CalenderScreen from "@/screens/FinanceOverview/CalenderScreen/CalenderScreen";
 import SearchScreen from "@/screens/FinanceOverview/SearchScreen/SearchScreen";
+import AllStoresPage from "@/screens/AllStore";
+import FavoriteStores from "@/screens/FavoriteStores";
+import AddStorePage from "@/screens/AddStore";
+import SettingsStore from "@/screens/SettingsStores";
 // import TransactionScreen from "@/screens/Transaction";
 
 type ProfileStackParamList = {
@@ -122,6 +126,7 @@ function ProfileStackScreen() {
         name="DeleteAccountScreen"
         component={DeleteAccountScreen}
       />
+    
       <ProfileStack.Screen
         name="SupportChannelsScreen"
         component={SupportChannelsScreen}
@@ -131,7 +136,21 @@ function ProfileStackScreen() {
         name="AddExpensesScreen"
         component={AddExpensesScreen}
       />
+
       <ProfileStack.Screen name="TransactionForm" component={Home} />
+      <ProfileStack.Screen name="SettingsStore" component={SettingsStore} />
+      <ProfileStack.Screen
+        name="AllStores"
+        component={AllStoresPage}
+      />
+      <ProfileStack.Screen
+        name="FavoriteStores"
+        component={FavoriteStores}
+      />
+      <ProfileStack.Screen
+      name="AddStore"
+      component={AddStorePage}
+      />
     </ProfileStack.Navigator>
   );
 }

@@ -153,14 +153,15 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   findButton: {
-    backgroundColor: Theme.colors.primary,
+    backgroundColor: "#cccccc",
     padding: 15,
     borderRadius: 5,
     alignItems: "center",
     marginVertical: 15,
   },
   disabledButton: {
-    backgroundColor: "#cccccc",
+    backgroundColor: Theme.colors.primary,
+
   },
   findButtonText: {
     color: "white",
