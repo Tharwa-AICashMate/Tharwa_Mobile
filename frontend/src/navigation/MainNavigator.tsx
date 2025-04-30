@@ -32,8 +32,9 @@ import { RootStackParamList } from "@/navigation/types";
 import HelpCenterScreen from "@/screens/EditProfile/HelpCenterScreen";
 import { useDispatch } from "react-redux";
 import { fetchCurrentUser } from "@/redux/slices/AuthSlice";
-import { AppDispatch } from "@/redux/store";
+import { AppDispatch } from "@/redux/s";
 import { useAppSelector } from "@/redux/hook";
+import SettingsStore from "@/screens/SettingsStores";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -70,6 +71,10 @@ export default function MainNavigator() {
                 </View>
               )}
             </RootStack.Screen>
+            <RootStack.Screen
+              name="stores"
+              component={SettingsStore}
+            />
 
             {/* Settings & Profile */}
             <RootStack.Screen
