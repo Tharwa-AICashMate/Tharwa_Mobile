@@ -60,8 +60,6 @@ const styles = StyleSheet.create({
   },
   addExpenseContainer:{
     backgroundColor: Theme.colors.background,
-  
-    
   },
   addButton: {
     backgroundColor: Theme.colors.primary,

@@ -54,9 +54,9 @@ export default function MainNavigator() {
   return (
     <>
       <NavigationContainer>
-        {!session ? (
+        {/* {!session ? (
           <OnBoardingNavigation />
-        ) : (
+        ) : ( */}
           <RootStack.Navigator
             initialRouteName={"MainApp"}
             screenOptions={{ headerShown: false }}
@@ -152,7 +152,7 @@ export default function MainNavigator() {
               component={PasswordChangeConfirmScreen}
             />
           </RootStack.Navigator>
-        )}
+        {/* )} */}
       </NavigationContainer>
     </>
   );

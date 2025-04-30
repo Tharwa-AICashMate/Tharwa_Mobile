@@ -41,7 +41,7 @@ const TransactionScreen: React.FC = () => {
     if (filteredTransactions.length === 0) return null;
     
     return (
-      <MonthSection key={month} month={month} transactions={filteredTransactions}  />
+      <MonthSection key={month} month={month} transactions={filteredTransactions} showCategory={true} />
     );
   };
   

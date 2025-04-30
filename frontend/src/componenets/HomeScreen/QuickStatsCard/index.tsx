@@ -1,99 +1,99 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import {
-  useFonts,
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-} from "@expo-google-fonts/inter";
+import { View, Text, StyleSheet, ViewStyle } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Theme from "@/theme";
+import { useAppSelector } from "@/redux/hook"; // Use your Redux hook
 
-interface QuickStatsCardProps {
-  savingsProgress: number; // Percentage (0-100)
-  revenueLastWeek: number;
-  foodLastWeek: number;
-}
+// Import the transaction type
+import { Transaction } from "@/types/transactionTypes";
 
-const QuickStatsCard: React.FC<QuickStatsCardProps> = ({
-  savingsProgress,
-  revenueLastWeek,
-  foodLastWeek,
-}) => {
-  const [fontsLoaded] = useFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-  });
+// Define the component props
+type QuickStatsCardProps = {
+  style?: ViewStyle;
+};
 
-  if (!fontsLoaded) {
-    return null; // Or a loading indicator
-  }
+const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
+  const transactions = useAppSelector(
+    (state) => state.transactions.transactions
+  );
 
-  const radius = 30;
-  const strokeWidth = 5;
-  const progressWidth = (savingsProgress / 100) * (radius * 2);
+  // Helper function to filter transactions for the current week
+  const getMaxTransactionForWeek = (transactions: Transaction[]) => {
+    const startOfWeek = new Date();
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Start of the week (Sunday)
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const endOfWeek = new Date();
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // End of the week (Saturday)
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    const transactionsThisWeek = transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.created_at);
+      return transactionDate >= startOfWeek && transactionDate <= endOfWeek;
+    });
+
+    const maxIncome = transactionsThisWeek
+      .filter((t) => t.type === "income")
+      .reduce((max, t) => (t.amount > max.amount ? t : max), {
+        amount: 0,
+      } as Transaction);
+
+    const maxExpense = transactionsThisWeek
+      .filter((t) => t.type === "expense")
+      .reduce((max, t) => (t.amount > max.amount ? t : max), {
+        amount: 0,
+      } as Transaction);
+
+    return { maxIncome, maxExpense };
+  };
+
+  const { maxIncome, maxExpense } = getMaxTransactionForWeek(transactions);
 
   return (
-    <View style={styles.container}>
-      {/* Savings On Goals */}
-      <View style={styles.savingsContainer}>
-        <View style={styles.progressCircle}>
-          <Ionicons
-            name="car"
-            size={20}
-            color="#3F51B5"
-            style={styles.carIcon}
-          />
-          <View
-            style={[
-              styles.outerCircle,
-              { width: radius * 2, height: radius * 2 },
-            ]}
-          >
-            <View
-              style={[
-                styles.innerCircle,
-                {
-                  width: radius * 2 - strokeWidth,
-                  height: radius * 2 - strokeWidth,
-                },
-              ]}
-            >
-              <View
-                style={[
-                  styles.progressBar,
-                  { width: progressWidth, height: strokeWidth },
-                ]}
-              />
-            </View>
+    <View style={[styles.card, style]}>
+      <Text style={styles.title}>Weekly Highlights</Text>
+      <View style={styles.statsContainer}>
+        {/* Highest Income */}
+        <View style={styles.stat}>
+          <View style={styles.iconContainer}>
+            <MaterialCommunityIcons
+              name="trending-up"
+              size={18}
+              color={Theme.colors.primary}
+            />
           </View>
-        </View>
-        <Text style={styles.savingsLabel}>Savings</Text>
-        <Text style={styles.savingsLabel}>On Goals</Text>
-      </View>
-
-      {/* Separator */}
-      <View style={styles.separator} />
-
-      {/* Revenue Last Week */}
-      <View style={styles.revenueFoodContainer}>
-        <View style={styles.itemContainer}>
-          <Ionicons name="cash-outline" size={24} color="grey" />
-          <View style={styles.textContainer}>
-            <Text style={styles.itemLabel}>Revenue Last Week</Text>
-            <Text style={styles.itemValue}>${revenueLastWeek.toFixed(2)}</Text>
+          <View style={styles.statContent}>
+            <Text style={styles.label}>Highest Income</Text>
+            <Text style={styles.amount}>
+              {maxIncome.amount > 0 ? `$${maxIncome.amount.toFixed(2)}` : "-"}
+            </Text>
+            <Text style={styles.description}>
+              {maxIncome.category_name || "No weekly highlights yet"}
+            </Text>
           </View>
         </View>
 
-        {/* Food Last Week */}
-        <View style={styles.itemContainer}>
-          <Ionicons name="restaurant" size={24} color="grey" />
-          <View style={styles.textContainer}>
-            <Text style={styles.itemLabel}>Food Last Week</Text>
-            <Text style={styles.itemValue}>
-              -${Math.abs(foodLastWeek).toFixed(2)}
+        {/* Divider */}
+        <View style={styles.divider} />
+
+        {/* Highest Expense */}
+        <View style={styles.stat}>
+          <View style={styles.iconContainer}>
+            <MaterialCommunityIcons
+              name="trending-down"
+              size={18}
+              color={Theme.colors.accentDark}
+            />
+          </View>
+          <View style={styles.statContent}>
+            <Text style={styles.label}>Highest Expense</Text>
+            <Text style={styles.amount}>
+              {maxExpense.amount > 0
+                ? `-$${maxExpense.amount.toFixed(2)}`
+                : "-"}
+            </Text>
+            <Text style={styles.description}>
+              {maxExpense.category_name || "No weekly highlights yet"}
             </Text>
           </View>
         </View>
@@ -103,83 +103,63 @@ const QuickStatsCard: React.FC<QuickStatsCardProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Theme.colors.primary,
-    borderRadius: 10,
-    padding: 15,
-   flexDirection: "row",
-    marginHorizontal: "auto",
-    alignItems: "center",
-    justifyContent: "space-between",
-    height: 150,
-    width: "90%",
+  card: {
+    backgroundColor: Theme.colors.background,
+    borderRadius: 12,
+    padding: 12,
+    width: 350,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
+    marginTop: 16,
   },
-  savingsContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 15,
-  },
-  progressCircle: {
-    position: "relative",
-    width: 60,
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  outerCircle: {
-    borderRadius: 30,
-    backgroundColor: "#E0E0E0",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  innerCircle: {
-    borderRadius: 25,
-    backgroundColor: "#FFF",
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "hidden",
-  },
-  progressBar: {
-    position: "absolute",
-    backgroundColor: "#3F51B5",
-    borderRadius: 2,
-  },
-  carIcon: {
-    position: "absolute",
-  },
-  savingsLabel: {
-    fontFamily: "Inter_400Regular",
-    fontSize: 12,
-    color: "#555",
-    textAlign: "center",
-  },
-  separator: {
-    height: "80%",
-    width: 1,
-    backgroundColor: "white",
-  },
-  revenueFoodContainer: {
-    flex: 1,
-    paddingLeft: 15,
-    justifyContent: "space-around",
-  },
-  itemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  textContainer: {
-    marginLeft: 10,
-  },
-  itemLabel: {
-    fontFamily: "Inter_500Medium",
-    fontSize: 14,
-    color: "#333",
-  },
-  itemValue: {
-    fontFamily: "Inter_600SemiBold",
+  title: {
     fontSize: 16,
-    color: "#222",
+    fontWeight: "600",
+    marginBottom: 12,
+    color: Theme.colors.textDark,
+  },
+  statsContainer: {
+    flexDirection: "row",
+  },
+  stat: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  iconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: Theme.colors.secondery,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
+  statContent: {
+    flex: 1,
+  },
+  label: {
+    fontSize: 12,
+    color: Theme.colors.text,
+    marginBottom: 2,
+  },
+  amount: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: Theme.colors.textDark,
+    marginBottom: 2,
+  },
+  description: {
+    fontSize: 12,
+    color: Theme.colors.text,
+  },
+  divider: {
+    width: 1,
+    backgroundColor: Theme.colors.textLight,
+    marginHorizontal: 12,
   },
 });
 

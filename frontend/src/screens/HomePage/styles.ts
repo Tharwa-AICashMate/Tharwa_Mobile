@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.highlight,
   },
   scrollContent: {
-    flex:1
+    flex: 1,
   },
   contentBox: {
     flex: 1,
@@ -41,6 +41,24 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 24,
     overflow: "hidden",
     paddingTop: 16,
+  },
+  addExpenseContainer: {
+    backgroundColor: Theme.colors.background,
+  },
+  addButton: {
+    backgroundColor: Theme.colors.primary,
+    marginHorizontal: "auto",
+    marginVertical: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    width: "auto",
+    alignItems: "center",
+  },
+  addButtonText: {
+    color: "#333",
+    fontWeight: "600",
+    fontSize: 16,
   },
 });
 
