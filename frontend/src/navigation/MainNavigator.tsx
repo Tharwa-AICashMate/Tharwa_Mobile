@@ -51,20 +51,20 @@ export default function MainNavigator() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session ? true : false);
     });
-  }, [userExist]);
-  if (!user)
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#FFFFFF",
-        }}
-      >
-        <ActivityIndicator size="large" color="#FFC107" />
-      </View>
-    );
+  }, []);
+  // if (!user)
+  //   return (
+  //     <View
+  //       style={{
+  //         flex: 1,
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         backgroundColor: "#FFFFFF",
+  //       }}
+  //     >
+  //       <ActivityIndicator size="large" color="#FFC107" />
+  //     </View>
+  //   );
   return (
     <>
       <NavigationContainer>

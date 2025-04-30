@@ -67,10 +67,10 @@ const Profile: React.FC = () => {
       });
       console.log('Updated user:', response.data);
 
-      // عرض رسالة التحديث الناجح أسفل الزر
+
       setUpdateMessage('Data Updated Successfully');
 
-      // إخفاء الرسالة بعد 2 ثانية
+
       setTimeout(() => {
         setUpdateMessage('');
       }, 2000);
@@ -122,6 +122,7 @@ const Profile: React.FC = () => {
                 placeholder="Email Address"
                 keyboardType="email-address"
                 placeholderTextColor="#999"
+                editable={false}
               />
             </View>
 

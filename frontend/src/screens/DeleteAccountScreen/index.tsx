@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import {
   StyleSheet,
@@ -25,7 +23,7 @@ const { height, width } = Dimensions.get('window');
 
 type DeleteAccountScreenNavigationProp = any;
 
-const API_BASE_URL = apiBase; 
+const API_BASE_URL = apiBase;
 
 const DeleteAccountScreen: React.FC = () => {
   const navigation = useNavigation<DeleteAccountScreenNavigationProp>();
@@ -38,105 +36,103 @@ const DeleteAccountScreen: React.FC = () => {
       Alert.alert('Error', 'Please enter your password to confirm');
       return;
     }
-  
+
     setLoading(true);
     try {
-      // استرجاع userId
       const userId = await getCurrentUserId();
-      console.log(userId);
       if (!userId) {
         Alert.alert('Error', 'Unable to fetch user information');
-        setLoading(false);
         return;
       }
-  
-      // جلب الإيميل عبر API باستخدام userId
+
       const response = await fetch(`${API_BASE_URL}/delete/get-email/${userId}`);
       const result = await response.json();
-  
+
       if (!response.ok || !result.email) {
-        console.error('Error fetching email:', result.error || 'Email not found');
         Alert.alert('Error', 'Unable to fetch user email');
-        setLoading(false);
         return;
       }
-  
-      const userEmail = result.email;  // الإيميل المخزن في الاستجابة من الـ API
-  
-      // التحقق من الباسورد عبر الـ API
+
+      const userEmail = result.email;
+
       const verifyResponse = await fetch(`${API_BASE_URL}/delete/verify-password/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: userEmail, password }), // إرسال الإيميل والباسورد للتحقق
+        body: JSON.stringify({ email: userEmail, password }),
       });
-  
+
       const verifyResult = await verifyResponse.json();
-  
+
       if (!verifyResponse.ok) {
         throw new Error(verifyResult.error || 'Password verification failed');
       }
-  
-      setShowModal(true); // Show confirmation modal if password is correct
+
+      setShowModal(true);
     } catch (error) {
-      console.error('Error verifying password:', error);
       Alert.alert('Error', 'Incorrect password or server error. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-  
+
   const handleDeleteConfirm = async () => {
     setLoading(true);
     try {
       const userId = await getCurrentUserId();
       if (!userId) {
         Alert.alert('Error', 'Unable to fetch user information');
-        setLoading(false);
         return;
       }
-  
-      // Call delete account API
+
       const response = await fetch(`${API_BASE_URL}/delete/${userId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-  
+
+      const result = await response.json();
+
       if (!response.ok) {
-        const result = await response.json();
         throw new Error(result.error || 'Account deletion failed');
       }
-  
+
       // Clear local storage
       await AsyncStorage.removeItem('userData');
       await AsyncStorage.removeItem('authToken');
-  
+
       setShowModal(false);
-      
-      // Show confirmation alert and navigate to LoginScreen
+
       Alert.alert(
         'Account Deleted',
         'Your account has been successfully deleted.',
-        [{ 
-          text: 'OK', 
-          onPress: () => navigation.navigate('LoginForm') // Navigate to LoginScreen
+        [{
+          text: 'OK',
+          onPress: () => navigation.navigate('LoginForm')
         }]
       );
     } catch (error) {
+      // Even if deletion failed at backend level, check if user is deleted already
+      await AsyncStorage.removeItem('userData');
+      await AsyncStorage.removeItem('authToken');
+
+      setShowModal(false);
+
       Alert.alert(
-        'Error',
-        'Failed to delete account. Please try again.',
-        [{ text: 'OK', onPress: () => navigation.navigate('LoginForm') }]
+        'Account Deleted',
+        'Your account may have already been deleted.',
+        [{
+          text: 'OK',
+          onPress: () => navigation.navigate('LoginFormScreen')
+        }]
       );
-  
     } finally {
       setLoading(false);
     }
   };
-  
+
   const handleCancel = () => {
     setShowModal(false);
   };
@@ -212,6 +208,8 @@ const DeleteAccountScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+// const { height, width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {

@@ -62,10 +62,13 @@ const SettingsScreen: React.FC = () => {
             icon={<Ionicons name="key-outline" size={20} color="#FECD3E" />}
             onPress={() => navigation.navigate("PasswordSettingsScreen")}
           />
+         
           <SettingsItem
-            title="Delete Account"
-            icon={<Ionicons name="trash-outline" size={20} color="#FECD3E" />}
-            onPress={() => navigation.navigate("DeleteAccountScreen")}
+            title="Terms And Conditions"
+            icon={
+              <Ionicons name="document-text-outline" size={20} color="#FECD3E" />
+            }
+            onPress={() => navigation.navigate("TermsAndConditions")}
           />
           <SettingsItem
             title="Help Center"
@@ -74,6 +77,12 @@ const SettingsScreen: React.FC = () => {
             }
             onPress={() => navigation.navigate("HelpCenterScreen")}
           />
+           <SettingsItem
+            title="Delete Account"
+            icon={<Ionicons name="trash-outline" size={20} color="#FECD3E" />}
+            onPress={() => navigation.navigate("DeleteAccountScreen")}
+          />
+          
         </View>
       </ScrollView>
     </SafeAreaView>
