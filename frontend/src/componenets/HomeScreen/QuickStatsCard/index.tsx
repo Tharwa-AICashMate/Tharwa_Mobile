@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, ViewStyle } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { styles } from "./styles";
 import Theme from "@/theme";
 import { useAppSelector } from "@/redux/hook"; // Use your Redux hook
 
@@ -59,13 +60,15 @@ const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
             <MaterialCommunityIcons
               name="trending-up"
               size={18}
-              color={Theme.colors.primary}
+              color={Theme.colors.accent}
             />
           </View>
           <View style={styles.statContent}>
             <Text style={styles.label}>Highest Income</Text>
             <Text style={styles.amount}>
-              {maxIncome.amount > 0 ? `$${maxIncome.amount.toFixed(2)}` : "-"}
+              {maxIncome.amount > 0
+                ? `$${maxIncome.amount.toFixed(2)}`
+                : "$0.00"}
             </Text>
             <Text style={styles.description}>
               {maxIncome.category_name || "No weekly highlights yet"}
@@ -90,7 +93,7 @@ const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
             <Text style={styles.amount}>
               {maxExpense.amount > 0
                 ? `-$${maxExpense.amount.toFixed(2)}`
-                : "-"}
+                : "$0.00"}
             </Text>
             <Text style={styles.description}>
               {maxExpense.category_name || "No weekly highlights yet"}
@@ -102,65 +105,5 @@ const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: Theme.colors.background,
-    borderRadius: 12,
-    padding: 12,
-    width: 350,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
-    marginTop: 16,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 12,
-    color: Theme.colors.textDark,
-  },
-  statsContainer: {
-    flexDirection: "row",
-  },
-  stat: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "flex-start",
-  },
-  iconContainer: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: Theme.colors.secondery,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 10,
-  },
-  statContent: {
-    flex: 1,
-  },
-  label: {
-    fontSize: 12,
-    color: Theme.colors.text,
-    marginBottom: 2,
-  },
-  amount: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: Theme.colors.textDark,
-    marginBottom: 2,
-  },
-  description: {
-    fontSize: 12,
-    color: Theme.colors.text,
-  },
-  divider: {
-    width: 1,
-    backgroundColor: Theme.colors.textLight,
-    marginHorizontal: 12,
-  },
-});
 
 export default QuickStatsCard;

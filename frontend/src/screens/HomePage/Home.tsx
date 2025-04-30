@@ -12,28 +12,22 @@ import { AppDispatch } from "@/redux/store";
 import { fetchTransactionsAsync } from "@/redux/slices/transactionSlice";
 import BalanceModal from "@/componenets/EditBalanceModal";
 import ExpenseBrief from "@/componenets/expenceBrief";
-import FinanceCategories from "@/componenets/HomeScreen/FinancialCategories";
-import { CategoryType } from "@/componenets/HomeScreen/FinancialCategories";
-import type { CategoryDetailNavigationProp } from "../CategoryDetails";
+import HomeScreenNavigation, { NavigationTile } from "@/componenets/HomeScreen/HomeScreenNavigation";
 
 const Home: React.FC = () => {
   const [openModal,setOpenModal] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
   const totalBalance = user?.balance||0
   const dispatch = useDispatch<AppDispatch>();
-  const navigation = useNavigation<CategoryDetailNavigationProp>();
-
-   const addExpense = () => {
-     navigation.navigate("AddExpensesScreen");
-   };
 
    const [selectedCategory, setSelectedCategory] = React.useState<
      string | undefined
    >();
 
-   const handleSelectCategory = (category: CategoryType) => {
-     console.log(`Selected Category: ${category.label} (ID: ${category.id})`);
-     setSelectedCategory(category.id);
+   const handleSelectCategory = (tile: NavigationTile) => {
+     setSelectedCategory(tile.id);
+     console.log(`Selected Tile: ${tile.label}`);
+     // Add navigation or other logic here if needed
    };
 
   useEffect(()=>{
@@ -64,16 +58,11 @@ const Home: React.FC = () => {
           <View style={styles.contentBox}>
             <QuickStatsCard/>
 
-            <FinanceCategories
-              onSelectCategory={(category) => setSelectedCategory(category.id)}
-              selectedCategoryId={selectedCategory}
+            <HomeScreenNavigation
+              onSelectTile={handleSelectCategory}
+              style={styles.budgetContainer}
             />
 
-            <View style={styles.addExpenseContainer}>
-              <TouchableOpacity style={styles.addButton} onPress={addExpense}>
-                <Text style={styles.addButtonText}>Add Expenses</Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </ScrollView>
       </ScrollView>
