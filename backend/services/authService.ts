@@ -10,13 +10,13 @@ const mailjetClient = mailjet.apiConnect(
 );
 
 const intialCategories = [
+  { name: "Income", icon: "cash-outline" },
   { name: "Food", icon: "restaurant-outline" },
   { name: "Transport", icon: "bus-outline" },
   { name: "Medicine", icon: "medical-outline" },
   { name: "Groceries", icon: "basket-outline" },
   { name: "Rent", icon: "key-outline" },
   { name: "Gifts", icon: "gift-outline" },
-  { name: "Savings", icon: "cash-outline" },
   { name: "Entertainment", icon: "film-outline" },
 ];
 

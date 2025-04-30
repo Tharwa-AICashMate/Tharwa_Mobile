@@ -98,7 +98,7 @@ const BarsWrapper = styled.View`
 const Bar = styled.View<{ height: number; isIncome: boolean }>`
   width: 6px;
   height: ${(props) => props.height}px;
-  background-color: ${(props) => (props.isIncome ? "#3B3B98" : "#FFC312")};
+  background-color: ${(props) => (props.isIncome ?  "#FFC312":"#3B3B98")};
   border-radius: 3px;
   margin: 0 2px;
 `;

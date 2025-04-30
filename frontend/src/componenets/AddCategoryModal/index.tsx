@@ -172,6 +172,7 @@ const CATEGORY_ICONS = [
   'school-outline',
   'bus-outline',
   'train-outline',
+  'pricetag-outline'
 ];
 
 interface AddCategoryModalProps {

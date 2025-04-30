@@ -31,7 +31,8 @@ type SavingDetailsProps = NativeStackScreenProps<
 >;
 
 const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
-  const { categoryName, goalID, Target, Icon } = route.params;
+  const data = route.params;
+  const { categoryName, goalID, Target, Icon } = data
   const dispatch = useAppDispatch();
 
   const goalIdNumber = Number(goalID);
