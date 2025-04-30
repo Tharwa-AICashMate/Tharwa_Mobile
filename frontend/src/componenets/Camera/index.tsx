@@ -18,6 +18,8 @@ import * as FileSystem from "expo-file-system";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
+import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
 import Header from "../HeaderIconsWithTitle/HeadericonsWithTitle";
 import styles, { modalStyles } from "./style";
 import Theme from "@/theme";
@@ -29,6 +31,8 @@ import { getCurrentUserId } from "@/utils/auth";
 import { apiBase } from "@/utils/axiosInstance";
 import LineItemsEditor from "./LineItems";
 import CategorySelector from "./CategorySelector";
+import { setUserStores } from "@/redux/slices/storeSlice";
+import axiosInstance from "@/config/axios";
 
 LogBox.ignoreLogs(["Possible Unhandled Promise Rejection"]);
 
@@ -48,8 +52,14 @@ interface InvoiceResult {
   transaction_hash?: string;
 }
 
+interface Store {
+  id: string;
+  name: string;
+}
+
 export default function CameraScreen() {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const cameraRef = useRef<CameraView>(null);
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [result, setResult] = useState<InvoiceResult | null>(null);
@@ -62,14 +72,19 @@ export default function CameraScreen() {
   const [apiEndpoint] = useState(`${apiBase}/ocr/process-receipt`);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedStore, setSelectedStore] = useState<string | null>(null);
   const [newCategoryModalVisible, setNewCategoryModalVisible] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryIcon, setNewCategoryIcon] = useState("basket-outline");
   const [userId, setUserId] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const [storesLoading, setStoresLoading] = useState(false);
   
   const { items: categories, loading: categoriesLoading } = useSelector(
     (state: RootState) => state.categories
+  );
+  const { userStores, loading } = useSelector(
+    (state: RootState) => state.store
   );
 
   const [processedTransactions, setProcessedTransactions] = useState<Set<string>>(new Set());
@@ -107,16 +122,35 @@ export default function CameraScreen() {
     loadData();
   }, [dispatch]);
 
-  useEffect(() => {
-    if (result && categories.length > 0) {
-      const suggestedCategory = findCategoryByName(result.category);
-      setSelectedCategory(suggestedCategory || categories[0]);
-      setEditableResult({...result});
-      const generatedDescription = generateDescriptionFromLineItems(result);
-      setDescription(generatedDescription);
-      setModalVisible(true);
-    }
-  }, [result, categories]);
+    // Fetch user stores when userId changes
+    useEffect(() => {
+      const loadUserStores = async () => {
+        try {
+          if (userId) {
+            setStoresLoading(true);
+            const response = await axiosInstance.get(`/user/stores/${userId}`);
+            dispatch(setUserStores(response.data));
+          }
+        } catch (error) {
+          console.error("Error loading stores:", error);
+        } finally {
+          setStoresLoading(false);
+        }
+      };
+  
+      loadUserStores();
+    }, [dispatch, userId]);
+  
+    useEffect(() => {
+      if (result && categories.length > 0) {
+        const suggestedCategory = findCategoryByName(result.category);
+        setSelectedCategory(suggestedCategory || categories[0]);
+        setEditableResult({...result});
+        const generatedDescription = generateDescriptionFromLineItems(result);
+        setDescription(generatedDescription);
+        setModalVisible(true);
+      }
+    }, [result, categories]);
 
   const checkForDuplicateCategory = (name: string): boolean => {
     return categories.some(
@@ -274,6 +308,7 @@ export default function CameraScreen() {
     setDescription("");
     setModalVisible(false);
     setSelectedCategory(null);
+    setSelectedStore(null);
     setEditMode(false);
   };
 
@@ -281,63 +316,89 @@ export default function CameraScreen() {
     setEditMode(!editMode);
   };
 
+
+
+  const handleStoreSelection = (storeId: string) => {
+    if (storeId === "add_new_store") {
+      setModalVisible(false);
+      navigation.navigate('AddStore');
+    } else {
+      setSelectedStore(storeId);
+    }
+  };
   const handleAddTransaction = async () => {
+    console.log("Add Transaction clicked", { 
+      hasEditableResult: !!editableResult, 
+      hasSelectedCategory: !!selectedCategory, 
+      userId: userId 
+    });
+    
     if (!editableResult || !selectedCategory || !userId) {
       Alert.alert("Error", "Missing required information to create transaction");
       return;
     }
     
-    const amountString = editableResult.total_amount.replace(/[^0-9.-]+/g, "");
-    const amount = parseFloat(amountString);
-    
-    if (isNaN(amount)) {
-      Alert.alert("Error", "Invalid amount");
-      return;
+    try {
+      console.log("Creating transaction with data:", {
+        category: selectedCategory.name,
+        amount: parseFloat(editableResult.total_amount.replace(/[^0-9.-]+/g, "")),
+        title: editableResult.supplier_name,
+        store_id: selectedStore,
+      });
+      
+      const transaction = {
+        category_id: selectedCategory.id as number,
+        amount: parseFloat(editableResult.total_amount.replace(/[^0-9.-]+/g, "")),
+        type: "expense" as "expense" | "income",
+        title: editableResult.supplier_name,
+        description: description || `Receipt from ${editableResult.supplier_name}`,
+        user_id: userId,
+        storeId: selectedStore,
+        created_at: new Date(editableResult.invoice_date),
+        details: editableResult.line_items?.map(item => ({
+          name: item.name,
+          unitPrice: item.unitPrice,
+          quantity: item.quantity || 1
+        })) || []
+      };
+      
+      const transactionHash = generateTransactionHash(transaction);
+      console.log("Transaction hash generated:", transactionHash);
+      
+      if (processedTransactions.has(transactionHash)) {
+        Alert.alert(
+          "Duplicate Transaction", 
+          "This transaction appears to be a duplicate. Are you sure you want to add it?",
+          [
+            { text: "Cancel", style: "cancel" },
+            { 
+              text: "Add Anyway", 
+              style: "destructive",
+              onPress: () => createTransactionRecord(transaction, transactionHash)
+            }
+          ]
+        );
+        return;
+      }
+      
+      await createTransactionRecord(transaction, transactionHash);
+    } catch (error) {
+      console.error("Error in handleAddTransaction:", error);
+      Alert.alert("Error", "Failed to process transaction");
     }
-  
-    const transaction = {
-      category_id: selectedCategory.id as number,
-      amount: amount,
-      type: "expense" as "expense" | "income",
-      title: editableResult.supplier_name,
-      description: description || `Receipt from ${editableResult.supplier_name}`,
-      user_id: userId,
-      created_at: new Date(editableResult.invoice_date),
-      details: editableResult.line_items?.map(item => ({
-        name: item.name,
-        unitPrice: item.unitPrice,
-        quantity: item.quantity || 1
-      })) || []
-    };
-    
-    const transactionHash = generateTransactionHash(transaction);
-    
-    if (processedTransactions.has(transactionHash)) {
-      Alert.alert(
-        "Duplicate Transaction", 
-        "This transaction appears to be a duplicate. Are you sure you want to add it?",
-        [
-          { text: "Cancel", style: "cancel" },
-          { 
-            text: "Add Anyway", 
-            style: "destructive",
-            onPress: () => createTransactionRecord(transaction, transactionHash)
-          }
-        ]
-      );
-      return;
-    }
-    
-    createTransactionRecord(transaction, transactionHash);
   };
   
   const createTransactionRecord = async (transaction: any, hash: string) => {
+    console.log("Starting transaction creation...");
     setIsCreatingTransaction(true);
     
     try {
+      console.log("Dispatching createTransaction with:", transaction);
       const resultAction = await dispatch(createTransaction(transaction) as any);
+      console.log("Dispatch result:", resultAction);
       
       if (createTransaction.fulfilled.match(resultAction)) {
+        console.log("Transaction created successfully");
         setProcessedTransactions(prev => new Set([...prev, hash]));
         
         Alert.alert(
@@ -488,7 +549,7 @@ export default function CameraScreen() {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={Platform.OS === "ios" ? 40 : 0}
         >
-          <View style={modalStyles.modalContent}>
+           <View style={modalStyles.modalContent}>
             <View style={modalStyles.modalHeader}>
               <Text style={modalStyles.modalTitle}>Receipt Details</Text>
               <View style={modalStyles.headerButtons}>
@@ -514,6 +575,55 @@ export default function CameraScreen() {
                     {renderEditableField("supplier_name", "Vendor", "business-outline")}
                     {renderEditableField("invoice_date", "Date", "calendar-outline")}
                     {renderEditableField("total_amount", "Amount", "cash-outline")}
+                    
+                    {/* Store Selector */}
+                    {storesLoading ? (
+                      <View style={modalStyles.loadingContainer}>
+                        <ActivityIndicator size="small" color={Theme.colors.primary} />
+                        <Text style={modalStyles.loadingText}>Loading stores...</Text>
+                      </View>
+                    ) : userStores.length > 0 ? (
+                      <View style={modalStyles.fieldContainer}>
+                        <View style={modalStyles.fieldLabelContainer}>
+                          <Ionicons name="storefront-outline" size={18} color="#666" style={modalStyles.fieldIcon} />
+                          <Text style={modalStyles.fieldLabel}>Store</Text>
+                        </View>
+                        <View style={modalStyles.storeSelectorContainer}>
+                          <Picker
+                            selectedValue={selectedStore || ''}
+                            style={modalStyles.storePicker}
+                            onValueChange={handleStoreSelection}
+                            dropdownIconColor={Theme.colors.primary}
+                          >
+                            <Picker.Item label="Select a store..." value={null} />
+                            {userStores.map((store) => (
+                              <Picker.Item 
+                                key={store.id} 
+                                label={store.name} 
+                                value={store.id} 
+                              />
+                            ))}
+                            <Picker.Item 
+                              label="+ Add New Store" 
+                              value="add_new_store"
+                              color={Theme.colors.primary}
+                            />
+                          </Picker>
+                        </View>
+                      </View>
+                    ) : (
+                      <TouchableOpacity 
+                        style={modalStyles.addStoreButton}
+                        onPress={() => {
+                          setModalVisible(false);
+                          navigation.navigate('AddStore');
+                        }}
+                      >
+                        <Text style={modalStyles.addStoreButtonText}>
+                          <Ionicons name="add-circle-outline" size={16} /> Add Your First Store
+                        </Text>
+                      </TouchableOpacity>
+                    )}
                     
                     <LineItemsEditor
                       lineItems={editableResult.line_items || []}

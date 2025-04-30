@@ -1,5 +1,3 @@
-
-
 import { supabase } from "../config/supabase.js";
 
 interface DescriptionItem {
@@ -9,6 +7,7 @@ interface DescriptionItem {
 }
 
 interface Transaction {
+  id?:number,
   user_id?: string;
   category_id: number;
   amount: number;
@@ -16,6 +15,7 @@ interface Transaction {
   title: string;
   created_at: Date;
   details?: DescriptionItem[]; 
+  storeId?:string
 }
 
 export const createTransaction = async (transaction: Transaction) => {
@@ -35,11 +35,12 @@ export const createTransaction = async (transaction: Transaction) => {
       transaction.category_id = data.id;
     }
   }
-  delete transaction.user_id
+  // delete transaction.user_id
+  const {user_id,storeId,...Transaction}=transaction
 
   const transactionToInsert = {
-    ...transaction,
-    details: transaction.details ? JSON.stringify(transaction.details) : null
+    ...Transaction,
+    details: Transaction.details ? JSON.stringify(Transaction.details) : null
   };
   const { data, error } = await supabase
     .from('transactions')
@@ -47,11 +48,16 @@ export const createTransaction = async (transaction: Transaction) => {
     .select();
   console.log(error)
   if (error) throw new Error(error.message);
-  
+
+  const { storeData, storeError } = await supabase
+    .from('items_store')
+    .insert([
+      { item_id: data[0].id, store_id: storeId }
+    ]);
 
   return data?.[0] ? {
     ...data[0],
-    details: data[0].details ? JSON.parse(data[0].details) : undefined
+    details: data[0].details ? JSON.parse(data[0].details) : undefined,
   } : null;
 };
 

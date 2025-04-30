@@ -22,7 +22,7 @@ export const getTransactions = async (req: Request, res: Response) => {
 export const addTransaction = async (req: Request, res: Response) => {
   try {
     
-    const { category_id,user_id, amount, type, title ,created_at,details} = req.body;
+    const { category_id,user_id, amount, type, title ,created_at,details,storeId} = req.body;
     
     if ((type == 'income' && !user_id ) || (type == 'expense' && !category_id) || !amount || !type || !title ) {
       return res.status(400).json({ message: 'Missing required fields' });
@@ -37,6 +37,7 @@ export const addTransaction = async (req: Request, res: Response) => {
       type,
       title,
       details,
+      storeId
       
   
     });

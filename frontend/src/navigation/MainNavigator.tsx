@@ -83,10 +83,9 @@ export default function MainNavigator() {
               name="FavoriteStores"
               component={FavoriteStores}
             />
-             <RootStack.Screen
+            <RootStack.Screen
               name="AddStore"
-              component={AddStorePage}
-            />
+              component={AddStorePage}/>
 
             {/* Settings & Profile */}
             <RootStack.Screen
