@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import { View, FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 interface CategoryItem {
   id: string;
@@ -38,35 +39,53 @@ const CategoryIcon = styled(Ionicons)`
   color: #fff;
 `;
 
-const CategoryListItem: React.FC<{ item: CategoryItem }> = ({ item }) => (
-  <CategoryButton onPress={() => console.log(`Pressed ${item.label}`)}>
-    <IconBackground color={item.color}>
-      <CategoryIcon name={item.iconName} />
-    </IconBackground>
-    <CategoryLabel>{item.label}</CategoryLabel>
-  </CategoryButton>
-);
+const CategoryListItem: React.FC<{ item: CategoryItem }> = ({ item }) => {
+  const navigation = useNavigation();
+
+  const handlePress = () => {
+    if (item.id === "Store") {
+     navigation.navigate("Profile", { screen:"SettingsStore"}); 
+    } else {
+      console.log(`Pressed ${item.label}`);
+    }
+  };
+
+  return (
+    <CategoryButton onPress={handlePress}>
+      <IconBackground color={item.color}>
+        <CategoryIcon name={item.iconName} />
+      </IconBackground>
+      <CategoryLabel>{item.label}</CategoryLabel>
+    </CategoryButton>
+  );
+};
 
 const FinancialCategories: React.FC = () => {
   const categories: CategoryItem[] = [
     {
       id: "income",
       label: "Income",
-      iconName: "cash-outline", // Or 'cash-outline', 'wallet-outline'
-      color: "#81C784", // Greenish for income
+      iconName: "cash-outline",
+      color: "#81C784",
     },
     {
       id: "expense",
       label: "Expense",
-      iconName: "remove-circle-outline", // Or 'cart-outline', 'remove-circle-outline'
-      color: "#E57373", // Reddish for expense
+      iconName: "remove-circle-outline",
+      color: "#E57373",
     },
     {
       id: "savings",
       label: "Savings",
-      iconName: "star-outline", // Or 'piggy-bank-outline', 'star-outline'
-      color: "#64B5F6", // Blueish for savings
+      iconName: "star-outline",
+      color: "#64B5F6",
     },
+    {
+      id: "Store",
+      label: "Store",
+      iconName: "storefront-outline",
+      color: "#64B5F6",
+    }
   ];
 
   return (

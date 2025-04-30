@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserLocation, BestStoreResult, Store } from '../../types/store';
-import { findBestStore ,runAnalysis} from './storeThunk';
+import { addStore, fetchStores, fetchUserStores, findBestStore ,removeUserStore,runAnalysis} from './storeThunk';
 
 interface StoreState {
   userLocation: UserLocation | null;
@@ -12,7 +12,11 @@ interface StoreState {
   searchRadius: number; 
   analysisStatus: 'idle' | 'loading' | 'succeeded' | 'failed'; // Add analysisStatus property
   analysisResults: any; 
-
+  addStoreStatus: 'idle' | 'loading' | 'succeeded' | 'failed'; 
+    addStoreError: string | null; 
+    newlyAddedStore: Store | null;
+    userStores: Store[],
+    removeStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
 const initialState: StoreState = {
@@ -25,6 +29,11 @@ const initialState: StoreState = {
   searchRadius: 5, 
   analysisStatus: 'idle',
   analysisResults: null, 
+  addStoreStatus: 'idle',
+  addStoreError: null,
+  newlyAddedStore: null,
+  userStores: [],
+   removeStatus: 'idle'
 };
 
 export const storeSlice = createSlice({
@@ -34,6 +43,8 @@ export const storeSlice = createSlice({
     setUserLocation: (state, action: PayloadAction<UserLocation>) => {
       state.userLocation = action.payload;
       state.locationDetected = true;
+    }, setStores: (state, action: PayloadAction<Store[]>) => {
+      state.stores = action.payload;
     },
     resetBestStore: (state) => {
       state.bestStoreResult = null;
@@ -42,6 +53,16 @@ export const storeSlice = createSlice({
     setSearchRadius: (state, action: PayloadAction<number>) => {
       state.searchRadius = action.payload;
     },
+    resetAddStoreStatus: (state) => {
+      state.addStoreStatus = 'idle';
+      state.addStoreError = null;
+      state.newlyAddedStore = null;
+  },
+  resetRemoveStatus: (state) => {
+    state.removeStatus = 'idle';
+  },clearUserStores: (state) => {
+    state.userStores = [];
+  },
   },
   extraReducers: (builder) => {
     builder
@@ -66,9 +87,56 @@ export const storeSlice = createSlice({
       .addCase(runAnalysis.rejected, (state, action) => {
         state.analysisStatus = 'failed';
         state.error = action.error.message || 'An unknown error occurred';
-      });
+      })    
+      .addCase(fetchStores.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchStores.fulfilled, (state, action) => {
+        state.loading = false;
+        state.stores = action.payload;
+      })
+      .addCase(fetchStores.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string || 'Failed to fetch stores';
+      })
+      .addCase(addStore.pending, (state) => {
+        state.addStoreStatus = 'loading';
+        state.addStoreError = null;
+        state.newlyAddedStore = null;
+    })
+    .addCase(addStore.fulfilled, (state, action) => {
+      state.addStoreStatus = 'succeeded';
+      state.newlyAddedStore = action.payload;
+      state.userStores = [...state.userStores, action.payload]; 
+    })
+    .addCase(addStore.rejected, (state, action) => {
+        state.addStoreStatus = 'failed';
+        state.addStoreError = action.payload as string || 'Failed to add store.';
+    }) .addCase(fetchUserStores.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(fetchUserStores.fulfilled, (state, action) => {
+      state.loading = false;
+      state.userStores = action.payload; 
+    })
+    .addCase(fetchUserStores.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string || 'Failed to fetch user stores';
+    })
+    .addCase(removeUserStore.pending, (state) => {
+      state.removeStatus = 'loading';
+    })
+    .addCase(removeUserStore.fulfilled, (state, action) => {
+      state.removeStatus = 'succeeded';
+      state.userStores = state.userStores.filter(store => store.id !== action.payload);
+    })
+    .addCase(removeUserStore.rejected, (state, action) => {
+      state.removeStatus = 'failed';
+      state.error = action.payload as string || 'Failed to remove store';
+    });
   },
 });
 
-export const { setUserLocation, resetBestStore, setSearchRadius } = storeSlice.actions;
+export const { setUserLocation, resetBestStore, setSearchRadius , resetAddStoreStatus , resetRemoveStatus ,clearUserStores , setStores } = storeSlice.actions;
 export default storeSlice.reducer;

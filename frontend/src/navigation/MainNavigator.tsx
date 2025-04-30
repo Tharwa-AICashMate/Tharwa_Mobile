@@ -33,30 +33,31 @@ import HelpCenterScreen from "@/screens/EditProfile/HelpCenterScreen";
 import { useDispatch } from "react-redux";
 import { fetchCurrentUser } from "@/redux/slices/AuthSlice";
 import { AppDispatch } from "@/redux/store";
+import AddStore from "@/screens/AddStore";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export default function MainNavigator() {
-  const [session, setSession] = useState<boolean>(false);
-  const dispatch = useDispatch<AppDispatch>();
+  // const [session, setSession] = useState<boolean>(false);
+  // const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    dispatch(fetchCurrentUser()).then(res => {
-      if (fetchCurrentUser.fulfilled.match(res)) 
-        setSession(true);
-    })
+  // useEffect(() => {
+  //   dispatch(fetchCurrentUser()).then(res => {
+  //     if (fetchCurrentUser.fulfilled.match(res)) 
+  //       setSession(true);
+  //   })
     
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session ? true : false);
-    });
-  }, []);
+  //   supabase.auth.onAuthStateChange((_event, session) => {
+  //     setSession(session ? true : false);
+  //   });
+  // }, []);
 
   return (
     <>
       <NavigationContainer>
-        {!session ? (
-          <OnBoardingNavigation />
-        ) : (
+        {/* {!session ? ( 
+          <OnBoardingNavigation /> 
+          ) : ( */}
           <RootStack.Navigator
             initialRouteName={"MainApp"}
             screenOptions={{ headerShown: false }}
@@ -146,13 +147,15 @@ export default function MainNavigator() {
             />
             <RootStack.Screen name="SearchScreen" component={SearchScreen} />
 
+            <RootStack.Screen name="AddStore" component={AddStore} />
+
             {/* Password Change Confirm */}
             <RootStack.Screen
               name="PasswordChangeConfirm"
               component={PasswordChangeConfirmScreen}
             />
           </RootStack.Navigator>
-        )}
+         {/* )} */}
       </NavigationContainer>
     </>
   );

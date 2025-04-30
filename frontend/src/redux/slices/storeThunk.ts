@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getStores, getStoreItems, getBestMatch } from "../../api/storeapi";
+import { getStores, getStoreItems, getBestMatch, addStore as apiAddStore } from "../../api/storeapi";
 import { RootState } from "../store";
 import {
   Store,
@@ -11,7 +11,65 @@ import {
 import axios from "axios";
 
 import { API_ENDPOINTS } from "../../api/aiApi";
-import { calculateDistance } from "@/utils/locationUtils";
+import { calculateDistance } from "@/utils/locationutils";
+import axiosInstance from "@/config/axios";
+export const fetchStores = createAsyncThunk<Store[], void>(
+  'store/fetchStores',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/stores');
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch stores');
+    }
+  }
+);
+export const addStore = createAsyncThunk(
+  'store/addStore',
+  async (payload: {
+    name: string;
+    latitude: number;
+    longitude: number;
+    city: string;
+    country: string;
+    userId: string;
+  }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('/stores', payload);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.error || 'Failed to add store');
+    }
+  }
+);
+
+export const fetchUserStores = createAsyncThunk(
+  'store/fetchUserStores',
+  async (userId: string, { rejectWithValue }) => {
+    const testUserId = "48c72b4f-2a9b-4548-af7d-5a4862d1d9cc";
+    try {
+      const response = await axiosInstance.get(`/user/stores?userId=${userId}`);
+      // const response = await axiosInstance.get(`/user/stores?userId=${testUserId}`);
+
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.error || 'Failed to fetch user stores');
+    }
+  }
+);
+
+export const removeUserStore = createAsyncThunk(
+  'store/removeUserStore',
+  async (storeId: string, { rejectWithValue }) => {
+    try {
+      await axiosInstance.delete(`/user/stores/${storeId}`);
+      return storeId;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.error || 'Failed to remove store');
+    }
+  }
+);
+
 
 export const runAnalysis = createAsyncThunk(
   "store/runAnalysis",
@@ -54,7 +112,6 @@ export const findBestStore = createAsyncThunk<
   }
 
   try {
-    // محاولة الاتصال بالباكند أولاً
     const bestStore = await getBestMatch(
       userLocation.latitude,
       userLocation.longitude,

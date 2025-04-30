@@ -6,7 +6,7 @@ import { calculateHaversineDistance } from "../utils/haversine";
 import { supabase } from '../utils/supabaseClient';
 import { Store } from "../types";
 
-import { getDistance } from '../utils/distanceutils';
+import { getDistance } from '../utils/distanceUtils';
 
 export const getAllStores = async (req: Request, res: Response) => {
   const { data, error } = await supabase.from('stores').select('*');

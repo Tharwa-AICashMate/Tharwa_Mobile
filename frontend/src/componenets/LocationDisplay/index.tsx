@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { setUserLocation } from "@/redux/slices/storeSlice";
-import { getCurrentLocation } from "@/utils/locationUtils";
+import { getCurrentLocation } from "@/utils/locationutils";
 import Theme from "@/theme";
 
 const LocationDisplay: React.FC = () => {
