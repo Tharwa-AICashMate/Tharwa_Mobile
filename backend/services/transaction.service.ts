@@ -1,5 +1,61 @@
+
+
 import { supabase } from "../config/supabase.js";
 
+interface DescriptionItem {
+  name: string;
+  unitPrice: number;
+  quantity?: number;
+}
+
+interface Transaction {
+  user_id?: string;
+  category_id: number;
+  amount: number;
+  type: "income" | "expense";
+  title: string;
+  created_at: Date;
+  details?: DescriptionItem[]; 
+}
+
+export const createTransaction = async (transaction: Transaction) => {
+  console.log(transaction)
+  if (transaction.type === 'income') {
+    const { data, error } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('name', 'Income')
+      .eq('user_id', transaction.user_id) 
+      .limit(1)
+      .single();
+  
+    if (error) {
+      console.error('Error fetching Income category:', error);
+    } else if (data) {
+      transaction.category_id = data.id;
+    }
+  }
+  delete transaction.user_id
+
+  const transactionToInsert = {
+    ...transaction,
+    details: transaction.details ? JSON.stringify(transaction.details) : null
+  };
+  const { data, error } = await supabase
+    .from('transactions')
+    .insert([transactionToInsert])
+    .select();
+  console.log(error)
+  if (error) throw new Error(error.message);
+  
+
+  return data?.[0] ? {
+    ...data[0],
+    details: data[0].details ? JSON.parse(data[0].details) : undefined
+  } : null;
+};
+
+// Update other functions to handle details parsing
 export const getAllTransactions = async (userId: string, page = 1) => {
   const from = (page - 1) * 20;
   const to = from + 20 - 1;
@@ -12,23 +68,14 @@ export const getAllTransactions = async (userId: string, page = 1) => {
     .range(from, to);
 
   if (error) throw new Error(error.message);
-  return data;
+  
+  return data?.map(transaction => ({
+    ...transaction,
+    details: transaction.details ? JSON.parse(transaction.details) : undefined
+  }));
 };
-export const createTransaction = async (transaction: {
-  category_id: number;
-  amount: number;
-  type: string;
-  title: string;
-  created_at: Date;
-}) => {
-  const { data, error } = await supabase
-    .from("transactions")
-    .insert([transaction])
-    .select();
 
-  if (error) throw new Error(error.message);
-  return data?.[0];
-};
+
 
 export const getTransactionsByCategory = async (
   userId: string,
@@ -47,7 +94,11 @@ export const getTransactionsByCategory = async (
     .range(from, to);
 
   if (error) throw new Error(error.message);
-  return data;
+  
+  return data?.map(transaction => ({
+    ...transaction,
+    details: transaction.details ? JSON.parse(transaction.details) : undefined
+  }));
 };
 
 export const deleteTransaction = async (transactionId: string) => {
@@ -67,6 +118,9 @@ export const editTransaction = async (transaction: {
   created_at: Date;
   id: string;
 }) => {
+
+  console.log(transaction)
+
   const { data, error } = await supabase
     .from("transactions")
     .update(transaction)

@@ -8,20 +8,15 @@ import styles from "./styles";
 interface MonthSectionProps {
   month: string;
   transactions: Transaction[];
-  showCategory: boolean;
+  showCategory:boolean, icon?: string
 }
-
-const MonthSection: React.FC<MonthSectionProps> = ({
-  month,
-  transactions,
-  showCategory,
-}) => {
+const MonthSection: React.FC<MonthSectionProps> = ({ month, transactions,showCategory,icon }) => {
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
   const handleToggleMenu = (id: string) => {
     setActiveMenuId((prev) => (prev === id ? null : id));
   };
-
+  console.log(transactions)
   return (
     <View style={styles.container}>
       <View style={styles.containerTitle}>
@@ -39,6 +34,7 @@ const MonthSection: React.FC<MonthSectionProps> = ({
           transaction={transaction}
           iconBgColor={Theme.colors.accentLight}
           showCategory={showCategory}
+                  icon={icon}
           isMenuVisible={activeMenuId === transaction.transaction_id}
           onToggleMenu={handleToggleMenu}
         />

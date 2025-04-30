@@ -6,11 +6,14 @@ export interface Category {
   created_at?: Date;
 }
 
-
 export interface CreateCategoryDTO {
   name: string;
   icon: string;
   user_id: string;
 }
 
+export interface UpdateCategoryDTO {
+  name?: string;
+  icon?: string;
 
+}

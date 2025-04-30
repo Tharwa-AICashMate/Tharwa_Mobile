@@ -3,8 +3,7 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
+   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
 import {
@@ -13,11 +12,9 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Ionicons } from "@expo/vector-icons";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { RootStackParamList } from "App";
-import BalanceDisplay from "@/componenets/BalanceDisplay";
-import ProgressBar from "@/componenets/ProgressBar";
+
 import Theme from "@/theme";
 import styles from "./style";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
@@ -27,12 +24,9 @@ import {
 } from "@/redux/slices/categoryTransactions";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getCurrentUserId } from "@/utils/auth";
-import { apiBase } from "@/utils/axiosInstance";
 import MonthSection from "@/componenets/MonthSection";
 import { groupTransactionsByMonth } from "@/utils/helpers";
 import ExpenseBrief from "@/componenets/expenceBrief";
-import { Transaction } from "@/types/transactionTypes";
 import { FlatList } from "react-native-gesture-handler";
 
 dayjs.extend(utc);
@@ -97,7 +91,22 @@ const CategoryDetailScreen = () => {
         dispatch(clearTransactions());
         loadCategoryTransactions(true);
       }
-    }, [categoryId, userId])
+    }, [categoryId, userId, dispatch])
+  );
+
+  const groupedTransactions = TransactionsOfCategory.reduce(
+    (groups: { [key: string]: typeof TransactionsOfCategory }, transaction) => {
+      const date = dayjs.utc(new Date(transaction.created_at));
+      const monthName = date.format("MMMM YYYY");
+
+      if (!groups[monthName]) {
+        groups[monthName] = [];
+      }
+
+      groups[monthName].push(transaction);
+      return groups;
+    },
+    {}
   );
 
   const addExpense = () => {

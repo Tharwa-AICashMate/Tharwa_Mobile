@@ -32,7 +32,8 @@ import { RootStackParamList } from "@/navigation/types";
 import HelpCenterScreen from "@/screens/EditProfile/HelpCenterScreen";
 import { useDispatch } from "react-redux";
 import { fetchCurrentUser } from "@/redux/slices/AuthSlice";
-import { AppDispatch } from "@/redux/s";
+import { AppDispatch } from "@/redux/store";
+import AddIncomeScreen from "@/screens/AddIncome";
 import { useAppSelector } from "@/redux/hook";
 import SettingsStore from "@/screens/SettingsStores";
 
@@ -143,6 +144,7 @@ export default function MainNavigator() {
             <RootStack.Screen name="Savings" component={Savings} />
             <RootStack.Screen name="SavingDetails" component={SavingDetails} />
             <RootStack.Screen name="AddSavings" component={AddSavingsScreen} />
+            <RootStack.Screen name="AddIncome" component={AddIncomeScreen} />
 
             {/* Notification */}
             <RootStack.Screen name="Notification" component={Notification} />

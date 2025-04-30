@@ -1,12 +1,28 @@
 import React from "react";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
-import { View, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+// 1. Define your root stack param types
+type RootStackParamList = {
+  AddIncome: undefined;
+  AddExpensesScreen: undefined;
+  Savings: undefined;
+  // Add other screens here as needed
+};
+
+// 2. Create navigation prop type for this component
+type FinancialCategoriesNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'AddIncome' | 'AddExpensesScreen' | 'Savings'
+>;
 
 interface CategoryItem {
   id: string;
-  label: string;
+  displayLabel: string; 
+  screenName: keyof RootStackParamList; 
   iconName: keyof typeof Ionicons.glyphMap;
   color: string;
 }
@@ -43,11 +59,10 @@ const CategoryListItem: React.FC<{ item: CategoryItem }> = ({ item }) => {
   const navigation = useNavigation();
 
   const handlePress = () => {
-    if (item.id === "Store") {
-     navigation.navigate("stores"); 
-    } else {
-      console.log(`Pressed ${item.label}`);
-    }
+   
+      navigation.navigate(item.screenName)
+      console.log(`Pressed ${item.displayLabel}`);
+    
   };
 
   return (
@@ -55,7 +70,7 @@ const CategoryListItem: React.FC<{ item: CategoryItem }> = ({ item }) => {
       <IconBackground color={item.color}>
         <CategoryIcon name={item.iconName} />
       </IconBackground>
-      <CategoryLabel>{item.label}</CategoryLabel>
+      <CategoryLabel>{item.displayLabel}</CategoryLabel>
     </CategoryButton>
   );
 };
@@ -64,25 +79,29 @@ const FinancialCategories: React.FC = () => {
   const categories: CategoryItem[] = [
     {
       id: "income",
-      label: "Income",
-      iconName: "cash-outline", // Or 'cash-outline', 'wallet-outline'
-      color: "#81C784", // Greenish for income
+      displayLabel: "Income",
+      screenName: "AddIncome",
+      iconName: "cash-outline",
+      color: "#81C784",
     },
     {
       id: "expense",
-      label: "Expense",
-      iconName: "remove-circle-outline", // Or 'cart-outline', 'remove-circle-outline'
-      color: "#E57373", // Reddish for expense
+      displayLabel: "Expense",
+      screenName: "AddExpensesScreen",
+      iconName: "remove-circle-outline",
+      color: "#E57373",
     },
     {
       id: "savings",
-      label: "Savings",
+      displayLabel: "Savings",
+      screenName: "Savings",
       iconName: "star-outline",
       color: "#64B5F6",
     },
     {
-      id: "Store",
-      label: "Store",
+      id: "stores",
+      displayLabel: "Store",
+      screenName: "stores",
       iconName: "storefront-outline",
       color: "#64B5F6",
     }

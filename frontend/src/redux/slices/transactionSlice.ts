@@ -66,18 +66,29 @@ export const addTransactionAsync = createAsyncThunk(
 export const deleteTransactionsAsync = createAsyncThunk(
   "transactions/deleteTransactions",
   async (transactionId: string, thunkAPI) => {
+    console.log('-------------------------')
+
     await api.deleteTransactions(transactionId);
+    console.log('-------------------------')
+
     const state = thunkAPI.getState();
-    const transactions = state.transactions.items || state.transactionsByCategory.data;
+    const transactions = state.transactions.transactions || state.transactionsByCategory.data;
+    console.log(transactions,'-----dfghgfh------',state.transactions.items,'-----dfghgfh------',state.transactionsByCategory)
     const transaction = transactions.find(
       (t: Transaction) => t.transaction_id == transactionId
     );
+    console.log('-------------------------',{
+      type: transaction.type,
+      amount: transaction.amount,
+    })
+
     thunkAPI.dispatch(
       removeTransaction({
         type: transaction.type,
         amount: transaction.amount,
       })
     );
+    console.log('-------------------------')
     thunkAPI.dispatch(deleteCategoryTransactions(Number(transactionId)));
     return transactionId;
   }

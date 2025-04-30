@@ -24,43 +24,52 @@ interface TransactionItemProps {
   showCategory: boolean;
   isMenuVisible: boolean;
   onToggleMenu: (id: string) => void;
+  icon?: string;
 }
 
-type navProps = NativeStackScreenProps<
-  RootStackParamList,
-  "CategoryDetail"
->;
+type navProps = NativeStackScreenProps<RootStackParamList, "CategoryDetail">;
 const TransactionItem: React.FC<TransactionItemProps> = ({
   transaction,
   iconBgColor = Theme.colors.accentLight,
   showCategory = true,
+  icon,
   isMenuVisible,
-  onToggleMenu
+  onToggleMenu,
 }) => {
   const menuVisible = isMenuVisible;
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<navProps>();
-  
 
   const handleEdit = () => {
     onToggleMenu(null);
-    navigation.navigate("AddExpensesScreen",{transaction});
+    if (transaction.type == 'income')
+      navigation.navigate("AddIncome", { transaction });
+    else
+      navigation.navigate("AddExpensesScreen", { transaction });
   };
 
   const handleDelete = () => {
     onToggleMenu(null);
-    dispatch(deleteTransactionsAsync(transaction.transaction_id))
+    dispatch(deleteTransactionsAsync(transaction.transaction_id));
   };
 
   return (
     <>
       <View style={styles.transactionItem}>
         <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
-          <Ionicons name={transaction.icon} size={20} color="white" />
+          <Ionicons
+            name={transaction.icon || (icon as any)}
+            size={20}
+            color="white"
+          />
         </View>
 
         <View style={styles.transactionDetails}>
-          <Text style={styles.transactionTitle} numberOfLines={1} ellipsizeMode="tail">
+          <Text
+            style={styles.transactionTitle}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
             {transaction.title || transaction.category_name}
           </Text>
           <Text style={styles.transactionSubtitle}>
@@ -70,7 +79,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
 
         {showCategory && (
           <View style={styles.seperator}>
-            <Text style={styles.category} numberOfLines={1} ellipsizeMode="tail">
+            <Text
+              style={styles.category}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {transaction.category_name}
             </Text>
           </View>
@@ -86,36 +99,41 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
           {formatCurrency(transaction.amount)}
         </Text>
 
-        <TouchableOpacity onPress={() => onToggleMenu(transaction.transaction_id)} style={styles.menuIcon}>
-          <Ionicons name="ellipsis-vertical" size={20} color={Theme.colors.text} />
+        <TouchableOpacity
+          onPress={() => onToggleMenu(transaction.transaction_id)}
+          style={styles.menuIcon}
+        >
+          <Ionicons
+            name="ellipsis-vertical"
+            size={20}
+            color={Theme.colors.text}
+          />
         </TouchableOpacity>
-      {menuVisible && (
-        <>
-          <TouchableWithoutFeedback onPress={() => onToggleMenu(null)}>
-            <View style={StyleSheet.absoluteFillObject} />
-          </TouchableWithoutFeedback>
+        {menuVisible && (
+          <>
+            <TouchableWithoutFeedback onPress={() => onToggleMenu(null)}>
+              <View style={StyleSheet.absoluteFillObject} />
+            </TouchableWithoutFeedback>
 
-          <View style={styles.dropdownMenu}>
-            <Pressable onPress={handleEdit} style={styles.menuItem}>
-              <Text>Edit</Text>
-            </Pressable>
-            <Pressable onPress={handleDelete} style={styles.menuItem}>
-              <Text style={{ color: "red" }}>Delete</Text>
-            </Pressable>
-          </View>
-        </>
-      )}
+            <View style={styles.dropdownMenu}>
+              <Pressable onPress={handleEdit} style={styles.menuItem}>
+                <Text>Edit</Text>
+              </Pressable>
+              <Pressable onPress={handleDelete} style={styles.menuItem}>
+                <Text style={{ color: "red" }}>Delete</Text>
+              </Pressable>
+            </View>
+          </>
+        )}
       </View>
 
       {menuVisible && (
-        
-          <TouchableWithoutFeedback onPress={() => onToggleMenu(null)}>
-            <View style={StyleSheet.absoluteFillObject} />
-          </TouchableWithoutFeedback>
-          )}
+        <TouchableWithoutFeedback onPress={() => onToggleMenu(null)}>
+          <View style={StyleSheet.absoluteFillObject} />
+        </TouchableWithoutFeedback>
+      )}
     </>
   );
 };
-
 
 export default TransactionItem;

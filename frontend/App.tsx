@@ -41,6 +41,7 @@ export type RootStackParamList = {
     Icon: string;
   };
   AddExpensesScreen: { transaction: Transaction|undefined};
+  AddIncome: { transaction: Transaction|undefined};
   Savings: { categoryName: string };
   SavingDetails: {
     categoryName: string;

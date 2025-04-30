@@ -8,7 +8,6 @@ import {
 } from "@react-navigation/native";
 import {
   NativeStackNavigationProp,
-  NativeStackScreenProps,
 } from "@react-navigation/native-stack";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 
@@ -51,7 +50,6 @@ const AddExpensesScreen = () => {
           console.error("Failed to get user ID:", error);
         }
       };
-
       fetchUserId();
     }, [])
   );
@@ -64,9 +62,14 @@ const AddExpensesScreen = () => {
     category: string;
     amount: string;
     title: string;
-    type: "expense";
+    type: "expense" | "income" | "savings";
     message: string;
     created_at: Date;
+    descriptionItems?: Array<{
+      name: string;
+      unitPrice: string;
+      quantity?: string;
+    }>;
   }) => {
     const selectedCategory = categories.find(
       (cat) => cat.name === data.category
@@ -76,13 +79,22 @@ const AddExpensesScreen = () => {
       console.error("Category or user not found");
       return;
     }
-
+  
+    // Format description items for database
+    const details = data.descriptionItems?.map(item => ({
+      name: item.name,
+      unitPrice: parseFloat(item.unitPrice),
+      quantity: item.quantity ? parseInt(item.quantity) : undefined
+    }));
+  
     const newTransaction = {
+      user_id: userId,
       category_id: Number(selectedCategory.id),
       amount: parseFloat(data.amount),
-      type: data.type,
+      type: data.type as "expense" | "income",
       title: data.title || data.category,
       created_at: data.created_at,
+      details: details
     };
     if (transaction?.transaction_id) {
       dispatch(
@@ -98,12 +110,7 @@ const AddExpensesScreen = () => {
     } else
       dispatch(createTransaction(newTransaction)).then((res) => {
         if (res.meta.requestStatus === "fulfilled") {
-          navigation.replace("CategoryDetail", {
-            categoryName: selectedCategory.name,
-            categoryId: selectedCategory.id as number,
-            UserId: userId,
-            Icon: selectedCategory.icon,
-          });
+          navigation.goBack();
         }
       });
   };
@@ -128,8 +135,7 @@ const AddExpensesScreen = () => {
           <TransactionForm
             title="Expense"
             buttonText="Save"
-            categories={categories}
-            onSubmit={handleSubmit}
+              onSubmit={handleSubmit}
           />
         )}
       </View>
