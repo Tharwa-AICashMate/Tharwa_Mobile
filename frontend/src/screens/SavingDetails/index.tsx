@@ -21,7 +21,8 @@ import styles from "./style";
 import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/theme";
 import { useFocusEffect } from "@react-navigation/native";
-import { IDeposit } from "@/types/depositType";
+import { ActivityIndicator } from "react-native";
+import MonthSection from "@/componenets/MonthSection";
 
 dayjs.extend(utc);
 
@@ -40,7 +41,7 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
     (state) => state.goals.currentAmounts[goalIdNumber]
   );
 
-  const { deposits, loading } = useAppSelector((state) => state.deposits);
+  const { deposits, loading: isLoading, } = useAppSelector((state) => state.deposits);
 
   useFocusEffect(
     useCallback(() => {
@@ -54,7 +55,7 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
 
   const groupedDeposits = deposits.reduce(
     (groups: { [key: string]: any[] }, deposit) => {
-      const date = dayjs.utc(deposit.created_at || new Date());
+      const date = dayjs.utc(new Date(deposit.created_at as Date));
       const monthName = date.format("MMMM YYYY");
 
       if (!groups[monthName]) {
@@ -149,32 +150,27 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
           </View>
         </View>
 
+
+
         <ScrollView style={styles.transactionList}>
-          {Object.keys(groupedDeposits).map((month) => (
-            <View key={month} style={styles.monthSection}>
-              <Text style={styles.monthTitle}>{month}</Text>
-
-              {groupedDeposits[month].map((deposit: IDeposit) => {
-                const date = dayjs.utc(deposit.created_at).local();
-                const formattedDate = date.format("DD MMM");
-                const formattedTime = date.format("hh:mm A");
-
-                return (
-                  <TransactionItem
-                    key={deposit.id}
-                    id={deposit.id}
-                    title={`${deposit.title} `}
-                    subtitle={`${formattedDate} at ${formattedTime}`}
-                    amount={deposit.amount}
-                    icon={Icon}
-                    iconBgColor={Theme.colors.accentLight}
-                    isDeposit={true}
-                  />
-                );
-              })}
-            </View>
-          ))}
-        </ScrollView>
+                {isLoading ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      minHeight: 200,
+                      
+                    }}
+                  >
+                    <ActivityIndicator size="large" color={Theme.colors.primary} />
+                  </View>
+                ) : (
+                  Object.keys(groupedDeposits).map((month) => (
+                    <MonthSection key={month} month={month} transactions={groupedDeposits[month]} showCategory={false} icon={Icon}/>
+                  ))
+                )}
+              </ScrollView>
 
         <View style={styles.addSavingContainer}>
           <TouchableOpacity style={styles.addButton} onPress={addSavings}>

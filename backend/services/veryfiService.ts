@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Define the expected response type for Veryfi API
+
 export interface InvoiceResult {
   supplier_name: string;
   total_amount: string;

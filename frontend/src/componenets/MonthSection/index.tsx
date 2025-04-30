@@ -7,10 +7,10 @@ import TransactionItem from "@/componenets/TransactionItem";
 interface MonthSectionProps {
   month: string;
   transactions: Transaction[];
-  showCategory:boolean
+  showCategory:boolean, icon?: string
 }
 
-const MonthSection: React.FC<MonthSectionProps> = ({ month, transactions,showCategory }) => {
+const MonthSection: React.FC<MonthSectionProps> = ({ month, transactions,showCategory,icon }) => {
   console.log(transactions)
   return (
     <View style={styles.container}>
@@ -22,10 +22,11 @@ const MonthSection: React.FC<MonthSectionProps> = ({ month, transactions,showCat
             console.log(transaction);
             return (
               <TransactionItem
-                  key={transaction.transaction_id}
+                  key={transaction.id}
                   transaction={transaction}
                   iconBgColor={Theme.colors.accentLight}
                   showCategory ={showCategory}
+                  icon={icon}
               />)
       })}
     </View>

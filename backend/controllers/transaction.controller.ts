@@ -19,18 +19,23 @@ export const getTransactions = async (req: Request, res: Response) => {
 };
 export const addTransaction = async (req: Request, res: Response) => {
   try {
-    const { category_id, amount, type, title ,created_at} = req.body;
+    const { category_id, amount, type, title ,created_at,details} = req.body;
     
-    if ( !category_id || !amount || !type || !title) {
+    if ( !category_id || !amount || !type || !title ) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
+    
     const newTransaction = await transactionService.createTransaction({
+      
       created_at,
       category_id,
       amount,
       type,
-      title
+      title,
+      details,
+      
+  
     });
 
     res.status(201).json(newTransaction);

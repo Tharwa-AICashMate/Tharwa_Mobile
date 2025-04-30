@@ -81,7 +81,7 @@ const CategoryDetailScreen = () => {
 
   const groupedTransactions = TransactionsOfCategory.reduce(
     (groups: { [key: string]: typeof TransactionsOfCategory }, transaction) => {
-      const date = dayjs.utc(transaction.created_at);
+      const date = dayjs.utc(new Date(transaction.created_at));
       const monthName = date.format("MMMM YYYY");
 
       if (!groups[monthName]) {

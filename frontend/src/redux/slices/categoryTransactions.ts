@@ -2,15 +2,23 @@ import { apiBase } from "@/utils/axiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+
+interface DescriptionItem {
+  name: string;
+  unitPrice: number;
+  quantity?: number;
+}
+
 interface Transaction {
   transaction_id: number;
   user_id: string;
   title: string;
   amount: number;
-  type: "income" | "expence";
+  type: "income" | "expense";
   category_id: number;
   category_name: string;
   created_at: string;
+  details?: DescriptionItem[];
 }
 
 interface TransactionState {
@@ -20,6 +28,16 @@ interface TransactionState {
   createLoading: boolean;
   createError: string | null;
 }
+
+interface CreateTransactionPayload {
+  category_id: number;
+  amount: number;
+  type: "income" | "expense";
+  title: string;
+  created_at: Date;
+  details?: DescriptionItem[];
+}
+
 
 const initialState: TransactionState = {
   data: [],
@@ -46,31 +64,24 @@ export const fetchTransactionsByCategory = createAsyncThunk(
   }
 );
 
+
 export const createTransaction = createAsyncThunk(
   "transactions/create",
-  async (
-    transaction: {
-      category_id: number;
-      amount: number;
-      type: "income" | "expence";
-      title: string;
-      created_at:Date
-    },
-    { rejectWithValue }
-  ) => {
+  async (transaction: CreateTransactionPayload, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         `${apiBase}/transactions`,
         transaction
       );
-      console.log('---------------------------------',response.data);
+      console.log("Transaction created:", response.data);
       return response.data;
     } catch (error: any) {
-      console.log('------------------------',error)
+      console.error("Create transaction error:", error);
       return rejectWithValue(error.message);
     }
   }
 );
+
 
 const transactionSlice = createSlice({
   name: "transactions",
@@ -82,7 +93,6 @@ const transactionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // 🟦 Fetch
       .addCase(fetchTransactionsByCategory.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -102,7 +112,7 @@ const transactionSlice = createSlice({
       })
       .addCase(createTransaction.fulfilled, (state, action) => {
         state.createLoading = false;
-        state.data.push(action.payload); // add new transaction to state
+        state.data.push(action.payload);
       })
       .addCase(createTransaction.rejected, (state, action) => {
         state.createLoading = false;
@@ -110,5 +120,6 @@ const transactionSlice = createSlice({
       });
   },
 });
+
 export const { clearTransactions } = transactionSlice.actions;
 export default transactionSlice.reducer;

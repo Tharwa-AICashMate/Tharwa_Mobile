@@ -48,6 +48,7 @@ export type RootStackParamList = {
   };
   Camera: undefined;
   AddSavings: undefined;
+  AddIncome:undefined
 };
 
 const RootStack = createStackNavigator();

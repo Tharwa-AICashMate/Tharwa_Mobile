@@ -10,17 +10,19 @@ interface TransactionItemProps {
   transaction:Transaction
   iconBgColor?: string;
   showCategory:boolean,
+  icon?:string
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({
   transaction,
   iconBgColor = Theme.colors.accentLight,
   showCategory = true,
+  icon
 }) => {
   return (
     <View style={styles.transactionItem}>
       <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
-        <Ionicons name={transaction.icon} size={20} color="white" />
+        <Ionicons name={transaction.icon  || icon  as any} size={20} color="white" />
       </View>
 
       <View style={styles.transactionDetails}>

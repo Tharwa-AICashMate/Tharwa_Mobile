@@ -12,6 +12,7 @@ export interface IDepositCreate {
   amount: number;
   message?: string;
   title: string;
+  created_at:Date
 }
 
 export interface IDepositUpdate {

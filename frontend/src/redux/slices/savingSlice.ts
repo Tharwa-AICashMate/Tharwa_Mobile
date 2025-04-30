@@ -71,7 +71,7 @@ export const createGoal = createAsyncThunk(
 export const updateGoal = createAsyncThunk(
   "goals/updateGoal",
   async (
-    { id, data }: { id: string; data: Partial<Goal> },
+    { id, data }: { id: number; data: Partial<Goal> },
     { rejectWithValue }
   ) => {
     try {

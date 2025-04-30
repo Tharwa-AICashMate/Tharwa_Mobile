@@ -39,6 +39,21 @@ export const deleteCategory = async (req: Request, res: Response): Promise<void>
         res.status(500).json({ message: error.message });
     }
 };
+
+
+export const updateCategory = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    const updatedCategory = await categoryService.updateCategory(Number(id), updates);
+    if (!updatedCategory) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+    res.status(200).json(updatedCategory);
+  } catch (error:any) {
+    res.status(500).json({ message: 'Error updating category', error: error.message });
+  }
+};
 // // Get all categories
 // const getCategories = async (req: Request, res: Response) => {
 //   try {

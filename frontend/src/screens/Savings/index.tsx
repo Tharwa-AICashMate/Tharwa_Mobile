@@ -1,3 +1,344 @@
+// import React, { useEffect, useState } from 'react';
+// import {
+//   SafeAreaView,
+//   View,
+//   Text,
+//   FlatList,
+//   TouchableOpacity,
+//   ActivityIndicator,
+// } from 'react-native';
+// import { Ionicons } from '@expo/vector-icons';
+// import { useFocusEffect, useNavigation } from '@react-navigation/native';
+// import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+// import { RootStackParamList } from 'App';
+// import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
+// import BalanceDisplay from '@/componenets/BalanceDisplay';
+// import ProgressBar from '@/componenets/ProgressBar';
+// import Theme from '@/theme';
+// import styles from './style';
+// import { useAppDispatch, useAppSelector } from '@/redux/hook';
+// import { fetchUserGoals, createGoal } from '@/redux/slices/savingSlice';
+// import { Goal } from '@/types/goal';
+// import AddCategoryModal from '@/componenets/AddCategoryModal';
+// import { getCurrentUserId } from '@/utils/auth';
+// import { apiBase } from '@/utils/axiosInstance';
+
+// type SavingsScreenNavigationProp = NativeStackNavigationProp<
+//   RootStackParamList,
+//   'Savings'
+// >;
+
+// const Savings = () => {
+//   const navigation = useNavigation<SavingsScreenNavigationProp>();
+//   const dispatch = useAppDispatch();
+
+//   const { items: savingsGoals, loading: isLoading } = useAppSelector((state) => state.goals);
+//   const [userId, setUserId] = useState<string | null>(null);
+//   const [modalVisible, setModalVisible] = useState(false);
+//   const [newGoalName, setNewGoalName] = useState("");
+//   const [targetAmount, setTargetAmount] = useState("");
+//   const [selectedIcon, setSelectedIcon] = useState("wallet-outline");
+//   const [totalBalance, setTotalBalance] = useState(0);
+  
+//   // Add validation state
+//   const [nameError, setNameError] = useState("");
+//   const [targetError, setTargetError] = useState("");
+//   const [iconError, setIconError] = useState("");
+
+//   useEffect(() => {
+//     const loadUserIdAndGoals = async () => {
+//       try {
+//         const currentUserId = await getCurrentUserId();
+//         if (currentUserId) {
+//           setUserId(currentUserId);
+//           dispatch(fetchUserGoals(currentUserId));
+//         }
+//       } catch (err) {
+//         console.error("Error fetching user goals:", err);
+//       }
+//     };
+
+//     loadUserIdAndGoals();
+//   }, [dispatch]);
+
+//   const navigateToCategory = (
+//     categoryName: string,
+//     goalID: number,
+//     Target: number,
+//     Icon: string
+//   ) => {
+//     navigation.navigate('SavingDetails', {
+//       categoryName,
+//       goalID,
+//       Target,
+//       Icon,
+//     });
+//   };
+
+//   const checkForDuplicateName = (name: string) => {
+//     const normalizedName = name.trim().toLowerCase();
+//     return savingsGoals.some(goal => goal.name.toLowerCase() === normalizedName);
+//   };
+
+//   const validateForm = () => {
+//     let isValid = true;
+
+//     // Validate name
+//     if (!newGoalName.trim()) {
+//       setNameError("Goal name is required");
+//       isValid = false;
+//     } else if (newGoalName.trim().length < 3) {
+//       setNameError("Goal name must be at least 3 characters");
+//       isValid = false;
+//     } else if (checkForDuplicateName(newGoalName)) {
+//       setNameError("A savings goal with this name already exists");
+//       isValid = false;
+//     } else {
+//       setNameError("");
+//     }
+
+//     // Validate target amount
+//     if (!targetAmount.trim()) {
+//       setTargetError("Target amount is required");
+//       isValid = false;
+//     } else {
+//       const amount = parseFloat(targetAmount);
+//       if (isNaN(amount) || amount <= 0) {
+//         setTargetError("Please enter a valid positive amount");
+//         isValid = false;
+//       } else if (amount > 1000000) {
+//         setTargetError("Target amount cannot exceed 1,000,000");
+//         isValid = false;
+//       } else {
+//         setTargetError("");
+//       }
+//     }
+
+//     // Validate icon
+//     if (!selectedIcon) {
+//       setIconError("Please select an icon");
+//       isValid = false;
+//     } else {
+//       setIconError("");
+//     }
+
+//     return isValid;
+//   };
+
+//   const handleAddGoal = () => {
+//     if (validateForm() && userId) {
+//       dispatch(
+//         createGoal({
+//           name: newGoalName.trim(),
+//           icon: selectedIcon,
+//           target_amount: parseFloat(targetAmount),
+//           user_id: userId,
+//           deadline: new Date(), // Add actual deadline if needed
+//         })
+//       );
+//       resetForm();
+//       setModalVisible(false);
+//     }
+//   };
+
+//   const resetForm = () => {
+//     setNewGoalName('');
+//     setTargetAmount('');
+//     setSelectedIcon('wallet-outline');
+//     setNameError('');
+//     setTargetError('');
+//     setIconError('');
+//   };
+
+//   const fetchBalance = async () => {
+//     try {
+//       const currentUserId = await getCurrentUserId();
+//       if (!currentUserId) return;
+
+//       const response = await fetch(`${apiBase}/api/balances/user/${currentUserId}`);
+//       if (!response.ok) throw new Error('Failed to fetch balance');
+
+//       const data = await response.json();
+//       setTotalBalance(data.balance_limit || 0);
+//     } catch (error) {
+//       console.error('Error fetching balance:', error);
+//     }
+//   };
+
+//   useFocusEffect(
+//     React.useCallback(() => {
+//       fetchBalance();
+//     }, [])
+//   );
+
+//   const handleCancel = () => {
+//     resetForm();
+//     setModalVisible(false);
+//   };
+
+//   const handleChangeTargetAmount = (value: string) => {
+//     // Only allow numeric input with up to 2 decimal places
+//     const regex = /^\d*\.?\d{0,2}$/;
+//     if (value === '' || regex.test(value)) {
+//       setTargetAmount(value);
+      
+//       // Clear error if there was one
+//       if (targetError) {
+//         setTargetError('');
+//       }
+//     }
+//   };
+
+//   const handleChangeName = (value: string) => {
+//     setNewGoalName(value);
+    
+//     // Clear error if name is valid but check for duplicates
+//     if (value.trim().length >= 3) {
+//       if (checkForDuplicateName(value)) {
+//         setNameError("A savings goal with this name already exists");
+//       } else {
+//         setNameError('');
+//       }
+//     }
+//   };
+
+//   const handleSelectIcon = (icon: string) => {
+//     setSelectedIcon(icon);
+    
+//     // Clear error if there was one
+//     if (iconError) {
+//       setIconError('');
+//     }
+//   };
+
+//   const renderGoalCard = ({ item }: { item: Goal | { name: string, isMoreButton?: boolean } }) => {
+//     // If this is the "More" button item
+//     if ('isMoreButton' in item && item.isMoreButton) {
+//       return (
+//         <TouchableOpacity
+//           style={styles.categoryCard}
+//           onPress={() => setModalVisible(true)}
+//         >
+//           <View style={styles.categoryIconContainer}>
+//             <Ionicons name="add" size={45} color="white" />
+//           </View>
+//           <Text style={styles.categoryName}>More</Text>
+//         </TouchableOpacity>
+//       );
+//     }
+
+//     // Otherwise render normal goal card
+//     return (
+//       <TouchableOpacity
+//         style={styles.categoryCard}
+//         onPress={() =>
+//           navigateToCategory(
+//             item.name,
+//             (item as Goal).id ?? 1,
+//             (item as Goal).target_amount ?? 0,
+//             (item as Goal).icon ?? 'wallet-outline'
+//           )
+//         }
+//       >
+//         <View style={styles.categoryIconContainer}>
+//           <Ionicons
+//             name={(item as Goal).icon ?? 'wallet-outline' as any}
+//             size={45}
+//             color="white"
+//           />
+//         </View>
+//         <Text style={styles.categoryName}>{item.name}</Text>
+//       </TouchableOpacity>
+//     );
+//   };
+
+//   const renderContent = () => {
+//     if (isLoading) {
+//       return (
+//         <View style={styles.emptyStateContainer}>
+//           <ActivityIndicator size="large" color={Theme.colors.primary} />
+//           <Text style={styles.emptyStateText}>Loading savings goals...</Text>
+//         </View>
+//       );
+//     }
+
+//     if (savingsGoals.length === 0) {
+//       return (
+//         <View style={styles.emptyStateContainer}>
+//           <TouchableOpacity
+//             style={styles.emptyStateAddButton}
+//             onPress={() => setModalVisible(true)}
+//           >
+//             <Ionicons name="add-circle" size={80} color={Theme.colors.primary} />
+//           </TouchableOpacity>
+//           <Text style={styles.emptyStateTitle}>Create Your First Goal</Text>
+//           <Text style={styles.emptyStateText}>
+//             Start saving for something special by adding your first goal
+//           </Text>
+//         </View>
+//       );
+//     }
+
+//     return (
+//       <FlatList
+//         data={[...savingsGoals, { name: 'More', isMoreButton: true }]}
+//         keyExtractor={(item, index) =>
+//           'id' in item ? String((item as Goal).id) : `more-${index}`
+//         }
+//         numColumns={3}
+//         renderItem={renderGoalCard}
+//         contentContainerStyle={styles.categoriesGrid}
+//       />
+//     );
+//   };
+
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <Header title="Savings" />
+
+//       <View style={styles.balanceContainer}>
+//         <BalanceDisplay balance={totalBalance} expense={1000} />
+//       </View>
+
+//       <View style={styles.budgetContainer}>
+//         <View style={styles.progressContainer}>
+//           <ProgressBar percentage={30} amount={122223} />
+//         </View>
+
+//         <View style={styles.budgetStatus}>
+//           <Ionicons name="checkbox-outline" size={16} color={Theme.colors.text} />
+//           <Text style={styles.budgetStatusText}>
+//             30% Of Your Expenses, Looks Good.
+//           </Text>
+//         </View>
+//       </View>
+
+//       <View style={styles.categoriesContainer}>
+//         {renderContent()}
+//       </View>
+
+//       <AddCategoryModal
+//         visible={modalVisible}
+//         categoryName={newGoalName}
+//         selectedIcon={selectedIcon}
+//         targetAmount={targetAmount}
+//         onChangeName={handleChangeName}
+//         onSelectIcon={handleSelectIcon}
+//         onChangeTargetAmount={handleChangeTargetAmount}
+//         onSave={handleAddGoal}
+//         onCancel={handleCancel}
+//         showTargetInput={true}
+//         nameError={nameError}
+//         iconError={iconError}
+//         targetError={targetError}
+//       />
+//     </SafeAreaView>
+//   );
+// };
+
+// export default Savings;
+
+
 import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
@@ -5,6 +346,9 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
+  Modal,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -16,7 +360,7 @@ import ProgressBar from '@/componenets/ProgressBar';
 import Theme from '@/theme';
 import styles from './style';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
-import { fetchUserGoals, createGoal } from '@/redux/slices/savingSlice';
+import { fetchUserGoals, createGoal, updateGoal, deleteGoal } from '@/redux/slices/savingSlice';
 import { Goal } from '@/types/goal';
 import AddCategoryModal from '@/componenets/AddCategoryModal';
 import { getCurrentUserId } from '@/utils/auth';
@@ -31,13 +375,21 @@ const Savings = () => {
   const navigation = useNavigation<SavingsScreenNavigationProp>();
   const dispatch = useAppDispatch();
 
-  const { items: savingsGoals } = useAppSelector((state) => state.goals);
+  const { items: savingsGoals, loading: isLoading } = useAppSelector((state) => state.goals);
   const [userId, setUserId] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [actionModalVisible, setActionModalVisible] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [newGoalName, setNewGoalName] = useState("");
   const [targetAmount, setTargetAmount] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("wallet-outline");
   const [totalBalance, setTotalBalance] = useState(0);
+  const [isEditMode, setIsEditMode] = useState(false);
+  
+  // Add validation state
+  const [nameError, setNameError] = useState("");
+  const [targetError, setTargetError] = useState("");
+  const [iconError, setIconError] = useState("");
 
   useEffect(() => {
     const loadUserIdAndGoals = async () => {
@@ -69,21 +421,100 @@ const Savings = () => {
     });
   };
 
+  const checkForDuplicateName = (name: string) => {
+    const normalizedName = name.trim().toLowerCase();
+    return savingsGoals.some(goal => 
+      goal.name.toLowerCase() === normalizedName && 
+      (!isEditMode || (isEditMode && goal.id !== selectedGoal?.id))
+    );
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+
+    // Validate name
+    if (!newGoalName.trim()) {
+      setNameError("Goal name is required");
+      isValid = false;
+    } else if (newGoalName.trim().length < 3) {
+      setNameError("Goal name must be at least 3 characters");
+      isValid = false;
+    } else if (checkForDuplicateName(newGoalName)) {
+      setNameError("A savings goal with this name already exists");
+      isValid = false;
+    } else {
+      setNameError("");
+    }
+
+    // Validate target amount
+    if (!targetAmount.trim()) {
+      setTargetError("Target amount is required");
+      isValid = false;
+    } else {
+      const amount = parseFloat(targetAmount);
+      if (isNaN(amount) || amount <= 0) {
+        setTargetError("Please enter a valid positive amount");
+        isValid = false;
+      } else if (amount > 1000000) {
+        setTargetError("Target amount cannot exceed 1,000,000");
+        isValid = false;
+      } else {
+        setTargetError("");
+      }
+    }
+
+    // Validate icon
+    if (!selectedIcon) {
+      setIconError("Please select an icon");
+      isValid = false;
+    } else {
+      setIconError("");
+    }
+
+    return isValid;
+  };
+
   const handleAddGoal = () => {
-    if (newGoalName.trim() && targetAmount.trim() && userId) {
-      dispatch(
-        createGoal({
-          name: newGoalName.trim(),
-          icon: selectedIcon,
-          target_amount: parseFloat(targetAmount),
-          user_id: userId,
-          deadline: new Date(), // Add actual deadline if needed
-        })
-      );
-      setNewGoalName('');
-      setTargetAmount('');
+    if (validateForm() && userId) {
+      if (isEditMode && selectedGoal) {
+        // Update existing goal
+        dispatch(
+          updateGoal({
+            id: selectedGoal.id as number,
+            data: {
+              name: newGoalName.trim(),
+              icon: selectedIcon,
+              target_amount: parseFloat(targetAmount),
+              // Keep other properties unchanged
+            },
+          })
+        );
+      } else {
+        // Create new goal
+        dispatch(
+          createGoal({
+            name: newGoalName.trim(),
+            icon: selectedIcon,
+            target_amount: parseFloat(targetAmount),
+            user_id: userId,
+            deadline: new Date(), // Add actual deadline if needed
+          })
+        );
+      }
+      resetForm();
       setModalVisible(false);
     }
+  };
+
+  const resetForm = () => {
+    setNewGoalName('');
+    setTargetAmount('');
+    setSelectedIcon('wallet-outline');
+    setNameError('');
+    setTargetError('');
+    setIconError('');
+    setIsEditMode(false);
+    setSelectedGoal(null);
   };
 
   const fetchBalance = async () => {
@@ -108,40 +539,186 @@ const Savings = () => {
   );
 
   const handleCancel = () => {
-    setNewGoalName('');
-    setTargetAmount('');
+    resetForm();
     setModalVisible(false);
   };
 
-  const renderGoalCard = ({ item }: { item: Goal | { name: string } }) => (
-    <TouchableOpacity
-      style={styles.categoryCard}
-      onPress={() =>
-        item.name.toLowerCase() === "more"
-          ? setModalVisible(true)
-          : navigateToCategory(
-              item.name,
-              (item as Goal).id ?? 1,
-              (item as Goal).target_amount ?? 0,
-              (item as Goal).icon ?? 'wallet-outline'
-            )
+  const handleChangeTargetAmount = (value: string) => {
+    // Only allow numeric input with up to 2 decimal places
+    const regex = /^\d*\.?\d{0,2}$/;
+    if (value === '' || regex.test(value)) {
+      setTargetAmount(value);
+      
+      // Clear error if there was one
+      if (targetError) {
+        setTargetError('');
       }
-    >
-      <View style={styles.categoryIconContainer}>
-        <Ionicons
-          name={
-            item.name.toLowerCase() === 'more'
-              ? 'add' as any
-              : (item as Goal).icon ?? 'wallet-outline'
-          }
-          size={45}
-          color="white"
-        />
-      </View>
-      <Text style={styles.categoryName}>{item.name}</Text>
-  
-    </TouchableOpacity>
-  );
+    }
+  };
+
+  const handleChangeName = (value: string) => {
+    setNewGoalName(value);
+    
+    // Clear error if name is valid but check for duplicates
+    if (value.trim().length >= 3) {
+      if (checkForDuplicateName(value)) {
+        setNameError("A savings goal with this name already exists");
+      } else {
+        setNameError('');
+      }
+    }
+  };
+
+  const handleSelectIcon = (icon: string) => {
+    setSelectedIcon(icon);
+    
+    // Clear error if there was one
+    if (iconError) {
+      setIconError('');
+    }
+  };
+
+  const handleGoalLongPress = (goal: Goal) => {
+    setSelectedGoal(goal);
+    setActionModalVisible(true);
+  };
+
+  const openEditModal = () => {
+    if (!selectedGoal) return;
+    
+    setIsEditMode(true);
+    setNewGoalName(selectedGoal.name);
+    setTargetAmount(selectedGoal.target_amount.toString());
+    setSelectedIcon(selectedGoal.icon || 'wallet-outline');
+    setNameError('');
+    setTargetError('');
+    setIconError('');
+    setModalVisible(true);
+    setActionModalVisible(false);
+  };
+
+  const handleDeleteGoal = () => {
+    if (!selectedGoal) return;
+    
+    setActionModalVisible(false);
+    
+    Alert.alert(
+      "Delete Savings Goal",
+      `Are you sure you want to delete the goal "${selectedGoal.name}"?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            dispatch(deleteGoal(selectedGoal.id as number));
+            setSelectedGoal(null);
+          },
+        },
+      ]
+    );
+  };
+
+  const renderGoalCard = ({ item }: { item: Goal | { name: string, isMoreButton?: boolean } }) => {
+    // If this is the "More" button item
+    if ('isMoreButton' in item && item.isMoreButton) {
+      return (
+        <TouchableOpacity
+          style={styles.categoryCard}
+          onPress={() => {
+            setIsEditMode(false);
+            resetForm();
+            setModalVisible(true);
+          }}
+        >
+          <View style={styles.categoryIconContainer}>
+            <Ionicons name="add" size={45} color="white" />
+          </View>
+          <Text style={styles.categoryName}>More</Text>
+        </TouchableOpacity>
+      );
+    }
+
+    // Otherwise render normal goal card
+    const goal = item as Goal;
+    return (
+      <TouchableOpacity
+        style={styles.categoryCard}
+        onPress={() =>
+          navigateToCategory(
+            goal.name,
+            goal.id as number,
+            goal.target_amount,
+            goal.icon || 'wallet-outline'
+          )
+        }
+        onLongPress={() => handleGoalLongPress(goal)}
+        delayLongPress={300}
+      >
+        <View style={styles.categoryIconContainer}>
+          <Ionicons
+            name={(goal.icon || 'wallet-outline') as any}
+            size={45}
+            color="white"
+          />
+        </View>
+        <Text style={styles.categoryName}>{goal.name}</Text>
+        <TouchableOpacity
+          style={styles.optionsButton}
+          onPress={() => handleGoalLongPress(goal)}
+        >
+          <Ionicons name="ellipsis-vertical" size={18} color="white" />
+        </TouchableOpacity>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <View style={styles.emptyStateContainer}>
+          <ActivityIndicator size="large" color={Theme.colors.primary} />
+          <Text style={styles.emptyStateText}>Loading savings goals...</Text>
+        </View>
+      );
+    }
+
+    if (savingsGoals.length === 0) {
+      return (
+        <View style={styles.emptyStateContainer}>
+          <TouchableOpacity
+            style={styles.emptyStateAddButton}
+            onPress={() => {
+              setIsEditMode(false);
+              resetForm();
+              setModalVisible(true);
+            }}
+          >
+            <Ionicons name="add-circle" size={80} color={Theme.colors.primary} />
+          </TouchableOpacity>
+          <Text style={styles.emptyStateTitle}>Create Your First Goal</Text>
+          <Text style={styles.emptyStateText}>
+            Start saving for something special by adding your first goal
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <FlatList
+        data={[...savingsGoals, { name: 'More', isMoreButton: true }]}
+        keyExtractor={(item, index) =>
+          'id' in item ? String((item as Goal).id) : `more-${index}`
+        }
+        numColumns={3}
+        renderItem={renderGoalCard}
+        contentContainerStyle={styles.categoriesGrid}
+      />
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -165,28 +742,58 @@ const Savings = () => {
       </View>
 
       <View style={styles.categoriesContainer}>
-        <FlatList
-          data={[...savingsGoals, { name: 'More' }]}
-          keyExtractor={(item, index) =>
-            'id' in item ? String((item as Goal).id) : `more-${index}`
-          }
-          numColumns={3}
-          renderItem={renderGoalCard}
-          contentContainerStyle={styles.categoriesGrid}
-        />
+        {renderContent()}
       </View>
+
+      {/* Action Modal for Edit/Delete */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={actionModalVisible}
+        onRequestClose={() => setActionModalVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.actionModalOverlay}
+          activeOpacity={1}
+          onPress={() => setActionModalVisible(false)}
+        >
+          <View style={styles.actionModalContainer}>
+            <TouchableOpacity 
+              style={styles.actionButton} 
+              onPress={openEditModal}
+            >
+              <Ionicons name="pencil" size={24} color={Theme.colors.primary} />
+              <Text style={styles.actionButtonText}>Edit</Text>
+            </TouchableOpacity>
+            
+            <View style={styles.actionDivider} />
+            
+            <TouchableOpacity 
+              style={styles.actionButton} 
+              onPress={handleDeleteGoal}
+            >
+              <Ionicons name="trash" size={24} color={Theme.colors.primary} />
+              <Text style={[styles.actionButtonText, { color: Theme.colors.text}]}>Delete</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
 
       <AddCategoryModal
         visible={modalVisible}
         categoryName={newGoalName}
         selectedIcon={selectedIcon}
         targetAmount={targetAmount}
-        onChangeName={setNewGoalName}
-        onSelectIcon={setSelectedIcon}
-        onChangeTargetAmount={setTargetAmount}
+        onChangeName={handleChangeName}
+        onSelectIcon={handleSelectIcon}
+        onChangeTargetAmount={handleChangeTargetAmount}
         onSave={handleAddGoal}
         onCancel={handleCancel}
         showTargetInput={true}
+        nameError={nameError}
+        iconError={iconError}
+        targetError={targetError}
+        isEditing={isEditMode}
       />
     </SafeAreaView>
   );
