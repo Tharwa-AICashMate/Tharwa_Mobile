@@ -64,6 +64,7 @@ const AddExpensesScreen = () => {
     title: string;
     type: "expense" | "income" | "savings";
     message: string;
+    store?:string
     created_at: Date;
     descriptionItems?: Array<{
       name: string;
@@ -94,7 +95,8 @@ const AddExpensesScreen = () => {
       type: data.type as "expense" | "income",
       title: data.title || data.category,
       created_at: data.created_at,
-      details: details
+      details: details,
+      storeId:data.store
     };
     if (transaction?.transaction_id) {
       dispatch(
@@ -114,7 +116,7 @@ const AddExpensesScreen = () => {
         }
       });
   };
-
+  console.log(transaction)
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Theme.colors.primary }}>
       <Header title="Add Expenses" />
@@ -123,13 +125,14 @@ const AddExpensesScreen = () => {
           <TransactionForm
             title="Expense"
             buttonText="Save"
-            categories={categories}
+            //categories={categories}
             onSubmit={handleSubmit}
             initialCategory={transaction?.category_name}
             initialAmount={transaction?.amount.toString()}
             initialTitle={transaction?.title}
             initialMessage={transaction?.description}
             initialDate={new Date(transaction?.created_at)}
+            initialDetails={transaction?.details}
           />
         ) : (
           <TransactionForm

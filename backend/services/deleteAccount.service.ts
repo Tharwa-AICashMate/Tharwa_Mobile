@@ -37,9 +37,9 @@ export const deleteAccount = async (supabase: SupabaseClient, userId: string): P
 
     // Optionally, delete user-related data from other tables
     const { error: profileError } = await supabase
-      .from('profiles') // Adjust table name as needed
+      .from('users')
       .delete()
-      .eq('user_id', userId);
+      .eq('id', userId);
 
     if (profileError) {
       console.error('Error deleting user profile:', profileError);
@@ -56,30 +56,30 @@ export const deleteAccount = async (supabase: SupabaseClient, userId: string): P
 
 
 export const getEmailByUserId = async (
-    supabase: SupabaseClient,
-    userId: string
-  ): Promise<string | null> => {
-    try {
-      const { data, error } = await supabase
-        .from('users') // استبدل هذا باسم الجدول الذي يخزن البيانات الشخصية
-        .select('email')
-        .eq('id', userId)
-        .single();
-  
-      if (error) {
-        console.error('Error fetching email:', error.message);
-        return null;
-      }
-  
-      return data?.email || null;
-    } catch (error) {
-      console.error('Unexpected error fetching email:', error);
+  supabase: SupabaseClient,
+  userId: string
+): Promise<string | null> => {
+  try {
+    const { data, error } = await supabase
+      .from('users') 
+      .select('email')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching email:', error.message);
       return null;
     }
-  };
+
+    return data?.email || null;
+  } catch (error) {
+    console.error('Unexpected error fetching email:', error);
+    return null;
+  }
+};
 
 
-  // Update password for a user
+// Update password for a user
 // Update password for a user securely with hashing using Supabase's auth system
 export const updatePassword = async (
   supabase: SupabaseClient,

@@ -66,7 +66,6 @@ export const getAllTransactions = async (userId: string, page = 1) => {
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .range(from, to);
-
   if (error) throw new Error(error.message);
   
   return data?.map(transaction => ({

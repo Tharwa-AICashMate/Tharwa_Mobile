@@ -98,7 +98,7 @@ export const TargetProgress: React.FC<TargetProgressProps> = ({
       </Container>
     );
   }
-
+  console.log(goals.length)
   return (
     <Container>
       {goals.map((goal, index) => {
@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
     backgroundColor: Theme.colors.accentLight,
     padding: 14,
     borderRadius: 30,
+    minWidth:140,
     alignItems: "center",
   },
 });

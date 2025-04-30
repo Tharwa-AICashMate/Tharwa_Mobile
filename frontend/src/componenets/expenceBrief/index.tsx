@@ -9,7 +9,7 @@ import { getCurrentUserId } from "@/utils/auth";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { fetchBalance, fetchFinanceData } from "@/redux/slices/financeSlice";
 
-const ExpenseBrief: React.FC = () => {
+const ExpenseBrief: React.FC = ({setTotalBalance}) => {
   const dispatch = useAppDispatch();
   const { balance, expenses, income, savings, loading, error } = useAppSelector(
     (state) => state.finance
@@ -21,13 +21,15 @@ const ExpenseBrief: React.FC = () => {
       console.log(userId)
       dispatch(fetchFinanceData(userId));
       dispatch(fetchBalance(userId));
+      if(setTotalBalance)
+        setTotalBalance(balance)
     }
 
     fetchAll();
   }, [dispatch]);
 
   const availableBalance = balance - expenses - savings + income;
-  const percentage = availableBalance ? (expenses / availableBalance) * 100 : 0;
+  const percentage = availableBalance ? (expenses / (balance+income)) * 100 : 0;
   return (
     <View style={{ marginBottom: 30 }}>
       <View style={styles.budgetContainer}>

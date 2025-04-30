@@ -10,6 +10,7 @@ export const getTransactions = async (req: Request, res: Response) => {
     const userId = req.params.userId;
     const page = parseInt(req.query.page as string) || 1;
     const transactions = await transactionService.getAllTransactions(userId,page);
+    console.log(transactions)
     res.json(transactions);
   } catch (err: any) {
     res.status(500).json({ 

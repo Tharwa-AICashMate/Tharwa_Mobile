@@ -17,8 +17,10 @@ import ExpenseBrief from "@/componenets/expenceBrief";
 
 const TargetsContainer = styled.View`
   flex-direction: row;
-  justify-content: space-around;
+  
   margin-top: 16px;
+  justify-content:space-between;
+  flex-warp:warp;
 `;
 
 export const FinanceOverview: React.FC = () => {
@@ -182,15 +184,9 @@ export const FinanceOverview: React.FC = () => {
 
           <TargetsContainer>
             <TargetProgress
-              title="Travel"
-              progress={30}
               color={Theme.colors.accentDark}
             />
-            <TargetProgress
-              title="Car"
-              progress={50}
-              color={Theme.colors.accentDark}
-            />
+          
           </TargetsContainer>
         </View>
       </ScrollView>

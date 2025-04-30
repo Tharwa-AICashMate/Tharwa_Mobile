@@ -40,7 +40,7 @@ export const createBalanceService = async (balance: BalanceInput) => {
     .upsert([balance], {  onConflict: 'user_id'})
     .select()
     .single();
-
+  console.log(data,error)
   if (error) throw error;
   return data;
 };

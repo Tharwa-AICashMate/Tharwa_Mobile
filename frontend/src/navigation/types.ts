@@ -37,4 +37,7 @@ export type RootStackParamList = {
   TermsAndConditions: undefined;
   StoreHome: undefined;
   StoreScreen: undefined;
+  AllStores:undefined;
+  FavoriteStores:undefined;
+  AddStore:undefined;
 };

@@ -41,7 +41,7 @@ export const fetchBalance = createAsyncThunk(
   async (userId: string, thunkAPI) => {
     try {  
         const response = await fetch(`${apiBase}/api/balances/user/${userId}`);
-        if (!response.ok) throw new Error('Failed to fetch balance');
+        //if (!response.ok) throw new Error('Failed to fetch balance');
         const data = await response.json();
         return data.balance_limit || 0;
       } catch (error) {

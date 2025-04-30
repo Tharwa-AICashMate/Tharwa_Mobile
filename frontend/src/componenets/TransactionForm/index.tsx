@@ -11,7 +11,8 @@ import {
   Keyboard,
   ActivityIndicator,
 } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
+import { clearUserStores, setUserStores } from "@/redux/slices/storeSlice";
+ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
@@ -19,6 +20,9 @@ import { fetchUserCategories } from "@/redux/slices/categoriesSlice";
 import { getCurrentUserId } from "@/utils/auth";
 import Theme from "@/theme";
 import styles from "./style";
+import axios from "axios";
+ import { apiBase } from "@/utils/axiosInstance";
+ import axiosInstance from "@/config/axios";
 import { Transaction } from "@/types/transactionTypes";
 
 interface Category {
@@ -55,12 +59,15 @@ interface TransactionFormProps {
     message: string;
     created_at: Date;
     descriptionItems?: DescriptionItem[];
+    store?: string;
   }) => void;
   initialCategory?: string;
   initialAmount?: string;
   initialTitle?: string;
   initialMessage?: string;
   initialDate?: Date;
+  initialStore?: string;
+  initialDetails?:any;
   resetAfterSubmit?: boolean;
   isIncome?: boolean;
   isSavings?: boolean;
@@ -75,10 +82,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   initialTitle = "",
   initialMessage = "",
   initialDate = new Date(),
+  initialStore = "",
+  initialDetails=[{ name: "", unitPrice: "" }],
   resetAfterSubmit = true,
   isIncome = false,
   isSavings = false,
 }) => {
+  console.log(initialDetails)
+  const navigation = useNavigation();
   // Form state
   const [date, setDate] = useState<Date>(initialDate);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -87,33 +98,39 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const [titleValue, setTitleValue] = useState(initialTitle);
   const [message, setMessage] = useState(initialMessage);
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
-  const [descriptionItems, setDescriptionItems] = useState<DescriptionItem[]>([
-    { name: "", unitPrice: "" },
-  ]);
-  
+  const [descriptionItems, setDescriptionItems] = useState<DescriptionItem[]>(initialDetails);
+  const [store, setStore] = useState(initialStore);
+  const [showStorePicker, setShowStorePicker] = useState(false);
+  const [stores, setStores] = useState<any[]>([]);
+  const [storesLoading, setStoresLoading] = useState(false);
   // Redux state
   const dispatch = useAppDispatch();
-  const { items: categories, loading: categoriesLoading } = useAppSelector((state) => state.categories);
-  const { items: savingsGoals, loading: savingsLoading } = useAppSelector((state) => state.goals);
-  
+  const { items: categories, loading: categoriesLoading } = useAppSelector(
+    (state) => state.categories
+  );
+  const { items: savingsGoals, loading: savingsLoading } = useAppSelector(
+    (state) => state.goals
+  );
   // Find income category
-  const incomeCategory = categories.find(category => 
-    category.name.toLowerCase() === "income"
+  const incomeCategory = categories.find(
+    (category) => category.name.toLowerCase() === "income"
   );
 
   // Determine which categories to show based on form type
   const displayCategories = isSavings ? savingsGoals : categories;
-  const isLoading = isSavings ? savingsLoading : categoriesLoading;
-
+  const isLoading = isSavings
+     ? savingsLoading
+     : categoriesLoading || storesLoading;
   // Keyboard tracking
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [currentFocusedInput, setCurrentFocusedInput] = useState<string | null>(null);
-  
+  const [currentFocusedInput, setCurrentFocusedInput] = useState<string | null>(
+    null
+  );  
   // References
   const scrollViewRef = useRef<ScrollView>(null);
-  const inputRefs = useRef<{[key: string]: any}>({});
-
+  const inputRefs = useRef<{ [key: string]: any }>({});
+  
   // Error states
   const [errors, setErrors] = useState({
     date: "",
