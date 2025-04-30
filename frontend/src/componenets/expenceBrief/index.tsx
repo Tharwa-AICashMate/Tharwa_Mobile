@@ -27,7 +27,7 @@ const ExpenseBrief: React.FC = () => {
   }, [dispatch]);
 
   const availableBalance = balance - expenses - savings + income;
-  const percentage = availableBalance ? (expenses / balance) * 100 : 0;
+  const percentage = availableBalance ? (expenses / availableBalance) * 100 : 0;
   return (
     <View style={{ marginBottom: 30 }}>
       <View style={styles.budgetContainer}>
