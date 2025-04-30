@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Store } from '@/types/settings.types';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import Theme from '@/theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AllStoresPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -34,7 +35,7 @@ const AllStoresPage: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView  style={styles.container}>
               <Header title='All Stores' />
 
       <View style={styles.content}>
@@ -73,7 +74,7 @@ const AllStoresPage: React.FC = () => {
       />
       </View>
      
-    </View>
+    </SafeAreaView>
   );
 };
 

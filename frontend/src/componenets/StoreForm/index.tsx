@@ -135,11 +135,10 @@ useEffect(() => {
   };
 
   const handleAddStore = (suggestion: GeoapifySuggestion) => {
-    // if (!user?.id) {
-    //   console.error('User not authenticated');
-    //   return;
-    // }
-    const testUserId = "48c72b4f-2a9b-4548-af7d-5a4862d1d9cc";
+    if (!user?.id) {
+      console.error('User not authenticated');
+      return;
+    }
 
     const { name, lat, lon, city, country } = suggestion.properties;
     dispatch(addStore({
@@ -148,7 +147,7 @@ useEffect(() => {
       longitude: lon,
       city: city || 'Unknown',
       country: country || 'Unknown',
-      userId: testUserId,
+      userId: user.id,
     }));
     setSuggestions([]);
     setSearchQuery('');

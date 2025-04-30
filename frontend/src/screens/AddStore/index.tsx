@@ -5,19 +5,20 @@ import StoreForm from '@/componenets/StoreForm';
 import { Store } from '@/types/store';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import Theme from '@/theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AddStorePage: React.FC = () => {
   const handleSuccess = (newStore: Store) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header title="Add Store" />
       <View style={styles.content}>
       <StoreForm onSuccess={handleSuccess} />
 
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 const styles=StyleSheet.create({

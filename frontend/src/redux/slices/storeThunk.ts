@@ -46,11 +46,8 @@ export const addStore = createAsyncThunk(
 export const fetchUserStores = createAsyncThunk(
   'store/fetchUserStores',
   async (userId: string, { rejectWithValue }) => {
-    const testUserId = "48c72b4f-2a9b-4548-af7d-5a4862d1d9cc";
     try {
       const response = await axiosInstance.get(`/user/stores?userId=${userId}`);
-      // const response = await axiosInstance.get(`/user/stores?userId=${testUserId}`);
-
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.error || 'Failed to fetch user stores');
@@ -119,19 +116,17 @@ export const findBestStore = createAsyncThunk<
       searchRadius
     ).catch((apiError) => {
       console.warn("API request failed, trying client calculation:", apiError);
-      throw apiError; // سيتم التعامل معها في catch التالي
+      throw apiError;
     });
 
     return bestStore;
   } catch {
-    // إذا فشل اتصال API نستخدم الحساب المحلي
     try {
       const [stores, storeItems] = await Promise.all([
         getStores().catch(() => [] as Store[]),
         getStoreItems().catch(() => [] as StoreItem[]),
       ]);
 
-      // حساب المسافات بشكل متوازي
       const storesWithDistance = await Promise.all(
         stores.map(async (store) => ({
           ...store,
@@ -144,7 +139,6 @@ export const findBestStore = createAsyncThunk<
         }))
       );
 
-      // تصفية المتاجر في نطاق البحث
       const storesInRadius = storesWithDistance.filter(
         (store) => store.distance <= searchRadius
       );

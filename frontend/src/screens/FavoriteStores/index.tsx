@@ -9,49 +9,50 @@ import { clearUserStores ,setStores} from '@/redux/slices/storeSlice';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import Theme from '@/theme';
 import axiosInstance from '@/config/axios';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const FavoriteStores: React.FC = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state: RootState) => state.auth);
   const { userStores, loading } = useAppSelector((state: RootState) => state.store);
   const [refreshing, setRefreshing] = useState(false);
-  // useEffect(() => {
-  //   const testUserId = "48c72b4f-2a9b-4548-af7d-5a4862d1d9cc";
-  //   if (user?.id) {
-  //     // dispatch(fetchUserStores(user.id));
-  //     dispatch(fetchUserStores(testUserId));
-
-  //   }
-  // }, [user, dispatch]);
   useEffect(() => {
     const loadData = async () => {
       try {
-        const testUserId = "48c72b4f-2a9b-4548-af7d-5a4862d1d9cc";
-        const response = await axiosInstance.get(`/user/stores?userId=${testUserId}`);
-        dispatch(setStores(response.data));
+        if (user?.id) {
+          const response = await axiosInstance.get(`/user/stores?userId=${user.id}`);
+          dispatch(setStores(response.data));
+        }
       } catch (error) {
         console.error('Error loading stores:', error);
       }
     };
     
     loadData();
-  }, [dispatch]);
+  }, [dispatch, user]);
   const handleShare = (store) => {
     Share.share({
       message: `Check out this store: ${store.name}\nLocation: ${store.city}, ${store.country}\nCoordinates: ${store.latitude}, ${store.longitude}`,
     });
   };
-  const testUserId = "48c72b4f-2a9b-4548-af7d-5a4862d1d9cc";
 
-  const handleRefresh = async () => {
-    dispatch(clearUserStores());
-    setRefreshing(true);
-    await dispatch(fetchUserStores(testUserId));
-    setRefreshing(false);
-  };
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        if (user?.id) {
+          const response = await axiosInstance.get(`/user/stores?userId=${user.id}`);
+          dispatch(setStores(response.data));
+        }
+      } catch (error) {
+        console.error('Error loading stores:', error);
+      }
+    };
+    
+    loadData();
+  }, [dispatch, user]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header title={"Favorite Stores"} />
       <View style={styles.content}>
       <FlatList
@@ -101,7 +102,7 @@ const FavoriteStores: React.FC = () => {
         }
       />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
