@@ -11,32 +11,19 @@ import {
   Keyboard,
   ActivityIndicator,
 } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
+import { clearUserStores, setUserStores } from "@/redux/slices/storeSlice";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { fetchUserCategories } from "@/redux/slices/categoriesSlice";
 import { getCurrentUserId } from "@/utils/auth";
+
 import Theme from "@/theme";
 import styles from "./style";
-import { Transaction } from "@/types/transactionTypes";
-
-interface Category {
-  id?: number;
-  name: string;
-  icon: string;
-  user_id: string;
-  created_at?: Date;
-}
-
-interface SavingsGoal {
-  id?: number;
-  name: string;
-  icon: string;
-  target_amount?: number;
-  user_id: string;
-  created_at?: Date;
-}
+import axios from "axios";
+import { apiBase } from "@/utils/axiosInstance";
+import axiosInstance from "@/config/axios";
 
 interface DescriptionItem {
   name: string;
@@ -55,12 +42,14 @@ interface TransactionFormProps {
     message: string;
     created_at: Date;
     descriptionItems?: DescriptionItem[];
+    store?: string;
   }) => void;
   initialCategory?: string;
   initialAmount?: string;
   initialTitle?: string;
   initialMessage?: string;
   initialDate?: Date;
+  initialStore?: string;
   resetAfterSubmit?: boolean;
   isIncome?: boolean;
   isSavings?: boolean;
@@ -75,10 +64,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   initialTitle = "",
   initialMessage = "",
   initialDate = new Date(),
+  initialStore = "",
   resetAfterSubmit = true,
   isIncome = false,
   isSavings = false,
 }) => {
+  const navigation = useNavigation();
   // Form state
   const [date, setDate] = useState<Date>(initialDate);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -86,33 +77,45 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const [amount, setAmount] = useState(initialAmount);
   const [titleValue, setTitleValue] = useState(initialTitle);
   const [message, setMessage] = useState(initialMessage);
+  const [store, setStore] = useState(initialStore);
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
+  const [showStorePicker, setShowStorePicker] = useState(false);
   const [descriptionItems, setDescriptionItems] = useState<DescriptionItem[]>([
     { name: "", unitPrice: "" },
   ]);
-  
+  const [stores, setStores] = useState<any[]>([]);
+  const [storesLoading, setStoresLoading] = useState(false);
+
   // Redux state
   const dispatch = useAppDispatch();
-  const { items: categories, loading: categoriesLoading } = useAppSelector((state) => state.categories);
-  const { items: savingsGoals, loading: savingsLoading } = useAppSelector((state) => state.goals);
-  
+  const { items: categories, loading: categoriesLoading } = useAppSelector(
+    (state) => state.categories
+  );
+  const { items: savingsGoals, loading: savingsLoading } = useAppSelector(
+    (state) => state.goals
+  );
+
   // Find income category
-  const incomeCategory = categories.find(category => 
-    category.name.toLowerCase() === "income"
+  const incomeCategory = categories.find(
+    (category) => category.name.toLowerCase() === "income"
   );
 
   // Determine which categories to show based on form type
   const displayCategories = isSavings ? savingsGoals : categories;
-  const isLoading = isSavings ? savingsLoading : categoriesLoading;
+  const isLoading = isSavings
+    ? savingsLoading
+    : categoriesLoading || storesLoading;
 
   // Keyboard tracking
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [currentFocusedInput, setCurrentFocusedInput] = useState<string | null>(null);
-  
+  const [currentFocusedInput, setCurrentFocusedInput] = useState<string | null>(
+    null
+  );
+
   // References
   const scrollViewRef = useRef<ScrollView>(null);
-  const inputRefs = useRef<{[key: string]: any}>({});
+  const inputRefs = useRef<{ [key: string]: any }>({});
 
   // Error states
   const [errors, setErrors] = useState({
@@ -126,45 +129,46 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   // Button press state
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Fetch categories when screen focuses
-  useFocusEffect(
-    React.useCallback(() => {
-      let isActive = true;
+  // Fetch user stores directly
 
-      const fetchData = async () => {
-        try {
-          const userId = await getCurrentUserId();
-          if (isActive && userId) {
-            if (!isSavings) {
-              await dispatch(fetchUserCategories(userId));
-            }
-          
-          }
-        } catch (error) {
-          console.error("Failed to fetch categories:", error);
+  useEffect(() => {
+    const fetchData = async () => {
+      setUserId(await getCurrentUserId());
+    };
+    fetchData();
+  }, []);
+  const [userId, setUserId] = useState("");
+  const { userStores, loading } = useAppSelector((state) => state.store);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        if (userId) {
+          console.log(userId);
+          const response = await axiosInstance.get(`/user/stores/${userId}`);
+          dispatch(setUserStores(response.data));
         }
-      };
+      } catch (error) {
+        console.error("Error loading stores:", error);
+      }
+    };
 
-      fetchData();
-
-      return () => {
-        isActive = false;
-      };
-    }, [dispatch, isSavings])
-  );
+    loadData();
+  }, [dispatch, userId]);
+  console.log(userStores);
 
   // Keyboard event listeners
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      "keyboardDidShow",
       (e) => {
         setKeyboardHeight(e.endCoordinates.height);
         setKeyboardVisible(true);
       }
     );
-    
+
     const keyboardWillHideListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      "keyboardDidHide",
       () => {
         setKeyboardHeight(0);
         setKeyboardVisible(false);
@@ -242,18 +246,18 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     if (isDateInFuture(dateToValidate)) {
       error = "Date cannot be in the future";
     }
-    setErrors(prev => ({ ...prev, date: error }));
+    setErrors((prev) => ({ ...prev, date: error }));
     return !error;
   };
 
   const validateCategory = () => {
     if (isIncome) return true;
-    
+
     let error = "";
     if (!category) {
       error = `Please select a ${isSavings ? "savings goal" : "category"}`;
     }
-    setErrors(prev => ({ ...prev, category: error }));
+    setErrors((prev) => ({ ...prev, category: error }));
     return !error;
   };
 
@@ -266,7 +270,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     } else if (!isPositiveNumber(amount)) {
       error = "Amount must be a positive number";
     }
-    setErrors(prev => ({ ...prev, amount: error }));
+    setErrors((prev) => ({ ...prev, amount: error }));
     return !error;
   };
 
@@ -275,45 +279,55 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     if (titleValue.trim() === "" && titleValue !== "") {
       error = "Title cannot be just whitespace";
     }
-    setErrors(prev => ({ ...prev, title: error }));
+    setErrors((prev) => ({ ...prev, title: error }));
     return !error;
   };
 
   const validateDescriptionItems = () => {
     if (isIncome || isSavings) return true;
-    
+
     const itemErrors: string[] = [];
     let isValid = true;
 
     descriptionItems.forEach((item, index) => {
       let error = "";
-      
-      if ((item.name !== "" || item.unitPrice !== "") && 
-          (item.name === "" || item.unitPrice === "")) {
+
+      if (
+        (item.name !== "" || item.unitPrice !== "") &&
+        (item.name === "" || item.unitPrice === "")
+      ) {
         error = "Please fill both name and price";
       }
-      
+
       if (item.name !== "" && !isValidItemName(item.name)) {
         error = "Item name is required";
       }
-      
+
       if (item.unitPrice !== "" && !isValidNumber(item.unitPrice)) {
         error = "Price must be a valid number";
       } else if (item.unitPrice !== "" && !isPositiveNumber(item.unitPrice)) {
         error = "Price must be positive";
       }
-      
-      if (item.quantity !== undefined && item.quantity !== "" && !isValidNumber(item.quantity)) {
+
+      if (
+        item.quantity !== undefined &&
+        item.quantity !== "" &&
+        !isValidNumber(item.quantity)
+      ) {
         error = "Quantity must be a valid number";
-      } else if (item.quantity !== undefined && item.quantity !== "" && !isPositiveNumber(item.quantity)) {
+      } else if (
+        item.quantity !== undefined &&
+        item.quantity !== "" &&
+        !isPositiveNumber(item.quantity)
+      ) {
         error = "Quantity must be positive";
       }
-      
+
       itemErrors[index] = error;
       if (error) isValid = false;
     });
 
-    setErrors(prev => ({ ...prev, descriptionItems: itemErrors }));
+    setErrors((prev) => ({ ...prev, descriptionItems: itemErrors }));
     return isValid;
   };
 
@@ -324,7 +338,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     const isTitleValid = validateTitle();
     const isItemsValid = validateDescriptionItems();
 
-    return isDateValid && isCategoryValid && isAmountValid && isTitleValid && isItemsValid;
+    return (
+      isDateValid &&
+      isCategoryValid &&
+      isAmountValid &&
+      isTitleValid &&
+      isItemsValid
+    );
   };
 
   const handleSubmit = () => {
@@ -333,19 +353,23 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
     setIsSubmitting(true);
 
-    const filteredItems = isIncome || isSavings ? undefined : descriptionItems.filter(
-      item => item.name.trim() !== "" && item.unitPrice.trim() !== ""
-    );
+    const filteredItems =
+      isIncome || isSavings
+        ? undefined
+        : descriptionItems.filter(
+            (item) => item.name.trim() !== "" && item.unitPrice.trim() !== ""
+          );
 
     try {
       onSubmit({
-        category: isIncome ? (incomeCategory?.name || "income") : category,
+        category: isIncome ? incomeCategory?.name || "income" : category,
         amount,
         title: titleValue,
         message,
-        type: isSavings ? "savings" : (isIncome ? "income" : "expense"),
+        type: isSavings ? "savings" : isIncome ? "income" : "expense",
         created_at: date,
         descriptionItems: filteredItems,
+        store: store || undefined,
       });
 
       if (resetAfterSubmit) {
@@ -354,6 +378,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         setAmount("");
         setTitleValue("");
         setMessage("");
+        setStore("");
         setDescriptionItems([{ name: "", unitPrice: "" }]);
         setErrors({
           date: "",
@@ -376,9 +401,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const addDescriptionItem = () => {
     if (isIncome || isSavings) return;
     setDescriptionItems([...descriptionItems, { name: "", unitPrice: "" }]);
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      descriptionItems: [...prev.descriptionItems, ""]
+      descriptionItems: [...prev.descriptionItems, ""],
     }));
   };
 
@@ -387,10 +412,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     const newItems = [...descriptionItems];
     newItems.splice(index, 1);
     setDescriptionItems(newItems);
-    
+
     const newErrors = [...errors.descriptionItems];
     newErrors.splice(index, 1);
-    setErrors(prev => ({ ...prev, descriptionItems: newErrors }));
+    setErrors((prev) => ({ ...prev, descriptionItems: newErrors }));
   };
 
   const updateDescriptionItem = (
@@ -399,30 +424,28 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     value: string
   ) => {
     if (isIncome || isSavings) return;
-    
+
     const newItems = [...descriptionItems];
-    
+
     if (field === "unitPrice" || field === "quantity") {
-      if (value !== "" && value !== "." && !isValidNumber(value) && !value.endsWith(".")) {
+      if (
+        value !== "" &&
+        value !== "." &&
+        !isValidNumber(value) &&
+        !value.endsWith(".")
+      ) {
         return;
       }
     }
-    
+
     newItems[index] = { ...newItems[index], [field]: value };
     setDescriptionItems(newItems);
     validateDescriptionItems();
   };
 
-  const formatDateForWebInput = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color={Theme.colors.primary} />
       </View>
     );
@@ -439,16 +462,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           ref={scrollViewRef}
           contentContainerStyle={[
             styles.scrollContainer,
-            { paddingBottom: Platform.OS !== "web" ? keyboardHeight + 100 : 100 }
+            { paddingBottom: keyboardHeight + 100 },
           ]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={true}
         >
-          <Pressable 
-            style={{ flex: 1 }} 
+          <Pressable
+            style={{ flex: 1 }}
             onPress={() => {
               Keyboard.dismiss();
               setShowCategoryPicker(false);
+              setShowStorePicker(false);
               setCurrentFocusedInput(null);
             }}
           >
@@ -456,49 +480,33 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               {/* Date field */}
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Date</Text>
-                {Platform.OS === "web" ? (
-                  <input
-                    type="date"
-                    value={formatDateForWebInput(date)}
-                    onChange={(e) => {
-                      const selectedDate = new Date(e.target.value);
-                      setDate(selectedDate);
-                      validateDate(selectedDate);
-                    }}
-                    style={styles.dateSelect}
-                    max={formatDateForWebInput(new Date())}
+                <TouchableOpacity
+                  style={styles.input}
+                  onPress={showDatePickerModal}
+                  ref={(ref) => (inputRefs.current["date"] = ref)}
+                >
+                  <Text style={{ color: Theme.colors.text }}>
+                    {date.toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </Text>
+                  <Ionicons
+                    name="calendar-outline"
+                    size={20}
+                    color={Theme.colors.text}
                   />
-                ) : (
-                  <>
-                    <TouchableOpacity
-                      style={styles.input}
-                      onPress={showDatePickerModal}
-                      ref={ref => inputRefs.current['date'] = ref}
-                    >
-                      <Text style={{ color: Theme.colors.text }}>
-                        {date.toLocaleDateString("en-US", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </Text>
-                      <Ionicons
-                        name="calendar-outline"
-                        size={20}
-                        color={Theme.colors.text}
-                      />
-                    </TouchableOpacity>
+                </TouchableOpacity>
 
-                    {showDatePicker && (
-                      <DateTimePicker
-                        value={date}
-                        mode="date"
-                        display="default"
-                        onChange={handleDateChange}
-                        maximumDate={new Date()}
-                      />
-                    )}
-                  </>
+                {showDatePicker && (
+                  <DateTimePicker
+                    value={date}
+                    mode="date"
+                    display="default"
+                    onChange={handleDateChange}
+                    maximumDate={new Date()}
+                  />
                 )}
                 {errors.date ? (
                   <Text style={styles.errorText}>{errors.date}</Text>
@@ -508,83 +516,69 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               {/* Category field (hidden for income) */}
               {!isIncome && (
                 <View style={styles.inputGroup}>
-                  <Text style={styles.label}>{isSavings ? "Savings Goal" : "Category"}</Text>
-                  {Platform.OS === "web" ? (
-                    <select
-                      value={category}
-                      onChange={(e) => {
-                        setCategory(e.target.value);
-                        validateCategory();
-                      }}
-                      style={styles.webSelect}
-                      onFocus={() => setCurrentFocusedInput('category')}
+                  <Text style={styles.label}>
+                    {isSavings ? "Savings Goal" : "Category"}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.input}
+                    onPress={() => {
+                      Keyboard.dismiss();
+                      setShowCategoryPicker(!showCategoryPicker);
+                      setCurrentFocusedInput("category");
+                    }}
+                    ref={(ref) => (inputRefs.current["category"] = ref)}
+                  >
+                    <Text style={{ color: Theme.colors.text }}>
+                      {category ||
+                        `Select the ${isSavings ? "savings goal" : "category"}`}
+                    </Text>
+                    <Ionicons
+                      name="chevron-down"
+                      size={20}
+                      color={Theme.colors.textLight}
+                    />
+                  </TouchableOpacity>
+                  {showCategoryPicker && (
+                    <View
+                      style={[
+                        styles.categoryPicker,
+                        styles.categoryPickerScroll,
+                      ]}
                     >
-                      <option value="">{`Select the ${isSavings ? "savings goal" : "category"}`}</option>
-                      {displayCategories.map((cat) => (
-                        <option key={cat.id} value={cat.name}>
-                          {cat.name}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    <>
-                      <TouchableOpacity
-                        style={styles.input}
-                        onPress={() => {
-                          Keyboard.dismiss();
-                          setShowCategoryPicker(!showCategoryPicker);
-                          setCurrentFocusedInput('category');
-                        }}
-                        ref={ref => inputRefs.current['category'] = ref}
+                      <ScrollView
+                        nestedScrollEnabled={true}
+                        keyboardShouldPersistTaps="handled"
+                        showsVerticalScrollIndicator={true}
                       >
-                        <Text style={{ color: Theme.colors.text }}>
-                          {category || `Select the ${isSavings ? "savings goal" : "category"}`}
-                        </Text>
-                        <Ionicons
-                          name="chevron-down"
-                          size={20}
-                          color={Theme.colors.textLight}
-                        />
-                      </TouchableOpacity>
-                      {showCategoryPicker && (
-                        <View style={[styles.categoryPicker, styles.categoryPickerScroll]}>
-                          <ScrollView
-                            nestedScrollEnabled={true}
-                            keyboardShouldPersistTaps="handled"
-                            showsVerticalScrollIndicator={true}
+                        {displayCategories.map((cat) => (
+                          <TouchableOpacity
+                            key={cat.id}
+                            style={styles.categoryOption}
+                            onPress={() => {
+                              setCategory(cat.name);
+                              setShowCategoryPicker(false);
+                              setErrors((prev) => ({ ...prev, category: "" }));
+                            }}
                           >
-                            {displayCategories.map((cat) => (
-                              <TouchableOpacity
-                                key={cat.id}
-                                style={styles.categoryOption}
-                                onPress={() => {
-                                  setCategory(cat.name);
-                                  setShowCategoryPicker(false);
-                                   // Clear the error message immediately
-                                   setErrors(prev => ({ ...prev, category: "" }));
-                                }}
-                              >
-                                <View
-                                  style={[
-                                    styles.categoryIcon,
-                                    { backgroundColor: Theme.colors.accentLight },
-                                  ]}
-                                >
-                                  <Ionicons
-                                    name={cat.icon as any}
-                                    size={16}
-                                    color="white"
-                                  />
-                                </View>
-                                <Text style={{ color: Theme.colors.text }}>
-                                  {cat.name}
-                                </Text>
-                              </TouchableOpacity>
-                            ))}
-                          </ScrollView>
-                        </View>
-                      )}
-                    </>
+                            <View
+                              style={[
+                                styles.categoryIcon,
+                                { backgroundColor: Theme.colors.accentLight },
+                              ]}
+                            >
+                              <Ionicons
+                                name={cat.icon as any}
+                                size={16}
+                                color="white"
+                              />
+                            </View>
+                            <Text style={{ color: Theme.colors.text }}>
+                              {cat.name}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
                   )}
                   {errors.category ? (
                     <Text style={styles.errorText}>{errors.category}</Text>
@@ -592,19 +586,116 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 </View>
               )}
 
+            
+              {/* Store field (hidden for income and savings) */}
+              {!isIncome && !isSavings && (
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Store (Optional)</Text>
+                  <TouchableOpacity
+                    style={styles.input}
+                    onPress={() => {
+                      Keyboard.dismiss();
+                      setShowStorePicker(!showStorePicker);
+                      setCurrentFocusedInput("store");
+                    }}
+                    ref={(ref) => (inputRefs.current["store"] = ref)}
+                  >
+                    <Text style={{ color: Theme.colors.text }}>
+                      {store || "Select a store"}
+                    </Text>
+                    <Ionicons
+                      name="chevron-down"
+                      size={20}
+                      color={Theme.colors.textLight}
+                    />
+                  </TouchableOpacity>
+                  {showStorePicker && (
+                    <View
+                      style={[
+                        styles.categoryPicker,
+                        styles.categoryPickerScroll,
+                      ]}
+                    >
+                      <ScrollView
+                        nestedScrollEnabled={true}
+                        keyboardShouldPersistTaps="handled"
+                        showsVerticalScrollIndicator={true}
+                      >
+                        {/* Display all stores as options */}
+                        {userStores.map((storeItem) => (
+                          <TouchableOpacity
+                            key={storeItem.id}
+                            style={styles.categoryOption}
+                            onPress={() => {
+                              setStore(storeItem.id); 
+                              setShowStorePicker(false);
+                            }}
+                          >
+                            <Ionicons
+                              name="storefront-outline"
+                              size={16}
+                              color={Theme.colors.text}
+                            />
+                            <Text
+                              style={{
+                                color: Theme.colors.text,
+                                marginLeft: 10,
+                              }}
+                            >
+                              {storeItem.name} 
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                        <TouchableOpacity
+                          style={[
+                            styles.categoryOption,
+                            {
+                              borderTopWidth: 1,
+                              borderTopColor: Theme.colors.background,
+                            },
+                          ]}
+                          onPress={() => {
+                            navigation.navigate("AddStore");
+                            setShowStorePicker(false);
+                          }}
+                        >
+                          <Ionicons
+                            name="add-circle-outline"
+                            size={16}
+                            color={Theme.colors.primary}
+                          />
+                          <Text
+                            style={{
+                              color: Theme.colors.primary,
+                              marginLeft: 10,
+                            }}
+                          >
+                            + Add Store
+                          </Text>
+                        </TouchableOpacity>
+                      </ScrollView>
+                    </View>
+                  )}
+                </View>
+              )}
               {/* Amount field */}
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Amount</Text>
                 <TextInput
-                  ref={ref => inputRefs.current['amount'] = ref}
+                  ref={(ref) => (inputRefs.current["amount"] = ref)}
                   style={[styles.input, { color: Theme.colors.text }]}
                   value={amount}
                   onChangeText={(text) => {
-                    if (text === "" || text === "." || (isValidNumber(text) && !text.startsWith("-")) || text.endsWith(".")) {
+                    if (
+                      text === "" ||
+                      text === "." ||
+                      (isValidNumber(text) && !text.startsWith("-")) ||
+                      text.endsWith(".")
+                    ) {
                       setAmount(text);
                     }
                   }}
-                  onFocus={() => setCurrentFocusedInput('amount')}
+                  onFocus={() => setCurrentFocusedInput("amount")}
                   onBlur={validateAmount}
                   placeholder="$0.00"
                   placeholderTextColor={Theme.colors.textLight}
@@ -619,13 +710,19 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>{title} Title</Text>
                 <TextInput
-                  ref={ref => inputRefs.current['title'] = ref}
+                  ref={(ref) => (inputRefs.current["title"] = ref)}
                   style={[styles.input, { color: Theme.colors.text }]}
                   value={titleValue}
                   onChangeText={setTitleValue}
-                  onFocus={() => setCurrentFocusedInput('title')}
+                  onFocus={() => setCurrentFocusedInput("title")}
                   onBlur={validateTitle}
-                  placeholder={isIncome ? "Salary" : (isSavings ? "Monthly deposit" : "Dinner")}
+                  placeholder={
+                    isIncome
+                      ? "Salary"
+                      : isSavings
+                        ? "Monthly deposit"
+                        : "Dinner"
+                  }
                   placeholderTextColor={Theme.colors.textLight}
                 />
                 {errors.title ? (
@@ -638,10 +735,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 <View style={styles.inputGroup}>
                   <Text style={styles.label}>Items (Optional)</Text>
                   {descriptionItems.map((item, index) => (
-                    <View 
-                      key={index} 
+                    <View
+                      key={index}
                       style={styles.descriptionItemContainer}
-                      ref={ref => inputRefs.current[`item-${index}`] = ref}
+                      ref={(ref) => (inputRefs.current[`item-${index}`] = ref)}
                     >
                       <View style={styles.descriptionItemRow}>
                         <TextInput
@@ -653,7 +750,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                           onChangeText={(text) =>
                             updateDescriptionItem(index, "name", text)
                           }
-                          onFocus={() => setCurrentFocusedInput(`item-${index}`)}
+                          onFocus={() =>
+                            setCurrentFocusedInput(`item-${index}`)
+                          }
                           onBlur={validateDescriptionItems}
                           placeholder="Item name"
                           placeholderTextColor={Theme.colors.textLight}
@@ -665,11 +764,18 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                           ]}
                           value={item.unitPrice}
                           onChangeText={(text) => {
-                            if (text === "" || text === "." || (isValidNumber(text) && !text.startsWith("-")) || text.endsWith(".")) {
+                            if (
+                              text === "" ||
+                              text === "." ||
+                              (isValidNumber(text) && !text.startsWith("-")) ||
+                              text.endsWith(".")
+                            ) {
                               updateDescriptionItem(index, "unitPrice", text);
                             }
                           }}
-                          onFocus={() => setCurrentFocusedInput(`item-${index}`)}
+                          onFocus={() =>
+                            setCurrentFocusedInput(`item-${index}`)
+                          }
                           onBlur={validateDescriptionItems}
                           placeholder="Price"
                           placeholderTextColor={Theme.colors.textLight}
@@ -682,11 +788,18 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                           ]}
                           value={item.quantity || ""}
                           onChangeText={(text) => {
-                            if (text === "" || text === "." || (isValidNumber(text) && !text.startsWith("-")) || text.endsWith(".")) {
+                            if (
+                              text === "" ||
+                              text === "." ||
+                              (isValidNumber(text) && !text.startsWith("-")) ||
+                              text.endsWith(".")
+                            ) {
                               updateDescriptionItem(index, "quantity", text);
                             }
                           }}
-                          onFocus={() => setCurrentFocusedInput(`item-${index}`)}
+                          onFocus={() =>
+                            setCurrentFocusedInput(`item-${index}`)
+                          }
                           onBlur={validateDescriptionItems}
                           placeholder="Qty"
                           placeholderTextColor={Theme.colors.textLight}
@@ -721,7 +834,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                       size={20}
                       color={Theme.colors.primary}
                     />
-                    <Text style={{ color: Theme.colors.primary, marginLeft: 5 }}>
+                    <Text
+                      style={{ color: Theme.colors.primary, marginLeft: 5 }}
+                    >
                       Add Item
                     </Text>
                   </TouchableOpacity>
@@ -732,11 +847,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Note (Optional)</Text>
                 <TextInput
-                  ref={ref => inputRefs.current['message'] = ref}
+                  ref={(ref) => (inputRefs.current["message"] = ref)}
                   style={[styles.messageInput, { color: Theme.colors.text }]}
                   value={message}
                   onChangeText={setMessage}
-                  onFocus={() => setCurrentFocusedInput('message')}
+                  onFocus={() => setCurrentFocusedInput("message")}
                   placeholder="Enter any additional notes"
                   placeholderTextColor={Theme.colors.textLight}
                   multiline
@@ -744,8 +859,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               </View>
 
               {/* Save Button */}
-              <TouchableOpacity 
-                style={styles.saveButton} 
+              <TouchableOpacity
+                style={styles.saveButton}
                 onPress={handleSubmit}
                 disabled={isSubmitting || isLoading}
               >

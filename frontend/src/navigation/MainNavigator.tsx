@@ -36,6 +36,7 @@ import { AppDispatch } from "@/redux/store";
 import AddIncomeScreen from "@/screens/AddIncome";
 import { useAppSelector } from "@/redux/hook";
 import SettingsStore from "@/screens/SettingsStores";
+import AddStorePage from "@/screens/AddStore";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -76,6 +77,11 @@ export default function MainNavigator() {
               name="stores"
               component={SettingsStore}
             />
+
+
+             <RootStack.Screen
+              name="AddStore"
+              component={AddStorePage}/>
 
             {/* Settings & Profile */}
             <RootStack.Screen

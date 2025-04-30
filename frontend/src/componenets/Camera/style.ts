@@ -584,9 +584,42 @@ export const modalStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
   },
-
-
-  
+  storeSelectorContainer: {
+    borderWidth: 1,
+    // height:30,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginTop: 8,
+    backgroundColor: '#f9f9f9',
+    overflow: 'hidden',
+  },
+  storePicker: {
+    width: '100%',
+    height: 50,
+    color: '#333',
+  },
+  storePickerItem: {
+    fontSize: 16,
+    color: '#333',
+  },
+  addStoreOption: {
+    color: Theme.colors.primary,
+    fontWeight: '600',
+  },
+  addStoreButton: {
+    padding: 15,
+    backgroundColor: Theme.colors.primary + '20',
+    borderRadius: 8,
+    marginVertical: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Theme.colors.primary + '50'
+  },
+  addStoreButtonText: {
+    color: Theme.colors.primary,
+    fontWeight: '600',
+    fontSize: 14
+  },
 
 
 });

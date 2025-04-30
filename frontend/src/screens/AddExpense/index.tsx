@@ -20,6 +20,7 @@ import { RootStackParamList } from "App";
 import { editTransactionsAsync } from "@/redux/slices/transactionSlice";
 import { fetchUserCategories } from "@/redux/slices/categoriesSlice";
 
+
 type AddExpensesScreenNavigationProp = NativeStackNavigationProp<{
   CategoryDetail: {
     categoryName: string;
@@ -61,14 +62,16 @@ const AddExpensesScreen = () => {
   const handleSubmit = (data: {
     category: string;
     amount: string;
-    title: string;
+  
     type: "expense" | "income" | "savings";
     message: string;
+    store?:string
     created_at: Date;
     descriptionItems?: Array<{
       name: string;
       unitPrice: string;
       quantity?: string;
+
     }>;
   }) => {
     const selectedCategory = categories.find(
@@ -79,6 +82,7 @@ const AddExpensesScreen = () => {
       console.error("Category or user not found");
       return;
     }
+    
   
     // Format description items for database
     const details = data.descriptionItems?.map(item => ({
@@ -94,7 +98,8 @@ const AddExpensesScreen = () => {
       type: data.type as "expense" | "income",
       title: data.title || data.category,
       created_at: data.created_at,
-      details: details
+      details: details,
+      storeId:data.store
     };
     if (transaction?.transaction_id) {
       dispatch(
@@ -123,7 +128,7 @@ const AddExpensesScreen = () => {
           <TransactionForm
             title="Expense"
             buttonText="Save"
-            categories={categories}
+            // categories={categories}
             onSubmit={handleSubmit}
             initialCategory={transaction?.category_name}
             initialAmount={transaction?.amount.toString()}
