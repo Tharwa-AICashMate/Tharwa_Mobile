@@ -52,20 +52,20 @@ const FinancialCategories: React.FC = () => {
     {
       id: "income",
       label: "Income",
-      iconName: "cash-outline", // Or 'cash-outline', 'wallet-outline'
-      color: "#81C784", // Greenish for income
+      iconName: "cash-outline", 
+      color: "#81C784", 
     },
     {
       id: "expense",
       label: "Expense",
-      iconName: "remove-circle-outline", // Or 'cart-outline', 'remove-circle-outline'
-      color: "#E57373", // Reddish for expense
+      iconName: "remove-circle-outline", 
+      color: "#E57373",
     },
     {
       id: "savings",
       label: "Savings",
-      iconName: "star-outline", // Or 'piggy-bank-outline', 'star-outline'
-      color: "#64B5F6", // Blueish for savings
+      iconName: "star-outline",
+      color: "#64B5F6",
     },
   ];
 
