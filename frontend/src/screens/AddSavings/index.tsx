@@ -2,7 +2,7 @@
 import React from "react";
 
 import { SafeAreaView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 
@@ -16,12 +16,16 @@ type AddSavingsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "AddSavings"
 >;
+type editRouteProp = RouteProp<RootStackParamList, "AddIncome">;
 
 const AddSavingsScreen = () => {
   const navigation = useNavigation<AddSavingsScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const { items: savingsGoals } = useAppSelector((state) => state.goals);
+  const route = useRoute<editRouteProp>();
 
+  const data = route.params;
+  const savingCategory= data?.savingCategory;
   const handleSubmit = (data: {
     category: string;
     amount: string;
@@ -59,7 +63,7 @@ const AddSavingsScreen = () => {
         title="Savings"
         buttonText="Add to Savings"
         onSubmit={handleSubmit}
-        initialCategory=""
+        initialCategory={savingCategory}
         initialAmount=""
         initialTitle=""
         initialMessage=""

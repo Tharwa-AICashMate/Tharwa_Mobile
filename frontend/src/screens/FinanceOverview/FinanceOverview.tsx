@@ -170,13 +170,6 @@ export const FinanceOverview: React.FC = () => {
 
           <BarChart
             data={periodData}
-            maxValue={
-              selectedPeriod === "Weekly"
-                ? 10000
-                : selectedPeriod === "Monthly"
-                  ? 20000
-                  : 200000
-            }
             period={selectedPeriod}
           />
 

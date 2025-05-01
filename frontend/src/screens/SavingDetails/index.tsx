@@ -87,7 +87,7 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
       : 0;
 
   const addSavings = () => {
-    navigation.navigate("AddSavings");
+    navigation.navigate("AddSavings",{savingCategory:categoryName});
   };
 
   return (

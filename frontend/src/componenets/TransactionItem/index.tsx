@@ -53,6 +53,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
     dispatch(deleteTransactionsAsync(transaction.transaction_id));
   };
 
+  console.log(transaction)
   return (
     <>
       <View style={styles.transactionItem}>
@@ -116,6 +117,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
             </TouchableWithoutFeedback>
 
             <View style={styles.dropdownMenu}>
+              {transaction.details?.length &&
+                <Pressable onPress={()=>navigation.navigate('transDetails',{transaction:transaction.details})} style={styles.menuItem}>
+                <Text >View Details</Text>
+              </Pressable>
+              }
               <Pressable onPress={handleEdit} style={styles.menuItem}>
                 <Text>Edit</Text>
               </Pressable>

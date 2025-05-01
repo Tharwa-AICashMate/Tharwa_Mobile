@@ -41,6 +41,7 @@ const AddExpensesScreen = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const data = route.params;
   const transaction = data?.transaction;
+  const categoryName = data?.categoryName
   useFocusEffect(
     useCallback(() => {
       const fetchUserId = async () => {
@@ -136,12 +137,15 @@ const AddExpensesScreen = () => {
             initialMessage={transaction?.description}
             initialDate={new Date(transaction?.created_at)}
             initialDetails={transaction?.details}
+            initialStore={transaction?.store_id}
           />
         ) : (
           <TransactionForm
             title="Expense"
             buttonText="Save"
               onSubmit={handleSubmit}
+              initialCategory={categoryName}
+
           />
         )}
       </View>

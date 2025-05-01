@@ -110,7 +110,7 @@ const CategoryDetailScreen = () => {
   );
 
   const addExpense = () => {
-    navigation.navigate("AddExpensesScreen");
+    navigation.navigate("AddExpensesScreen",{categoryName});
   };
   const renderFooter = () => {
     if (isLoading && page > 1) {

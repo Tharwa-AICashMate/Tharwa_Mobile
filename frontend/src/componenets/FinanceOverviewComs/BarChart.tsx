@@ -24,7 +24,6 @@ interface BarChartData {
 
 interface BarChartProps {
   data: BarChartData[];
-  maxValue: number;
   period: "Weekly" | "Monthly" | "Year";
 }
 
@@ -98,7 +97,7 @@ const BarsWrapper = styled.View`
 const Bar = styled.View<{ height: number; isIncome: boolean }>`
   width: 6px;
   height: ${(props) => props.height}px;
-  background-color: ${(props) => (props.isIncome ?  "#FFC312":"#3B3B98")};
+  background-color: ${(props) => (props.isIncome ? "#FFC312" : "#3B3B98")};
   border-radius: 3px;
   margin: 0 2px;
 `;
@@ -110,33 +109,44 @@ const DayLabel = styled.Text`
   font-size: 12px;
 `;
 
-export const BarChart: React.FC<BarChartProps> = ({ data, maxValue, period }) => {
+const getDynamicYAxis = (maxValue: number) => {
+  const step = Math.ceil(maxValue / 5 / 1000) * 1000; 
+  const labels = [];
+
+  for (let i = 5; i >= 0; i--) {
+    labels.push(i * step);
+  }
+
+  return labels;
+};
+
+
+export const BarChart: React.FC<BarChartProps> = ({ data, period }) => {
+  const navigation = useNavigation<NavigationProp>();
+
+  const maxValue = Math.max(
+    ...data.map((item) => Math.max(item.income, item.expenses)),
+    1
+  );
+
   const getBarHeight = (value: number) => {
     const maxHeight = 140;
     return (value / maxValue) * maxHeight;
   };
 
-  const yAxisLabels =
-    period === "Weekly" ? [10000,8000, 6000, 4000, 2000, 0] :
-    period === "Monthly" ? [20000, 16000, 12000, 8000, 4000, 0] :
-    [200000, 150000, 100000, 50000, 0];
+  const yAxisLabels = getDynamicYAxis(maxValue);
 
-  const navigation = useNavigation<NavigationProp>();
-
-  // Calculate width for each bar based on the period type
   const calculateBarWidth = (totalItems: number, period: string) => {
-    const availableWidth = Dimensions.get("window").width * 0.88; // 88% of the screen width
-    
+    const availableWidth = Dimensions.get("window").width * 0.88;
+
     if (period === "Weekly") {
-
-      return availableWidth / totalItems * 0.85; 
+      return (availableWidth / totalItems) * 0.85;
     } else if (period === "Monthly") {
-
-      return availableWidth / totalItems * 1; 
+      return (availableWidth / totalItems) * 1;
     } else if (period === "Year") {
-      return availableWidth / totalItems * 0.8; 
+      return (availableWidth / totalItems) * 0.8;
     }
-    return availableWidth / totalItems; 
+    return availableWidth / totalItems;
   };
 
   const barWidth = calculateBarWidth(data.length, period);
@@ -149,9 +159,6 @@ export const BarChart: React.FC<BarChartProps> = ({ data, maxValue, period }) =>
         <IconButton onPress={() => navigation.navigate('SearchScreen')}>
           <Icon name="search" size={24} color={Theme.colors.textLight} />
         </IconButton>
-        {/* <IconButton onPress={() => navigation.navigate('CalenderScreen')}>
-          <Icon name="calendar" size={24} color={Theme.colors.textLight} />
-        </IconButton> */}
       </IconContainer>
 
       <ChartWithYAxis>

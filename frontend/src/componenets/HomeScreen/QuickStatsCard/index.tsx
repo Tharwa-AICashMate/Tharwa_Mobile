@@ -74,7 +74,7 @@ const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
       if (userId) {
         setTotals(await getWeeklyHighs(userId));
       } else {
-        console.error("User ID is undefined");
+        console.log("User ID is undefined");
       }
     }
     fetchData()

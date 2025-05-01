@@ -39,6 +39,7 @@ import SettingsStore from "@/screens/SettingsStores";
 import AllStoresPage from "@/screens/AllStore";
 import FavoriteStores from "@/screens/FavoriteStores";
 import AddStorePage from "@/screens/AddStore";
+import TransactionsDetails from "@/screens/transactionsDetails";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
@@ -75,6 +76,10 @@ export default function MainNavigator() {
                 </View>
               )}
             </RootStack.Screen>
+            <RootStack.Screen
+              name="transDetails"
+              component={TransactionsDetails}
+            />
             <RootStack.Screen
               name="AllStores"
               component={AllStoresPage}

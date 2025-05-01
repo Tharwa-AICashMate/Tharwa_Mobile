@@ -44,7 +44,7 @@ export const storeSlice = createSlice({
       state.userLocation = action.payload;
       state.locationDetected = true;
     }, setStores: (state, action: PayloadAction<Store[]>) => {
-      state.stores = action.payload;
+      state.stores = [...action.payload];
     }, setUserStores: (state, action: PayloadAction<Store[]>) => {
       state.userStores = action.payload;
     },

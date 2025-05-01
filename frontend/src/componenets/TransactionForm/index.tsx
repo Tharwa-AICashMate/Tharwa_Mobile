@@ -24,6 +24,7 @@ import styles from "./style";
 import axios from "axios";
 import { apiBase } from "@/utils/axiosInstance";
 import axiosInstance from "@/config/axios";
+import { store } from "@/redux/store";
 
 interface DescriptionItem {
   name: string;
@@ -150,7 +151,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           console.log(userId);
           const response = await axiosInstance.get(`/user/stores/${userId}`);
           dispatch(setUserStores(response.data));
+    
         }
+
       } catch (error) {
         console.error("Error loading stores:", error);
       }
@@ -158,8 +161,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
     loadData();
   }, [dispatch, userId]);
-  console.log(userStores);
 
+  useEffect(()=>{
+    console.log("stoeId :",store)
+    const matchedItem = userStores?.find(item => item.id == store);
+    setStoreText(matchedItem?.name);
+  },[stores,userStores])
   // Keyboard event listeners
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener(
@@ -350,6 +357,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     );
   };
 
+  console.log(descriptionItems)
+
   const handleSubmit = () => {
     if (isSubmitting) return;
     if (!validateForm()) return;
@@ -421,6 +430,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     setErrors((prev) => ({ ...prev, descriptionItems: newErrors }));
   };
 
+  
+  useEffect(()=>{
+    const amount = descriptionItems.reduce((acc,item)=>{
+      console.log(acc,Number(item.quantity),Number(item.unitPrice))
+      return acc += (Number(item.quantity) || 1) * Number(item.unitPrice)
+    },0)
+  
+    setAmount(amount.toFixed(2))
+  },[descriptionItems])
   const updateDescriptionItem = (
     index: number,
     field: keyof DescriptionItem,
@@ -739,6 +757,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                   <Text style={styles.label}>Items (Optional)</Text>
                   {descriptionItems.map((item, index) => (
                     <View
+                      onPress={console.log('--------------',item)}
                       key={index}
                       style={styles.descriptionItemContainer}
                       ref={(ref) => (inputRefs.current[`item-${index}`] = ref)}

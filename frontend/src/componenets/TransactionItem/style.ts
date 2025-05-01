@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     borderRightColor: Theme.colors.highlight,
     borderLeftColor: Theme.colors.highlight,
     borderLeftWidth: 2,
-    width: 100,
+    width: 95,
     paddingHorizontal: 10,
   },
   category: {

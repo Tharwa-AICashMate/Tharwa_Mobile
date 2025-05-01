@@ -38,14 +38,14 @@ export default function Header({ title, goBackTo, bellNavigateTo }: HeaderProps)
           style={styles.bellIcon}
         />
       </TouchableOpacity>
-    <TouchableOpacity onPress={() => navigation.navigate(bellNavigateTo || 'Notification')}>
+    {/* <TouchableOpacity onPress={() => navigation.navigate(bellNavigateTo || 'Notification')}>
         <Ionicons
           name="notifications-outline"
           size={20}
           color="black"
           style={styles.bellIcon}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
 
       

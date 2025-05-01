@@ -196,7 +196,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         </View>
       )}
 
-      {activeTab === "income" && (
+      {activeTab === "incom" && (
         <View style={styles.addExpenseContainer}>
           <TouchableOpacity
             style={styles.addButton}
