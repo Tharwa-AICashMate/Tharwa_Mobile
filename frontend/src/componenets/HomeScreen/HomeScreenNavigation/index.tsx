@@ -27,42 +27,42 @@ import { styles } from "./styles";
        label: "Add Income",
        icon: "wallet-outline",
        backgroundColor: Theme.colors.accentLight,
-       screen:"AddIncome"
+       screen: "AddIncome",
      },
      {
        id: "allStores",
        label: "All Stores",
        icon: "business-outline",
        backgroundColor: Theme.colors.accentLight,
-       screen:"AllStores"
+       screen: "AllStores",
      },
      {
        id: "savingGoals",
        label: "Saving Goals",
        icon: "trophy-outline",
        backgroundColor: Theme.colors.accent,
-       screen:"Savings"
+       screen: "Savings",
      },
      {
        id: "myStores",
        label: "My Stores",
        icon: "storefront-outline",
        backgroundColor: Theme.colors.accent,
-       screen:"FavoriteStores"
+       screen: "FavoriteStores",
      },
      {
        id: "addExpenses",
        label: "Add Expenses",
        icon: "cash-outline",
        backgroundColor: Theme.colors.accentDark,
-       screen:"AddExpensesScreen"
+       screen: "AddExpensesScreen",
      },
      {
-       id: "findStores",
-       label: "Find Stores",
-       icon: "search-outline",
+       id: "addStores",
+       label: "Add Stores",
+       icon: "add-outline",
        backgroundColor: Theme.colors.accentDark,
-       screen:"AddStore"
+       screen: "AddStore",
      },
    ];
  

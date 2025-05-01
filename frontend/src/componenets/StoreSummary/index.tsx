@@ -42,7 +42,7 @@ const StoreSummary: React.FC<StoreSummaryProps> = ({
           onTouchEnd={() => onSelectTab('analysis')}
         >
 <Ionicons name="analytics" size={24} color={'202063'}/>
-          <Text style={[styles.tabLabel,activeTab === 'analysis' && styles.activeTabText]}>Analsis</Text>
+          <Text style={[styles.tabLabel,activeTab === 'analysis' && styles.activeTabText]}>Analysis</Text>
         </View>
       </View>
     </View>

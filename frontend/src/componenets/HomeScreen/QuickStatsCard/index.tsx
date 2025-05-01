@@ -12,7 +12,7 @@ interface QuickStatsCardProps {
 }
 
 
-async function getWeeklyHighs(userId) {
+async function getWeeklyHighs(userId: string) {
   const { data, error } = await supabase
     .rpc('get_weekly_highs', { uid: userId });
 
@@ -58,18 +58,29 @@ const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
 
   //   return { maxIncome, maxExpense };
   // };
-  const userId = useAppSelector(state => state.auth.user?.id) 
-  const [totals,setTotals] = useState({})
-  useEffect(()=>{
-    async function fetchData(){
-      
-      setTotals(await getWeeklyHighs(userId))
 
+  const userId = useAppSelector(state => state.auth.user?.id) 
+  interface WeeklyHighs {
+    highest_income: { amount: number; title: string } | null;
+    highest_expense: { amount: number; category_name: string } | null;
+  }
+  
+  const [totals, setTotals] = useState<WeeklyHighs>({
+    highest_income: null,
+    highest_expense: null,
+  });
+  useEffect(() => {
+    async function fetchData() {
+      if (userId) {
+        setTotals(await getWeeklyHighs(userId));
+      } else {
+        console.error("User ID is undefined");
+      }
     }
     fetchData()
-  },[userId])
-  console.log(totals)
-  const { highest_income:maxIncome, highest_expense:maxExpense } = totals;
+  }, [userId]);
+  console.log(totals);
+  const { highest_income:maxIncome, highest_expense:maxExpense } = totals || {};
 
   return (
     <View style={[styles.card, style]}>
@@ -87,8 +98,8 @@ const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
           <View style={styles.statContent}>
             <Text style={styles.label}>Highest Income</Text>
             <Text style={styles.amount}>
-              {maxIncome?.amount > 0
-                ? `$${maxIncome?.amount.toFixed(2)}`
+              {maxIncome?.amount && maxIncome.amount > 0
+                ? `$${maxIncome.amount.toFixed(2)}`
                 : "$0.00"}
             </Text>
             <Text style={styles.description}>
@@ -111,7 +122,7 @@ const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
           <View style={styles.statContent}>
             <Text style={styles.label}>Highest Expense</Text>
             <Text style={styles.amount}>
-              {maxExpense?.amount > 0
+              {maxExpense?.amount && maxExpense.amount > 0
                 ? `-$${maxExpense?.amount.toFixed(2)}`
                 : "$0.00"}
             </Text>
