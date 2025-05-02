@@ -15,7 +15,9 @@ import ExpenseBrief from "@/componenets/expenceBrief";
 import HomeScreenNavigation, {
   NavigationTile,
 } from "@/componenets/HomeScreen/HomeScreenNavigation";
+import { useTranslation } from "react-i18next";
 const Home: React.FC = () => {
+  const {t}=useTranslation()
   const [openModal, setOpenModal] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
   const [totalBalance, setTotalBalance] = useState(0);
@@ -53,7 +55,7 @@ const Home: React.FC = () => {
           backgroundColor={Theme.colors.highlight}
           translucent={false}
         />
-        <Header title=" Home" />
+        <Header title= {t("home.name")}/>
         {/* budget */}
         <ExpenseBrief setTotalBalance={setTotalBalance} />
 

@@ -1,0 +1,90 @@
+{
+  "header": {
+    "invoice": "الفاتورة",
+    "camera": "الكاميرا",
+    "language": "اللغة",
+    "categories":"الاقسام"
+  },
+  "expenseBrief": {
+    "statusMessage": "{{percentage}}% من مصروفاتك، تبدو {{status}}.",
+    "good": "جيدة",
+    "bad": "سيئة"
+  },
+  "balanceDisplay": {
+    "totalBalance": "إجمالي الرصيد",
+    "totalExpense": "إجمالي المصروفات"
+  },
+  "home":{
+    "name":"الرئيسيه",
+    "navigation": {
+      "addIncome": "إضافة دخل",
+      "allStores": "كل المتاجر",
+      "savingGoals": "أهداف التوفير",
+      "myStores": "متاجري",
+      "addExpenses": "إضافة مصروفات",
+      "addStores": "إضافة متجر"
+  },
+  "quickStats": {
+    "weeklyHighlights": "أبرز الأسبوع",
+    "highestIncome": "أعلى دخل",
+    "highestExpense": "أعلى مصروف",
+    "noHighlights": "لا توجد أبرز أسبوعية حتى الآن"
+  },
+  "currencySymbol": "ر.س"
+
+
+},
+
+  "transactionForm": {
+    "date": "التاريخ",
+    "datePlaceholder": "اختر التاريخ",
+    "dateError": "لا يمكن أن يكون التاريخ في المستقبل",
+    "category": "الفئة",
+    "categoryPlaceholder": "اختر الفئة",
+    "categoryError": "الرجاء اختيار الفئة",
+    "savingsGoal": "هدف التوفير",
+    "savingsGoalPlaceholder": "اختر هدف التوفير",
+    "savingsGoalError": "الرجاء اختيار هدف التوفير",
+    "store": "المتجر (اختياري)",
+    "storePlaceholder": "اختر المتجر",
+    "addStore": "+ إضافة متجر",
+    "amount": "المبلغ",
+    "amountPlaceholder": "$0.00",
+    "amountError": {
+      "required": "المبلغ مطلوب",
+      "validNumber": "يجب أن يكون المبلغ رقمًا صحيحًا",
+      "positive": "يجب أن يكون المبلغ رقمًا موجبًا"
+    },
+    "title": {
+      "expense": "عنوان المصروف",
+      "income": "عنوان الدخل",
+      "savings": "عنوان التوفير"
+    },
+    "titlePlaceholder": {
+      "expense": "العشاء",
+      "income": "الراتب",
+      "savings": "الإيداع الشهري"
+    },
+    "titleError": "لا يمكن أن يكون العنوان فارغًا",
+    "items": "العناصر (اختياري)",
+    "itemNamePlaceholder": "اسم العنصر",
+    "itemPricePlaceholder": "السعر",
+    "itemQuantityPlaceholder": "الكمية",
+    "itemError": {
+      "bothFields": "الرجاء ملء كل من الاسم والسعر",
+      "nameRequired": "اسم العنصر مطلوب",
+      "validNumber": "يجب أن يكون رقمًا صحيحًا",
+      "positive": "يجب أن يكون رقمًا موجبًا"
+    },
+    "addItem": "إضافة عنصر",
+    "note": "ملاحظة (اختياري)",
+    "notePlaceholder": "أدخل أي ملاحظات إضافية",
+    "saveButton": {
+      "default": "حفظ",
+      "processing": "جاري المعالجة..."
+    },
+    "deleteItem": "حذف العنصر"
+  }
+
+
+}
