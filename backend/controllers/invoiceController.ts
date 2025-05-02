@@ -12,7 +12,7 @@ export const processReceipt = async (req: Request, res: Response) => {
     const result = await processInvoice(imageBase64, fileName);
     res.json(result);
   } catch (error) {
-    console.error("API error:", error);
+    console.log("API error:", error);
     res.status(500).json({
       error: error instanceof Error ? error.message : "Unknown error occurred"
     });

@@ -35,6 +35,7 @@ class AuthService {
       email,
       password,
     });
+    console.log(userData)
     // update user profile data
     const { data: updatedUserData, error: updateError } =
       await AuthService.upadateUserProfile(email, {
@@ -44,7 +45,7 @@ class AuthService {
         DOB: profileData.dob,
       });
 
-
+      console.log(updatedUserData)
      if(data){
       intialCategories.forEach(category => {
         createCategory({...category,user_id:data.user!.id})

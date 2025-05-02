@@ -19,7 +19,7 @@ export async function authenticateUser(req: Request, res: Response, next: NextFu
         req.user = user;
         next();
     } catch (error) {
-        console.error('Authentication error:', error);
+        console.log('Authentication error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 }

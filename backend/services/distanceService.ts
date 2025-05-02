@@ -45,7 +45,7 @@ export const getDrivingDistance = async (
 
     return data.routes[0].summary.distance / 1000;
   } catch (error) {
-    console.error("Error:", error instanceof Error ? error.message : "Unknown error");
+    console.log("Error:", error instanceof Error ? error.message : "Unknown error");
     throw new Error("Failed to fetch distance");
   }
 };

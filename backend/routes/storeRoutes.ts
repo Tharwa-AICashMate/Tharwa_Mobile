@@ -32,7 +32,7 @@ const router = Router();
 
 //     res.status(201).json({ message: 'Store added successfully', store: data[0] });
 //   } catch (err) {
-//     console.error('Error adding store:', err);
+//     console.log('Error adding store:', err);
 //     res.status(500).json({ error: 'Internal server error' });
 //   }
 // });
@@ -75,7 +75,7 @@ const router = Router();
 
 //     res.status(201).json(newStore);
 //   } catch (error) {
-//     console.error('Error:', error);
+//     console.log('Error:', error);
 //     res.status(500).json({
 //       error: 'فشل إضافة المتجر',
 //       details: error.message
@@ -124,7 +124,7 @@ router.post("/stores", async (req, res) => {
 
     res.status(201).json(newStore);
   } catch (error) {
-    console.error("Error:", error);
+    console.log("Error:", error);
     res.status(500).json({
       error: "Failed to add store",
       details: error.message,
@@ -164,7 +164,7 @@ router.get("/user/stores/:userId", async (req, res) => {
     }));
     res.json(stores);
   } catch (error) {
-    console.error("Error:", error);
+    console.log("Error:", error);
     res.status(500).json([]);
   }
 });
@@ -185,7 +185,7 @@ router.delete("/user/stores/:userId/:storeId", async (req, res) => {
       .status(200)
       .json({ message: "Store association deleted successfully." });
   } catch (error) {
-    console.error("Error deleting store:", error);
+    console.log("Error deleting store:", error);
     res.status(500).json({ error: "Failed to delete store association." });
   }
 });

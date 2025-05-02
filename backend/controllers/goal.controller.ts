@@ -17,7 +17,7 @@ export class GoalController {
 
       return res.json(goals);
     } catch (error) {
-      console.error("Error fetching goals:", error);
+      console.log("Error fetching goals:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   }

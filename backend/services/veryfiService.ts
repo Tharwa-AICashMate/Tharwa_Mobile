@@ -41,7 +41,7 @@ async function getVeryfiCategories(): Promise<string[]> {
     );
     return response.data.categories;
   } catch (error) {
-    console.error("Failed to fetch categories:", error);
+    console.log("Failed to fetch categories:", error);
     return [
       "Advertising & Marketing", "Automotive", "Bank Charges",
       "Insurance", "Legal & Professional Services", "Meals & Entertainment",
@@ -115,7 +115,7 @@ export async function processInvoice(imageBase64: string, fileName?: string): Pr
       }))
     };
   } catch (error) {
-    console.error("Processing error:", error instanceof Error ? error.message : error);
+    console.log("Processing error:", error instanceof Error ? error.message : error);
     throw new Error("Invoice processing failed");
   }
 }

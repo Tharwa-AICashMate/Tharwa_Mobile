@@ -37,7 +37,7 @@ export class TranswcatService {
                 .lte('created_at', endDate);
 
             if (error) {
-                console.error(error);
+                console.log(error);
                 throw new Error('Error fetching weekly data from Supabase');
             }
 
@@ -75,7 +75,7 @@ export class TranswcatService {
                 .lt('created_at', endDate);
 
             if (error) {
-                console.error(error);
+                console.log(error);
                 throw new Error('Error fetching monthly data from Supabase');
             }
 
@@ -113,7 +113,7 @@ export class TranswcatService {
                 .lte('created_at', endDate);
     
             if (error) {
-                console.error(error);
+                console.log(error);
                 throw new Error(`Error fetching data for year ${year}`);
             }
     
@@ -162,7 +162,7 @@ export class TranswcatService {
                 .lte('created_at', endDate);
 
             if (error) {
-                console.error(error);
+                console.log(error);
                 throw new Error('Error fetching weekly data from Supabase');
             }
 
@@ -201,7 +201,7 @@ export class TranswcatService {
                 .lt('created_at', endDate);
 
             if (error) {
-                console.error(error);
+                console.log(error);
                 throw new Error('Error fetching monthly data from Supabase');
             }
 
@@ -239,7 +239,7 @@ export class TranswcatService {
                 .lte('created_at', endDate);
     
             if (error) {
-                console.error(error);
+                console.log(error);
                 throw new Error(`Error fetching data for year ${year}`);
             }
     

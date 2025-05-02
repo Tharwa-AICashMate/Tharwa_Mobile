@@ -12,7 +12,7 @@ export class TranswcatController {
             const weeklyAmounts = await TranswcatService.getWeeklyAmounts(userId);
             res.json({ weeklyAmounts });
         } catch (error) {
-            console.error(error);
+            console.log(error);
             res.status(500).json({ message: 'Error fetching weekly amounts' });
         }
     }
@@ -28,7 +28,7 @@ export class TranswcatController {
             const monthlyAmounts = await TranswcatService.getMonthlyAmounts(userId);
             res.json({ monthlyAmounts });
         } catch (error) {
-            console.error(error);
+            console.log(error);
             res.status(500).json({ message: 'Error fetching monthly amounts' });
         }
     }
@@ -46,7 +46,7 @@ export class TranswcatController {
             const yearlyAmounts = await TranswcatService.getYearlyAmounts(userId);
             res.json({ yearlyAmounts }); // <--- No change needed
         } catch (error) {
-            console.error(error);
+            console.log(error);
             res.status(500).json({ message: 'Error fetching yearly amounts' });
         }
     }
@@ -65,7 +65,7 @@ export class TranswcatController {
             const weeklyAmounts = await TranswcatService.getWeeklyExpenseAmounts(userId);
             res.json({ weeklyAmounts });
         } catch (error) {
-            console.error(error);
+            console.log(error);
             res.status(500).json({ message: 'Error fetching weekly expense amounts' });
         }
     }
@@ -82,7 +82,7 @@ export class TranswcatController {
             const monthlyAmounts = await TranswcatService.getMonthlyExpenseAmounts(userId);
             res.json({ monthlyAmounts });
         } catch (error) {
-            console.error(error);
+            console.log(error);
             res.status(500).json({ message: 'Error fetching monthly expense amounts' });
         }
     }
@@ -99,7 +99,7 @@ export class TranswcatController {
             const yearlyAmounts = await TranswcatService.getYearlyExpenseAmounts(userId);
             res.json({ yearlyAmounts }); // <--- Return array as is
         } catch (error) {
-            console.error(error);
+            console.log(error);
             res.status(500).json({ message: 'Error fetching yearly expense amounts' });
         }
     }

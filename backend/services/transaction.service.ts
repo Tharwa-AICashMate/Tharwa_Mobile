@@ -16,6 +16,7 @@ interface Transaction {
   created_at: Date;
   details?: DescriptionItem[];
   storeId?: string;
+  description?:string;
 }
 
 export const createTransaction = async (transaction: Transaction) => {
@@ -30,13 +31,15 @@ export const createTransaction = async (transaction: Transaction) => {
       .single();
 
     if (error) {
-      console.error("Error fetching Income category:", error);
+      console.log("Error fetching Income category:", error);
     } else if (data) {
       transaction.category_id = data.id;
     }
+    console.log(data)
   }
   // delete transaction.user_id
   const { user_id, storeId, ...Transaction } = transaction;
+  console.log(user_id)
 
   const transactionToInsert = {
     ...Transaction,
@@ -73,28 +76,14 @@ export const getAllTransactions = async (userId: string, page = 1) => {
     .order("created_at", { ascending: false })
     .range(from, to);
 
-    const transactionIds = data?.map(tx => tx.transaction_id);
+     const formated = data?.map(tx =>({
+      ...tx,
+      details: parseTransactionDetails(tx?.details)
+    }));
 
-    const { data: txDetails, error: detailsError } = await supabase
-      .from("transactions")
-      .select("id, details")
-      .in("id", transactionIds);
-    
-    if (detailsError) {
-      console.error("Error fetching details:", detailsError);
-      return;
-    }
-
-    const merged = data?.map(tx => {
-      const match = txDetails.find(detail => detail.id === tx.transaction_id);
-      const parsedDetails = parseTransactionDetails(match?.details);
-      return {
-        ...tx,
-        details: parsedDetails
-      };
-    });
+   
   if (error) throw new Error(error.message);
-  return merged;
+  return formated;
 };
 
 const parseTransactionDetails = (details: string | null) => {
@@ -121,7 +110,7 @@ const parseTransactionDetails = (details: string | null) => {
       }))
     : [];
   } catch (error) {
-    console.error("Error parsing details:", error);
+    console.log("Error parsing details:", error);
     return [];
   }
 };
@@ -142,28 +131,13 @@ export const getTransactionsByCategory = async (
     .order("created_at", { ascending: false })
     .range(from, to);
 
-    const transactionIds = data?.map(tx => tx.transaction_id);
-
-    const { data: txDetails, error: detailsError } = await supabase
-      .from("transactions")
-      .select("id, details")
-      .in("id", transactionIds);
-    
-    if (detailsError) {
-      console.error("Error fetching details:", detailsError);
-      return;
-    }
-
-    const merged = data?.map(tx => {
-      const match = txDetails.find(detail => detail.id === tx.transaction_id);
-      const parsedDetails = parseTransactionDetails(match?.details);
-      return {
-        ...tx,
-        details: parsedDetails
-      };
-    });
+  
+    const formated = data?.map(tx =>({
+      ...tx,
+      details: parseTransactionDetails(tx?.details)
+    }));
   if (error) throw new Error(error.message);
-  return merged;
+  return formated;
 };
 
 export const deleteTransaction = async (transactionId: string) => {
@@ -186,6 +160,7 @@ export const editTransaction = async (transaction: {
   created_at: Date;
   id: string;
   details?: any;
+  description?:string;
 }) => {
   const { user_id, storeId, ...Transaction } = transaction;
 console.log('---------',Transaction)
@@ -212,7 +187,7 @@ console.log('---------',Transaction)
       .upsert([{ item_id: Transaction.id, store_id: storeId }], {
         onConflict: "item_id",
       });
-    if (storeError) console.error("Store upsert error:", storeError);
+    if (storeError) console.log("Store upsert error:", storeError);
   }
 
   // Merge storeId and parse `details` for return

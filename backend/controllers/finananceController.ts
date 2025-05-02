@@ -10,7 +10,7 @@ export const getUserFinance = async (req: Request, res: Response) => {
     const data = await getFinanceSummary(userId);
     res.json({ ...data });
   } catch (error: any) {
-    console.error('Finance summary error:', error);
+    console.log('Finance summary error:', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
   }
 };

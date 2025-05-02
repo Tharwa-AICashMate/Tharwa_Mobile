@@ -30,7 +30,7 @@ export const getSpendingAnalytics = async (): Promise<
     .eq("type", "expense");
 
   if (error) {
-    console.error("Error fetching spending analytics:", error);
+    console.log("Error fetching spending analytics:", error);
     return null;
   }
   return data;
@@ -44,7 +44,7 @@ export const getIncomeAnalytics = async (): Promise<AnalyticsData[] | null> => {
     .eq("type", "income");
 
   if (error) {
-    console.error("Error fetching income analytics:", error);
+    console.log("Error fetching income analytics:", error);
     return null;
   }
   return data;
@@ -82,7 +82,7 @@ export const getFinancialTrends = async (): Promise<AnalyticsData[] | null> => {
     .order("date", { ascending: false });
 
   if (error) {
-    console.error("Error fetching financial trends:", error);
+    console.log("Error fetching financial trends:", error);
     return null;
   }
   return data;

@@ -19,7 +19,7 @@ export const verifyPassword = async (req: Request, res: Response) => {
   
       return res.status(200).json({ message: 'Password verified successfully' });
     } catch (error) {
-      console.error('Error verifying password:', error);
+      console.log('Error verifying password:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
   };
@@ -36,7 +36,7 @@ export const deleteAccount = async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: 'Account deleted successfully' });
   } catch (error) {
-    console.error('Error deleting account:', error);
+    console.log('Error deleting account:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -55,7 +55,7 @@ export const getEmailByUserId = async (req: Request, res: Response) => {
   
       return res.status(200).json({ email });
     } catch (error) {
-      console.error('Error fetching email:', error);
+      console.log('Error fetching email:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
   };
@@ -79,7 +79,7 @@ export const updatePassword = async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: 'Password updated successfully' });
   } catch (error) {
-    console.error('Error updating password:', error);
+    console.log('Error updating password:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };

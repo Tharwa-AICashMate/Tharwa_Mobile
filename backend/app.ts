@@ -20,6 +20,7 @@ import goalRoutes from './routes/goal.route.js'
 import searchRoutes from './routes/search.route.js';
 import financeRoutes from './routes/financeRoute.js';
 import bodyParser from "body-parser";
+import ragService from "./services/ragService.js";
 dotenv.config();
 validateEnv();
 
@@ -65,7 +66,7 @@ app.use(
     res: express.Response,
     next: express.NextFunction
   ) => {
-    console.error(err.stack);
+    console.log(err.stack);
     res.status(500).json({ message: "Something broke!" });
   }
 );
@@ -74,12 +75,14 @@ supabase
   .from("stores")
   .select("*")
   .then(({ data, error }) => {
-    if (error) console.error("Supabase Error:", error);
+    if (error) console.log("Supabase Error:", error);
     // else console.log('Supabase Data:', data);
   });
+  
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, async () => {
+  await ragService.initialize();
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
 });
 

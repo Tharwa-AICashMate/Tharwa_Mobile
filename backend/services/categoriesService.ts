@@ -9,7 +9,7 @@ export const createCategory = async (
     .insert(categoryData)
     .select()
     .single();
-
+  console.log(data)
   if (error) throw error;
   return data;
 };

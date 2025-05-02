@@ -5,7 +5,7 @@ import {
 } from "../controllers/ragController.js";
 
 const aiRouter = express.Router();;
-// aiRouter.get("/find", findData);
+aiRouter.post("/find", findData);
 // aiRouter.get("/analyze", analyzeData);
 aiRouter.post("/analyze", analyzeData);
 
