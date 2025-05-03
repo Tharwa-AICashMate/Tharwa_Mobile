@@ -8,17 +8,23 @@ import styles from "./styles";
 import { getCurrentUserId } from "@/utils/auth";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { fetchBalance, fetchFinanceData } from "@/redux/slices/financeSlice";
+import { useTranslation } from "react-i18next";
 
 interface ExpenseBriefProps {
   setTotalBalance?: (balance: number) => void;
 }
 
-const ExpenseBrief: React.FC<ExpenseBriefProps> = () => {
+const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
+  
   const dispatch = useAppDispatch();
   const { balance, expenses, income, savings, loading, error } = useAppSelector(
     (state) => state.finance
   );
+  
   console.log({ balance, expenses, income, savings, loading, error });
+
   useEffect(() => {
     async function fetchAll() {
       const userId = await getCurrentUserId();
@@ -47,15 +53,20 @@ const ExpenseBrief: React.FC<ExpenseBriefProps> = () => {
             amount={availableBalance || 0}
           />
         </View>
-        <View style={styles.budgetStatus}>
+        <View style={[styles.budgetStatus, { 
+          flexDirection: isRTL ? 'row-reverse' : 'row',
+          
+        }]}>
           <Ionicons
             name="checkbox-outline"
             size={16}
             color={Theme.colors.text}
           />
-          <Text style={styles.budgetStatusText}>
-            {percentage?.toFixed(2)}% Of Your Expenses, Looks{" "}
-            {percentage < 50 ? "Good" : "Bad"}.
+          <Text style={[styles.budgetStatusText]}>
+            {t('expenseBrief.statusMessage', {
+              percentage: percentage?.toFixed(2),
+              status: percentage < 50 ? t('expenseBrief.good') : t('expenseBrief.bad')
+            })}
           </Text>
         </View>
       </View>

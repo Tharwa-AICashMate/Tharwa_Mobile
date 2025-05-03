@@ -33,6 +33,7 @@ import LineItemsEditor from "./LineItems";
 import CategorySelector from "./CategorySelector";
 import { setUserStores } from "@/redux/slices/storeSlice";
 import axiosInstance from "@/config/axios";
+import { useTranslation } from "react-i18next";
 import { isValidDateValue } from "@/utils/validators";
 
 LogBox.ignoreLogs(["Possible Unhandled Promise Rejection"]);
@@ -80,7 +81,7 @@ export default function CameraScreen() {
   const [userId, setUserId] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [storesLoading, setStoresLoading] = useState(false);
-  
+  const { t } = useTranslation();
   const { items: categories, loading: categoriesLoading } = useSelector(
     (state: RootState) => state.categories
   );
@@ -490,7 +491,7 @@ export default function CameraScreen() {
         contentContainerStyle={styles.flexGrow}
         keyboardShouldPersistTaps="handled"
       >
-        <Header title="Camera" />
+        <Header title={t('header.camera')} />
         {!photoUri ? (
           <View style={styles.cameraContainer}>
             <CameraView

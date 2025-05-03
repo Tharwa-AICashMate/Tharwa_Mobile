@@ -1,0 +1,301 @@
+{
+  "header": {
+    "invoice": "Invoice",
+    "camera": "Camera",
+    "language": "Language",
+    "categories": "Categories"
+  },
+  "expenseBrief": {
+    "statusMessage": "{{percentage}}% Of Your Expenses, Looks {{status}}.",
+    "good": "Good",
+    "bad": "Bad"
+  },
+  "balanceDisplay": {
+    "totalBalance": "Total Balance",
+    "totalExpense": "Total Expense"
+  },
+  "home": {
+    "name": "Home",
+    "navigation": {
+      "addIncome": "Add Income",
+      "allStores": "All Stores",
+      "savingGoals": "Saving Goals",
+      "myStores": "My Stores",
+      "addExpenses": "Add Expenses",
+      "addStores": "Add Stores"
+    },
+    "quickStats": {
+      "weeklyHighlights": "Weekly Highlights",
+      "highestIncome": "Highest Income",
+      "highestExpense": "Highest Expense",
+      "noHighlights": "No weekly highlights yet"
+    },
+    "currencySymbol": "$"
+  },
+  "transactionForm": {
+    "date": "Date",
+    "datePlaceholder": "Select date",
+    "dateError": "Date cannot be in the future",
+    "category": "Category",
+    "categoryPlaceholder": "Select category",
+    "categoryError": "Please select a category",
+    "savingsGoal": "Savings Goal",
+    "savingsGoalPlaceholder": "Select savings goal",
+    "savingsGoalError": "Please select a savings goal",
+    "store": "Store (Optional)",
+    "storePlaceholder": "Select a store",
+    "addStore": "+ Add Store",
+    "amount": "Amount",
+    "amountPlaceholder": "$0.00",
+    "amountError": {
+      "required": "Amount is required",
+      "validNumber": "Amount must be a valid number",
+      "positive": "Amount must be positive"
+    },
+    "title": {
+      "expense": "Expense Title",
+      "income": "Income Title",
+      "savings": "Savings Title"
+    },
+    "titlePlaceholder": {
+      "expense": "Dinner",
+      "income": "Salary",
+      "savings": "Monthly deposit"
+    },
+    "titleError": "Title cannot be empty",
+    "items": "Items (Optional)",
+    "itemNamePlaceholder": "Item name",
+    "itemPricePlaceholder": "Price",
+    "itemQuantityPlaceholder": "Qty",
+    "itemError": {
+      "bothFields": "Please fill both name and price",
+      "nameRequired": "Item name is required",
+      "validNumber": "Must be a valid number",
+      "positive": "Must be positive"
+    },
+    "addItem": "Add Item",
+    "note": "Note (Optional)",
+    "notePlaceholder": "Enter any additional notes",
+    "saveButton": {
+      "default": "Save",
+      "processing": "Processing..."
+    },
+    "deleteItem": "Remove item"
+  },
+  "logo": "Tharwa",
+  "onboarding": {
+    "welcomeMsg": "Welcome To Expense Manager",
+    "onboardingMsg": "Are You Ready To Take Control Of Your Finances?",
+    "next": "Next"
+  },
+  "Login": {
+    "login": "Log In",
+    "loginMsg": "Begin your journey to financial peace The Tharwa way.",
+    "forgotPassword": "Forgot Password?",
+    "signUp": "Sign Up"
+  },
+  "SignUpScreen": {
+    "welcome": "Welcome",
+    "FullName": "Full Name",
+    "fullNamePlaceholder": "Your full name",
+    "fullNameError": "please provide a valid name",
+    "email": "Email",
+    "emailPlaceholder": "example@example.com",
+    "emailError": "Invalid Email",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "+123456789",
+    "phoneNumberError": "Invalid Number",
+    "dateOfBirth": "Date of Birth",
+    "dateOfBirthPlaceholder": "1/1/2000",
+    "dateOfBirthError": "Invalid Date of birth",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "passwordPlaceholder": "Password",
+    "confirmPasswordPlaceholder": "Confirm password",
+    "passwordError": "Invalid Password",
+    "passwordErrorMatch": "Passwords don't match",
+    "termsAndConditions": "By continuing, you agree to <b>Terms of Service</b> and <b>Privacy Policy</b>",
+    "noActiveSession": "No active session",
+    "signUp": "Sign Up",
+    "loginMsg": "Already have an account?",
+    "login": "Log In"
+  },
+  "loginScreen": {
+    "welcome": "Welcome",
+    "email": "Email",
+    "emailPlaceholder": "example@example.com",
+    "emailError": "Invalid Email",
+    "password": "Password",
+    "passwordPlaceholder": "Password",
+    "passwordError": "Invalid Password",
+    "noActiveSession": "No active session",
+    "signUp": "Sign Up",
+    "login": "Log In",
+    "forgotPassword": "Forgot Password?",
+    "fingerprint": "Use Fingerprint To Access",
+    "or": "or sign up with"
+  },
+  "profileScreen": {
+    "profile": "Profile",
+    "noName": "No name",
+    "editProfile": "Edit Profile",
+    "help": "Help",
+    "settings": "Settings",
+    "logout": "Log Out"
+  },
+  "help": {
+    "helpAndFAQs": "Help & FAQs",
+    "howCanWeHelpYou": "How Can We Help You?",
+    "faq": "FAQ",
+    "contactUs": "Contact Us",
+    "general": "General",
+    "account": "Account",
+    "services": "Services",
+    "search": "Search"
+  },
+  "generalFAQs": {
+    "howDoIStartSaving_Q": "How do I start saving?",
+    "howDoIStartSaving_A": "To begin saving, create an account, add savings goals, and set aside a portion of your income regularly.",
+    "howMuchDoesItCostToUseTharwa_Q": "How much does it cost to use Tharwa?",
+    "howMuchDoesItCostToUseTharwa_A": "Tharwa is free to use. We do not charge any fees for using our platform.",
+    "howToContactSupport_Q": "How to contact support?",
+    "howToContactSupport_A": "You can reach our support team through the 'Contact Us' button in the Help Center, or via any of our support channels."
+  },
+  "accountFAQs": {
+    "howToChangePassword_Q": "How to change my password?",
+    "howToChangePassword_A": "To change your password, go to the settings page and select 'Change Password'.",
+    "howToUpdateMyProfile_Q": "How to update my profile?",
+    "howToUpdateMyProfile_A": "To update your profile, go to the profile page and select 'Edit Profile',update your information, and save changes.",
+    "howToUpdateMySettings_Q": "How to update my settings?",
+    "howToUpdateMySettings_A": "Navigate to 'Settings' from your profile page to manage notifications, security, and other preferences.",
+    "howToDeleteAccount_Q": "How to delete my account?",
+    "howToDeleteAccount_A": "Go to 'Settings', select 'Account', and click on 'Delete Account'. Follow the confirmation steps to complete the process."
+  },
+  "servicesFAQs": {
+    "howToAccessTransactionsHistory_Q": "How to access my transactions history?",
+    "howToAccessTransactionsHistory_A": "Go to 'Transactions' in the main menu to view your complete expense history and filter by date or category.",
+    "CanUseAppOffline_Q": "Can I use the app offline?",
+    "CanUseAppOffline_A": "Some features are available offline, but you'll need an internet connection for real-time updates and transactions."
+  },
+  "contactUs": {
+    "searchSupportChannels": "Search Support Channels",
+    "customerService": "Customer Service",
+    "website": "Website",
+    "facebook": "Facebook",
+    "whatsapp": "WhatsApp",
+    "instagram": "Instagram"
+  },
+  "EditProfile": {
+    "editProfile": "Edit My Profile",
+    "accountSettings": "Account Settings",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Full Name",
+    "phone": "Phone",
+    "phonePlaceholder": "Phone",
+    "emailAddress": "Email Address",
+    "emailAddressPlaceholder": "Email Address",
+    "pushNotifications": "Push Notifications",
+    "updateProfile": "Update Profile"
+  },
+  "analysis": {
+    "analysis": "Analysis",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "income": "Income",
+    "expense": "Expense",
+    "incomeExpense": "Income & Expense",
+    "noData": "No data available for this period"
+  },
+  "SmartGrocery": {
+    "smartGroceryOffers": "Smart Grocery Offers",
+    "yourLocation": "Your Location:",
+    "latitude": "Latitude:",
+    "longitude": "Longitude:",
+    "retry": "Retry",
+    "findByMap": "Find by Map",
+    "analysis": "Analysis",
+    "searchScope": "Search scope:",
+    "km5": "5 km",
+    "km10": "10 km",
+    "km20": "20 km",
+    "km50": "50 km",
+    "km100": "100 km",
+    "enterGroceryItem": "Enter grocery item",
+    "add": "Add",
+    "yourGroceryList": "Your Grocery List:",
+    "addItemsToYourGroceryList": "Add items to your grocery list",
+    "findBestStore": "Find Best Store ({searchRadius}km)"
+  },
+  "favoriteStores": {
+    "favoriteStores": "Favorite Stores",
+    "addStore": "Add Store",
+    "storeName": "Store Name",
+    "storeNamePlaceholder": "Enter store name",
+    "storeLocation": "Store Location",
+    "storeLocationPlaceholder": "Enter store location",
+    "storeCategory": "Store Category",
+    "storeCategoryPlaceholder": "Select store category",
+    "storeCategoryError": "Please select a store category",
+    "addStoreButton": "Add Store",
+    "noFavoriteStores": "No favorite stores yet"
+  },
+  "forgotPasswordScreen": {
+    "forgotPassword": "Forgot Password",
+    "resetPassword": "Reset Password?",
+    "resetPasswordDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
+    "enterEmailAddress": "Enter Email Address",
+    "emailPlaceholder": "example@example.com",
+    "invalidEmailOrPassword": "Invalid email",
+    "nextStep": "Next Step",
+    "signUp": "Sign Up",
+    "orSignUpWith": "or sign up with",
+    "dontHaveAnAccount": "Don't have an account?",
+    "signUpLink": "Sign Up"
+  },
+  "savingsScreen": {
+    "noSavings": {
+      "createYourFirstGoal": "Create Your First Goal",
+      "startSavingForSomethingSpecial": "Start saving for something special by adding your first goal"
+    },
+    "savingsModal": {
+      "addSavingsGoal": "Add Savings Goal",
+      "name": "Name",
+      "goalNamePlaceholder": "Goal name",
+    "charactersLimit": "{0}/20 characters",
+      "targetAmount": "Target Amount",
+      "enterTargetAmount": "Enter target amount",
+      "selectIcon": "Select Icon",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
+  "addStoreScreen": {
+    "addStore": "Add Store",
+    "locationNote": "Note: Could not get your location. Search results may not be location-specific.",
+    "searchForStoresByName": "Search for stores by name...",
+    "search": "Search",
+    "enterStoreNameToSearch": "Enter a store name to search or allow location access for nearby stores."
+  },
+  "favoriteStoresScreen": {
+    "favoriteStores": "Favorite Stores",
+    "noFavoriteStores": "No favorite stores yet"
+  },
+  "allStoresScreen": {
+    "allStores": "All Stores",
+    "noStores": "No stores found",
+    "searchPlaceholder": "Search stores"
+  },
+  "searchScreen": {
+  "searchTitle": "Search",
+  "searchPlaceholder": "Search...",
+  "categories": "Categories",
+  "selectCategory": "Select the category",
+  "date": "Date",
+  "dateValue": "03 / MAY / 2025",
+  "report": "Report",
+  "income": "Income",
+  "expense": "Expense",
+  "searchButton": "Search"
+  }
+}

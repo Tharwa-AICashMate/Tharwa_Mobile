@@ -10,6 +10,7 @@ import {
   Pressable,
   Keyboard,
   ActivityIndicator,
+  I18nManager,
 } from "react-native";
 import { clearUserStores, setUserStores } from "@/redux/slices/storeSlice";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -18,6 +19,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { fetchUserCategories } from "@/redux/slices/categoriesSlice";
 import { getCurrentUserId } from "@/utils/auth";
+import { useTranslation } from "react-i18next";
 
 import Theme from "@/theme";
 import styles from "./style";
@@ -72,7 +74,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   isIncome = false,
   isSavings = false,
 }) => {
-  console.log(initialDetails);
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
+  
   const navigation = useNavigation();
   // Form state
   const [date, setDate] = useState<Date>(initialDate);
@@ -151,9 +155,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           console.log(userId);
           const response = await axiosInstance.get(`/user/stores/${userId}`);
           dispatch(setUserStores(response.data));
-    
         }
-
       } catch (error) {
         console.log("Error loading stores:", error);
       }
@@ -162,11 +164,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     loadData();
   }, [dispatch, userId]);
 
-  useEffect(()=>{
-    console.log("stoeId :",store)
-    const matchedItem = userStores?.find(item => item.id == store);
+  useEffect(() => {
+    console.log("stoeId :", store);
+    const matchedItem = userStores?.find((item) => item.id == store);
     setStoreText(matchedItem?.name);
-  },[stores,userStores])
+  }, [stores, userStores]);
+
   // Keyboard event listeners
   useEffect(() => {
     const keyboardWillShowListener = Keyboard.addListener(
@@ -254,7 +257,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const validateDate = (dateToValidate: Date = date) => {
     let error = "";
     if (isDateInFuture(dateToValidate)) {
-      error = "Date cannot be in the future";
+      error = t("transactionForm.dateError");
     }
     setErrors((prev) => ({ ...prev, date: error }));
     return !error;
@@ -265,7 +268,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
     let error = "";
     if (!category) {
-      error = `Please select a ${isSavings ? "savings goal" : "category"}`;
+      error = isSavings
+        ? t("transactionForm.savingsGoalError")
+        : t("transactionForm.categoryError");
     }
     setErrors((prev) => ({ ...prev, category: error }));
     return !error;
@@ -274,11 +279,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const validateAmount = () => {
     let error = "";
     if (!amount) {
-      error = "Amount is required";
+      error = t("transactionForm.amountError.required");
     } else if (!isValidNumber(amount)) {
-      error = "Amount must be a valid number";
+      error = t("transactionForm.amountError.validNumber");
     } else if (!isPositiveNumber(amount)) {
-      error = "Amount must be a positive number";
+      error = t("transactionForm.amountError.positive");
     }
     setErrors((prev) => ({ ...prev, amount: error }));
     return !error;
@@ -287,7 +292,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const validateTitle = () => {
     let error = "";
     if (titleValue.trim() === "" && titleValue !== "") {
-      error = "Title cannot be just whitespace";
+      error = t("transactionForm.titleError");
     }
     setErrors((prev) => ({ ...prev, title: error }));
     return !error;
@@ -306,17 +311,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         (item.name !== "" || item.unitPrice !== "") &&
         (item.name === "" || item.unitPrice === "")
       ) {
-        error = "Please fill both name and price";
+        error = t("transactionForm.itemError.bothFields");
       }
 
       if (item.name !== "" && !isValidItemName(item.name)) {
-        error = "Item name is required";
+        error = t("transactionForm.itemError.nameRequired");
       }
 
       if (item.unitPrice !== "" && !isValidNumber(item.unitPrice)) {
-        error = "Price must be a valid number";
+        error = t("transactionForm.itemError.validNumber");
       } else if (item.unitPrice !== "" && !isPositiveNumber(item.unitPrice)) {
-        error = "Price must be positive";
+        error = t("transactionForm.itemError.positive");
       }
 
       if (
@@ -324,13 +329,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         item.quantity !== "" &&
         !isValidNumber(item.quantity)
       ) {
-        error = "Quantity must be a valid number";
+        error = t("transactionForm.itemError.validNumber");
       } else if (
         item.quantity !== undefined &&
         item.quantity !== "" &&
         !isPositiveNumber(item.quantity)
       ) {
-        error = "Quantity must be positive";
+        error = t("transactionForm.itemError.positive");
       }
 
       itemErrors[index] = error;
@@ -357,7 +362,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     );
   };
 
-  console.log(descriptionItems)
+  console.log(descriptionItems);
 
   const handleSubmit = () => {
     if (isSubmitting) return;
@@ -500,14 +505,22 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             <View style={styles.formContainer}>
               {/* Date field */}
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>Date</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                  {t("transactionForm.date")}
+                </Text>
                 <TouchableOpacity
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    {
+                      flexDirection: isRTL ? "row-reverse" : "row",
+                      justifyContent: "space-between",
+                    },
+                  ]}
                   onPress={showDatePickerModal}
                   ref={(ref) => (inputRefs.current["date"] = ref)}
                 >
                   <Text style={{ color: Theme.colors.text }}>
-                    {date.toLocaleDateString("en-US", {
+                    {date.toLocaleDateString(i18n.language, {
                       month: "long",
                       day: "numeric",
                       year: "numeric",
@@ -537,11 +550,19 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               {/* Category field (hidden for income) */}
               {!isIncome && (
                 <View style={styles.inputGroup}>
-                  <Text style={styles.label}>
-                    {isSavings ? "Savings Goal" : "Category"}
+                  <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                    {isSavings
+                      ? t("transactionForm.savingsGoal")
+                      : t("transactionForm.category")}
                   </Text>
                   <TouchableOpacity
-                    style={styles.input}
+                    style={[
+                      styles.input,
+                      {
+                        flexDirection: isRTL ? "row-reverse" : "row",
+                        justifyContent: "space-between",
+                      },
+                    ]}
                     onPress={() => {
                       Keyboard.dismiss();
                       setShowCategoryPicker(!showCategoryPicker);
@@ -551,7 +572,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                   >
                     <Text style={{ color: Theme.colors.text }}>
                       {category ||
-                        `Select the ${isSavings ? "savings goal" : "category"}`}
+                        t(
+                          isSavings
+                            ? "transactionForm.savingsGoalPlaceholder"
+                            : "transactionForm.categoryPlaceholder"
+                        )}
                     </Text>
                     <Ionicons
                       name="chevron-down"
@@ -574,7 +599,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                         {displayCategories.map((cat) => (
                           <TouchableOpacity
                             key={cat.id}
-                            style={styles.categoryOption}
+                            style={[
+                              styles.categoryOption,
+                              {
+                                flexDirection: isRTL ? "row-reverse" : "row",
+                              },
+                            ]}
                             onPress={() => {
                               setCategory(cat.name);
                               setShowCategoryPicker(false);
@@ -593,7 +623,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                                 color="white"
                               />
                             </View>
-                            <Text style={{ color: Theme.colors.text }}>
+                            <Text
+                              style={[
+                                { color: Theme.colors.text },
+                                isRTL ? { marginRight: 10 } : { marginLeft: 10 },
+                              ]}
+                            >
                               {cat.name}
                             </Text>
                           </TouchableOpacity>
@@ -610,9 +645,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               {/* Store field (hidden for income and savings) */}
               {!isIncome && !isSavings && (
                 <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Store (Optional)</Text>
+                  <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                    {t("transactionForm.store")}
+                  </Text>
                   <TouchableOpacity
-                    style={styles.input}
+                    style={[
+                      styles.input,
+                      {
+                        flexDirection: isRTL ? "row-reverse" : "row",
+                        justifyContent: "space-between",
+                      },
+                    ]}
                     onPress={() => {
                       Keyboard.dismiss();
                       setShowStorePicker(!showStorePicker);
@@ -621,7 +664,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     ref={(ref) => (inputRefs.current["store"] = ref)}
                   >
                     <Text style={{ color: Theme.colors.text }}>
-                      {storeText || "Select a store"}
+                      {storeText || t("transactionForm.storePlaceholder")}
                     </Text>
                     <Ionicons
                       name="chevron-down"
@@ -645,10 +688,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                         {userStores.map((storeItem) => (
                           <TouchableOpacity
                             key={storeItem.id}
-                            style={styles.categoryOption}
+                            style={[
+                              styles.categoryOption,
+                              {
+                                flexDirection: isRTL ? "row-reverse" : "row",
+                              },
+                            ]}
                             onPress={() => {
                               setStore(storeItem.id);
-                              setStoreText(storeItem.name)
+                              setStoreText(storeItem.name);
                               setShowStorePicker(false);
                             }}
                           >
@@ -658,10 +706,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                               color={Theme.colors.text}
                             />
                             <Text
-                              style={{
-                                color: Theme.colors.text,
-                                marginLeft: 10,
-                              }}
+                              style={[
+                                { color: Theme.colors.text },
+                                isRTL ? { marginRight: 10 } : { marginLeft: 10 },
+                              ]}
                             >
                               {storeItem.name}
                             </Text>
@@ -673,6 +721,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                             {
                               borderTopWidth: 1,
                               borderTopColor: Theme.colors.background,
+                              flexDirection: isRTL ? "row-reverse" : "row",
                             },
                           ]}
                           onPress={() => {
@@ -686,12 +735,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                             color={Theme.colors.primary}
                           />
                           <Text
-                            style={{
-                              color: Theme.colors.primary,
-                              marginLeft: 10,
-                            }}
+                            style={[
+                              { color: Theme.colors.primary },
+                              isRTL ? { marginRight: 10 } : { marginLeft: 10 },
+                            ]}
                           >
-                            + Add Store
+                            {t("transactionForm.addStore")}
                           </Text>
                         </TouchableOpacity>
                       </ScrollView>
@@ -701,10 +750,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               )}
               {/* Amount field */}
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>Amount</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                  {t("transactionForm.amount")}
+                </Text>
                 <TextInput
                   ref={(ref) => (inputRefs.current["amount"] = ref)}
-                  style={[styles.input, { color: Theme.colors.text }]}
+                  style={[
+                    styles.input,
+                    { color: Theme.colors.text, textAlign: isRTL ? "right" : "left" },
+                  ]}
                   value={amount}
                   onChangeText={(text) => {
                     if (
@@ -718,7 +772,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                   }}
                   onFocus={() => setCurrentFocusedInput("amount")}
                   onBlur={validateAmount}
-                  placeholder="$0.00"
+                  placeholder={t("transactionForm.amountPlaceholder")}
                   placeholderTextColor={Theme.colors.textLight}
                   keyboardType="numeric"
                 />
@@ -729,20 +783,29 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
               {/* Title field */}
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>{title} Title</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                  {isIncome
+                    ? t("transactionForm.title.income")
+                    : isSavings
+                    ? t("transactionForm.title.savings")
+                    : t("transactionForm.title.expense")}
+                </Text>
                 <TextInput
                   ref={(ref) => (inputRefs.current["title"] = ref)}
-                  style={[styles.input, { color: Theme.colors.text }]}
+                  style={[
+                    styles.input,
+                    { color: Theme.colors.text, textAlign: isRTL ? "right" : "left" },
+                  ]}
                   value={titleValue}
                   onChangeText={setTitleValue}
                   onFocus={() => setCurrentFocusedInput("title")}
                   onBlur={validateTitle}
                   placeholder={
                     isIncome
-                      ? "Salary"
+                      ? t("transactionForm.titlePlaceholder.income")
                       : isSavings
-                        ? "Monthly deposit"
-                        : "Dinner"
+                      ? t("transactionForm.titlePlaceholder.savings")
+                      : t("transactionForm.titlePlaceholder.expense")
                   }
                   placeholderTextColor={Theme.colors.textLight}
                 />
@@ -754,19 +817,29 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               {/* Description Items (hidden for income and savings) */}
               {!isIncome && !isSavings && (
                 <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Items (Optional)</Text>
+                  <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                    {t("transactionForm.items")}
+                  </Text>
                   {descriptionItems.map((item, index) => (
                     <View
-                      onPress={console.log('--------------',item)}
                       key={index}
                       style={styles.descriptionItemContainer}
                       ref={(ref) => (inputRefs.current[`item-${index}`] = ref)}
                     >
-                      <View style={styles.descriptionItemRow}>
+                      <View
+                        style={[
+                          styles.descriptionItemRow,
+                          { flexDirection: isRTL ? "row-reverse" : "row" },
+                        ]}
+                      >
                         <TextInput
                           style={[
                             styles.descriptionInput,
-                            { flex: 2, color: Theme.colors.text },
+                            {
+                              flex: 2,
+                              color: Theme.colors.text,
+                              textAlign: isRTL ? "right" : "left",
+                            },
                           ]}
                           value={item.name}
                           onChangeText={(text) =>
@@ -776,13 +849,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                             setCurrentFocusedInput(`item-${index}`)
                           }
                           onBlur={validateDescriptionItems}
-                          placeholder="Item name"
+                          placeholder={t("transactionForm.itemNamePlaceholder")}
                           placeholderTextColor={Theme.colors.textLight}
                         />
                         <TextInput
                           style={[
                             styles.descriptionInput,
-                            { flex: 1, color: Theme.colors.text },
+                            {
+                              flex: 1,
+                              color: Theme.colors.text,
+                              textAlign: isRTL ? "right" : "left",
+                            },
                           ]}
                           value={item.unitPrice}
                           onChangeText={(text) => {
@@ -799,14 +876,18 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                             setCurrentFocusedInput(`item-${index}`)
                           }
                           onBlur={validateDescriptionItems}
-                          placeholder="Price"
+                          placeholder={t("transactionForm.itemPricePlaceholder")}
                           placeholderTextColor={Theme.colors.textLight}
                           keyboardType="numeric"
                         />
                         <TextInput
                           style={[
                             styles.descriptionInput,
-                            { flex: 1, color: Theme.colors.text },
+                            {
+                              flex: 1,
+                              color: Theme.colors.text,
+                              textAlign: isRTL ? "right" : "left",
+                            },
                           ]}
                           value={item.quantity || ""}
                           onChangeText={(text) => {
@@ -823,7 +904,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                             setCurrentFocusedInput(`item-${index}`)
                           }
                           onBlur={validateDescriptionItems}
-                          placeholder="Qty"
+                          placeholder={t("transactionForm.itemQuantityPlaceholder")}
                           placeholderTextColor={Theme.colors.textLight}
                           keyboardType="numeric"
                         />
@@ -848,7 +929,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     </View>
                   ))}
                   <TouchableOpacity
-                    style={styles.addItemButton}
+                    style={[
+                      styles.addItemButton,
+                      { flexDirection: isRTL ? "row-reverse" : "row" },
+                    ]}
                     onPress={addDescriptionItem}
                   >
                     <Ionicons
@@ -857,9 +941,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                       color={Theme.colors.primary}
                     />
                     <Text
-                      style={{ color: Theme.colors.primary, marginLeft: 5 }}
+                      style={[
+                        { color: Theme.colors.primary },
+                        isRTL ? { marginRight: 5 } : { marginLeft: 5 },
+                      ]}
                     >
-                      Add Item
+                      {t("transactionForm.addItem")}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -867,14 +954,23 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
               {/* Note field */}
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>Note (Optional)</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                  {t("transactionForm.note")}
+                </Text>
                 <TextInput
                   ref={(ref) => (inputRefs.current["message"] = ref)}
-                  style={[styles.messageInput, { color: Theme.colors.text }]}
+                  style={[
+                    styles.messageInput,
+                    {
+                      color: Theme.colors.text,
+                      textAlign: isRTL ? "right" : "left",
+                      writingDirection: isRTL ? "rtl" : "ltr",
+                    },
+                  ]}
                   value={message}
                   onChangeText={setMessage}
                   onFocus={() => setCurrentFocusedInput("message")}
-                  placeholder="Enter any additional notes"
+                  placeholder={t("transactionForm.notePlaceholder")}
                   placeholderTextColor={Theme.colors.textLight}
                   multiline
                 />
@@ -887,7 +983,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 disabled={isSubmitting || isLoading}
               >
                 <Text style={styles.saveButtonText}>
-                  {isSubmitting ? "Processing..." : buttonText}
+                  {isSubmitting
+                    ? t("transactionForm.saveButton.processing")
+                    : t("transactionForm.saveButton.default")}
                 </Text>
               </TouchableOpacity>
             </View>
