@@ -8,11 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { isValidEmail } from "@/utils/validators";
 import { forgetPassword } from "@/redux/slices/AuthSlice";
 import { AppDispatch } from "@/redux/store";
+import { useTranslation } from "react-i18next";
 
 const ForgotPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [email, setEmail] = useState<string>("");
   const { error, loading } = useSelector((state: any) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
+  const {t}=useTranslation()
 
   async function handelForgetPassword() {
     const resultAction = await dispatch(forgetPassword(email));
@@ -26,7 +28,7 @@ const ForgotPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Forgot Password</Text>
+        <Text style={styles.title}>{t("forgotPasswordScreen.forgotPassword")}</Text>
       </View>
 
       <View style={styles.form}>
@@ -34,23 +36,23 @@ const ForgotPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
           <Text
             style={[styles.secondaryButtonText, { alignSelf: "flex-start" }]}
           >
-            Reset Password?
+            {t("forgotPasswordScreen.resetPassword")}
           </Text>
           <Text style={styles.linkText}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor.
+          {t("forgotPasswordScreen.resetPasswordDescription")}
+           
           </Text>
         </View>
 
         <Input
-          label="Enter Email Adress"
+          label= {t("forgotPasswordScreen.enterEmailAddress")}
           keyboardType="email-address"
           value={email}
           validator={isValidEmail}
           onChangeText={setEmail}
-          errorMessage={"please Enter a valid Email"}
+          errorMessage= {t("forgotPasswordScreen.invalidEmailOrPassword")}
           autoCapitalize="none"
-          placeholder="example@example.com"
+          placeholder= {t("forgotPasswordScreen.emailPlaceholder")}
         />
 
         {error && <Text style={styles.errorText}>{error}</Text>}
@@ -59,24 +61,24 @@ const ForgotPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
           style={styles.primaryButton}
           onPress={handelForgetPassword}
         >
-          <Text style={styles.primaryButtonText}>Next Step</Text>
+          <Text style={styles.primaryButtonText}>{t("forgotPasswordScreen.nextStep")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.secondaryButton}
           onPress={() => navigation.navigate("CreateAccount")}
         >
-          <Text style={styles.secondaryButtonText}>Sign Up</Text>
+          <Text style={styles.secondaryButtonText}>{t("forgotPasswordScreen.signUp")}</Text>
         </TouchableOpacity>
 
         <SocialSignIn />
 
         <View style={styles.link}>
-          <Text style={styles.linkText}>Don't have an account? </Text>
+          <Text style={styles.linkText}>{t("forgotPasswordScreen.dontHaveAnAccount")}</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate("CreateAccount")}
           >
-            <Text style={styles.linkButton}>Sign Up</Text>
+            <Text style={styles.linkButton}>{t("forgotPasswordScreen.signUp")}</Text>
           </TouchableOpacity>
         </View>
       </View>

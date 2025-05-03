@@ -1,8 +1,11 @@
 import Theme from "@/theme";
-import { StyleSheet } from "react-native";
-
+import { StyleSheet, I18nManager } from "react-native";
+import i18next from "../../../../services/i18next";
+const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
+console.log(isRTL);
 const styles = StyleSheet.create({
   container: {
+    direction:isRTL?'rtl':'ltr',
     marginBottom: 20,
   },
   label: {
@@ -13,7 +16,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   inputContainer: {
-    flexDirection: "row",
+    flexDirection: isRTL? "row-reverse": "row",
     alignItems: "center",
     width: "100%",
     backgroundColor: Theme.colors.secondery,
@@ -22,17 +25,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   input: {
+    textAlign:isRTL?'right':'left',
     paddingVertical: 10,
     paddingRight: 20,
     flex: 1,
     fontSize: 16,
     width: "100%",
-    color: Theme.colors.text,
-    textAlign: Theme.typography.direction || "left",
+    color: Theme.colors.text
   },
   iconContainer: {
     position: "absolute",
-    right: 0,
+    right: isRTL? "100%": 0,
     paddingHorizontal: 10,
   },
   errorText: {

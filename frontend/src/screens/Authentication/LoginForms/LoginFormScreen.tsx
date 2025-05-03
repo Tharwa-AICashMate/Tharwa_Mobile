@@ -9,12 +9,14 @@ import { loginUser } from "@/redux/slices/AuthSlice";
 import { isStrongPassword, isValidEmail } from "@/utils/validators";
 import SocialSignIn from "@/componenets/Login/SocialSignIn";
 import Theme from "@/theme";
+import { useTranslation } from "react-i18next";
 
 const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const { error, loading } = useSelector((state: any) => state.auth);
+  const {t}=useTranslation()
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -27,29 +29,29 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
       <StatusBar barStyle="light-content" backgroundColor={Theme.colors.highlight} translucent={false} />
 
       <View style={styles.header}>
-        <Text style={styles.title}>Welcome</Text>
+        <Text style={styles.title}>{t("loginScreen.welcome")}</Text>
       </View>
 
       <View style={styles.form}>
         {error && <Text style={styles.errorText}>{error}</Text>}
 
         <Input
-          label="Email"
+          label={t("loginScreen.email")}
           value={email}
           keyboardType="email-address"
           onChangeText={setEmail}
-          errorMessage={"Invalid Email"}
+          errorMessage={t("loginScreen.emailError")}
           validator={isValidEmail}
           autoCapitalize="none"
-          placeholder="example@example.com"
+          placeholder={t("loginScreen.emailPlaceholder")}
         />
 
         <Input
-          label="Password"
+          label={t("loginScreen.password")}
           value={password}
           onChangeText={setPassword}
           validator={isStrongPassword}
-          errorMessage={"Invalid Password"}
+          errorMessage={t("loginScreen.passwordError")}
           autoCapitalize="none"
           autoComplete="off"
           secureTextEntry={showPassword}
@@ -67,34 +69,34 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
         />
 
         <TouchableOpacity style={styles.primaryButton} onPress={handleLogin}>
-          <Text style={styles.primaryButtonText}>Log In</Text>
+          <Text style={styles.primaryButtonText}>{t("loginScreen.login")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
-          <Text style={styles.forgotText}>Forgot Password?</Text>
+          <Text style={styles.forgotText}>{t("loginScreen.forgotPassword")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.secondaryButton}
           onPress={() => navigation.navigate("CreateAccount")}
         >
-          <Text style={styles.secondaryButtonText}>Sign Up</Text>
+          <Text style={styles.secondaryButtonText}>{t("loginScreen.signUp")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.fingerprintButton}
           onPress={() => navigation.navigate("Fingerprint")}
         >
-          <Text style={styles.fingerprintText}>Use Fingerprint To Access</Text>
+          <Text style={styles.fingerprintText}>{t("loginScreen.fingerprint")}</Text>
         </TouchableOpacity>
 
         <SocialSignIn/> 
         <View style={styles.link}>
-          <Text style={styles.linkText}>Don't have an account? </Text>
+          <Text style={styles.linkText}>{t("loginScreen.register")}</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate("CreateAccount")}
           >
-            <Text style={styles.linkButton}> Sign Up</Text>
+            <Text style={styles.linkButton}>{t("loginScreen.signUp")}</Text>
           </TouchableOpacity>
         </View>
       </View>

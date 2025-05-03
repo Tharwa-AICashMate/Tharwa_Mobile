@@ -114,7 +114,10 @@
     "confirmPasswordPlaceholder": "Confirm password",
     "passwordError": "Invalid Password",
     "passwordErrorMatch": "Passwords don't match",
-    "termsAndConditions": "By continuing, you agree to <b>Terms of Service</b> and <b>Privacy Policy</b>",
+    "byContinue": "By continuing, you agree to",
+    "and": "and",
+    "termsAndConditions": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
     "noActiveSession": "No active session",
     "signUp": "Sign Up",
     "loginMsg": "Already have an account?",
@@ -133,7 +136,8 @@
     "login": "Log In",
     "forgotPassword": "Forgot Password?",
     "fingerprint": "Use Fingerprint To Access",
-    "or": "or sign up with"
+    "or": "or sign up with",
+    "register":"don't have an acount"
   },
   "profileScreen": {
     "profile": "Profile",
@@ -262,7 +266,7 @@
       "addSavingsGoal": "Add Savings Goal",
       "name": "Name",
       "goalNamePlaceholder": "Goal name",
-    "charactersLimit": "{0}/20 characters",
+      "charactersLimit": "{0}/20 characters",
       "targetAmount": "Target Amount",
       "enterTargetAmount": "Enter target amount",
       "selectIcon": "Select Icon",
@@ -287,15 +291,15 @@
     "searchPlaceholder": "Search stores"
   },
   "searchScreen": {
-  "searchTitle": "Search",
-  "searchPlaceholder": "Search...",
-  "categories": "Categories",
-  "selectCategory": "Select the category",
-  "date": "Date",
-  "dateValue": "03 / MAY / 2025",
-  "report": "Report",
-  "income": "Income",
-  "expense": "Expense",
-  "searchButton": "Search"
+    "searchTitle": "Search",
+    "searchPlaceholder": "Search...",
+    "categories": "Categories",
+    "selectCategory": "Select the category",
+    "date": "Date",
+    "dateValue": "03 / MAY / 2025",
+    "report": "Report",
+    "income": "Income",
+    "expense": "Expense",
+    "searchButton": "Search"
   }
 }

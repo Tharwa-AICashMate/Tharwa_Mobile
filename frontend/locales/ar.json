@@ -114,7 +114,10 @@
     "confirmPasswordPlaceholder": "تأكيد كلمة المرور",
     "passwordError": "كلمة مرور غير صحيحة",
     "passwordErrorMatch": "كلمات المرور غير متطابقة",
-    "termsAndConditions": "بالمتابعة، أنت توافق على <b>شروط الخدمة</b> و <b>سياسة الخصوصية</b>",
+    "byContinue": "بالمتابعة، أنت توافق على",
+    "and": "و",
+    "termsAndConditions": "شروط الخدمة ",
+    "privacyPolicy": "سياسة الخصوصية",
     "noActiveSession": "لا توجد جلسة نشطة",
     "signUp": "اشتراك",
     "loginMsg": "هل لديك حساب بالفعل؟",
@@ -133,7 +136,8 @@
     "login": "تسجيل الدخول",
     "forgotPassword": "هل نسيت كلمة المرور؟",
     "fingerprint": "استخدم بصمة الإصبع للوصول",
-    "or": "أو سجل باستخدام"
+    "or": "أو سجل باستخدام",
+    "register":"لا تمتلك حسابا"
   },
   "profileScreen": {
     "profile": "الملف الشخصي",

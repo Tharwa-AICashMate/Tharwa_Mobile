@@ -16,6 +16,7 @@ import styles from "./style";
 import { navigationProps } from "@/types";
 import axios from "axios";
 import Theme from "@/theme";
+import { useTranslation } from "react-i18next";
 
 
 const { width } = Dimensions.get("window");
@@ -26,23 +27,25 @@ interface Slide {
   image: any;
 }
 
-const slides: Slide[] = [
-  {
-    id: "1",
-    title: "Welcome To\nExpense Manager",
-    image: require("@/assets/conis-hand.png"),
-  },
-  {
-    id: "2",
-    title: "Are You Ready To\nTake Control Of\nYour Finances?",
-    image: require("@/assets/phone-hand.png"),
-  },
-];
 
 const OnboardingScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const flatListRef = useRef<ScrollView>(null);
-
+  const {t}=useTranslation()
+  
+  const slides: Slide[] = [
+    {
+      id: "1",
+      title: t("onboarding.welcomeMsg"),
+      image: require("@/assets/conis-hand.png"),
+    },
+    {
+      id: "2",
+      title: t("onboarding.onboardingMsg"),
+      image: require("@/assets/phone-hand.png"),
+    },
+  ];
+  
   const handleNext = () => {
     if (currentIndex < slides.length - 1) {
       flatListRef.current?.scrollTo({
@@ -94,7 +97,7 @@ const OnboardingScreen: React.FC<navigationProps> = ({ navigation }) => {
           </View>
           <View>
             <TouchableOpacity onPress={handleNext}>
-              <Text style={styles.nextButtonText}>Next</Text>
+              <Text style={styles.nextButtonText}>{t("onboarding.next")}</Text>
             </TouchableOpacity>
             <View style={styles.pagination}>
               {slides.map((_, index) => (

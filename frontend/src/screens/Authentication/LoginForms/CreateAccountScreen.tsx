@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "@/redux/slices/AuthSlice";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
-
 import { AppDispatch } from "@/redux/store";
 import {
   doPasswordsMatch,
@@ -27,7 +26,10 @@ import {
   isValidUsername,
 } from "@/utils/validators";
 import Theme from "@/theme";
-
+import { useTranslation } from "react-i18next";
+import { I18nManager } from "react-native";
+import i18next from "../../../../services/i18next";
+const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
 const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -41,6 +43,8 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
     useState<boolean>(false);
   const { error, loading } = useSelector((state: any) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
+  const {t}=useTranslation()
+
   async function signUpWithEmail() {
     if (!doPasswordsMatch(confirmPassword, password)) return;
     const user: User = {
@@ -71,7 +75,7 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
 
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>Welcome</Text>
+          <Text style={styles.title}>{t("SignUpScreen.welcome")}</Text>
         </View>
 
         <View style={styles.form}>
@@ -82,47 +86,47 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
             contentContainerStyle={styles.scrollContainer}
           >
             <Input
-              label="Full name"
+              label={t("SignUpScreen.FullName")}
               value={fullName}
               onChangeText={setFullName}
-              errorMessage={"please provide a valid name"}
+              errorMessage={t("SignUpScreen.fullNameError")}
               autoCapitalize="none"
-              placeholder="Your full name"
+              placeholder={t("SignUpScreen.fullNamePlaceholder")}
               validator={isValidName}
             />
 
             <Input
-              label="Email"
+              label={t("SignUpScreen.email")}
               value={email}
               onChangeText={setEmail}
-              errorMessage={"Invalid Email"}
+              errorMessage={t("SignUpScreen.emailError")}
               autoCapitalize="none"
-              placeholder="example@example.com"
+              placeholder={t("SignUpScreen.emailPlaceholder")}
               validator={isValidEmail}
               keyboardType="email-address"
             />
 
             <Input
-              label="phone Number"
+              label={t("SignUpScreen.phoneNumber")}
               value={phone}
               onChangeText={setphone}
-              errorMessage={"Invalid Number"}
+              errorMessage={t("SignUpScreen.phoneNumberError")}
               autoCapitalize="none"
-              placeholder="+123456789"
+              placeholder={t("SignUpScreen.phoneNumberPlaceholder")}
               validator={isValidPhoneNumber}
             />
 
             <Input
-              label="Date of birth"
+              label={t("SignUpScreen.dateOfBirth")}
               value={dob.toLocaleDateString()}
               autoCapitalize="none"
-              placeholder="DD / MM / YYYY"
+              placeholder={t("SignUpScreen.dateOfBirthPlaceholder")}
+              errorMessage={t("SignUpScreen.dateOfBirthError")}
               editable={false}
               endIcon={
                 <Ionicons
                   name="calendar-outline"
                   size={15}
-                  // color={Theme.colors.text}
                   onPress={() => setShowDatePicker(true)}
                  
                 />
@@ -134,6 +138,7 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
                 value={dob}
                 mode="date"
                 display="default"
+                locale={isRTL ?"ar" :'en'} 
                 onChange={(e) => {
                   setDob(new Date(e.nativeEvent.timestamp));
                   setShowDatePicker(false);
@@ -142,10 +147,10 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
             )}
 
             <Input
-              label="Password"
+              label={t("SignUpScreen.password")}
               value={password}
               onChangeText={setPassword}
-              errorMessage={"Invalid Password"}
+              errorMessage={t("SignUpScreen.passwordError")}
               validator={isStrongPassword}
               autoCapitalize="none"
               secureTextEntry={!showPassword}
@@ -156,17 +161,17 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
                       ? require("@/assets/Eye-icon-open.png")
                       : require("@/assets/Eye-icon.png")
                   }
-                  style={{ width: 25, height: 13 }}
+                  style={{ width: 25, height: 13 ,objectFit:'contain'}}
                 />
               }
               onEndIconPress={() => setShowPassword((prev) => !prev)}
             />
 
             <Input
-              label="Confirm Password"
+              label={t("SignUpScreen.confirmPassword")}
               value={confirmPassword}
               onChangeText={setConfirmPassword}
-              errorMessage={"Passwords don't match"}
+              errorMessage={t("SignUpScreen.passwordErrorMatch")}
               autoCapitalize="none"
               validator={doPasswordsMatch.bind("", password)}
               secureTextEntry={!showConfirmPassword}
@@ -177,7 +182,7 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
                       ? require("@/assets/Eye-icon-open.png")
                       : require("@/assets/Eye-icon.png")
                   }
-                  style={{ width: 25, height: 13 }}
+                  style={{ width: 25, height: 13 ,objectFit:'contain'}}
                 />
               }
               onEndIconPress={() => setShowConfirmPassword((prev) => !prev)}
@@ -185,10 +190,10 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
 
             <View style={styles.termsContainer}>
               <Text style={styles.termsText}>
-                By continuing, you agree to
-                <Text style={styles.termsLink}> Terms of Service </Text>
-                and
-                <Text style={styles.termsLink}> Privacy Policy</Text>
+                {t("SignUpScreen.byContinue")}
+                <Text style={styles.termsLink}> {t("SignUpScreen.termsAndConditions")} </Text>
+                {t("SignUpScreen.and")}
+                <Text style={styles.termsLink}> {t("SignUpScreen.privacyPolicy")}</Text>
               </Text>
             </View>
 
@@ -196,7 +201,7 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
               style={styles.primaryButton}
               onPress={signUpWithEmail}
             >
-              <Text style={styles.primaryButtonText}>Sign Up</Text>
+              <Text style={styles.primaryButtonText}>{t("SignUpScreen.signUp")}</Text>
             </TouchableOpacity>
               {loading && (
                 <View >
@@ -204,11 +209,11 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
                 </View>
               )}
             <View style={styles.link}>
-              <Text style={styles.linkText}>Already have an account? </Text>
+              <Text style={styles.linkText}>{t("SignUpScreen.loginMsg")}</Text>
               <TouchableOpacity
                 onPress={() => navigation.navigate("LoginForm")}
               >
-                <Text style={styles.linkButton}>Log In</Text>
+                <Text style={styles.linkButton}> {t("SignUpScreen.login")}</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>

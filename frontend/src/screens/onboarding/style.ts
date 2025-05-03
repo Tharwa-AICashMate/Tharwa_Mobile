@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign:'center',
+    maxWidth:250,
     marginTop:60,
     color: Theme.colors.textDark,
     fontFamily:Theme.typography.fonts.poppins.semiBold,

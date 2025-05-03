@@ -1,8 +1,11 @@
 import Theme from "@/theme";
-import { StyleSheet } from "react-native";
-
+import { StyleSheet, I18nManager } from "react-native";
+import i18next from "../../../../services/i18next";
+const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
+console.log(isRTL)
 const styles = StyleSheet.create({
   container: {
+    direction:isRTL?'rtl':'ltr',
     flex: 1,
     backgroundColor: Theme.colors.primary,
     alignItems: "center",
@@ -20,6 +23,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   form: {
+    textAlign:isRTL?'right':'left',
     height: "80%",
     width: "100%",
     alignItems: "center",
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   socialIcons: {
-    flexDirection: "row",
+    flexDirection: isRTL?"row-reverse":"row",
     justifyContent: "center",
     marginVertical: 20,
   },
@@ -95,7 +99,7 @@ const styles = StyleSheet.create({
     fontFamily: Theme.typography.fonts.leagueSpartan.light,
   },
   termsContainer: {
-    flexDirection: "row",
+    flexDirection: isRTL?"row-reverse":"row",
     width: "70%",
   },
   termsText: {
@@ -119,7 +123,7 @@ const styles = StyleSheet.create({
   },
 
   pinDots: {
-    flexDirection: "row",
+    flexDirection: isRTL?"row-reverse":"row",
   },
   pinDot: {
     width: 40,

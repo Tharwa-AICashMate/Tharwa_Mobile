@@ -3,9 +3,11 @@ import React, { useEffect, useRef } from "react";
 import { Animated, Image, SafeAreaView, StatusBar, Text, View } from "react-native";
 import styles from "./styles";
 import Theme from "@/theme";
+import { useTranslation } from "react-i18next";
 
 const LaunchScreen: React.FC<navigationProps> = ({ navigation }) => {
   const logoOpacity = useRef(new Animated.Value(1)).current;
+  const {t}=useTranslation()
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -28,7 +30,7 @@ const LaunchScreen: React.FC<navigationProps> = ({ navigation }) => {
       <StatusBar barStyle="light-content" backgroundColor={Theme.colors.highlight} translucent={false} />
 
           <Image source={require("@/assets/logo.png")} style={styles.logo} />
-          <Text style={styles.logoText}>Tharwa</Text>
+          <Text style={styles.logoText}>{t("logo")}</Text>
         </View>
       </Animated.View>
     </SafeAreaView>
