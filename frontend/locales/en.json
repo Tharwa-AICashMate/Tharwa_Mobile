@@ -299,12 +299,14 @@
   },
   "favoriteStoresScreen": {
     "favoriteStores": "Favorite Stores",
-    "noFavoriteStores": "No favorite stores yet"
+    "noFavoriteStores": "No favorite stores yet",
+    "viewInMap": "View in Map"
   },
   "allStoresScreen": {
     "allStores": "All Stores",
     "noStores": "No stores found",
-    "searchPlaceholder": "Search stores"
+    "searchPlaceholder": "Search stores",
+    "viewInMap": "View in Map"
   },
   "searchScreen": {
     "searchTitle": "Search",
@@ -317,5 +319,47 @@
     "income": "Income",
     "expense": "Expense",
     "searchButton": "Search"
+  },
+  "enterTotalBalanceModal": {
+    "enterTotalBalance": "Enter Total Balance",
+    "totalBalancePlaceholder": "Enter ammount",
+    "save": "Save",
+    "cancel": "Cancel",
+    "enterBalanceError": "Enter a valid balance value"
+  },
+  "settingsScreen": {
+    "settings": "Settings",
+    "passwordSettings": "Password Settings",
+    "termsAndConditions": "Terms And Conditions",
+    "helpCenter": "Help Center",
+    "deleteAccount": "Delete Account"
+  },
+  "passwordSettings": {
+    "passwordSettingsTitle": "Password Settings",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "changePasswordButton": "Change Password",
+    "allFieldsRequired": "All fields are required",
+    "passwordError": "Password must be at least 8 characters",
+    "passwordErrorMatch": "Passwords do not match"
+  },
+  "termsAndConditions": {
+    "termsAndConditionsTitle": "Terms And Conditions",
+    "termsAndConditionsText": "Please read and agree to our basic terms and conditions before proceeding.\n\n1. Account Usage: You are responsible for maintaining the security of your account.\n2. Data Privacy: We respect your privacy and handle your data according to our privacy policy.\n3. Service Changes: We may update our services and terms from time to time.\n\nBy continuing, you agree to these terms.",
+    "acceptTermsCheckbox": "I accept the terms and conditions",
+    "acceptButton": "Accept"
+  },
+  "deleteAccount": {
+    "deleteAccountTitle": "Delete Account",
+    "deleteAccountConfirmation": "Are You Sure You Want To Delete Your Account?",
+    "deleteAccountWarning": "By deleting your account, you will lose all your data permanently including:",
+    "transactionHistory": "Transaction history",
+    "savedBudgetsAndGoals": "Saved budgets and goals",
+    "accountSettingsAndPreferences": "Account settings and preferences",
+    "allPersonalInformation": "All personal information",
+    "confirmPasswordPrompt": "Please enter your password to confirm:",
+    "deleteAccountButton": "Delete Account",
+    "cancelButton": "Cancel"
   }
 }

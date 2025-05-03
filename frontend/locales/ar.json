@@ -299,12 +299,14 @@
   },
   "favoriteStoresScreen": {
     "favoriteStores": "المتاجر المفضلة",
-    "noFavoriteStores": "لا توجد متاجر مفضلة حتى الآن"
+    "noFavoriteStores": "لا توجد متاجر مفضلة حتى الآن",
+    "viewInMap": "عرض على الخريطة"
   },
   "allStoresScreen": {
     "allStores": "جميع المتاجر",
     "noStores": "لم يتم العثور على متاجر",
-    "searchPlaceholder": "ابحث عن متاجر"
+    "searchPlaceholder": "ابحث عن متاجر",
+    "viewInMap": "عرض على الخريطة"
   },
   "searchScreen": {
     "searchTitle": "بحث",
@@ -317,5 +319,47 @@
     "income": "الدخل",
     "expense": "المصروفات",
     "searchButton": "بحث"
+  },
+  "enterTotalBalanceModal": {
+    "enterTotalBalance": "إدخال إجمالي الرصيد",
+    "totalBalancePlaceholder": "ادخل المبلغ",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "enterBalanceError": "ادخل رصيدًا صحيحًا"
+  },
+  "settingsScreen": {
+    "settings": "الإعدادات",
+    "passwordSettings": "إعدادات كلمة المرور",
+    "termsAndConditions": "الشروط والأحكام",
+    "helpCenter": "مركز المساعدة",
+    "deleteAccount": "حذف الحساب"
+  },
+  "passwordSettings": {
+    "passwordSettingsTitle": "إعدادات كلمة المرور",
+    "currentPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+    "changePasswordButton": "تغيير كلمة المرور",
+    "allFieldsRequired": "جميع الحقول مطلوبة",
+    "passwordError": "كلمة السر يجب أن تحتوي على 8 أحرف على الأقل",
+    "passwordErrorMatch": "كلمات المرور غير متطابقة"
+  },
+  "termsAndConditions": {
+    "termsAndConditionsTitle": "الشروط والأحكام",
+    "termsAndConditionsText": "يرجى قراءة والموافقة على شروطنا وأحكامنا الأساسية قبل المتابعة.\n\n1. استخدام الحساب: أنت مسؤول عن الحفاظ على أمان حسابك.\n2. خصوصية البيانات: نحترم خصوصيتك ونتعامل مع بياناتك وفقًا لسياسة الخصوصية الخاصة بنا.\n3. تغييرات الخدمة: قد نقوم بتحديث خدماتنا وشروطنا من وقت لآخر.\n\nبالمتابعة، أنت توافق على هذه الشروط.",
+    "acceptTermsCheckbox": "أوافق على الشروط والأحكام",
+    "acceptButton": "موافق"
+  },
+  "deleteAccount": {
+    "deleteAccountTitle": "حذف الحساب",
+    "deleteAccountConfirmation": "هل أنت متأكد أنك تريد حذف حسابك؟",
+    "deleteAccountWarning": "بحذف حسابك، ستفقد جميع بياناتك نهائيًا بما في ذلك:",
+    "transactionHistory": "سجل المعاملات",
+    "savedBudgetsAndGoals": "الميزانيات والأهداف المحفوظة",
+    "accountSettingsAndPreferences": "إعدادات وتفضيلات الحساب",
+    "allPersonalInformation": "جميع المعلومات الشخصية",
+    "confirmPasswordPrompt": "يرجى إدخال كلمة المرور لتأكيد الحذف:",
+    "deleteAccountButton": "حذف الحساب",
+    "cancelButton": "إلغاء"
   }
 }
