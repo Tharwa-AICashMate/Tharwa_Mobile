@@ -1,11 +1,11 @@
 import { navigationProps } from "@/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StatusBar } from "react-native";
 import styles from "./styles";
 import Input from "@/componenets/UI/input";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import { loginUser } from "@/redux/slices/AuthSlice";
+import { clearError, loginUser } from "@/redux/slices/AuthSlice";
 import { isStrongPassword, isValidEmail } from "@/utils/validators";
 import SocialSignIn from "@/componenets/Login/SocialSignIn";
 import Theme from "@/theme";
@@ -16,7 +16,7 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const { error, loading } = useSelector((state: any) => state.auth);
-  const {t}=useTranslation()
+  const { t } = useTranslation();
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -24,9 +24,17 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
     const resultAction = await dispatch(loginUser({ email, password }));
   };
 
+  useEffect(() => {
+    dispatch(clearError());
+  }, []);
+
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={Theme.colors.highlight} translucent={false} />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={Theme.colors.highlight}
+        translucent={false}
+      />
 
       <View style={styles.header}>
         <Text style={styles.title}>{t("loginScreen.welcome")}</Text>
@@ -73,24 +81,30 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
-          <Text style={styles.forgotText}>{t("loginScreen.forgotPassword")}</Text>
+          <Text style={styles.forgotText}>
+            {t("loginScreen.forgotPassword")}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.secondaryButton}
           onPress={() => navigation.navigate("CreateAccount")}
         >
-          <Text style={styles.secondaryButtonText}>{t("loginScreen.signUp")}</Text>
+          <Text style={styles.secondaryButtonText}>
+            {t("loginScreen.signUp")}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.fingerprintButton}
           onPress={() => navigation.navigate("Fingerprint")}
         >
-          <Text style={styles.fingerprintText}>{t("loginScreen.fingerprint")}</Text>
+          <Text style={styles.fingerprintText}>
+            {t("loginScreen.fingerprint")}
+          </Text>
         </TouchableOpacity>
 
-        <SocialSignIn/> 
+        <SocialSignIn />
         <View style={styles.link}>
           <Text style={styles.linkText}>{t("loginScreen.register")}</Text>
           <TouchableOpacity

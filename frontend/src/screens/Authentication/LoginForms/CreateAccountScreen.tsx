@@ -13,7 +13,7 @@ import styles from "./styles";
 import Input from "@/componenets/UI/input";
 import { navigationProps, User } from "@/types";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "@/redux/slices/AuthSlice";
+import { clearError, registerUser } from "@/redux/slices/AuthSlice";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 import { AppDispatch } from "@/redux/store";
@@ -64,6 +64,9 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
     }
   }
 
+  useEffect(()=>{
+    dispatch(clearError())
+  },[])
  
 
   return (

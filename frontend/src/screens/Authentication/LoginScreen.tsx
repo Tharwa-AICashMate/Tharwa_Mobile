@@ -1,24 +1,25 @@
 import React from "react";
-import { View, Text,  TouchableOpacity, Image, StatusBar } from "react-native";
+import { View, Text, TouchableOpacity, Image, StatusBar } from "react-native";
 import { navigationProps } from "@/types";
 import styles from "./styles";
 import Theme from "@/theme";
 import { useTranslation } from "react-i18next";
 
 const LoginScreen: React.FC<navigationProps> = ({ navigation }) => {
-  const {t}=useTranslation()
-  
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={Theme.colors.background} translucent={false} />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={Theme.colors.background}
+        translucent={false}
+      />
 
       <View style={styles.loginScreenContainer}>
         <Image source={require("@/assets/logo2.png")} />
-        <Text style={styles.title}>{t("logo")}
-        </Text>
-        <Text style={styles.subtitle}>
-          {t("Login.loginMsg")}
-        </Text>
+        <Text style={styles.title}>{t("logo")}</Text>
+        <Text style={styles.subtitle}>{t("Login.loginMsg")}</Text>
 
         <TouchableOpacity
           style={styles.primaryButton}
@@ -43,4 +44,3 @@ const LoginScreen: React.FC<navigationProps> = ({ navigation }) => {
 };
 
 export default LoginScreen;
-

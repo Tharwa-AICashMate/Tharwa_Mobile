@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   form: {
-    textAlign:isRTL?'right':'left',
     height: "80%",
     width: "100%",
     alignItems: "center",

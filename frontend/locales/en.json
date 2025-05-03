@@ -257,6 +257,22 @@
     "dontHaveAnAccount": "Don't have an account?",
     "signUpLink": "Sign Up"
   },
+  "securityPinScreen":{
+    "securityPin":"Security Pin",
+    "enterPin":"Enter Security Pin",
+    "accept":"Accept",
+    "sendAgain":"Send Again",
+    "signUp": "Sign Up",
+    "dontHaveAnAccount": "Don't have an account?",
+  },
+  "newPasswordScreen":{
+    "newPassword":"New Password",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "passwordError": "Invalid Password",
+    "passwordErrorMatch": "Passwords don't match",
+    "changePassword": "Change Password"
+  },
   "savingsScreen": {
     "noSavings": {
       "createYourFirstGoal": "Create Your First Goal",
