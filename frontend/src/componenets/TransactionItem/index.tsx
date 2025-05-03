@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Pressable,
   TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/theme";
@@ -17,6 +18,7 @@ import { useAppDispatch } from "@/redux/hook";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "App";
+import { deleteDeposit } from "@/redux/slices/depositSlice";
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -42,10 +44,9 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
 
   const handleEdit = () => {
     onToggleMenu(null);
-    if (transaction.type == 'income')
+    if (transaction.type == "income")
       navigation.navigate("AddIncome", { transaction });
-    else
-      navigation.navigate("AddExpensesScreen", { transaction });
+    else navigation.navigate("AddExpensesScreen", { transaction });
   };
 
   const handleDelete = () => {
@@ -53,7 +54,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
     dispatch(deleteTransactionsAsync(transaction.transaction_id));
   };
 
-  console.log(transaction)
+  const handlePress = () => {
+    if (!transaction.type)
+      Alert.alert(transaction.message || "No details added");
+  };
+  console.log(transaction);
   return (
     <>
       <View style={styles.transactionItem}>
@@ -100,16 +105,32 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
           {formatCurrency(transaction.amount)}
         </Text>
 
-        <TouchableOpacity
-          onPress={() => onToggleMenu(transaction.transaction_id)}
-          style={styles.menuIcon}
-        >
+        {transaction.type ? (
+          <TouchableOpacity
+            onPress={() => onToggleMenu(transaction.transaction_id)}
+            style={styles.menuIcon}
+          >
+            <Ionicons
+              name="ellipsis-vertical"
+              size={20}
+              color={Theme.colors.text}
+            />
+          </TouchableOpacity>
+        ) : (
+          <>
+          <TouchableOpacity onPress={()=>dispatch(deleteDeposit(transaction.id))} style={{zIndex:100}}>
           <Ionicons
-            name="ellipsis-vertical"
-            size={20}
-            color={Theme.colors.text}
-          />
-        </TouchableOpacity>
+              name="trash"
+              size={15}
+              color="#F55"
+              />
+            
+          </TouchableOpacity>
+            <TouchableOpacity onPress={handlePress} style={{position:'absolute',top:0,left:0,height:"100%",width:"100%"}}>
+        
+          </TouchableOpacity>
+          </>
+        )}
         {menuVisible && (
           <>
             <TouchableWithoutFeedback onPress={() => onToggleMenu(null)}>
@@ -117,11 +138,18 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
             </TouchableWithoutFeedback>
 
             <View style={styles.dropdownMenu}>
-              {transaction.details?.length &&
-                <Pressable onPress={()=>navigation.navigate('transDetails',{transaction:transaction.details})} style={styles.menuItem}>
-                <Text >View Details</Text>
-              </Pressable>
-              }
+              {transaction.details?.length && (
+                <Pressable
+                  onPress={() =>
+                    navigation.navigate("transDetails", {
+                      transaction: transaction,
+                    })
+                  }
+                  style={styles.menuItem}
+                >
+                  <Text>View Details</Text>
+                </Pressable>
+              )}
               <Pressable onPress={handleEdit} style={styles.menuItem}>
                 <Text>Edit</Text>
               </Pressable>

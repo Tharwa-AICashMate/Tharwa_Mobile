@@ -3,84 +3,30 @@ import { View, Text, ViewStyle } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Theme from "@/theme";
 import { styles } from "./styles";
-import { useAppSelector } from "@/redux/hook";
-import { Transaction } from "@/types/transactionTypes";
-import { supabase } from "@/utils/supabase";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { getWeeklyHighs } from "@/redux/slices/financeSlice";
 
 interface QuickStatsCardProps {
   style?: ViewStyle;
 }
 
-
-async function getWeeklyHighs(userId: string) {
-  const { data, error } = await supabase
-    .rpc('get_weekly_highs', { uid: userId });
-
-  if (error) {
-    console.log('Error fetching weekly highs:', error);
-    return { success: false, error };
-  }
-
-  console.log('Weekly highs:', {data});
-  return  data[0] ;
+interface WeeklyHighs {
+  highest_income: { amount: number; title: string } | null;
+  highest_expense: { amount: number; category_name: string } | null;
 }
 
 const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
-  // const transactions = useAppSelector(
-  //   (state) => state.transactions.transactions
-  // );
-
-  // const getMaxTransactionForWeek = (transactions: Transaction[]) => {
-  //   const startOfWeek = new Date();
-  //   startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Start of the week (Sunday)
-  //   startOfWeek.setHours(0, 0, 0, 0);
-
-  //   const endOfWeek = new Date();
-  //   endOfWeek.setDate(startOfWeek.getDate() + 6); // End of the week (Saturday)
-  //   endOfWeek.setHours(23, 59, 59, 999);
-
-  //   const transactionsThisWeek = transactions.filter((transaction) => {
-  //     const transactionDate = new Date(transaction.created_at);
-  //     return transactionDate >= startOfWeek && transactionDate <= endOfWeek;
-  //   });
-
-  //   const maxIncome = transactionsThisWeek
-  //     .filter((t) => t.type === "income")
-  //     .reduce((max, t) => (t.amount > max.amount ? t : max), {
-  //       amount: 0,
-  //     } as Transaction);
-
-  //   const maxExpense = transactionsThisWeek
-  //     .filter((t) => t.type === "expense")
-  //     .reduce((max, t) => (t.amount > max.amount ? t : max), {
-  //       amount: 0,
-  //     } as Transaction);
-
-  //   return { maxIncome, maxExpense };
-  // };
-
-  const userId = useAppSelector(state => state.auth.user?.id) 
-  interface WeeklyHighs {
-    highest_income: { amount: number; title: string } | null;
-    highest_expense: { amount: number; category_name: string } | null;
-  }
-  
-  const [totals, setTotals] = useState<WeeklyHighs>({
-    highest_income: null,
-    highest_expense: null,
-  });
-  useEffect(() => {
-    async function fetchData() {
-      if (userId) {
-        setTotals(await getWeeklyHighs(userId));
-      } else {
-        console.log("User ID is undefined");
-      }
-    }
-    fetchData()
-  }, [userId]);
-  console.log(totals);
-  const { highest_income:maxIncome, highest_expense:maxExpense } = totals || {};
+  const weeklyHighlights = useAppSelector(
+    (state) => state.finance.weeklyHighlights
+  );
+ 
+  const dispatch = useAppDispatch()
+  useEffect(()=>{
+    dispatch(getWeeklyHighs())
+  },[])
+  console.log("------", weeklyHighlights);
+  const { highest_income: maxIncome, highest_expense: maxExpense } =
+    weeklyHighlights || {};
 
   return (
     <View style={[styles.card, style]}>

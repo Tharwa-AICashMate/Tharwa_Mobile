@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity, Platform, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -9,19 +8,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import Theme from '@/theme';
 import { getCurrentUserId } from '@/utils/auth';
-import { fetchUserCategories } from '@/redux/slices/categoriesSlice'; // Update path if needed
+import { fetchUserCategories } from '@/redux/slices/categoriesSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import { apiBase } from '@/utils/axiosInstance';
 
 const SearchScreen: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const [selectedCategory, setSelectedCategory] = useState<string>('');
-    const [date, setDate] = useState<Date>(new Date());
-    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [startDate, setStartDate] = useState<Date>(new Date());
+    const [endDate, setEndDate] = useState<Date>(new Date());
+    const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+    const [showEndDatePicker, setShowEndDatePicker] = useState(false);
     const [reportType, setReportType] = useState<'Income' | 'Expense'>('Income');
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const [searchText,setSearchText] = useState<string>('')
+    const [searchText, setSearchText] = useState<string>('');
     const { items: categories, loading } = useSelector((state: RootState) => state.categories);
 
     const categoryIcons: { [key: string]: string } = {
@@ -49,37 +50,55 @@ const SearchScreen: React.FC = () => {
         return colorMap[category] || Theme.colors.primary;
     };
 
-    const handleDateChange = (event: any, selectedDate?: Date) => {
-        setShowDatePicker(Platform.OS === 'ios');
+    const handleDateChange = (event: any, selectedDate?: Date, type: 'start' | 'end') => {
         if (selectedDate) {
-            setDate(selectedDate);
+            if (type === 'start') {
+                setStartDate(selectedDate);
+                if (Platform.OS === 'ios') {
+                    setShowStartDatePicker(false); 
+                }
+                if (Platform.OS === 'android') {
+                    setShowStartDatePicker(false); 
+                }
+            } else {
+                setEndDate(selectedDate);
+                if (Platform.OS === 'ios') {
+                    setShowEndDatePicker(false); 
+                }
+                if (Platform.OS === 'android') {
+                    setShowEndDatePicker(false); 
+                }
+            }
         }
     };
-
+    
     const formatDate = (date: Date) => {
         const day = date.getDate();
         const month = date.toLocaleString('default', { month: 'short' }).toUpperCase();
         const year = date.getFullYear();
         return `${day < 10 ? '0' + day : day} / ${month} / ${year}`;
     };
-
-    const formatResultDate = (dateString: string) => {
-        const date = new Date(dateString);
-        const day = date.getDate();
-        const month = date.toLocaleString('default', { month: 'short' }).toUpperCase().substring(0, 3);
-        const year = date.getFullYear();
-        const hours = date.getHours();
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        return `${hours}:${minutes} - ${day}${month} ${year}`;
-    };
-
     const fetchData = async () => {
         try {
             const user_id = await getCurrentUserId();
-            const searchUrl = `${apiBase}/search/${user_id}?category_name=${encodeURIComponent(selectedCategory)}&created_at=${date.toISOString().split('T')[0]}&type=${reportType.toLowerCase()}&title=${searchText.toLowerCase()}`;
+    
+            const params = new URLSearchParams();
+            params.append('start_date', startDate.toISOString().split('T')[0]);
+            params.append('end_date', endDate.toISOString().split('T')[0]);
+            params.append('type', reportType.toLowerCase());
+            params.append('title', searchText.toLowerCase());
+    
+            if ( selectedCategory === "All") {
+                params.delete('category_name'); 
+            } else {
+                params.append('category_name', selectedCategory);
+            }
+    
+            const searchUrl = `${apiBase}/search/${user_id}?${params.toString()}`;
+    
             const response = await fetch(searchUrl);
             const data = await response.json();
-
+    
             if (data.length === 0) {
                 setErrorMessage('No data found.');
                 setSearchResults([]);
@@ -93,7 +112,8 @@ const SearchScreen: React.FC = () => {
             setSearchResults([]);
         }
     };
-
+    
+    
     useEffect(() => {
         const loadCategories = async () => {
             const userId = await getCurrentUserId();
@@ -101,6 +121,17 @@ const SearchScreen: React.FC = () => {
         };
         loadCategories();
     }, []);
+
+    // Toggle the date picker visibility and close the other one
+    const handleShowStartDatePicker = () => {
+        if (showEndDatePicker) setShowEndDatePicker(false);
+        setShowStartDatePicker(true); 
+    };
+
+    const handleShowEndDatePicker = () => {
+        if (showStartDatePicker) setShowStartDatePicker(false); 
+        setShowEndDatePicker(true); 
+    };
 
     return (
         <View style={styles.container}>
@@ -111,8 +142,9 @@ const SearchScreen: React.FC = () => {
                 placeholder="Search..."
                 placeholderTextColor="#999"
                 value={searchText}
-                onChangeText={(e)=>setSearchText(e)}
+                onChangeText={(e) => setSearchText(e)}
             />
+            <ScrollView>
             <View style={styles.contentBox}>
                 <Text style={styles.label}>Categories</Text>
                 <View style={styles.dropdown}>
@@ -122,24 +154,39 @@ const SearchScreen: React.FC = () => {
                         style={{ height: 50 }}
                         dropdownIconColor="#000"
                     >
-                        <Picker.Item label="Select the category" value="" />
+                       
+                        <Picker.Item label="All" value="All" /> 
                         {categories.map((cat) => (
                             <Picker.Item key={cat.id} label={cat.name} value={cat.name} />
                         ))}
                     </Picker>
                 </View>
 
-                <Text style={styles.label}>Date</Text>
-                <TouchableOpacity style={styles.dateInput} onPress={() => setShowDatePicker(true)}>
-                    <Text>{formatDate(date)}</Text>
+                <Text style={styles.label}>Start Date</Text>
+                <TouchableOpacity style={styles.dateInput} onPress={handleShowStartDatePicker}>
+                    <Text>{formatDate(startDate)}</Text>
                     <Ionicons name="calendar-outline" size={24} color={Theme.colors.primary} />
                 </TouchableOpacity>
-                {showDatePicker && (
+                {showStartDatePicker && (
                     <DateTimePicker
-                        value={date}
+                        value={startDate}
                         mode="date"
                         display="default"
-                        onChange={handleDateChange}
+                        onChange={(event, date) => handleDateChange(event, date, 'start')}
+                    />
+                )}
+
+                <Text style={styles.label}>End Date</Text>
+                <TouchableOpacity style={styles.dateInput} onPress={handleShowEndDatePicker}>
+                    <Text>{formatDate(endDate)}</Text>
+                    <Ionicons name="calendar-outline" size={24} color={Theme.colors.primary} />
+                </TouchableOpacity>
+                {showEndDatePicker && (
+                    <DateTimePicker
+                        value={endDate}
+                        mode="date"
+                        display="default"
+                        onChange={(event, date) => handleDateChange(event, date, 'end')}
                     />
                 )}
 
@@ -183,14 +230,9 @@ const SearchScreen: React.FC = () => {
                                     </View>
                                     <View style={styles.resultTextContainer}>
                                         <Text style={styles.resultTitle}>{item.title}</Text>
-                                        <Text style={styles.resultDate}>
-                                            {formatResultDate(item.created_at)}
-                                        </Text>
+                                        <Text style={styles.resultDate}>{item.created_at}</Text>
                                     </View>
-                                    <Text style={[
-                                        styles.resultAmount,
-                                        reportType === 'Income' ? styles.incomeAmount : styles.expenseAmount
-                                    ]}>
+                                    <Text style={[styles.resultAmount, reportType === 'Income' ? styles.incomeAmount : styles.expenseAmount]}>
                                         {reportType === 'Income' ? '+' : '-'}${parseFloat(item.amount).toFixed(2)}
                                     </Text>
                                 </View>
@@ -199,6 +241,9 @@ const SearchScreen: React.FC = () => {
                     </ScrollView>
                 )}
             </View>
+
+            </ScrollView>
+
         </View>
     );
 };
@@ -274,9 +319,8 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         borderWidth: 2,
         borderColor: Theme.colors.primary,
-        alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 5,
+        alignItems: 'center',
     },
     radioSelected: { borderColor: Theme.colors.primary },
     radioInner: {
@@ -285,59 +329,72 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         backgroundColor: Theme.colors.primary,
     },
-    radioLabel: { fontSize: 16, color: Theme.colors.text },
+    radioLabel: {
+        fontSize: 14,
+        color: Theme.colors.text,
+        marginLeft: 10,
+    },
     searchButton: {
-        backgroundColor: Theme.colors.primary,
-        paddingVertical: 10,
-        paddingHorizontal: 50,
+        width: '90%',
+        height: 45,
         borderRadius: 30,
+        backgroundColor: Theme.colors.primary,
+        alignItems: 'center',
+        justifyContent: 'center',
         marginTop: 20,
+        marginBottom:8
     },
     searchButtonText: {
-        color: Theme.colors.textLight,
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: '500',
+        color: Theme.colors.textLight,
     },
-    errorMessage: { color: 'red', marginTop: 20, fontSize: 16 },
-    resultsContainer: {
+    errorMessage: {
+        color: 'red',
+        fontSize: 16,
         marginTop: 20,
-        width: '100%',
-        maxHeight: '50%',
     },
-    resultsContentContainer: {
-        paddingHorizontal: 10,
-        paddingBottom: 20,
-    },
+    resultsContainer: { marginTop: 10, flex: 1, width: '100%' },
+    resultsContentContainer: { paddingBottom: 10 },
     resultItem: {
-        marginBottom: 12,
+        backgroundColor: Theme.colors.secondery,
+        borderRadius: 20,
+        marginVertical: 10,
         padding: 15,
-        backgroundColor: '#F5F5F5',
-        borderRadius: 15,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
-        shadowRadius: 2,
+        shadowRadius: 5,
     },
-    resultContent: { flexDirection: 'row', alignItems: 'center' },
+    resultContent: { flexDirection: 'row', alignItems: 'center', width: '80%' },
     iconContainer: {
-        width: 45,
-        height: 45,
-        borderRadius: 22.5,
-        justifyContent: 'center',
+        width: 40,
+        height: 40,
+        borderRadius: 20,
         alignItems: 'center',
-        marginRight: 15,
+        justifyContent: 'center',
+        marginRight: 10,
     },
-    resultTextContainer: { flex: 1 },
+    resultTextContainer: { width: '80%' },
     resultTitle: {
         fontSize: 16,
-        fontWeight: '600',
-        color: '#333',
-        marginBottom: 4,
+        fontWeight: '500',
+        color: Theme.colors.text,
     },
-    resultDate: { fontSize: 12, color: '#666' },
-    resultAmount: { fontSize: 16, fontWeight: 'bold' },
-    incomeAmount: { color: '#27AE60' },
-    expenseAmount: { color: '#E74C3C' },
+    resultDate: {
+        fontSize: 12,
+        fontWeight: '400',
+        color: Theme.colors.text,
+    },
+    resultAmount: {
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    incomeAmount: { color: Theme.colors.accentLight },
+    expenseAmount: { color: Theme.colors.accentDark},
 });
 
 export default SearchScreen;
+

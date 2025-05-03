@@ -20,7 +20,7 @@ export const fetchSupportChannels = async (): Promise<SupportChannel[]> => {
     const response = await fetch(`${BASE_URL}/supportChannels`);
     return await response.json();
   } catch (error) {
-    console.error('Error fetching support channels:', error);
+    console.log('Error fetching support channels:', error);
     return [];
   }
 };

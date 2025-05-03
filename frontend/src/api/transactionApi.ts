@@ -22,7 +22,7 @@ export const fetchTransactions = async (page = 1): Promise<Transaction[]> => {
         }) as Transaction
     );
   } catch (error) {
-    console.error("API Error:", error);
+    console.log("API Error:", error);
     throw new Error("Failed to fetch transactions");
   }
 };
@@ -34,7 +34,7 @@ export const addTransaction = async (
     const response = await axios.post(`${API_URL}/transactions`, transaction);
     return response.data;
   } catch (error) {
-    console.error("API Error:", error);
+    console.log("API Error:", error);
     throw new Error("Failed to add transaction");
   }
 };
@@ -49,7 +49,7 @@ export const deleteTransactions = async (
     console.log('----- ',response.data == "deleted sucessesfully",transactionId);
     return response.data == "deleted sucessesfully";
   } catch (error) {
-    console.error("API Error:", error);
+    console.log("API Error:", error);
     throw new Error("Failed to delete transaction");
   }
 };
@@ -65,7 +65,7 @@ export const editTransactions = async (
     );
     return response.data;
   } catch (error) {
-    console.error("API Error:", error);
+    console.log("API Error:", error);
     throw new Error("Failed to edit transaction");
   }
 };

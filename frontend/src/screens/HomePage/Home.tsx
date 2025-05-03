@@ -16,6 +16,8 @@ import HomeScreenNavigation, {
   NavigationTile,
 } from "@/componenets/HomeScreen/HomeScreenNavigation";
 const Home: React.FC = () => {
+  const { getBalance } = useAppSelector((state) => state.finance);
+  
   const [openModal, setOpenModal] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
   const [totalBalance, setTotalBalance] = useState(0);
@@ -31,14 +33,7 @@ const Home: React.FC = () => {
     console.log(`Selected Tile: ${tile.label}`);
   };
 
-  useEffect(() => {
-    const Timer = setTimeout(() => {
-      if (user && !totalBalance) setOpenModal(true);
-      else setOpenModal(false);
-    }, 1000);
-    return clearTimeout(Timer);
-  }, [user]);
-
+  
   useFocusEffect(
     React.useCallback(() => {
       dispatch(fetchTransactionsAsync());
@@ -55,7 +50,7 @@ const Home: React.FC = () => {
         />
         <Header title=" Home" />
         {/* budget */}
-        <ExpenseBrief setTotalBalance={setTotalBalance} />
+        <ExpenseBrief/>
 
         <ScrollView style={styles.scrollContent}>
           <View style={styles.contentBox}>
@@ -68,8 +63,8 @@ const Home: React.FC = () => {
           </View>
         </ScrollView>
       </ScrollView>
-      {!totalBalance && (
-        <BalanceModal isOpen={openModal} setIsOpen={setOpenModal} />
+      {getBalance && (
+        <BalanceModal isOpen={getBalance} setIsOpen={setOpenModal} />
       )}
     </>
   );

@@ -36,7 +36,7 @@ const AddSavingsScreen = () => {
   }) => {
     const selectedGoal = savingsGoals.find((goal) => goal.name === data.category);
     if (!selectedGoal) {
-      console.error("Savings goal not found");
+      console.log("Savings goal not found");
       return;
     }
 
@@ -65,7 +65,7 @@ const AddSavingsScreen = () => {
         onSubmit={handleSubmit}
         initialCategory={savingCategory}
         initialAmount=""
-        initialTitle=""
+        initialTitle={`${savingCategory} deposite`}
         initialMessage=""
         initialDate={new Date()}
         resetAfterSubmit={true}

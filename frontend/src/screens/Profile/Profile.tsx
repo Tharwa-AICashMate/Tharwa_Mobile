@@ -56,7 +56,7 @@ const Profile: React.FC = () => {
 
         setFullName(full_name);
       } catch (error) {
-        console.error('Failed to fetch user:', error);
+        console.log('Failed to fetch user:', error);
       }
     };
 
@@ -73,7 +73,7 @@ const Profile: React.FC = () => {
             <ProfileHeader full_name={full_name} />
             <MenuItem icon="person" label="Edit Profile" onPress={() => navigation.navigate('EditProfile')} />
             {/* <MenuItem icon="shield-checkmark" label="Security" onPress={() => navigation.navigate('Security')} /> */}
-            {/* <MenuItem icon="settings" label="Settings" onPress={() => navigation.navigate('SettingsScreen')} /> */}
+            <MenuItem icon="settings" label="Settings" onPress={() => navigation.navigate('SettingsScreen')} />
             <MenuItem icon="help-circle" label="Help" onPress={() => navigation.navigate('HelpCenterScreen')} />
             <MenuItem icon="log-out-outline" label="Logout" onPress={logout} />
           </View>

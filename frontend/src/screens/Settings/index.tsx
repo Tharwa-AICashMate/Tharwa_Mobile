@@ -46,7 +46,7 @@ const SettingsScreen: React.FC = () => {
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.section}>
-          <SettingsItem
+          {/* <SettingsItem
             title=" Notifications Settings"
             icon={
               <Ionicons
@@ -56,7 +56,7 @@ const SettingsScreen: React.FC = () => {
               />
             }
             onPress={() => navigation.navigate("NotificationSettingsScreen")}
-          />
+          /> */}
           <SettingsItem
             title="Password Settings"
             icon={<Ionicons name="key-outline" size={20} color="#FECD3E" />}

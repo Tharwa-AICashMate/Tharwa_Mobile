@@ -68,7 +68,7 @@ const CategoriesScreen = () => {
           }
         }
       } catch (err) {
-        console.error("Uncaught error:", err);
+        console.log("Uncaught error:", err);
       }
     };
 

@@ -6,7 +6,7 @@ interface StoreState {
   userLocation: UserLocation | null;
   locationDetected: boolean;
   stores: Store[];
-  bestStoreResult: BestStoreResult | null;
+  bestStoreResult: BestStoreResult[] | null;
   loading: boolean;
   error: string | null;
   searchRadius: number; 
@@ -74,9 +74,15 @@ export const storeSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(findBestStore.fulfilled, (state, action) => {
+      .addCase(findBestStore.fulfilled, (state, action:{payload:any[]}) => {
         state.loading = false;
-        state.bestStoreResult = action.payload;
+        console.log('payload',action.payload);
+        try{
+          state.bestStoreResult = [...action.payload];
+        }catch(error){
+          console.log(error)
+        }
+        console.log(state)
       })
       .addCase(findBestStore.rejected, (state, action) => {
         state.loading = false;

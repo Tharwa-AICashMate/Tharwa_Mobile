@@ -152,40 +152,46 @@ const StoreResult: React.FC = () => {
     );
   }
 
-  if (!bestStoreResult) {
+  if (!bestStoreResult?.length) {
     return null;
   }
 
-  const { store, totalPrice, distance } = bestStoreResult;
+  //const { store, totalPrice, distance } = bestStoreResult;
 
   // عرض القيم كما هي بدون تقريب
-  const formattedDistance = distance != null ? `${distance} km` : 'Distance not available';
-  const formattedPrice = totalPrice != null ? `$${totalPrice}` : 'Price not available';
+  //const formattedDistance = distance != null ? `${distance} km` : 'Distance not available';
+  //const formattedPrice = totalPrice != null ? `$${totalPrice}` : 'Price not available';
 
-  const openMaps = () => {
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${store.latitude},${store.longitude}`;
+  const openMaps = (st) => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${st.latitude},${st.longitude}`;
     Linking.openURL(url);
   };
+  console.log('bestResults-----------',bestStoreResult)
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Best Store Found:</Text>
-      <View style={styles.storeInfo}>
-        <Text style={styles.storeName}>{store.name}</Text>
-        <Text style={styles.storeDetail}>
-          Distance: {formattedDistance}
-        </Text>
-        <Text style={styles.storeDetail}>
-          Total Price: {formattedPrice}
-        </Text>
-      </View>
-
-      <TouchableOpacity style={styles.mapsButton} onPress={openMaps}>
-        <Text style={styles.mapsButtonText}>Open in Maps</Text>
-      </TouchableOpacity>
+    <View>
+      {bestStoreResult?.map((store, index) => (
+        <View key={index} style={styles.container}>
+          <Text style={styles.title}>Best Stores Found:</Text>
+          <View style={styles.storeInfo}>
+            <Text style={styles.storeName}>{store.store.name}</Text>
+            <Text style={styles.storeDetail}>
+              Distance: {store.distance != null ? `${store.distance} km` : 'Distance not available'}
+            </Text>
+            <Text style={styles.storeDetail}>
+              Total Price: {store.totalPrice != null ? `$${store.totalPrice}` : 'Price not available'}
+            </Text>
+          </View>
+  
+          <TouchableOpacity style={styles.mapsButton} onPress={() => openMaps(store.store)}>
+            <Text style={styles.mapsButtonText}>Open in Maps</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
     </View>
   );
-};
+}
+  
 
 const styles = StyleSheet.create({
   container: {

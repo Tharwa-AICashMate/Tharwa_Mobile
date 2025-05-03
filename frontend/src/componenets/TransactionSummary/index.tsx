@@ -77,7 +77,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
       dispatch(setUserBalance(data.balance_limit || parsed));
       dispatch(updateBalance(data.balance_limit || parsed));
     } catch (error) {
-      console.error("Error saving balance:", error);
+      console.log("Error saving balance:", error);
     } finally {
       setModalVisible(false);
     }
@@ -107,7 +107,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
       const data = await response.json();
       dispatch(updateIncome(parsedIncome));
     } catch (error) {
-      console.error("Error saving income:", error);
+      console.log("Error saving income:", error);
     } finally {
       setModalIncomeVisible(false);
     }

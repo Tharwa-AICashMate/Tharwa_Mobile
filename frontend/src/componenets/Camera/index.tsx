@@ -33,6 +33,7 @@ import LineItemsEditor from "./LineItems";
 import CategorySelector from "./CategorySelector";
 import { setUserStores } from "@/redux/slices/storeSlice";
 import axiosInstance from "@/config/axios";
+import { isValidDateValue } from "@/utils/validators";
 
 LogBox.ignoreLogs(["Possible Unhandled Promise Rejection"]);
 
@@ -111,11 +112,11 @@ export default function CameraScreen() {
           setUserId(currentUserId);
           const resultAction = await dispatch(fetchUserCategories(currentUserId) as any);
           if (fetchUserCategories.rejected.match(resultAction)) {
-            console.error("Fetch error:", resultAction.payload || resultAction.error);
+            console.log("Fetch error:", resultAction.payload || resultAction.error);
           }
         }
       } catch (err) {
-        console.error("Uncaught error:", err);
+        console.log("Uncaught error:", err);
       }
     };
 
@@ -132,7 +133,7 @@ export default function CameraScreen() {
             dispatch(setUserStores(response.data));
           }
         } catch (error) {
-          console.error("Error loading stores:", error);
+          console.log("Error loading stores:", error);
         } finally {
           setStoresLoading(false);
         }
@@ -234,7 +235,7 @@ export default function CameraScreen() {
       if (!photo) throw new Error("No photo captured");
       setPhotoUri(photo.uri);
     } catch (error: any) {
-      console.error("Camera Error:", error);
+      console.log("Camera Error:", error);
       Alert.alert("Camera Error", error.message || "Failed to take photo");
     }
   };
@@ -344,6 +345,7 @@ export default function CameraScreen() {
         amount: parseFloat(editableResult.total_amount.replace(/[^0-9.-]+/g, "")),
         title: editableResult.supplier_name,
         store_id: selectedStore,
+        created_at: editableResult.invoice_date
       });
       
       const transaction = {
@@ -354,7 +356,7 @@ export default function CameraScreen() {
         description: description || `Receipt from ${editableResult.supplier_name}`,
         user_id: userId,
         storeId: selectedStore,
-        created_at: new Date(editableResult.invoice_date),
+        created_at: isValidDateValue(editableResult.invoice_date)? new Date(editableResult.invoice_date) :new Date(),
         details: editableResult.line_items?.map(item => ({
           name: item.name,
           unitPrice: item.unitPrice,
@@ -383,7 +385,7 @@ export default function CameraScreen() {
       
       await createTransactionRecord(transaction, transactionHash);
     } catch (error) {
-      console.error("Error in handleAddTransaction:", error);
+      console.log("Error in handleAddTransaction:", error);
       Alert.alert("Error", "Failed to process transaction");
     }
   };
@@ -413,7 +415,7 @@ export default function CameraScreen() {
         throw new Error(resultAction.payload as string || "Failed to create transaction");
       }
     } catch (error: any) {
-      console.error("Transaction creation error:", error);
+      console.log("Transaction creation error:", error);
       Alert.alert("Error", error.message || "Failed to add transaction");
     } finally {
       setIsCreatingTransaction(false);

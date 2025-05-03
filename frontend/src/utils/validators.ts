@@ -18,6 +18,10 @@ export const isValidEmail = (email: string): boolean => {
     return regex.test(username);
   };
   
+  export const isValidDateValue = (value:any) =>{
+    const date = new Date(value);
+    return value !== null && value !== undefined && !isNaN(date.getTime());
+  }
   export const doPasswordsMatch = (
     password: string,
     confirmPassword: string

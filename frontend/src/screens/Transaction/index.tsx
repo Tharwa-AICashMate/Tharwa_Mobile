@@ -51,7 +51,7 @@ const TransactionScreen: React.FC = () => {
         setHasMore(false);
       }
     } catch (err) {
-      console.error("Error loading transactions:", err);
+      console.log("Error loading transactions:", err);
     }
   };
 

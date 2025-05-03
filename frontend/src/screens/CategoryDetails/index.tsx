@@ -76,11 +76,11 @@ const CategoryDetailScreen = () => {
           setHasMore(true);
         }
       } else {
-        console.error("Failed to load category transactions:", result.payload);
+        console.log("Failed to load category transactions:", result.payload);
         setHasMore(false);
       }
     } catch (err) {
-      console.error("Error loading category transactions:", err);
+      console.log("Error loading category transactions:", err);
       setHasMore(false);
     }
   };

@@ -15,6 +15,7 @@ import {
 } from "./categoryTransactions";
 import {
   addTransaction,
+  getWeeklyHighs,
   removeTransaction,
   updateTransaction,
 } from "./financeSlice";
@@ -90,6 +91,7 @@ export const deleteTransactionsAsync = createAsyncThunk(
     );
     console.log('-------------------------')
     thunkAPI.dispatch(deleteCategoryTransactions(Number(transactionId)));
+    thunkAPI.dispatch(getWeeklyHighs())
     return transactionId;
   }
 );

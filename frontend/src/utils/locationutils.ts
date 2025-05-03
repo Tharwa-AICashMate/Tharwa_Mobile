@@ -29,7 +29,7 @@ export const calculateDistance = async (
 
     return distanceInKm;
   } catch (error) {
-    console.error('Error fetching distance:', error);
+    console.log('Error fetching distance:', error);
     return Number.MAX_VALUE; // قيمة كبيرة عشان يستبعد المتجر
   }
 };
@@ -56,7 +56,7 @@ export const calculateDistance = async (
         longitude: location.coords.longitude,
       };
     } catch (error) {
-      console.error('Error getting location:', error);
+      console.log('Error getting location:', error);
       throw error;
     }
   };

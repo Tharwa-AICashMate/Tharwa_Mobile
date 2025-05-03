@@ -5,6 +5,7 @@ import { apiBase } from "@/utils/axiosInstance";
 import styles from "./styles";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { setUserBalance } from "@/redux/slices/AuthSlice";
+import { updateBalance, updateGetBalance } from "@/redux/slices/financeSlice";
 
 interface BalanceModalProps {
   isOpen: boolean;
@@ -21,7 +22,7 @@ const BalanceModal: React.FC<BalanceModalProps> = ({
   const dispatch = useAppDispatch()
   const handleSaveBalance = async () => {
     const parsed = parseFloat(inputValue);
-    if (isNaN(parsed)) {
+    if (isNaN(parsed) || parsed <= 0) {
       setError("Enter a valid balance value");
       return;
     }
@@ -41,8 +42,10 @@ const BalanceModal: React.FC<BalanceModalProps> = ({
 
       const data = await response.json();
       dispatch(setUserBalance(data.balance_limit ?? parsed));
+      dispatch(updateBalance(data.balance_limit??parsed))
+      dispatch(updateGetBalance(false))
     } catch (error) {
-      console.error("Error saving balance:", error);
+      console.log("Error saving balance:", error);
     } finally {
       setIsOpen(false);
       setError("");

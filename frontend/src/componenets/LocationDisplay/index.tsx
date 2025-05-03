@@ -21,7 +21,7 @@ const LocationDisplay: React.FC = () => {
       };
       dispatch(setUserLocation(location));
     } catch (error) {
-      console.error("Error getting location:", error);
+      console.log("Error getting location:", error);
       // Handle location error
     }
   };

@@ -31,7 +31,7 @@ const handleOpenMap = (lat: number, lon: number) => {
     });
 
     Linking.openURL(url).catch((err) =>
-      console.error("Error opening map:", err)
+      console.log("Error opening map:", err)
     );
   };
 const FavoriteStores: React.FC = () => {
@@ -50,7 +50,7 @@ const FavoriteStores: React.FC = () => {
           dispatch(setUserStores(response.data));
         }
       } catch (error) {
-        console.error("Error loading stores:", error);
+        console.log("Error loading stores:", error);
       }
     };
 

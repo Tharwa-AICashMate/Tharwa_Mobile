@@ -52,7 +52,7 @@ export const registerUser = createAsyncThunk(
       console.log("User registered successfully", user);
       return { ...user, dob: user.dob?.toISOString() };
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.log("Error registering user:", error);
       rejectWithValue("User Email already Registered");
     }
   }
@@ -74,7 +74,7 @@ export const loginUser = createAsyncThunk(
       console.log("userData", userData);
       return { ...userData.data, id: data.user.id };
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.log("Error registering user:", error);
       return rejectWithValue("Invalid email or password");
     }
   }
@@ -88,7 +88,7 @@ export const logoutUser = createAsyncThunk(
       if (error) return rejectWithValue("Logout failed");
       return null;
     } catch (error) {
-      console.error("Error logging out:", error);
+      console.log("Error logging out:", error);
       return rejectWithValue("Logout failed");
     }
   }
@@ -102,7 +102,8 @@ export const fetchCurrentUser = createAsyncThunk(
         data: { session },
         error,
       } = await supabase.auth.getSession();
-      if (error || !session) return rejectWithValue("No active session");
+      if (!session)return;
+      if (error ) return rejectWithValue("No active session");
 
       const userId = session.user.id;
 
@@ -117,7 +118,7 @@ export const fetchCurrentUser = createAsyncThunk(
 
       return { ...userData.data, id: userId };
     } catch (err) {
-      console.error("Error fetching current user:", err);
+      console.log("Error fetching current user:", err);
       return rejectWithValue("Failed to fetch user data");
     }
   }
@@ -148,7 +149,7 @@ export const loginWithProvider = createAsyncThunk(
         return userData.data;
       }
     } catch (error) {
-      console.error("Error logging in with provider:", error);
+      console.log("Error logging in with provider:", error);
       return rejectWithValue("Login failed");
     }
   }
@@ -167,7 +168,7 @@ export const forgetPassword = createAsyncThunk(
       }
       return email;
     } catch (error) {
-      console.error(
+      console.log(
         "Error sending otp:invalid email address can't send message",
         error
       );
@@ -192,7 +193,7 @@ export const verifyPin = createAsyncThunk(
         return rejectWithValue(data.message);
       }
     } catch (error) {
-      console.error("Error verifying pin:", error);
+      console.log("Error verifying pin:", error);
       return rejectWithValue("Invalid OTP");
     }
   }
@@ -213,7 +214,7 @@ export const resetPassword = createAsyncThunk(
         return rejectWithValue(data.message);
       }
     } catch (error) {
-      console.error("Error resetting password:", error);
+      console.log("Error resetting password:", error);
       return rejectWithValue("Error resetting password");
     }
   }

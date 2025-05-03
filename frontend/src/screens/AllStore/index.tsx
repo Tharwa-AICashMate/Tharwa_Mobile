@@ -33,7 +33,7 @@ const handleOpenMap = (lat: number, lon: number) => {
     default: `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`,
   });
 
-  Linking.openURL(url).catch((err) => console.error("Error opening map:", err));
+  Linking.openURL(url).catch((err) => console.log("Error opening map:", err));
 };
 const AllStoresPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -66,7 +66,7 @@ const AllStoresPage: React.FC = () => {
   };
   const handleAddStore = (store) => {
     if (!userId) {
-      console.error("User not authenticated");
+      console.log("User not authenticated");
       return;
     }
 

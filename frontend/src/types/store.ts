@@ -30,6 +30,7 @@ export interface BestStoreResult {
   store: Store;
   totalPrice: number;
   distance: number;
+  userId:string
   matchedItems: Array<{
     id: number;
     store_id: number;

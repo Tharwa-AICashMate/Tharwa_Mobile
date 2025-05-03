@@ -31,6 +31,18 @@ export const getDepositsByGoal = createAsyncThunk(
   }
 );
 
+export const deleteDeposit = createAsyncThunk(
+  "goals/deleteDeposit",
+  async (depositId: number) => {
+    try {
+      await axios.delete(`${apiBase}/deposits/${depositId}`);
+      return depositId;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+);
+
 interface DepositState {
   deposit?: IDeposit;
   deposits: IDeposit[];
@@ -90,6 +102,17 @@ const depositSlice = createSlice({
       .addCase(getDepositsByGoal.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      })
+      .addCase(deleteDeposit.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteDeposit.fulfilled, (state, action) => {
+        state.loading = false;
+        state.deposits = state.deposits.filter((item) => Number(item.id) !== action.payload);
+      })
+      .addCase(deleteDeposit.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to delete deposit";
       });
   },
 });

@@ -51,7 +51,7 @@ const Profile: React.FC = () => {
         setPhone(mobile_num);
         setEmail(email);
       } catch (error) {
-        console.error('Failed to fetch user:', error);
+        console.log('Failed to fetch user:', error);
       }
     };
 
@@ -73,7 +73,7 @@ const Profile: React.FC = () => {
         setUpdateMessage('');
       }, 2000);
     } catch (error) {
-      console.error('Failed to update profile:', error);
+      console.log('Failed to update profile:', error);
     }
   };
 

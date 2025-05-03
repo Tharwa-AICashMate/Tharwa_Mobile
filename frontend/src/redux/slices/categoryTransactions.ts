@@ -70,7 +70,7 @@ export const createTransaction = createAsyncThunk(
       console.log("Transaction created:", response.data);
       return response.data;
     } catch (error: any) {
-      console.error("Create transaction error:", error);
+      console.log("Create transaction error:", error);
       return rejectWithValue(error.message);
     }
   }
@@ -134,7 +134,7 @@ const transactionSlice = createSlice({
       })
       .addCase(createTransaction.fulfilled, (state, action) => {
         state.createLoading = false;
-        state.data.push(action.payload);
+        state.data = [...state.data,action.payload];
       })
       .addCase(createTransaction.rejected, (state, action) => {
         state.createLoading = false;

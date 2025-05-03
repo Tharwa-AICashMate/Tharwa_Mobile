@@ -155,7 +155,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         }
 
       } catch (error) {
-        console.error("Error loading stores:", error);
+        console.log("Error loading stores:", error);
       }
     };
 
@@ -235,7 +235,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const isPositiveNumber = (value: string): boolean => {
     if (value === "") return true;
     const numberValue = parseFloat(value);
-    return !isNaN(numberValue) && numberValue >= 0;
+    return !isNaN(numberValue) && numberValue > 0;
   };
 
   const isValidItemName = (value: string): boolean => {
@@ -401,7 +401,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         });
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.log("Error submitting form:", error);
     } finally {
       setTimeout(() => {
         setIsSubmitting(false);
@@ -437,7 +437,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       return acc += (Number(item.quantity) || 1) * Number(item.unitPrice)
     },0)
   
-    setAmount(amount.toFixed(2))
+    setAmount(amount ? amount.toFixed(2):'')
   },[descriptionItems])
   const updateDescriptionItem = (
     index: number,

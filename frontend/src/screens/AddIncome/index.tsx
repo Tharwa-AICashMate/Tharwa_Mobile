@@ -1,6 +1,10 @@
 import React, { useCallback, useState } from "react";
 import { View, SafeAreaView, Alert, ActivityIndicator } from "react-native";
-import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native";
+import {
+  useNavigation,
+  useFocusEffect,
+  useRoute,
+} from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
@@ -10,10 +14,13 @@ import { createTransaction } from "@/redux/slices/categoryTransactions";
 import { fetchUserCategories } from "@/redux/slices/categoriesSlice";
 import { getCurrentUserId } from "@/utils/auth";
 import { editTransactionsAsync } from "@/redux/slices/transactionSlice";
+import { updateWeeklyHighs } from "@/redux/slices/financeSlice";
 
 const AddIncomeScreen = () => {
   const dispatch = useAppDispatch();
-  const { items: categories, loading } = useAppSelector((state) => state.categories);
+  const { items: categories, loading } = useAppSelector(
+    (state) => state.categories
+  );
   const [userId, setUserId] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const navigation = useNavigation();
@@ -28,7 +35,7 @@ const AddIncomeScreen = () => {
           const id = await getCurrentUserId();
           setUserId(id);
         } catch (error) {
-          console.error("Failed to get user ID:", error);
+          console.log("Failed to get user ID:", error);
         }
       };
       fetchUserId();
@@ -45,69 +52,76 @@ const AddIncomeScreen = () => {
     descriptionItems?: any[];
   }) => {
     if (!userId) {
-      console.error("user not found");
+      console.log("user not found");
       return;
     }
-  
-  
-const newTransaction = {
+
+    const newTransaction = {
       user_id: userId,
       amount: parseFloat(data.amount),
-      type: "income" as "income"|"expense",
+      type: "income" as "income" | "expense",
       title: data.title || data.category,
       created_at: data.created_at,
-    
     };
     if (transaction?.transaction_id) {
-      console.log('----------------------test ',{
-          ...newTransaction,
-          id: transaction.transaction_id,
-        })
+      console.log("----------------------test ", {
+        ...newTransaction,
+        id: transaction.transaction_id,
+      });
       dispatch(
         editTransactionsAsync({
           ...newTransaction,
           id: transaction.transaction_id,
         })
-        ).then((res) => {
-          
-            navigation.goBack();
-          
-        });
-      } else
-    dispatch(createTransaction(newTransaction)).then((res) => {
-      if (res.meta.requestStatus === "fulfilled") {
-        Alert.alert(
-          "Success", 
-          "Income recorded successfully",
-          [{ text: "OK", onPress: () => navigation.goBack() }]
+      ).then((res) => {
+        navigation.goBack();
+        dispatch(
+          updateWeeklyHighs({
+            ...newTransaction,
+            created_at: newTransaction.created_at.toString(),
+          })
         );
-      }
-    });
+      });
+    } else
+      dispatch(createTransaction(newTransaction)).then((res) => {
+        if (res.meta.requestStatus === "fulfilled") {
+          Alert.alert("Success", "Income recorded successfully", [
+            { text: "OK", onPress: () => navigation.goBack() },
+          ]);
+        }
+        dispatch(
+          updateWeeklyHighs({
+            ...newTransaction,
+            created_at: newTransaction.created_at.toString(),
+          })
+        );
+      });
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Theme.colors.background }}>
       <Header title="Add Income" />
       {transaction ? (
-         <TransactionForm
-         title="Income"
-         buttonText={isProcessing ? "Processing..." : "Save Income"}
-         onSubmit={handleSubmit}
-         isIncome={true}
-         resetAfterSubmit={true}
-         initialAmount={transaction?.amount.toString()}
-         initialTitle={transaction?.title}
-         initialMessage={transaction?.description}
-         initialDate={new Date(transaction?.created_at)}
-       />
-     ) : (
-      <TransactionForm
-        title="Income"
-        buttonText={isProcessing ? "Processing..." : "Save Income"}
-        onSubmit={handleSubmit}
-        isIncome={true}
-        resetAfterSubmit={true}
-      />)}
+        <TransactionForm
+          title="Income"
+          buttonText={isProcessing ? "Processing..." : "Save Income"}
+          onSubmit={handleSubmit}
+          isIncome={true}
+          resetAfterSubmit={true}
+          initialAmount={transaction?.amount.toString()}
+          initialTitle={transaction?.title}
+          initialMessage={transaction?.description}
+          initialDate={new Date(transaction?.created_at)}
+        />
+      ) : (
+        <TransactionForm
+          title="Income"
+          buttonText={isProcessing ? "Processing..." : "Save Income"}
+          onSubmit={handleSubmit}
+          isIncome={true}
+          resetAfterSubmit={true}
+        />
+      )}
     </SafeAreaView>
   );
 };

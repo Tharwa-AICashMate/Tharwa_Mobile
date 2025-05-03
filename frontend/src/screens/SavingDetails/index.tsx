@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   View,
   Text,
@@ -23,6 +23,7 @@ import Theme from "@/theme";
 import { useFocusEffect } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native";
 import MonthSection from "@/componenets/MonthSection";
+import { groupTransactionsByMonth } from "@/utils/helpers";
 
 dayjs.extend(utc);
 
@@ -54,20 +55,10 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
     }, [dispatch, goalIdNumber])
   );
 
-  const groupedDeposits = deposits.reduce(
-    (groups: { [key: string]: any[] }, deposit) => {
-      const date = dayjs.utc(new Date(deposit.created_at as Date));
-      const monthName = date.format("MMMM YYYY");
-
-      if (!groups[monthName]) {
-        groups[monthName] = [];
-      }
-
-      groups[monthName].push(deposit);
-      return groups;
-    },
-    {}
-  );
+  useEffect(()=>{
+    dispatch(fetchGoalCurrentAmount(goalIdNumber));
+  },[deposits])
+  const groupedDeposits = groupTransactionsByMonth(deposits);
 
   const formatCurrency = (amount?: number): string => {
     if (typeof amount !== "number") return "$0";

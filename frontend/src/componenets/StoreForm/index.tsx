@@ -58,7 +58,7 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
     });
 
     Linking.openURL(url).catch((err) =>
-      console.error("Error opening map:", err)
+      console.log("Error opening map:", err)
     );
   };
   console.log(userLocation);
@@ -89,7 +89,7 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
               });
             },
             (error) => {
-              console.error(error);
+              console.log(error);
               setLocationError("Could not get your location");
             }
           );
@@ -147,7 +147,7 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
       const response = await axios.get(apiUrl);
       setSuggestions(response.data.features);
     } catch (error) {
-      console.error("Error fetching suggestions:", error);
+      console.log("Error fetching suggestions:", error);
       setSuggestions([]);
     } finally {
       setLoading(false);
@@ -156,7 +156,7 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
 
   const handleAddStore = (suggestion: GeoapifySuggestion) => {
     if (!user?.id) {
-      console.error("User not authenticated");
+      console.log("User not authenticated");
       return;
     }
 

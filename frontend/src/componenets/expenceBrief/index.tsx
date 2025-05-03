@@ -13,7 +13,7 @@ interface ExpenseBriefProps {
   setTotalBalance?: (balance: number) => void;
 }
 
-const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
+const ExpenseBrief: React.FC<ExpenseBriefProps> = () => {
   const dispatch = useAppDispatch();
   const { balance, expenses, income, savings, loading, error } = useAppSelector(
     (state) => state.finance
@@ -22,18 +22,18 @@ const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
   useEffect(() => {
     async function fetchAll() {
       const userId = await getCurrentUserId();
-      console.log(userId)
+      console.log(userId);
       dispatch(fetchFinanceData(userId));
       dispatch(fetchBalance(userId));
-      if(setTotalBalance)
-        setTotalBalance(balance)
     }
 
     fetchAll();
   }, [dispatch]);
 
   const availableBalance = balance - expenses - savings + income;
-  const percentage = availableBalance ? (expenses / (balance+income)) * 100 : 0;
+  const percentage = availableBalance
+    ? (expenses / (balance + income)) * 100
+    : 0;
   return (
     <View style={{ marginBottom: 30 }}>
       <View style={styles.budgetContainer}>

@@ -57,7 +57,7 @@ const Savings = () => {
           dispatch(fetchUserGoals(currentUserId));
         }
       } catch (err) {
-        console.error("Error fetching user goals:", err);
+        console.log("Error fetching user goals:", err);
       }
     };
 
