@@ -137,7 +137,7 @@
     "forgotPassword": "Forgot Password?",
     "fingerprint": "Use Fingerprint To Access",
     "or": "or sign up with",
-    "register":"don't have an acount"
+    "register": "don't have an acount"
   },
   "profileScreen": {
     "profile": "Profile",
@@ -257,16 +257,16 @@
     "dontHaveAnAccount": "Don't have an account?",
     "signUpLink": "Sign Up"
   },
-  "securityPinScreen":{
-    "securityPin":"Security Pin",
-    "enterPin":"Enter Security Pin",
-    "accept":"Accept",
-    "sendAgain":"Send Again",
+  "securityPinScreen": {
+    "securityPin": "Security Pin",
+    "enterPin": "Enter Security Pin",
+    "accept": "Accept",
+    "sendAgain": "Send Again",
     "signUp": "Sign Up",
-    "dontHaveAnAccount": "Don't have an account?",
+    "dontHaveAnAccount": "Don't have an account?"
   },
-  "newPasswordScreen":{
-    "newPassword":"New Password",
+  "newPasswordScreen": {
+    "newPassword": "New Password",
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "passwordError": "Invalid Password",

@@ -137,7 +137,7 @@
     "forgotPassword": "هل نسيت كلمة المرور؟",
     "fingerprint": "استخدم بصمة الإصبع للوصول",
     "or": "أو سجل باستخدام",
-    "register":"لا تمتلك حسابا"
+    "register": "لا تمتلك حسابا"
   },
   "profileScreen": {
     "profile": "الملف الشخصي",
@@ -257,16 +257,16 @@
     "dontHaveAnAccount": "ليس لديك حساب؟",
     "signUpLink": "اشتراك"
   },
-  "securityPinScreen":{
-    "securityPin":"رمز التحقق",
-    "enterPin":"ادخل رمز التحقق",
-    "accept":"تحقق",
-    "sendAgain":"ارسل مجددا",
+  "securityPinScreen": {
+    "securityPin": "رمز التحقق",
+    "enterPin": "ادخل رمز التحقق",
+    "accept": "تحقق",
+    "sendAgain": "ارسل مجددا",
     "signUp": "اشتراك",
-    "dontHaveAnAccount": "ليس لديك حساب؟",
+    "dontHaveAnAccount": "ليس لديك حساب؟"
   },
- "newPasswordScreen":{
-    "newPassword":"كلمة سر جديدة",
+  "newPasswordScreen": {
+    "newPassword": "كلمة سر جديدة",
     "password": "كلمة المرور",
     "confirmPassword": "تأكيد كلمة المرور",
     "passwordError": "كلمة مرور غير صحيحة",
