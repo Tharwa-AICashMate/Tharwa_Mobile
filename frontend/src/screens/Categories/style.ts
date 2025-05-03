@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
   },
 
   categoryIconContainer: {
-    width: 100,
-    height: 95,
+    width: 95,
+    height: 85,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
@@ -89,6 +89,66 @@ const styles = StyleSheet.create({
   budgetContainer: {
     paddingHorizontal: 20,
     paddingBottom: 20,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  emptyText: {
+    color: Theme.colors.text,
+    fontSize: 16,
+  },
+  sectionLoadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: 200, 
+  },
+  actionModalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  actionModalContainer: {
+    width: "70%",
+    backgroundColor: Theme.colors.background,
+    borderRadius: 16,
+    overflow: "hidden",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  actionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    paddingVertical: 18,
+  },
+  actionButtonText: {
+    marginLeft: 16,
+    fontSize: 16,
+    fontWeight: "500",
+    color: Theme.colors.text,
+  },
+  actionDivider: {
+    height: 1,
+    backgroundColor: Theme.colors.secondery,
+  },
+  optionsButton: {
+    position: "absolute",
+    top: 7,
+    right: 7,
+    width: 20,
+    height: 25,
+    borderRadius: 12,
+    backgroundColor: "rgba(0, 0, 0, 0.04)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

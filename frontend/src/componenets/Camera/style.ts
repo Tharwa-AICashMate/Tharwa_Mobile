@@ -391,5 +391,235 @@ export const modalStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     color: "#fff"
-  }
+  },
+
+  modalContent: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: '90%', 
+    width: '100%',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    elevation: 6,
+  },
+  modalScrollView: {
+    maxHeight: '80%', 
+  },
+  modalScrollContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 20,
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  editButton: {
+    padding: 8,
+    marginRight: 8,
+  },
+  fieldContainer: {
+    marginBottom: 12,
+  },
+  fieldLabelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  fieldLabel: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
+  },
+  fieldIcon: {
+    marginRight: 6,
+  },
+  fieldValue: {
+    fontSize: 16,
+    color: '#333',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 6,
+  },
+  fieldInput: {
+    fontSize: 16,
+    color: '#333',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  descriptionInput: {
+    fontSize: 16,
+    color: '#333',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    textAlignVertical: 'top',
+    minHeight: 80,
+  },
+
+  // Line items 
+  lineItemsContainer: {
+    marginTop: 8,
+    marginBottom: 16,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+    padding: 12,
+  },
+  lineItemRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  lineItemDescription: {
+    flex: 1,
+    fontSize: 14,
+    color: '#444',
+  },
+  lineItemPrice: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#333',
+    marginLeft: 8,
+  },
+
+
+
+  lineItemInputContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  lineItemInput: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 4,
+    padding: 8,
+    backgroundColor: Theme.colors.secondery,
+    fontSize: 14,
+  },
+  lineItemNameInput: {
+    width:100,
+    height:40,
+    marginRight: 8,
+  },
+  lineItemQuantityInput: {
+    width: 40,
+    marginRight: 8,
+    textAlign: 'center',
+  },
+  lineItemPriceInput: {
+    width: 80,
+    textAlign: 'left',
+  },
+  deleteItemButton: {
+    padding: 10,
+  },
+  addItemButton: {
+    marginLeft: 10,
+    padding: 4,
+  },
+
+  /* Description Input */
+  descriptionContainer: {
+    marginTop: 15,
+  },
+  descriptionLabel: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 5,
+  },
+  
+
+  /* Edit Mode  */
+  editModeIndicator: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: 'rgba(76, 175, 80, 0.2)',
+    padding: 5,
+    borderRadius: 4,
+  },
+  editModeText: {
+    color: Theme.colors?.primary || '#4CAF50',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },lineItemContent: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  lineItemName: {
+    flex: 0.6,
+    fontSize: 14,
+    color: '#333',
+  },
+  lineItemPriceContainer: {
+    flex: 0.4,
+    alignItems: 'flex-end',
+  },
+  lineItemUnitPrice: {
+    fontSize: 12,
+    color: '#666',
+  },
+  lineItemTotalPrice: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  storeSelectorContainer: {
+    borderWidth: 1,
+    // height:30,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginTop: 8,
+    backgroundColor: '#f9f9f9',
+    overflow: 'hidden',
+  },
+  storePicker: {
+    width: '100%',
+    height: 50,
+    color: '#333',
+  },
+  storePickerItem: {
+    fontSize: 16,
+    color: '#333',
+  },
+  addStoreOption: {
+    color: Theme.colors.primary,
+    fontWeight: '600',
+  },
+  addStoreButton: {
+    padding: 15,
+    backgroundColor: Theme.colors.primary + '20',
+    borderRadius: 8,
+    marginVertical: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Theme.colors.primary + '50'
+  },
+  addStoreButtonText: {
+    color: Theme.colors.primary,
+    fontWeight: '600',
+    fontSize: 14
+  },
+
+
 });

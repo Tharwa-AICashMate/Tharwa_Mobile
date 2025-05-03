@@ -37,7 +37,7 @@ export const useLocation = (): LocationHook => {
       });
     } catch (err) {
       setError('Could not fetch location');
-      console.error('Error getting location:', err);
+      console.log('Error getting location:', err);
     } finally {
       setLoading(false);
     }

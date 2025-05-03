@@ -1,0 +1,371 @@
+{
+  "header": {
+    "invoice": "الفاتورة",
+    "camera": "الكاميرا",
+    "language": "اللغة",
+    "categories": "التصنيفات"
+  },
+  "expenseBrief": {
+    "statusMessage": "{{percentage}}% من مصروفاتك، تبدو {{status}}.",
+    "good": "جيدة",
+    "bad": "سيئة"
+  },
+  "balanceDisplay": {
+    "totalBalance": "إجمالي الرصيد",
+    "totalExpense": "إجمالي المصروفات"
+  },
+  "home": {
+    "name": "الرئيسية",
+    "navigation": {
+      "addIncome": "إضافة دخل",
+      "allStores": "كل المتاجر",
+      "savingGoals": "أهداف الادخار",
+      "myStores": "متاجري",
+      "addExpenses": "إضافة مصروفات",
+      "addStores": "إضافة متاجر"
+    },
+    "quickStats": {
+      "weeklyHighlights": "موجز الأسبوع",
+      "highestIncome": "أعلى دخل",
+      "highestExpense": "أعلى مصروف",
+      "noHighlights": "لا توجد أبرز أحداث للأسبوع حتى الآن"
+    },
+    "currencySymbol": "ر.س"
+  },
+  "transactionForm": {
+    "date": "التاريخ",
+    "datePlaceholder": "اختر التاريخ",
+    "dateError": "لا يمكن أن يكون التاريخ في المستقبل",
+    "category": "التصنيف",
+    "categoryPlaceholder": "اختر التصنيف",
+    "categoryError": "الرجاء اختيار التصنيف",
+    "savingsGoal": "هدف الادخار",
+    "savingsGoalPlaceholder": "اختر هدف الادخار",
+    "savingsGoalError": "الرجاء اختيار هدف الادخار",
+    "store": "المتجر (اختياري)",
+    "storePlaceholder": "اختر المتجر",
+    "addStore": "+ إضافة متجر",
+    "amount": "المبلغ",
+    "amountPlaceholder": "ر.س 0.00",
+    "amountError": {
+      "required": "المبلغ مطلوب",
+      "validNumber": "يجب أن يكون المبلغ رقمًا صحيحًا",
+      "positive": "يجب أن يكون المبلغ رقمًا موجبًا"
+    },
+    "title": {
+      "expense": "عنوان المصروف",
+      "income": "عنوان الدخل",
+      "savings": "عنوان الادخار"
+    },
+    "titlePlaceholder": {
+      "expense": "العشاء",
+      "income": "الراتب",
+      "savings": "الإيداع الشهري"
+    },
+    "titleError": "لا يمكن أن يكون العنوان فارغًا",
+    "items": "العناصر (اختياري)",
+    "itemNamePlaceholder": "اسم العنصر",
+    "itemPricePlaceholder": "السعر",
+    "itemQuantityPlaceholder": "الكمية",
+    "itemError": {
+      "bothFields": "الرجاء ملء كل من الاسم والسعر",
+      "nameRequired": "اسم العنصر مطلوب",
+      "validNumber": "يجب أن يكون رقمًا صحيحًا",
+      "positive": "يجب أن يكون رقمًا موجبًا"
+    },
+    "addItem": "إضافة عنصر",
+    "note": "ملاحظة (اختياري)",
+    "notePlaceholder": "أدخل أي ملاحظات إضافية",
+    "saveButton": {
+      "default": "حفظ",
+      "processing": "جاري المعالجة..."
+    },
+    "deleteItem": "حذف العنصر"
+  },
+  "logo": "ثروة",
+  "onboarding": {
+    "welcomeMsg": "مرحباً بك في مدير المصروفات",
+    "onboardingMsg": "هل أنت جاهز للسيطرة على وضعك المالي؟",
+    "next": "التالي"
+  },
+  "Login": {
+    "login": "تسجيل الدخول",
+    "loginMsg": "ابدأ رحلتك نحو السلام المالي بطريقة ثروة.",
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "signUp": "اشتراك"
+  },
+  "SignUpScreen": {
+    "welcome": "أهلاً بك",
+    "FullName": "الاسم الكامل",
+    "fullNamePlaceholder": "اسمك الكامل",
+    "fullNameError": "يرجى إدخال اسم صحيح",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "example@example.com",
+    "emailError": "بريد إلكتروني غير صحيح",
+    "phoneNumber": "رقم الهاتف",
+    "phoneNumberPlaceholder": "+123456789",
+    "phoneNumberError": "رقم غير صحيح",
+    "dateOfBirth": "تاريخ الميلاد",
+    "dateOfBirthPlaceholder": "1/1/2000",
+    "dateOfBirthError": "تاريخ ميلاد غير صحيح",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "passwordPlaceholder": "كلمة المرور",
+    "confirmPasswordPlaceholder": "تأكيد كلمة المرور",
+    "passwordError": "كلمة مرور غير صحيحة",
+    "passwordErrorMatch": "كلمات المرور غير متطابقة",
+    "byContinue": "بالمتابعة، أنت توافق على",
+    "and": "و",
+    "termsAndConditions": "شروط الخدمة ",
+    "privacyPolicy": "سياسة الخصوصية",
+    "noActiveSession": "لا توجد جلسة نشطة",
+    "signUp": "اشتراك",
+    "loginMsg": "هل لديك حساب بالفعل؟",
+    "login": "تسجيل الدخول"
+  },
+  "loginScreen": {
+    "welcome": "أهلاً بك",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "example@example.com",
+    "emailError": "بريد إلكتروني غير صحيح",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "كلمة المرور",
+    "passwordError": "كلمة مرور غير صحيحة",
+    "noActiveSession": "لا توجد جلسة نشطة",
+    "signUp": "اشتراك",
+    "login": "تسجيل الدخول",
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "fingerprint": "استخدم بصمة الإصبع للوصول",
+    "or": "أو سجل باستخدام",
+    "register": "لا تمتلك حسابا"
+  },
+  "profileScreen": {
+    "profile": "الملف الشخصي",
+    "noName": "لا يوجد اسم",
+    "editProfile": "تعديل الملف الشخصي",
+    "help": "المساعدة",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج"
+  },
+  "help": {
+    "helpAndFAQs": "المساعدة والأسئلة الشائعة",
+    "howCanWeHelpYou": "كيف يمكننا مساعدتك؟",
+    "faq": "الأسئلة الشائعة",
+    "contactUs": "اتصل بنا",
+    "general": "عام",
+    "account": "الحساب",
+    "services": "الخدمات",
+    "search": "بحث"
+  },
+  "generalFAQs": {
+    "howDoIStartSaving_Q": "كيف أبدأ الادخار؟",
+    "howDoIStartSaving_A": "لبدء الادخار، قم بإنشاء حساب، وأضف أهداف ادخار، وخصص جزءًا من دخلك بانتظام.",
+    "howMuchDoesItCostToUseTharwa_Q": "كم تكلفة استخدام ثروة؟",
+    "howMuchDoesItCostToUseTharwa_A": "استخدام ثروة مجاني. لا نفرض أي رسوم لاستخدام منصتنا.",
+    "howToContactSupport_Q": "كيف يمكنني الاتصال بالدعم؟",
+    "howToContactSupport_A": "يمكنك التواصل مع فريق الدعم الخاص بنا من خلال زر 'اتصل بنا' في مركز المساعدة، أو عبر أي من قنوات الدعم الخاصة بنا."
+  },
+  "accountFAQs": {
+    "howToChangePassword_Q": "كيف أغير كلمة المرور الخاصة بي؟",
+    "howToChangePassword_A": "لتغيير كلمة المرور الخاصة بك، انتقل إلى صفحة الإعدادات وحدد 'تغيير كلمة المرور'.",
+    "howToUpdateMyProfile_Q": "كيف أحدث ملفي الشخصي؟",
+    "howToUpdateMyProfile_A": "لتحديث ملفك الشخصي، انتقل إلى صفحة الملف الشخصي وحدد 'تعديل الملف الشخصي'، وقم بتحديث معلوماتك، واحفظ التغييرات.",
+    "howToUpdateMySettings_Q": "كيف أحدث إعداداتي؟",
+    "howToUpdateMySettings_A": "انتقل إلى 'الإعدادات' من صفحة ملفك الشخصي لإدارة الإشعارات والأمان والتفضيلات الأخرى.",
+    "howToDeleteAccount_Q": "كيف أحذف حسابي؟",
+    "howToDeleteAccount_A": "انتقل إلى 'الإعدادات'، وحدد 'الحساب'، وانقر على 'حذف الحساب'. اتبع خطوات التأكيد لإكمال العملية."
+  },
+  "servicesFAQs": {
+    "howToAccessTransactionsHistory_Q": "كيف يمكنني الوصول إلى سجل المعاملات الخاص بي؟",
+    "howToAccessTransactionsHistory_A": "انتقل إلى 'المعاملات' في القائمة الرئيسية لعرض سجل النفقات الكامل الخاص بك وقم بالفلترة حسب التاريخ أو الفئة.",
+    "CanUseAppOffline_Q": "هل يمكنني استخدام التطبيق دون اتصال بالإنترنت؟",
+    "CanUseAppOffline_A": "تتوفر بعض الميزات دون اتصال بالإنترنت، ولكنك ستحتاج إلى اتصال بالإنترنت للحصول على تحديثات ومعاملات في الوقت الفعلي."
+  },
+  "contactUs": {
+    "searchSupportChannels": "بحث في قنوات الدعم",
+    "customerService": "خدمة العملاء",
+    "website": "الموقع الإلكتروني",
+    "facebook": "فيسبوك",
+    "whatsapp": "واتساب",
+    "instagram": "انستغرام"
+  },
+  "EditProfile": {
+    "editProfile": "تعديل ملفي الشخصي",
+    "accountSettings": "إعدادات الحساب",
+    "fullName": "الاسم الكامل",
+    "fullNamePlaceholder": "الاسم الكامل",
+    "phone": "رقم الهاتف",
+    "phonePlaceholder": "رقم الهاتف",
+    "emailAddress": "البريد الإلكتروني",
+    "emailAddressPlaceholder": "البريد الإلكتروني",
+    "pushNotifications": "إشعارات الدفع",
+    "updateProfile": "تحديث الملف الشخصي"
+  },
+  "analysis": {
+    "analysis": "تحليل",
+    "weekly": "أسبوعي",
+    "monthly": "شهري",
+    "yearly": "سنوي",
+    "income": "الدخل",
+    "expense": "المصروفات",
+    "incomeExpense": "الدخل والمصروفات",
+    "noData": "لا توجد بيانات متاحة لهذه الفترة"
+  },
+  "SmartGrocery": {
+    "smartGroceryOffers": "عروض البقالة الذكية",
+    "yourLocation": "موقعك:",
+    "latitude": "خط العرض:",
+    "longitude": "خط الطول:",
+    "retry": "إعادة المحاولة",
+    "findByMap": "البحث عن طريق الخريطة",
+    "analysis": "تحليل",
+    "searchScope": "نطاق البحث:",
+    "km5": "5 كم",
+    "km10": "10 كم",
+    "km20": "20 كم",
+    "km50": "50 كم",
+    "km100": "100 كم",
+    "enterGroceryItem": "أدخل سلعة البقالة",
+    "add": "إضافة",
+    "yourGroceryList": "قائمة مشترياتك:",
+    "addItemsToYourGroceryList": "أضف عناصر إلى قائمة مشترياتك",
+    "findBestStore": "البحث عن أفضل متجر ({searchRadius} كم)"
+  },
+  "favoriteStores": {
+    "favoriteStores": "المتاجر المفضلة",
+    "addStore": "إضافة متجر",
+    "storeName": "اسم المتجر",
+    "storeNamePlaceholder": "أدخل اسم المتجر",
+    "storeLocation": "موقع المتجر",
+    "storeLocationPlaceholder": "أدخل موقع المتجر",
+    "storeCategory": "فئة المتجر",
+    "storeCategoryPlaceholder": "اختر فئة المتجر",
+    "storeCategoryError": "يرجى اختيار فئة المتجر",
+    "addStoreButton": "إضافة متجر",
+    "noFavoriteStores": "لا توجد متاجر مفضلة حتى الآن"
+  },
+  "forgotPasswordScreen": {
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "resetPassword": "إعادة تعيين كلمة المرور؟",
+    "resetPasswordDescription": "نص تجريبي لوصف إعادة تعيين كلمة المرور.",
+    "enterEmailAddress": "أدخل عنوان البريد الإلكتروني",
+    "emailPlaceholder": "example@example.com",
+    "invalidEmailOrPassword": "بريد إلكتروني غير صحيح",
+    "nextStep": "الخطوة التالية",
+    "signUp": "اشتراك",
+    "orSignUpWith": "أو سجل باستخدام",
+    "dontHaveAnAccount": "ليس لديك حساب؟",
+    "signUpLink": "اشتراك"
+  },
+  "securityPinScreen": {
+    "securityPin": "رمز التحقق",
+    "enterPin": "ادخل رمز التحقق",
+    "accept": "تحقق",
+    "sendAgain": "ارسل مجددا",
+    "signUp": "اشتراك",
+    "dontHaveAnAccount": "ليس لديك حساب؟"
+  },
+  "newPasswordScreen": {
+    "newPassword": "كلمة سر جديدة",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "passwordError": "كلمة مرور غير صحيحة",
+    "passwordErrorMatch": "كلمات المرور غير متطابقة",
+    "changePassword": "تغيير كلمة السر"
+  },
+  "savingsScreen": {
+    "savings": "الادخار",
+    "goal": "الهدف",
+    "amountSaved": "المبلغ المدخر",
+    "currencySymbol": "ر.س",
+    "addSavings": "إضافة ادخار",
+    "addToSavings": "إضافة إلى المدخرات",
+    "noSavings": {
+      "createYourFirstGoal": "إنشاء هدفك الأول",
+      "startSavingForSomethingSpecial": "ابدأ الادخار لشيء مميز بإضافة هدفك الأول"
+    },
+    "savingsModal": {
+      "addSavingsGoal": "إضافة هدف ادخار",
+      "name": "الاسم",
+      "goalNamePlaceholder": "اسم الهدف",
+      "charactersLimit": "{0}/20 حرفًا",
+      "targetAmount": "المبلغ المستهدف",
+      "enterTargetAmount": "أدخل المبلغ المستهدف",
+      "selectIcon": "اختر أيقونة",
+      "cancel": "إلغاء",
+      "save": "حفظ"
+    }
+  },
+  "addStoreScreen": {
+    "addStore": "إضافة متجر",
+    "locationNote": "ملاحظة: تعذر الحصول على موقعك. قد لا تكون نتائج البحث خاصة بموقعك.",
+    "searchForStoresByName": "ابحث عن متاجر بالاسم...",
+    "search": "بحث",
+    "enterStoreNameToSearch": "أدخل اسم متجر للبحث أو اسمح بالوصول إلى الموقع للمتاجر القريبة."
+  },
+  "favoriteStoresScreen": {
+    "favoriteStores": "المتاجر المفضلة",
+    "noFavoriteStores": "لا توجد متاجر مفضلة حتى الآن",
+    "viewInMap": "عرض على الخريطة"
+  },
+  "allStoresScreen": {
+    "allStores": "جميع المتاجر",
+    "noStores": "لم يتم العثور على متاجر",
+    "searchPlaceholder": "ابحث عن متاجر",
+    "viewInMap": "عرض على الخريطة"
+  },
+  "searchScreen": {
+    "searchTitle": "بحث",
+    "searchPlaceholder": "بحث...",
+    "categories": "التصنيفات",
+    "selectCategory": "اختر التصنيف",
+    "date": "التاريخ",
+    "dateValue": "03 / مايو / 2025",
+    "report": "التقرير",
+    "income": "الدخل",
+    "expense": "المصروفات",
+    "searchButton": "بحث"
+  },
+  "enterTotalBalanceModal": {
+    "enterTotalBalance": "إدخال إجمالي الرصيد",
+    "totalBalancePlaceholder": "ادخل المبلغ",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "enterBalanceError": "ادخل رصيدًا صحيحًا"
+  },
+  "settingsScreen": {
+    "settings": "الإعدادات",
+    "passwordSettings": "إعدادات كلمة المرور",
+    "termsAndConditions": "الشروط والأحكام",
+    "helpCenter": "مركز المساعدة",
+    "deleteAccount": "حذف الحساب"
+  },
+  "passwordSettings": {
+    "passwordSettingsTitle": "إعدادات كلمة المرور",
+    "currentPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+    "changePasswordButton": "تغيير كلمة المرور",
+    "allFieldsRequired": "جميع الحقول مطلوبة",
+    "passwordError": "كلمة السر يجب أن تحتوي على 8 أحرف على الأقل",
+    "passwordErrorMatch": "كلمات المرور غير متطابقة"
+  },
+  "termsAndConditions": {
+    "termsAndConditionsTitle": "الشروط والأحكام",
+    "termsAndConditionsText": "يرجى قراءة والموافقة على شروطنا وأحكامنا الأساسية قبل المتابعة.\n\n1. استخدام الحساب: أنت مسؤول عن الحفاظ على أمان حسابك.\n2. خصوصية البيانات: نحترم خصوصيتك ونتعامل مع بياناتك وفقًا لسياسة الخصوصية الخاصة بنا.\n3. تغييرات الخدمة: قد نقوم بتحديث خدماتنا وشروطنا من وقت لآخر.\n\nبالمتابعة، أنت توافق على هذه الشروط.",
+    "acceptTermsCheckbox": "أوافق على الشروط والأحكام",
+    "acceptButton": "موافق"
+  },
+  "deleteAccount": {
+    "deleteAccountTitle": "حذف الحساب",
+    "deleteAccountConfirmation": "هل أنت متأكد أنك تريد حذف حسابك؟",
+    "deleteAccountWarning": "بحذف حسابك، ستفقد جميع بياناتك نهائيًا بما في ذلك:",
+    "transactionHistory": "سجل المعاملات",
+    "savedBudgetsAndGoals": "الميزانيات والأهداف المحفوظة",
+    "accountSettingsAndPreferences": "إعدادات وتفضيلات الحساب",
+    "allPersonalInformation": "جميع المعلومات الشخصية",
+    "confirmPasswordPrompt": "يرجى إدخال كلمة المرور لتأكيد الحذف:",
+    "deleteAccountButton": "حذف الحساب",
+    "cancelButton": "إلغاء"
+  }
+}

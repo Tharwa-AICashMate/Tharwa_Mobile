@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
 
 import styles from "./styles";
@@ -6,14 +6,15 @@ import { navigationProps } from "@/types";
 import SocialSignIn from "@/componenets/Login/SocialSignIn";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import { verifyPin } from "@/redux/slices/AuthSlice";
+import { clearError, verifyPin } from "@/redux/slices/AuthSlice";
+import { useTranslation } from "react-i18next";
 
-const SecurityPinScreen: React.FC<navigationProps> = ({navigation}) => {
+const SecurityPinScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [pin, setPin] = useState<String[]>([...Array(6)]);
   const inputs = useRef<(TextInput | null)[]>([]);
   const { error, loading } = useSelector((state: any) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
-
+  const { t } = useTranslation();
   const handlePinChange = (num: string, index: number) => {
     if (index < 5 && !(num == "")) {
       inputs.current[index + 1]?.focus();
@@ -33,22 +34,27 @@ const SecurityPinScreen: React.FC<navigationProps> = ({navigation}) => {
   };
 
   const verifyOTP = async () => {
-      const resultAction = await dispatch(verifyPin(pin.join("")));
-      if (verifyPin.fulfilled.match(resultAction)) {
-        navigation.navigate("NewPassword");
-      } else {
-        console.log("Signup failed:", resultAction.error);
-      }
-  }
+    const resultAction = await dispatch(verifyPin(pin.join("")));
+    if (verifyPin.fulfilled.match(resultAction)) {
+      navigation.navigate("NewPassword");
+    } else {
+      console.log("Signup failed:", resultAction.error);
+    }
+  };
 
+  useEffect(() => {
+    dispatch(clearError());
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Security Pin</Text>
+        <Text style={styles.title}>{t("securityPinScreen.securityPin")}</Text>
       </View>
 
       <View style={styles.form}>
-        <Text style={styles.secondaryButtonText}>Enter Security Pin</Text>
+        <Text style={styles.secondaryButtonText}>
+          {t("securityPinScreen.enterPin")}
+        </Text>
         <View style={styles.pinContainer}>
           <View style={styles.pinDots}>
             {pin.map((val, index) => (
@@ -70,26 +76,31 @@ const SecurityPinScreen: React.FC<navigationProps> = ({navigation}) => {
         </View>
 
         <View style={{ gap: 20 }}>
-          <TouchableOpacity
-            style={styles.primaryButton}
-            onPress={verifyOTP}
-          >
-            <Text style={styles.primaryButtonText}>Accept</Text>
+          <TouchableOpacity style={styles.primaryButton} onPress={verifyOTP}>
+            <Text style={styles.primaryButtonText}>
+              {t("securityPinScreen.accept")}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.secondaryButton}>
-            <Text style={styles.secondaryButtonText}>Send Again</Text>
+            <Text style={styles.secondaryButtonText}>
+              {t("securityPinScreen.sendAgain")}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={{ alignItems: "center" }}>
           <SocialSignIn />
 
           <View style={styles.link}>
-            <Text style={styles.linkText}>Don't have an account? </Text>
+            <Text style={styles.linkText}>
+              {t("securityPinScreen.dontHaveAnAccount")}
+            </Text>
             <TouchableOpacity
               onPress={() => navigation.navigate("CreateAccount")}
             >
-              <Text style={styles.linkButton}>Sign Up</Text>
+              <Text style={styles.linkButton}>
+                {t("securityPinScreen.signUp")}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

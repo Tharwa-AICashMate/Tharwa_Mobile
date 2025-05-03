@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -13,7 +13,8 @@ import { navigationProps } from "@/types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { doPasswordsMatch, isStrongPassword } from "@/utils/validators";
-import { resetPassword } from "@/redux/slices/AuthSlice";
+import { clearError, resetPassword } from "@/redux/slices/AuthSlice";
+import { useTranslation } from "react-i18next";
 
 const NewPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [password, setPassword] = useState<string>("");
@@ -23,7 +24,7 @@ const NewPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
     useState<boolean>(false);
   const { error, loading } = useSelector((state: any) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
-
+  const { t } = useTranslation();
   const handlePasswordReset = async () => {
     if (!doPasswordsMatch(password, confirmPassword)) return;
     const resultAction = await dispatch(resetPassword(password));
@@ -33,6 +34,10 @@ const NewPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
       console.log("ResetFailed failed:", resultAction.error);
     }
   };
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, []);
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -40,17 +45,18 @@ const NewPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
     >
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>New Password</Text>
+          <Text style={styles.title}>{t("newPasswordScreen.newPassword")}</Text>
         </View>
 
         <View style={styles.form}>
           {error && <Text style={styles.errorText}>{error}</Text>}
           <View style={{ gap: 20 }}>
             <Input
-              label="Password"
+              containerStyle={{ width: "80%" }}
+              label={t("newPasswordScreen.password")}
               value={password}
               onChangeText={setPassword}
-              errorMessage={"Invalid Password"}
+              errorMessage={t("newPasswordScreen.passwordError")}
               validator={isStrongPassword}
               autoCapitalize="none"
               secureTextEntry={!showPassword}
@@ -68,10 +74,10 @@ const NewPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
             />
 
             <Input
-              label="Confirm Password"
+              label={t("newPasswordScreen.confirmPassword")}
               value={confirmPassword}
               onChangeText={setConfirmPassword}
-              errorMessage={"Passwords don't match"}
+              errorMessage={t("newPasswordScreen.passwordErrorMatch")}
               autoCapitalize="none"
               validator={doPasswordsMatch.bind("", password)}
               secureTextEntry={!showConfirmPassword}
@@ -93,7 +99,9 @@ const NewPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
             style={[styles.primaryButton, { width: "100%" }]}
             onPress={handlePasswordReset}
           >
-            <Text style={styles.primaryButtonText}>Change Password</Text>
+            <Text style={styles.primaryButtonText}>
+              {t("newPasswordScreen.changePassword")}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

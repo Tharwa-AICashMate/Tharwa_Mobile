@@ -8,7 +8,7 @@ interface GoalsState {
   loading: boolean;
   error: string | null;
   currentAmounts: Record<number, number>;
-  goalLoading: Record<number, boolean>; 
+  goalLoading: Record<number, boolean>;
 }
 
 const initialState: GoalsState = {
@@ -71,7 +71,7 @@ export const createGoal = createAsyncThunk(
 export const updateGoal = createAsyncThunk(
   "goals/updateGoal",
   async (
-    { id, data }: { id: string; data: Partial<Goal> },
+    { id, data }: { id: number; data: Partial<Goal> },
     { rejectWithValue }
   ) => {
     try {
@@ -99,6 +99,8 @@ export const deleteGoal = createAsyncThunk(
   }
 );
 
+
+
 // === Slice ===
 
 const goalsSlice = createSlice({
@@ -113,13 +115,19 @@ const goalsSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchUserGoals.fulfilled, (state, action: PayloadAction<Goal[]>) => {
-        state.loading = false;
-        state.items = action.payload;
-      })
+      .addCase(
+        fetchUserGoals.fulfilled,
+        (state, action: PayloadAction<Goal[]>) => {
+          state.loading = false;
+          state.items = action.payload;
+        }
+      )
       .addCase(fetchUserGoals.rejected, (state, action) => {
         state.loading = false;
-        state.error = typeof action.payload === "string" ? action.payload : "Failed to fetch goals";
+        state.error =
+          typeof action.payload === "string"
+            ? action.payload
+            : "Failed to fetch goals";
       })
 
       // === Create Goal ===
@@ -129,7 +137,9 @@ const goalsSlice = createSlice({
 
       // === Update Goal ===
       .addCase(updateGoal.fulfilled, (state, action: PayloadAction<Goal>) => {
-        const index = state.items.findIndex(goal => goal.id === action.payload.id);
+        const index = state.items.findIndex(
+          (goal) => goal.id === action.payload.id
+        );
         if (index !== -1) {
           state.items[index] = action.payload;
         }
@@ -137,7 +147,7 @@ const goalsSlice = createSlice({
 
       // === Delete Goal ===
       .addCase(deleteGoal.fulfilled, (state, action: PayloadAction<number>) => {
-        state.items = state.items.filter(goal => goal.id !== action.payload);
+        state.items = state.items.filter((goal) => goal.id !== action.payload);
       })
 
       // === Fetch Goal Current Amount ===
@@ -153,7 +163,10 @@ const goalsSlice = createSlice({
       .addCase(fetchGoalCurrentAmount.rejected, (state, action) => {
         const goalId = action.meta.arg;
         state.goalLoading[goalId] = false;
-        state.error = typeof action.payload === "string" ? action.payload : "Failed to fetch current amount";
+        state.error =
+          typeof action.payload === "string"
+            ? action.payload
+            : "Failed to fetch current amount";
       });
   },
 });

@@ -106,7 +106,7 @@ const PasswordSettingsScreen: React.FC = () => {
         setLocalError("Failed to update password");
       }
     } catch (error: any) {
-      console.error("Error changing password:", error);
+      console.log("Error changing password:", error);
 
       if (axios.isAxiosError(error)) {
         if (!error.response) {

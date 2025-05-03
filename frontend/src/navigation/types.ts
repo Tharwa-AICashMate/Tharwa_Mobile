@@ -1,5 +1,6 @@
 export type RootStackParamList = {
   MainApp: undefined;
+
   SettingsScreen: undefined;
   HelpCenterScreen: undefined;
   PasswordSettingsScreen: undefined;
@@ -37,4 +38,8 @@ export type RootStackParamList = {
   TermsAndConditions: undefined;
   StoreHome: undefined;
   StoreScreen: undefined;
+  AllStores: undefined;
+  FavoriteStores: undefined;
+  AddStore: undefined;
+  transDetails: { transactionDetails: any };
 };

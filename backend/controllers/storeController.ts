@@ -6,10 +6,12 @@ import { calculateHaversineDistance } from "../utils/haversine";
 import { supabase } from '../utils/supabaseClient';
 import { Store } from "../types";
 
-import { getDistance } from '../utils/distanceutils';
+import { getDistance } from '../utils/distanceUtils';
 
 export const getAllStores = async (req: Request, res: Response) => {
-  const { data, error } = await supabase.from('stores').select('*');
+  const { userId } = req.params;
+
+  const { data, error } = await supabase .rpc('get_stores_with_favourite', { user_uuid: userId });
   if (error) return res.status(500).json({ error: error.message });
   return res.json(data);
 };
@@ -35,7 +37,7 @@ export const findBestStore = async (req: Request, res: Response) => {
     ]);
 
     if (storesResult.error || itemsResult.error) {
-      console.error('Supabase error:', storesResult.error || itemsResult.error);
+      console.log('Supabase error:', storesResult.error || itemsResult.error);
       return res.status(500).json({ error: 'Database error' });
     }
 
@@ -100,7 +102,7 @@ export const findBestStore = async (req: Request, res: Response) => {
     });
 
   } catch (error) {
-    console.error('Error in findBestStore:', error);
+    console.log('Error in findBestStore:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

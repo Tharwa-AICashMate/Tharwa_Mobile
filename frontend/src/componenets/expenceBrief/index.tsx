@@ -1,42 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/theme";
 import BalanceDisplay from "@/componenets/BalanceDisplay";
 import ProgressBar from "@/componenets/ProgressBar";
-import styles from "./styles"; // Assuming the styles are shared
-import { useAppSelector } from "@/redux/hook";
+import styles from "./styles";
+import { getCurrentUserId } from "@/utils/auth";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { fetchBalance, fetchFinanceData } from "@/redux/slices/financeSlice";
+import { useTranslation } from "react-i18next";
 
-const ExpenseBrief: React.FC = () => {
-  const balance = useAppSelector((state) => state.auth.user?.balance) || 0;
-  const transactions = useAppSelector(
-    (state) => state.transactions.transactions
-  );
-  const totalExpenses = transactions?.reduce(
-    (total, ele) => (total += ele.type == "expense" ? ele.amount : 0),
-    0
-  );
+interface ExpenseBriefProps {
+  setTotalBalance?: (balance: number) => void;
+}
 
-  const percentage = balance ? (totalExpenses / balance) * 100 : 0;
+const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
+  
+  const dispatch = useAppDispatch();
+  const { balance, expenses, income, savings, loading, error } = useAppSelector(
+    (state) => state.finance
+  );
+  
+  console.log({ balance, expenses, income, savings, loading, error });
+
+  useEffect(() => {
+    async function fetchAll() {
+      const userId = await getCurrentUserId();
+      console.log(userId);
+      dispatch(fetchFinanceData(userId));
+      dispatch(fetchBalance(userId));
+    }
+
+    fetchAll();
+  }, [dispatch]);
+
+  const availableBalance = balance - expenses - savings + income;
+  const percentage = availableBalance
+    ? (expenses / (balance + income)) * 100
+    : 0;
   return (
-    <View style={{marginBottom:30}}>
+    <View style={{ marginBottom: 30 }}>
       <View style={styles.budgetContainer}>
-        <BalanceDisplay balance={balance - totalExpenses} expense={totalExpenses} />
+        <BalanceDisplay balance={availableBalance} expense={expenses} />
       </View>
 
       <View style={styles.budgetContainer}>
         <View style={styles.progressContainer}>
-          <ProgressBar percentage={percentage} amount={balance || 0} />
+          <ProgressBar
+            percentage={parseFloat(percentage?.toFixed(2))}
+            amount={availableBalance || 0}
+          />
         </View>
-        <View style={styles.budgetStatus}>
+        <View style={[styles.budgetStatus, { 
+          flexDirection: isRTL ? 'row-reverse' : 'row',
+          
+        }]}>
           <Ionicons
             name="checkbox-outline"
             size={16}
             color={Theme.colors.text}
           />
-          <Text style={styles.budgetStatusText}>
-            {percentage}% Of Your Expenses, Looks{" "}
-            {percentage < 50 ? "Good" : "Bad"}.
+          <Text style={[styles.budgetStatusText]}>
+            {t('expenseBrief.statusMessage', {
+              percentage: percentage?.toFixed(2),
+              status: percentage < 50 ? t('expenseBrief.good') : t('expenseBrief.bad')
+            })}
           </Text>
         </View>
       </View>

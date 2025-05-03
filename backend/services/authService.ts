@@ -10,13 +10,13 @@ const mailjetClient = mailjet.apiConnect(
 );
 
 const intialCategories = [
+  { name: "Income", icon: "cash-outline" },
   { name: "Food", icon: "restaurant-outline" },
   { name: "Transport", icon: "bus-outline" },
   { name: "Medicine", icon: "medical-outline" },
   { name: "Groceries", icon: "basket-outline" },
   { name: "Rent", icon: "key-outline" },
   { name: "Gifts", icon: "gift-outline" },
-  { name: "Savings", icon: "cash-outline" },
   { name: "Entertainment", icon: "film-outline" },
 ];
 
@@ -35,6 +35,7 @@ class AuthService {
       email,
       password,
     });
+    console.log(userData)
     // update user profile data
     const { data: updatedUserData, error: updateError } =
       await AuthService.upadateUserProfile(email, {
@@ -44,7 +45,7 @@ class AuthService {
         DOB: profileData.dob,
       });
 
-
+      console.log(updatedUserData)
      if(data){
       intialCategories.forEach(category => {
         createCategory({...category,user_id:data.user!.id})

@@ -68,7 +68,7 @@ const HomeScreen: React.FC = () => {
       console.log("Analysis Data:", analysisData);
       await dispatch(runAnalysis(analysisData));
     } catch (error) {
-      console.error("Analysis failed:", error);
+      console.log("Analysis failed:", error);
     } finally {
       setLoading(false);
     }
@@ -153,14 +153,15 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   findButton: {
-    backgroundColor: Theme.colors.primary,
+    backgroundColor: Theme.colors.highlight,
     padding: 15,
     borderRadius: 5,
     alignItems: "center",
     marginVertical: 15,
   },
   disabledButton: {
-    backgroundColor: "#cccccc",
+    backgroundColor: Theme.colors.textLight,
+
   },
   findButtonText: {
     color: "white",

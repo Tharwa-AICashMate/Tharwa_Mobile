@@ -12,13 +12,13 @@ export const verifyPassword = async (
     });
 
     if (error) {
-      console.error('Password verification failed:', error.message);
+      console.log('Password verification failed:', error.message);
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error('Unexpected error verifying password:', error);
+    console.log('Unexpected error verifying password:', error);
     return false;
   }
 };
@@ -31,24 +31,24 @@ export const deleteAccount = async (supabase: SupabaseClient, userId: string): P
     const { error } = await supabase.auth.admin.deleteUser(userId);
 
     if (error) {
-      console.error('Error deleting user from auth:', error);
+      console.log('Error deleting user from auth:', error);
       return false;
     }
 
     // Optionally, delete user-related data from other tables
     const { error: profileError } = await supabase
-      .from('profiles') // Adjust table name as needed
+      .from('users')
       .delete()
-      .eq('user_id', userId);
+      .eq('id', userId);
 
     if (profileError) {
-      console.error('Error deleting user profile:', profileError);
+      console.log('Error deleting user profile:', profileError);
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error('Unexpected error deleting account:', error);
+    console.log('Unexpected error deleting account:', error);
     return false;
   }
 };
@@ -56,30 +56,30 @@ export const deleteAccount = async (supabase: SupabaseClient, userId: string): P
 
 
 export const getEmailByUserId = async (
-    supabase: SupabaseClient,
-    userId: string
-  ): Promise<string | null> => {
-    try {
-      const { data, error } = await supabase
-        .from('users') // استبدل هذا باسم الجدول الذي يخزن البيانات الشخصية
-        .select('email')
-        .eq('id', userId)
-        .single();
-  
-      if (error) {
-        console.error('Error fetching email:', error.message);
-        return null;
-      }
-  
-      return data?.email || null;
-    } catch (error) {
-      console.error('Unexpected error fetching email:', error);
+  supabase: SupabaseClient,
+  userId: string
+): Promise<string | null> => {
+  try {
+    const { data, error } = await supabase
+      .from('users') 
+      .select('email')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      console.log('Error fetching email:', error.message);
       return null;
     }
-  };
+
+    return data?.email || null;
+  } catch (error) {
+    console.log('Unexpected error fetching email:', error);
+    return null;
+  }
+};
 
 
-  // Update password for a user
+// Update password for a user
 // Update password for a user securely with hashing using Supabase's auth system
 export const updatePassword = async (
   supabase: SupabaseClient,
@@ -98,7 +98,7 @@ export const updatePassword = async (
     });
 
     if (error) {
-      console.error('Error updating password:', error.message);
+      console.log('Error updating password:', error.message);
       return false;
     }
 
@@ -106,7 +106,7 @@ export const updatePassword = async (
     console.log('Password updated successfully');
     return true;
   } catch (error) {
-    console.error('Unexpected error updating password:', error.message);
+    console.log('Unexpected error updating password:', error.message);
     return false;
   }
 };

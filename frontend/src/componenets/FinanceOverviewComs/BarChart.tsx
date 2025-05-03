@@ -1,6 +1,5 @@
-
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import Icon from 'react-native-vector-icons/Feather';
 import Theme from "@/theme";
@@ -14,7 +13,6 @@ type RootStackParamList = {
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
-
 interface BarChartData {
   day?: string;
   week?: string;
@@ -26,12 +24,11 @@ interface BarChartData {
 
 interface BarChartProps {
   data: BarChartData[];
-  maxValue: number;
-  period: "Daily" | "Weekly" | "Monthly" | "Year";
+  period: "Weekly" | "Monthly" | "Year";
 }
 
 const Container = styled.View`
-  background-color: ${Theme.colors.secondery}; 
+  background-color: ${Theme.colors.secondery};
   border-radius: 20px;
   padding: 16px;
   margin: 10px 0;
@@ -54,7 +51,7 @@ const IconContainer = styled.View`
 const IconButton = styled.TouchableOpacity`
   width: 36px;
   height: 36px;
-  background-color: #ffcc00; 
+  background-color: #ffcc00;
   border-radius: 14px;
   justify-content: center;
   align-items: center;
@@ -79,7 +76,7 @@ const YAxisLabel = styled.Text`
 
 const ChartContainer = styled.View`
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-end;
   height: 180px;
   margin-top: 8px;
@@ -89,7 +86,7 @@ const ChartContainer = styled.View`
 const BarGroup = styled.View`
   flex-direction: column;
   align-items: center;
-  width: 30px;
+  width: ${(props) => props.width}px;
 `;
 
 const BarsWrapper = styled.View`
@@ -100,7 +97,7 @@ const BarsWrapper = styled.View`
 const Bar = styled.View<{ height: number; isIncome: boolean }>`
   width: 6px;
   height: ${(props) => props.height}px;
-  background-color: ${(props) => (props.isIncome ? "#3B3B98" : "#FFC312")};
+  background-color: ${(props) => (props.isIncome ? "#FFC312" : "#3B3B98")};
   border-radius: 3px;
   margin: 0 2px;
 `;
@@ -112,32 +109,57 @@ const DayLabel = styled.Text`
   font-size: 12px;
 `;
 
-export const BarChart: React.FC<BarChartProps> = ({ data, maxValue, period }) => {
+const getDynamicYAxis = (maxValue: number) => {
+  const step = Math.ceil(maxValue / 5 / 1000) * 1000; 
+  const labels = [];
+
+  for (let i = 5; i >= 0; i--) {
+    labels.push(i * step);
+  }
+
+  return labels;
+};
+
+
+export const BarChart: React.FC<BarChartProps> = ({ data, period }) => {
+  const navigation = useNavigation<NavigationProp>();
+
+  const maxValue = Math.max(
+    ...data.map((item) => Math.max(item.income, item.expenses)),
+    1
+  );
+
   const getBarHeight = (value: number) => {
     const maxHeight = 140;
     return (value / maxValue) * maxHeight;
   };
 
-  const yAxisLabels =
-    period === "Daily" ? [300, 250, 200, 150, 100, 50, 0] :
-    period === "Weekly" ? [2000, 1500, 1000, 500, 0] :
-    period === "Monthly" ? [20000, 15000, 10000, 5000, 0] :
-    [200000, 150000, 100000, 50000, 0];
+  const yAxisLabels = getDynamicYAxis(maxValue);
 
-    const navigation = useNavigation<NavigationProp>();
+  const calculateBarWidth = (totalItems: number, period: string) => {
+    const availableWidth = Dimensions.get("window").width * 0.88;
+
+    if (period === "Weekly") {
+      return (availableWidth / totalItems) * 0.85;
+    } else if (period === "Monthly") {
+      return (availableWidth / totalItems) * 1;
+    } else if (period === "Year") {
+      return (availableWidth / totalItems) * 0.8;
+    }
+    return availableWidth / totalItems;
+  };
+
+  const barWidth = calculateBarWidth(data.length, period);
+
   return (
     <Container style={styles.container}>
-      {/* <Title>{period === "Daily" ? "Daily Comparison" : period === "Weekly" ? "Weeks Comparison" : period === "Monthly" ? "Monthly Comparison" : "Yearly Comparison"}</Title> */}
       <Title>Income & Expenses</Title>
 
       <IconContainer>
-      <IconButton onPress={() => navigation.navigate('SearchScreen')}>
-        <Icon name="search" size={24} color={Theme.colors.textLight} />
-      </IconButton>
-      <IconButton onPress={() => navigation.navigate('CalenderScreen')}>
-        <Icon name="calendar" size={24} color={Theme.colors.textLight} />
-      </IconButton>
-    </IconContainer>
+        <IconButton onPress={() => navigation.navigate('SearchScreen')}>
+          <Icon name="search" size={24} color={Theme.colors.textLight} />
+        </IconButton>
+      </IconContainer>
 
       <ChartWithYAxis>
         <YAxis>
@@ -146,17 +168,33 @@ export const BarChart: React.FC<BarChartProps> = ({ data, maxValue, period }) =>
           ))}
         </YAxis>
 
-        <ChartContainer>
-          {data.map((item, index) => (
-            <BarGroup key={index}>
-              <BarsWrapper>
-                <Bar height={getBarHeight(item.income)} isIncome={true} />
-                <Bar height={getBarHeight(item.expenses)} isIncome={false} />
-              </BarsWrapper>
-              <DayLabel>{period === "Daily" ? item.day : period === "Weekly" ? item.week : period === "Monthly" ? item.month : item.year}</DayLabel>
-            </BarGroup>
-          ))}
-        </ChartContainer>
+        {period === "Monthly" ? (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <ChartContainer>
+              {data.map((item, index) => (
+                <BarGroup key={index} width={calculateBarWidth(data.length, "Monthly")}>
+                  <BarsWrapper>
+                    <Bar height={getBarHeight(item.income)} isIncome={true} />
+                    <Bar height={getBarHeight(item.expenses)} isIncome={false} />
+                  </BarsWrapper>
+                  <DayLabel>{item.month}</DayLabel>
+                </BarGroup>
+              ))}
+            </ChartContainer>
+          </ScrollView>
+        ) : (
+          <ChartContainer>
+            {data.map((item, index) => (
+              <BarGroup key={index} width={barWidth}>
+                <BarsWrapper>
+                  <Bar height={getBarHeight(item.income)} isIncome={true} />
+                  <Bar height={getBarHeight(item.expenses)} isIncome={false} />
+                </BarsWrapper>
+                <DayLabel>{period === "Weekly" ? item.week : item.year}</DayLabel>
+              </BarGroup>
+            ))}
+          </ChartContainer>
+        )}
       </ChartWithYAxis>
     </Container>
   );
@@ -167,5 +205,5 @@ const styles = StyleSheet.create({
     width: "88%",
     marginLeft: "7%",
     marginTop: "7%",
-  }
+  },
 });

@@ -9,9 +9,11 @@ import {
 } from "@/redux/slices/AuthSlice";
 import { AppDispatch } from "@/redux/store";
 import { Provider } from "@supabase/supabase-js";
+import { useTranslation } from "react-i18next";
 
 export default function SocialSignIn() {
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
   useEffect(() => {
     const checkDeepLink = async () => {
       const url = await Linking.getInitialURL();
@@ -37,7 +39,7 @@ export default function SocialSignIn() {
 
   return (
     <>
-      <Text style={styles.linkText}>or sign up with </Text>
+      <Text style={styles.linkText}>{t("loginScreen.or")} </Text>
 
       <View style={styles.socialIcons}>
         <TouchableOpacity

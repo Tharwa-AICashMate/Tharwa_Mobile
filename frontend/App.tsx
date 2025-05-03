@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
@@ -29,6 +29,10 @@ import { store } from "./src/redux/store";
 import MainNavigator from "@/navigation/MainNavigator";
 import { createStackNavigator } from "@react-navigation/stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
+import { Transaction } from "@/types/transactionTypes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import i18next from './services/i18next';
 
 export type RootStackParamList = {
   Categories: undefined;
@@ -38,7 +42,8 @@ export type RootStackParamList = {
     UserId: string;
     Icon: string;
   };
-  AddExpensesScreen: undefined;
+  AddExpensesScreen: { transaction: Transaction|undefined,categoryName:string|undefined};
+  AddIncome: { transaction: Transaction|undefined,savingCategory:string|undefined};
   Savings: { categoryName: string };
   SavingDetails: {
     categoryName: string;
@@ -72,16 +77,28 @@ export default function App() {
   });
 
   const fontsLoaded = interLoaded && poppinsLoaded && leagueSpartanLoaded;
+  useEffect(() => {
+    const initLanguage = async () => {
+      try {
+        const storedLang = await AsyncStorage.getItem('user-language');
+        if (storedLang) {
+          await i18next.changeLanguage(storedLang);
+        }
+      } catch (error) {
+        console.error('Failed to load language:', error);
+      } 
+    };
 
+    initLanguage();
+  }, []);
   if (!fontsLoaded) return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
-        {/* <NavigationContainer> */}
         <MainNavigator />
-        {/* </NavigationContainer> */}
       </Provider>
+      <Toast />
     </GestureHandlerRootView>
   );
 }
@@ -89,6 +106,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff", // You can use Theme.colors.background if needed
+    backgroundColor: "#fff", 
   },
 });

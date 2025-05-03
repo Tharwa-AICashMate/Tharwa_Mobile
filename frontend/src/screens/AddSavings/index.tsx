@@ -1,289 +1,76 @@
 
-import React, { useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Platform,
-  KeyboardAvoidingView,
-  ScrollView,
-  Pressable,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { useNavigation } from "@react-navigation/native";
+import React from "react";
+
+import { SafeAreaView } from "react-native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { Keyboard } from "react-native";
 
 import { RootStackParamList } from "App";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
+import TransactionForm from "@/componenets/TransactionForm";
 import Theme from "@/theme";
 import { createDeposit } from "@/redux/slices/depositSlice";
-import styles from "@/componenets/TransactionForm/style";
-
 
 type AddSavingsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "AddSavings"
 >;
+type editRouteProp = RouteProp<RootStackParamList, "AddIncome">;
 
 const AddSavingsScreen = () => {
   const navigation = useNavigation<AddSavingsScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const { items: savingsGoals } = useAppSelector((state) => state.goals);
+  const route = useRoute<editRouteProp>();
 
-  // Form state
-  const [date, setDate] = useState<Date>(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [category, setCategory] = useState("");
-  const [amount, setAmount] = useState("");
-  const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
-  const [showCategoryPicker, setShowCategoryPicker] = useState(false);
-  const [validationError, setValidationError] = useState("");
-
-  const handleDateChange = (event: any, selectedDate?: Date) => {
-    const currentDate = selectedDate || date;
-    setShowDatePicker(Platform.OS === "ios");
-    setDate(currentDate);
-  };
-
-  const showDatePickerModal = () => {
-    setShowDatePicker(true);
-  };
-
-  const handleSubmit = () => {
-    setValidationError("");
-
-    if (!category || !amount) {
-      setValidationError("Please fill in category and amount fields");
-      return;
-    }
-
-    const selectedGoal = savingsGoals.find((cat) => cat.name === category);
+  const data = route.params;
+  const savingCategory= data?.savingCategory;
+  const handleSubmit = (data: {
+    category: string;
+    amount: string;
+    title: string;
+    message: string;
+    created_at: Date;
+    type: "expense" | "income" | "savings";
+  }) => {
+    const selectedGoal = savingsGoals.find((goal) => goal.name === data.category);
     if (!selectedGoal) {
-      console.error("Savings goal not found");
+      console.log("Savings goal not found");
       return;
     }
 
-    const amountValue = parseFloat(amount);
+    const amountValue = parseFloat(data.amount);
     if (isNaN(amountValue)) return;
 
     const newDeposit = {
-      goal_id: selectedGoal.id || 12,
+      goal_id: selectedGoal.id as number,
       amount: amountValue,
-      message: title || `Deposit to ${category}`,
-      title: title || `Deposit to ${category}`,
-      
+      message: data.message,
+      title: data.title || `Deposit to ${data.category}`,
+      created_at: data.created_at
     };
 
     dispatch(createDeposit(newDeposit));
 
-    navigation.navigate("SavingDetails", {
-      categoryName: category,
-      goalID: selectedGoal.id as number,
-      Icon: selectedGoal.icon as string,
-      Target: selectedGoal.target_amount,
-
-      
-    });
-  };
-
-  const formatDateForWebInput = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+    navigation.goBack();
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Theme.colors.primary }}>
       <Header title="Add to Savings" />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1, minHeight: '100%' }}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
-      >
-        <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
-          <View style={styles.formContainer}>
-            <ScrollView
-              contentContainerStyle={{ paddingBottom: 20 }}
-              keyboardDismissMode="interactive"
-              keyboardShouldPersistTaps="handled"
-            >
-              {/* Validation Error Message */}
-              {validationError ? (
-                <Text style={{ color: "red", marginBottom: 10, textAlign: "center" }}>
-                  {validationError}
-                </Text>
-              ) : null}
-
-              {/* Date */}
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Date</Text>
-
-                {Platform.OS === "web" ? (
-                  <input
-                    type="date"
-                    value={formatDateForWebInput(date)}
-                    onChange={(e) => {
-                      const selectedDate = new Date(e.target.value);
-                      setDate(selectedDate);
-                    }}
-                    style={styles.dateSelect}
-                  />
-                ) : (
-                  <>
-                    <TouchableOpacity
-                      style={styles.input}
-                      onPress={showDatePickerModal}
-                    >
-                      <Text style={{ color: Theme.colors.text }}>
-                        {date.toLocaleDateString("en-US", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </Text>
-                      <Ionicons
-                        name="calendar-outline"
-                        size={20}
-                        color={Theme.colors.text}
-                      />
-                    </TouchableOpacity>
-
-                    {showDatePicker && (
-                      <DateTimePicker
-                        value={date}
-                        mode="date"
-                        display="default"
-                        onChange={handleDateChange}
-                      />
-                    )}
-                  </>
-                )}
-              </View>
-
-              {/* Category */}
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Category</Text>
-
-                {Platform.OS === "web" ? (
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    style={styles.webSelect}
-                  >
-                    <option value="">Select the savings goal</option>
-                    {savingsGoals.map((goal) => (
-                      <option key={goal.id} value={goal.name}>
-                        {goal.name}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <>
-                    <TouchableOpacity
-                      style={styles.input}
-                      onPress={() => {
-                        Keyboard.dismiss();
-                        setShowCategoryPicker(!showCategoryPicker);
-                      }}
-                    >
-                      <Text style={{ color: Theme.colors.text }}>
-                        {category || "Select the savings goal"}
-                      </Text>
-                      <Ionicons
-                        name="chevron-down"
-                        size={20}
-                        color={Theme.colors.textLight}
-                      />
-                    </TouchableOpacity>
-                    {showCategoryPicker && (
-                      <View style={styles.categoryPicker}>
-                        <ScrollView>
-                          {savingsGoals.map((goal) => (
-                            <TouchableOpacity
-                              key={goal.id}
-                              style={styles.categoryOption}
-                              onPress={() => {
-                                setCategory(goal.name);
-                                setShowCategoryPicker(false);
-                              }}
-                            >
-                              <View
-                                style={[
-                                  styles.categoryIcon,
-                                  { backgroundColor: Theme.colors.accentLight },
-                                ]}
-                              >
-                                <Ionicons
-                                  name={goal.icon as any}
-                                  size={16}
-                                  color="white"
-                                />
-                              </View>
-                              <Text style={{ color: Theme.colors.text }}>
-                                {goal.name}
-                              </Text>
-                            </TouchableOpacity>
-                          ))}
-                        </ScrollView>
-                      </View>
-                    )}
-                  </>
-                )}
-              </View>
-
-              {/* Amount */}
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Amount</Text>
-                <TextInput
-                  style={[styles.input, { color: Theme.colors.text }]}
-                  value={amount}
-                  onChangeText={setAmount}
-                  placeholder="$0.00"
-                  placeholderTextColor={Theme.colors.textLight}
-                  keyboardType="numeric"
-                />
-              </View>
-
-              {/* Title */}
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Savings Title</Text>
-                <TextInput
-                  style={[styles.input, { color: Theme.colors.text }]}
-                  value={title}
-                  onChangeText={setTitle}
-                  placeholder="Bonus deposit"
-                  placeholderTextColor={Theme.colors.textLight}
-                />
-              </View>
-
-              {/* Message */}
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Note (Optional)</Text>
-                <TextInput
-                  style={[styles.messageInput, { color: Theme.colors.text }]}
-                  value={message}
-                  onChangeText={setMessage}
-                  placeholder="Enter any additional notes"
-                  placeholderTextColor={Theme.colors.textLight}
-                  multiline
-                />
-              </View>
-
-              {/* Save Button */}
-              <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
-                <Text style={styles.saveButtonText}>Add to Savings</Text>
-              </TouchableOpacity>
-            </ScrollView>
-          </View>
-        </Pressable>
-      </KeyboardAvoidingView>
+      <TransactionForm
+        title="Savings"
+        buttonText="Add to Savings"
+        onSubmit={handleSubmit}
+        initialCategory={savingCategory}
+        initialAmount=""
+        initialTitle={`${savingCategory} deposite`}
+        initialMessage=""
+        initialDate={new Date()}
+        resetAfterSubmit={true}
+        isSavings={true}
+      />
     </SafeAreaView>
   );
 };

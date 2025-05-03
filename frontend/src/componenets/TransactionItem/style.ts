@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   transactionItem: {
+    position:'relative',
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 12,
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     borderRightColor: Theme.colors.highlight,
     borderLeftColor: Theme.colors.highlight,
     borderLeftWidth: 2,
-    width: 100,
+    width: 95,
     paddingHorizontal: 10,
   },
   category: {
@@ -76,6 +77,27 @@ const styles = StyleSheet.create({
 
   depositAmount: {
     color: Theme.colors.text,
+  },
+  menuIcon: {
+    
+    padding: 5,
+  },
+  dropdownMenu: {
+    position: "absolute",
+    right: 20,
+    top: 10, 
+    backgroundColor: "white",
+    paddingVertical: 5,
+    borderRadius: 6,
+    elevation: 5,
+    zIndex: 999,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  menuItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
   },
 });
 export default styles;

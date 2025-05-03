@@ -8,7 +8,11 @@ import * as WebBrowser from "expo-web-browser";
 import { Provider } from "@supabase/supabase-js";
 import { RootState } from "../store";
 import { apiBase } from "@/utils/axiosInstance";
+import {  I18nManager } from "react-native";
+import i18next from "./../../../services/i18next";
+const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
 
+console.log(isRTL)
 interface AuthState {
   user: User | null;
   loading: boolean;
@@ -52,8 +56,8 @@ export const registerUser = createAsyncThunk(
       console.log("User registered successfully", user);
       return { ...user, dob: user.dob?.toISOString() };
     } catch (error) {
-      console.error("Error registering user:", error);
-      rejectWithValue("User Email already Registered");
+      console.log("Error registering user:", error);
+      rejectWithValue(isRTL?"الايميل المستخدم مسجل مسبقا":"User Email already Registered");
     }
   }
 );
@@ -67,15 +71,15 @@ export const loginUser = createAsyncThunk(
         email,
         password,
       });
-      if (error) return rejectWithValue("Invalid email or password");
+      if (error) return rejectWithValue(isRTL?"الايميل او كلمة المرور غير صحيحة":"Invalid email or password");
       const { data: userData } = await axios.post(`${apiBase}/auth/login`, {
         userId: data.user.id,
       });
       console.log("userData", userData);
       return { ...userData.data, id: data.user.id };
     } catch (error) {
-      console.error("Error registering user:", error);
-      return rejectWithValue("Invalid email or password");
+      console.log("Error registering user:", error);
+      return rejectWithValue(isRTL?"الايميل او كلمة المرور غير صحيحة":"Invalid email or password");
     }
   }
 );
@@ -85,11 +89,11 @@ export const logoutUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       let { error } = await supabase.auth.signOut();
-      if (error) return rejectWithValue("Logout failed");
+      if (error) return rejectWithValue(isRTL?" خطأ فى تسجيل الخروج":"Logout failed");
       return null;
     } catch (error) {
-      console.error("Error logging out:", error);
-      return rejectWithValue("Logout failed");
+      console.log("Error logging out:", error);
+      return rejectWithValue(isRTL?" خطأ فى تسجيل الخروج":"Logout failed");
     }
   }
 );
@@ -102,7 +106,8 @@ export const fetchCurrentUser = createAsyncThunk(
         data: { session },
         error,
       } = await supabase.auth.getSession();
-      if (error || !session) return rejectWithValue("No active session");
+      if (!session)return;
+      if (error ) return rejectWithValue(isRTL?"لا توجد جلسة نشطة":"No active session");
 
       const userId = session.user.id;
 
@@ -113,12 +118,12 @@ export const fetchCurrentUser = createAsyncThunk(
         }
       );
 
-      if (fetchError) return rejectWithValue("Failed to fetch user data");
+      if (fetchError) return rejectWithValue(isRTL?"خطأ فى تحميل بينات المستخدم":"Failed to fetch user data");
 
       return { ...userData.data, id: userId };
     } catch (err) {
-      console.error("Error fetching current user:", err);
-      return rejectWithValue("Failed to fetch user data");
+      console.log("Error fetching current user:", err);
+      return rejectWithValue(isRTL?"خطأ فى تحميل بينات المستخدم":"Failed to fetch user data");
     }
   }
 );
@@ -135,7 +140,7 @@ export const loginWithProvider = createAsyncThunk(
           skipBrowserRedirect: false,
         },
       });
-      if (error) return rejectWithValue("Login failed");
+      if (error) return rejectWithValue(isRTL?"خطأ فى تسجيل الدخول":"Login failed");
       const res = await WebBrowser.openAuthSessionAsync(
         data?.url ?? "",
         redirectTo
@@ -148,8 +153,8 @@ export const loginWithProvider = createAsyncThunk(
         return userData.data;
       }
     } catch (error) {
-      console.error("Error logging in with provider:", error);
-      return rejectWithValue("Login failed");
+      console.log("Error logging in with provider:", error);
+      return rejectWithValue(isRTL?"خطأ فى تسجيل الدخول":"Login failed");
     }
   }
 );
@@ -167,11 +172,11 @@ export const forgetPassword = createAsyncThunk(
       }
       return email;
     } catch (error) {
-      console.error(
+      console.log(
         "Error sending otp:invalid email address can't send message",
         error
       );
-      return rejectWithValue("invalid email address can't send message");
+      return rejectWithValue(isRTL?"الايميل المستخدم غير مسجل لا يمكن ارسال الرسالة":"invalid email address can't send message");
     }
   }
 );
@@ -192,8 +197,8 @@ export const verifyPin = createAsyncThunk(
         return rejectWithValue(data.message);
       }
     } catch (error) {
-      console.error("Error verifying pin:", error);
-      return rejectWithValue("Invalid OTP");
+      console.log("Error verifying pin:", error);
+      return rejectWithValue(isRTL?"رمز التحقق غير صحيح":"Invalid OTP");
     }
   }
 );
@@ -213,8 +218,8 @@ export const resetPassword = createAsyncThunk(
         return rejectWithValue(data.message);
       }
     } catch (error) {
-      console.error("Error resetting password:", error);
-      return rejectWithValue("Error resetting password");
+      console.log("Error resetting password:", error);
+      return rejectWithValue(isRTL?"خطأ فى تغيير كلمة السر":"Error resetting password");
     }
   }
 );
@@ -228,6 +233,9 @@ const authSlice = createSlice({
         state.user = { ...state.user, balance: action.payload }; // Update balance
       }
     },
+    clearError:(state) =>{
+      state.error ="";
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -323,6 +331,6 @@ const authSlice = createSlice({
 });
 
 
-export const { setUserBalance } = authSlice.actions;
+export const { setUserBalance ,clearError} = authSlice.actions;
 
 export default authSlice.reducer;

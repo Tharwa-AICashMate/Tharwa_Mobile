@@ -1,64 +1,58 @@
-
-import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { getCurrentUserId } from '@/utils/auth';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import Theme from '@/theme';
-import { useNavigation } from '@react-navigation/native';
-import { apiBase } from '@/utils/axiosInstance';
-import { useAppDispatch, useAppSelector } from '@/redux/hook';
-import { setUserBalance } from '@/redux/slices/AuthSlice';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Modal,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { getCurrentUserId } from "@/utils/auth";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Theme from "@/theme";
+import { useNavigation } from "@react-navigation/native";
+import { apiBase } from "@/utils/axiosInstance";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { setUserBalance } from "@/redux/slices/AuthSlice";
+import { fetchBalance } from "../expenceBrief";
+import {
+  fetchFinanceData,
+  selectFinance,
+  updateBalance,
+  addTransaction,
+  updateIncome,
+} from "@/redux/slices/financeSlice";
 
 interface TransactionSummaryProps {
-  activeTab: 'all' | 'income' | 'expence' | null;
-  onSelectTab: (tab: 'all' | 'income' | 'expence') => void;
-  transactions: { type: string; amount: number; }[];  // Add transactions prop here
+  activeTab: "all" | "income" | "expence" | null;
+  onSelectTab: (tab: "all" | "income" | "expence") => void;
 }
 
 const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   activeTab = null,
   onSelectTab,
-  transactions,  
 }) => {
-  const totalBalance = useAppSelector(state => state.auth.user?.balance);
-  const [income, setIncome] = useState(0);
-  const [expense, setExpense] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalIncomeVisible, setModalIncomeVisible] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-  const [inputIncomeValue, setInputIncomeValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
+  const [inputIncomeValue, setInputIncomeValue] = useState("");
   const navigation = useNavigation();
-  const dispatch = useAppDispatch()
-
-  // Calculate the sum of expenses
-  const calculateTotalExpense = (transactions: { type: string; amount: number; }[]) => {
-    return transactions
-      .filter(transaction => transaction.type === 'expence')
-      .reduce((sum, transaction) => sum + transaction.amount, 0);
-  };
+  const dispatch = useAppDispatch();
+  const { balance, expenses, income, savings, loading, error } = useAppSelector(
+    (state) => state.finance
+  );
 
   useEffect(() => {
-    const totalExpense = calculateTotalExpense(transactions);
-    setExpense(totalExpense);  
-  }, [transactions]); 
-
-  
-
-  const fetchIncome = async () => {
-    try {
-      const user_id = await getCurrentUserId();
-      const response = await fetch(`${apiBase}/income/${user_id}`);
-      if (!response.ok) throw new Error('Failed to fetch income');
-      const data = await response.json();
-      setIncome(data.income || 0);
-    } catch (error) {
-      console.error('Error fetching income:', error);
+    async function fetchAll() {
+      const userId = await getCurrentUserId();
+      dispatch(fetchFinanceData(userId));
+      dispatch(fetchBalance(userId));
     }
-  };
 
-  useEffect(() => {
-    fetchIncome();
-  }, []);
+    fetchAll();
+  }, [dispatch]);
+
+  const availableBalance = balance - expenses - savings + income;
 
   const handleSaveBalance = async () => {
     const parsed = parseFloat(inputValue);
@@ -66,25 +60,24 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
 
     try {
       const user_id = await getCurrentUserId();
-      const url = totalBalance
+      const url = balance
         ? `${apiBase}/api/balances/user/${user_id}`
         : `${apiBase}/api/balances`;
-      const method = totalBalance ? 'PUT' : 'POST';
+      const method = balance ? "PUT" : "POST";
 
       const response = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id, balance_limit: parsed }),
       });
 
-      if (!response.ok) throw new Error('Failed to save balance');
+      if (!response.ok) throw new Error("Failed to save balance");
 
       const data = await response.json();
       dispatch(setUserBalance(data.balance_limit || parsed));
-      setIncome(data.income || 0);
-      setExpense(data.expense || 0);
+      dispatch(updateBalance(data.balance_limit || parsed));
     } catch (error) {
-      console.error('Error saving balance:', error);
+      console.log("Error saving balance:", error);
     } finally {
       setModalVisible(false);
     }
@@ -92,93 +85,129 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
 
   const handleSaveIncome = async () => {
     const parsedIncome = parseFloat(inputIncomeValue);
+    console.log(parsedIncome)
     if (isNaN(parsedIncome)) return;
 
     try {
       const user_id = await getCurrentUserId();
-      const url = income == null
-        ? `${apiBase}/income/${user_id}`
-        : `${apiBase}/income/${user_id}`;
-      const method = income == null ? 'POST' : 'PUT';
+      const url =
+        income == null
+          ? `${apiBase}/income/${user_id}`
+          : `${apiBase}/income/${user_id}`;
+      const method = income == null ? "POST" : "PUT";
 
       const response = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id, income: parsedIncome }),
       });
 
-      if (!response.ok) throw new Error('Failed to save income');
+      if (!response.ok) throw new Error("Failed to save income");
 
       const data = await response.json();
-      setIncome(data.income || parsedIncome);
-      setTotalBalance(data.balance_limit || 0);
+      dispatch(updateIncome(parsedIncome));
     } catch (error) {
-      console.error('Error saving income:', error);
+      console.log("Error saving income:", error);
     } finally {
       setModalIncomeVisible(false);
     }
   };
 
   const handleAddExpense = () => {
-    navigation.navigate('AddExpensesScreen');
+    navigation.navigate("AddExpensesScreen");
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.balanceContainer} onPress={() => onSelectTab('all')}>
+      <TouchableOpacity
+        style={styles.balanceContainer}
+        onPress={() => onSelectTab("all")}
+      >
         <Text style={styles.balanceLabel}>Total Balance</Text>
-        <Text style={styles.balanceAmount}>${totalBalance.toFixed(2)}</Text>
+        <Text style={styles.balanceAmount}>
+          ${availableBalance?.toFixed(2)}
+        </Text>
       </TouchableOpacity>
 
       <View style={styles.tabsContainer}>
         <TouchableOpacity
-          style={[styles.tab, activeTab === 'income' && styles.activeTab]}
-          onPress={() => onSelectTab('income')}
+          style={[styles.tab, activeTab === "income" && styles.activeTab]}
+          onPress={() => onSelectTab("income")}
         >
           <MaterialCommunityIcons
             name="arrow-top-right-bold-box-outline"
             size={24}
-            color={activeTab === 'income' ? '#fff' : Theme.colors.primary}
+            color={activeTab === "income" ? "#fff" : Theme.colors.primary}
           />
-          <Text style={[styles.tabLabel, activeTab === 'income' && styles.activeTabText]}>Income</Text>
-          <Text style={[styles.tabAmount, activeTab === 'income' && styles.activeTabText]}>
+          <Text
+            style={[
+              styles.tabLabel,
+              activeTab === "income" && styles.activeTabText,
+            ]}
+          >
+            Income
+          </Text>
+          <Text
+            style={[
+              styles.tabAmount,
+              activeTab === "income" && styles.activeTabText,
+            ]}
+          >
             ${income.toFixed(2)}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.tab, activeTab === 'expence' && styles.activeTab]}
-          onPress={() => onSelectTab('expence')}
+          style={[styles.tab, activeTab === "expense" && styles.activeTab]}
+          onPress={() => onSelectTab("expense")}
         >
           <MaterialCommunityIcons
             name="arrow-bottom-left-bold-box-outline"
             size={24}
-            color={activeTab === 'expence' ? '#fff' : '#202063'}
+            color={activeTab === "expense" ? "#fff" : "#202063"}
           />
-          <Text style={[styles.tabLabel, activeTab === 'expence' && styles.activeTabText]}>Expense</Text>
-          <Text style={[styles.tabAmount, activeTab === 'expence' && styles.activeTabText]}>
-            ${expense.toFixed(2)}  
+          <Text
+            style={[
+              styles.tabLabel,
+              activeTab === "expense" && styles.activeTabText,
+            ]}
+          >
+            Expense
+          </Text>
+          <Text
+            style={[
+              styles.tabAmount,
+              activeTab === "expense" && styles.activeTabText,
+            ]}
+          >
+            ${expenses.toFixed(2)}
           </Text>
         </TouchableOpacity>
       </View>
 
-      {activeTab === 'all' && (
+      {activeTab === "all" && (
         <View style={styles.addExpenseContainer}>
-          <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => setModalVisible(true)}
+          >
             <Text style={styles.addButtonText}>Edit Balance</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      {activeTab === 'income' && (
+      {activeTab === "incom" && (
         <View style={styles.addExpenseContainer}>
-          <TouchableOpacity style={styles.addButton} onPress={() => setModalIncomeVisible(true)}>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => setModalIncomeVisible(true)}
+          >
             <Text style={styles.addButtonText}>Edit Income</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      {activeTab === 'expence' && (
+      {activeTab === "expence" && (
         <View style={styles.addExpenseContainer}>
           <TouchableOpacity style={styles.addButton} onPress={handleAddExpense}>
             <Text style={styles.addButtonText}>Add Expense</Text>
@@ -199,10 +228,16 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
               placeholder="Enter amount"
             />
             <View style={styles.buttonRow}>
-              <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={styles.cancelButton}
+              >
                 <Text style={styles.cancelText}>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleSaveBalance} style={styles.saveButton}>
+              <TouchableOpacity
+                onPress={handleSaveBalance}
+                style={styles.saveButton}
+              >
                 <Text style={styles.saveText}>Save</Text>
               </TouchableOpacity>
             </View>
@@ -222,10 +257,16 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
               placeholder="Enter amount"
             />
             <View style={styles.buttonRow}>
-              <TouchableOpacity onPress={() => setModalIncomeVisible(false)} style={styles.cancelButton}>
+              <TouchableOpacity
+                onPress={() => setModalIncomeVisible(false)}
+                style={styles.cancelButton}
+              >
                 <Text style={styles.cancelText}>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleSaveIncome} style={styles.saveButton}>
+              <TouchableOpacity
+                onPress={handleSaveIncome}
+                style={styles.saveButton}
+              >
                 <Text style={styles.saveText}>Save</Text>
               </TouchableOpacity>
             </View>
@@ -244,122 +285,122 @@ const styles = StyleSheet.create({
   balanceContainer: {
     width: "97%",
     height: 80,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 24,
     marginLeft: 10,
     padding: 10,
   },
   balanceLabel: {
     fontSize: 14,
-    color: '#333',
+    color: "#333",
     marginBottom: 4,
   },
   balanceAmount: {
     fontSize: 24,
-    fontWeight: '600',
-    color: '#333',
+    fontWeight: "600",
+    color: "#333",
   },
   tabsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   tab: {
     flex: 1,
     paddingVertical: 12,
-    alignItems: 'center',
+    alignItems: "center",
     marginHorizontal: 5,
     backgroundColor: Theme.colors.background,
     borderRadius: 16,
   },
   tabLabel: {
     fontSize: 14,
-    color: '#32325D',
+    color: "#32325D",
     marginBottom: 4,
   },
   tabAmount: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#32325D',
+    fontWeight: "600",
+    color: "#32325D",
   },
   activeTab: {
-    backgroundColor: '#32325D',
+    backgroundColor: "#32325D",
   },
   activeTabText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContainer: {
-    width: '85%',
-    backgroundColor: 'white',
+    width: "85%",
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 16,
     elevation: 5,
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 12,
-    textAlign: 'center',
+    textAlign: "center",
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
     marginBottom: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   saveButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: "#28a745",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
   },
   saveText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   cancelButton: {
-    backgroundColor: '#dc3545',
+    backgroundColor: "#dc3545",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
   },
   cancelText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   addExpenseContainer: {
     marginTop: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   addButton: {
     backgroundColor: Theme.colors.accentDark,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   addButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     marginLeft: 8,
   },
 });
