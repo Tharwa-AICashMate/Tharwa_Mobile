@@ -33,11 +33,11 @@ export const languageResources = {
 // Initialize i18n
 i18next.use(initReactI18next).init({
   compatibilityJSON: 'v3',
-  lng: 'en', // Default language
+  lng: 'en', 
   fallbackLng: 'en',
   resources: languageResources,
   interpolation: {
-    escapeValue: false, // React already protects against XSS
+    escapeValue: false,
   },
   react: {
     useSuspense: false,

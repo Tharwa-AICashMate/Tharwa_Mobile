@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, FlatList } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import Theme from '@/theme';
-import styles from './HeadericonsWithTitle.styles';
-import { useTranslation } from 'react-i18next';
-import i18next from '../../../services/i18next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Modal, FlatList } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
+import Theme from "@/theme";
+import styles from "./HeadericonsWithTitle.styles";
+import { useTranslation } from "react-i18next";
+import i18next from "../../../services/i18next";
 
 interface HeaderProps {
   title: string;
@@ -20,14 +21,18 @@ interface LanguageOption {
   nativeLabel: string;
 }
 
-export default function Header({ title, goBackTo, bellNavigateTo }: HeaderProps) {
+export default function Header({
+  title,
+  goBackTo,
+  bellNavigateTo,
+}: HeaderProps) {
   const navigation = useNavigation<NavigationProp<any>>();
   const { t } = useTranslation();
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
-  
+
   const languages: LanguageOption[] = [
-    { code: 'en', label: 'English', nativeLabel: 'English' },
-    { code: 'ar', label: 'Arabic', nativeLabel: 'العربية' }
+    { code: "en", label: "English", nativeLabel: "English" },
+    { code: "ar", label: "Arabic", nativeLabel: "العربية" },
   ];
 
   const handleBack = () => {
@@ -50,25 +55,27 @@ export default function Header({ title, goBackTo, bellNavigateTo }: HeaderProps)
 
   const renderLanguageItem = ({ item }: { item: LanguageOption }) => {
     const isSelected = i18next.language === item.code;
-    
+
     return (
       <TouchableOpacity
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: "row",
+          alignItems: "center",
           padding: 16,
           borderBottomWidth: 1,
-          borderBottomColor: '#f0f0f0',
-          backgroundColor: isSelected ? '#f8f8f8' : '#fff'
+          borderBottomColor: "#f0f0f0",
+          backgroundColor: isSelected ? "#f8f8f8" : "#fff",
         }}
         onPress={() => changeLanguage(item.code)}
       >
-        <Text style={{ 
-          fontWeight: isSelected ? 'bold' : 'normal',
-          fontSize: 16,
-          flex: 1,
-          color: isSelected ? Theme.colors.primary : '#333'
-        }}>
+        <Text
+          style={{
+            fontWeight: isSelected ? "bold" : "normal",
+            fontSize: 16,
+            flex: 1,
+            color: isSelected ? Theme.colors.primary : "#333",
+          }}
+        >
           {item.nativeLabel} ({item.label})
         </Text>
         {isSelected && (
@@ -82,13 +89,17 @@ export default function Header({ title, goBackTo, bellNavigateTo }: HeaderProps)
     <>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack}>
-          <Ionicons name="arrow-back" size={24} color={Theme.colors.secondery} />
+          <Ionicons
+            name={i18next.language === "ar" ? "arrow-forward" : "arrow-back"}
+            size={24}
+            color={Theme.colors.secondery}
+          />
         </TouchableOpacity>
 
         <Text style={styles.title}>{title}</Text>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TouchableOpacity onPress={() => navigation.navigate('Camera')}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
             <Ionicons
               name="camera-outline"
               size={20}
@@ -98,24 +109,28 @@ export default function Header({ title, goBackTo, bellNavigateTo }: HeaderProps)
           </TouchableOpacity>
 
           {/* Language selector button */}
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => setShowLanguageSelector(true)}
             style={{
-            
-              flexDirection: 'row',
-              alignItems: 'center',
-          
+              flexDirection: "row",
+              alignItems: "center",
+
               backgroundColor: Theme.colors.secondery,
-  
-      padding: 4,
-      borderRadius: 100,
-  
-      justifyContent: 'center',
-      margin:2
+
+              padding: 4,
+              borderRadius: 100,
+
+              justifyContent: "center",
+              margin: 2,
             }}
           >
             <Ionicons name="language" size={15} color={Theme.colors.text} />
-            <Ionicons name="chevron-down" size={10} color={Theme.colors.text} style={{ marginLeft: 2 }} />
+            <Ionicons
+              name="chevron-down"
+              size={10}
+              color={Theme.colors.text}
+              style={{ marginLeft: 2 }}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -130,50 +145,54 @@ export default function Header({ title, goBackTo, bellNavigateTo }: HeaderProps)
         <TouchableOpacity
           style={{
             flex: 1,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            justifyContent: 'center',
-            alignItems: 'center'
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
           }}
           activeOpacity={1}
           onPress={() => setShowLanguageSelector(false)}
         >
-          <View 
+          <View
             style={{
-              width: '80%',
-              maxHeight: '50%',
-              backgroundColor: 'white',
+              width: "80%",
+              maxHeight: "50%",
+              backgroundColor: "white",
               borderRadius: 10,
-              overflow: 'hidden'
+              overflow: "hidden",
             }}
           >
-            <View style={{
-              padding: 16,
-              borderBottomWidth: 1,
-              borderBottomColor: '#f0f0f0',
-              backgroundColor: Theme.colors.primary
-            }}>
-              <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
-                {t('Select Language')}
+            <View
+              style={{
+                padding: 16,
+                borderBottomWidth: 1,
+                borderBottomColor: "#f0f0f0",
+                backgroundColor: Theme.colors.primary,
+              }}
+            >
+              <Text
+                style={{ color: "white", fontSize: 18, fontWeight: "bold" }}
+              >
+                {t("Select Language")}
               </Text>
             </View>
-            
+
             <FlatList
               data={languages}
               renderItem={renderLanguageItem}
-              keyExtractor={item => item.code}
+              keyExtractor={(item) => item.code}
             />
-            
+
             <TouchableOpacity
               style={{
                 padding: 16,
-                alignItems: 'center',
+                alignItems: "center",
                 borderTopWidth: 1,
-                borderTopColor: '#f0f0f0'
+                borderTopColor: "#f0f0f0",
               }}
               onPress={() => setShowLanguageSelector(false)}
             >
-              <Text style={{ color: Theme.colors.primary, fontWeight: 'bold' }}>
-                {t('Cancel')}
+              <Text style={{ color: Theme.colors.primary, fontWeight: "bold" }}>
+                {t("Cancel")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -181,4 +200,4 @@ export default function Header({ title, goBackTo, bellNavigateTo }: HeaderProps)
       </Modal>
     </>
   );
-} 
+}

@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TouchableOpacity,
-   SafeAreaView,
+  SafeAreaView,
   ActivityIndicator,
 } from "react-native";
 import {
@@ -14,7 +14,7 @@ import {
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { RootStackParamList } from "App";
-
+import { groupTransactionsByMonth } from "@/utils/helpers";
 import Theme from "@/theme";
 import styles from "./style";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
@@ -24,10 +24,11 @@ import {
 } from "@/redux/slices/categoryTransactions";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import "dayjs/locale/ar"; // ✅ Arabic locale
 import MonthSection from "@/componenets/MonthSection";
-import { groupTransactionsByMonth } from "@/utils/helpers";
 import ExpenseBrief from "@/componenets/expenceBrief";
 import { FlatList } from "react-native-gesture-handler";
+import { useTranslation } from "react-i18next";
 
 dayjs.extend(utc);
 
@@ -45,6 +46,13 @@ const CategoryDetailScreen = () => {
 
   const { categoryName, categoryId, UserId, Icon } = route.params;
   const userId = UserId;
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+
+  // ✅ Set dayjs locale based on app language
+  useEffect(() => {
+    dayjs.locale(i18n.language);
+  }, [i18n.language]);
 
   const { loading: isLoading, data: TransactionsOfCategory } = useAppSelector(
     (state) => state.transactionsByCategory
@@ -97,7 +105,7 @@ const CategoryDetailScreen = () => {
   const groupedTransactions = TransactionsOfCategory.reduce(
     (groups: { [key: string]: typeof TransactionsOfCategory }, transaction) => {
       const date = dayjs.utc(new Date(transaction.created_at));
-      const monthName = date.format("MMMM YYYY");
+      const monthName = date.locale(i18n.language).format("MMMM YYYY"); // ✅ Localized month name
 
       if (!groups[monthName]) {
         groups[monthName] = [];
@@ -110,8 +118,9 @@ const CategoryDetailScreen = () => {
   );
 
   const addExpense = () => {
-    navigation.navigate("AddExpensesScreen",{categoryName});
+    navigation.navigate("AddExpensesScreen", { categoryName });
   };
+
   const renderFooter = () => {
     if (isLoading && page > 1) {
       return (
@@ -132,13 +141,13 @@ const CategoryDetailScreen = () => {
     }
     return null;
   };
-  return (
-    <SafeAreaView style={styles.container}>
-      <Header title={categoryName} />
 
+  return (
+    <SafeAreaView style={[styles.container, isRTL && { direction: "rtl" }]}>
+      <Header title={categoryName} />
       <ExpenseBrief />
       <View style={styles.transactionList}>
-        {isLoading && TransactionsOfCategory.length == 0? (
+        {isLoading && TransactionsOfCategory.length === 0 ? (
           <View
             style={{
               flex: 1,
@@ -151,9 +160,7 @@ const CategoryDetailScreen = () => {
           </View>
         ) : (
           <FlatList
-            data={Object.entries(
-              groupTransactionsByMonth(TransactionsOfCategory)
-            )}
+            data={Object.entries(groupedTransactions)}
             keyExtractor={(item) => item[0]}
             renderItem={({ item }) => (
               <MonthSection
@@ -176,7 +183,7 @@ const CategoryDetailScreen = () => {
 
       <View style={styles.addExpenseContainer}>
         <TouchableOpacity style={styles.addButton} onPress={addExpense}>
-          <Text style={styles.addButtonText}>Add Expense</Text>
+          <Text style={styles.addButtonText}>{t("categories.addexpense")}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

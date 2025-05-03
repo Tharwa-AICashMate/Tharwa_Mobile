@@ -19,7 +19,7 @@ import { supabase } from "@/utils/supabase";
 import Savings from "@/screens/Savings";
 import SavingDetails from "@/screens/SavingDetails";
 import AddSavingsScreen from "@/screens/AddSavings";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { ActivityIndicator, I18nManager, StyleSheet, View } from "react-native";
 import BottomTabs from "@/componenets/BottomNav/BottomTabs";
 import Theme from "@/theme";
 import { Session } from "@supabase/supabase-js";
@@ -42,7 +42,7 @@ import AddStorePage from "@/screens/AddStore";
 import TransactionsDetails from "@/screens/transactionsDetails";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
-
+const isRTL = I18nManager.isRTL;
 export default function MainNavigator() {
   const [session, setSession] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -60,7 +60,7 @@ export default function MainNavigator() {
 
   return (
     <>
-      <NavigationContainer>
+      <NavigationContainer   >
         {!session ? (
           <OnBoardingNavigation />
         ) : (
@@ -71,7 +71,7 @@ export default function MainNavigator() {
             {/* Main App */}
             <RootStack.Screen name="MainApp">
               {() => (
-                <View style={styles.container}>
+                <View style={[styles.container, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                   <BottomTabs />
                 </View>
               )}

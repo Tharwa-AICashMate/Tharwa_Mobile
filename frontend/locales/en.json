@@ -309,57 +309,178 @@
     "viewInMap": "View in Map"
   },
   "searchScreen": {
-    "searchTitle": "Search",
-    "searchPlaceholder": "Search...",
-    "categories": "Categories",
-    "selectCategory": "Select the category",
-    "date": "Date",
-    "dateValue": "03 / MAY / 2025",
-    "report": "Report",
+  "searchTitle": "Search",
+  "searchPlaceholder": "Search...",
+  "categories": "Categories",
+  "selectCategory": "Select the category",
+  "date": "Date",
+  "dateValue": "03 / MAY / 2025",
+  "report": "Report",
+  "income": "Income",
+  "expense": "Expense",
+  "searchButton": "Search"
+  },
+  "transactionScreen":{
+    "transactions": {
+    "title": "Transactions",
+    "loadingMore": "Loading more transactions...",
+    "error": "Error: {error}"
+  },
+  "common": {
+    "loading": "Loading...",
+    "retry": "Retry","cancel": "Cancel",
+    "save": "Save"
+  },
+  "transactionSummary": {
+    "totalBalance": "Total Balance",
     "income": "Income",
     "expense": "Expense",
-    "searchButton": "Search"
-  },
-  "enterTotalBalanceModal": {
-    "enterTotalBalance": "Enter Total Balance",
-    "totalBalancePlaceholder": "Enter ammount",
-    "save": "Save",
-    "cancel": "Cancel",
-    "enterBalanceError": "Enter a valid balance value"
-  },
-  "settingsScreen": {
-    "settings": "Settings",
-    "passwordSettings": "Password Settings",
-    "termsAndConditions": "Terms And Conditions",
-    "helpCenter": "Help Center",
-    "deleteAccount": "Delete Account"
-  },
-  "passwordSettings": {
-    "passwordSettingsTitle": "Password Settings",
-    "currentPassword": "Current Password",
-    "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password",
-    "changePasswordButton": "Change Password",
-    "allFieldsRequired": "All fields are required",
-    "passwordError": "Password must be at least 8 characters",
-    "passwordErrorMatch": "Passwords do not match"
-  },
-  "termsAndConditions": {
-    "termsAndConditionsTitle": "Terms And Conditions",
-    "termsAndConditionsText": "Please read and agree to our basic terms and conditions before proceeding.\n\n1. Account Usage: You are responsible for maintaining the security of your account.\n2. Data Privacy: We respect your privacy and handle your data according to our privacy policy.\n3. Service Changes: We may update our services and terms from time to time.\n\nBy continuing, you agree to these terms.",
-    "acceptTermsCheckbox": "I accept the terms and conditions",
-    "acceptButton": "Accept"
-  },
-  "deleteAccount": {
-    "deleteAccountTitle": "Delete Account",
-    "deleteAccountConfirmation": "Are You Sure You Want To Delete Your Account?",
-    "deleteAccountWarning": "By deleting your account, you will lose all your data permanently including:",
-    "transactionHistory": "Transaction history",
-    "savedBudgetsAndGoals": "Saved budgets and goals",
-    "accountSettingsAndPreferences": "Account settings and preferences",
-    "allPersonalInformation": "All personal information",
-    "confirmPasswordPrompt": "Please enter your password to confirm:",
-    "deleteAccountButton": "Delete Account",
-    "cancelButton": "Cancel"
+    "editBalance": "Edit Balance",
+    "editIncome": "Edit Income",
+    "addExpense": "Add Expense",
+    "enterBalance": "Enter Your Balance",
+    "enterIncome": "Enter Your Income",
+    "enterAmount": "Enter Amount"
   }
+  
+  },
+  "transactionItem":{
+    "edit": "Edit",
+    "delete": "Delete",
+    "viewDetails": "View Details"
+  },
+  "categories":{
+    "name":"Categories",
+  "more": "More",
+  "income": "Income",
+  "noCategoriesFound": "No categories found",
+  "edit": "Edit",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "deleteCategory": "Delete Category",
+  "confirmDeleteCategory": "Are you sure you want to delete the category \"{{categoryName}}\"?",
+  "userNotAuthenticated": "User not authenticated",
+  "categoryNameEmpty": "Category name cannot be empty",
+  "categoryNameTooLong": "Category name cannot exceed 20 characters",
+  "categoryNameExists": "A category with this name already exists",
+  "selectIcon": "Please select an icon for the category",
+  "addCategory": "Add Category",
+  "editCategory": "Edit Category",
+  "categoryName": "Category Name",
+  "save": "Save",
+  "selectCategory":"select category",
+  "firstCategory":"create your first category",
+  "selectIconPrompt": "Select Icon",
+  "addNewCategory": "Add New Category",
+  "add": "Add New Category",
+  "addexpense": "Add Expense",
+
+
+  "namePlaceholder": "Category name",
+  "selectCategoryIcon": "Select Icon",
+  "update": "Update",
+  "characterCount": "{{count}}/20 characters"
+},
+"savingsGoal": {
+  "add": "Add Savings Goal",
+  "edit": "Edit Savings Goal",
+  "name": "Name",
+  "namePlaceholder": "Goal name",
+  "targetAmount": "Target Amount",
+  "targetAmountPlaceholder": "Enter target amount"
+},
+"validation": {
+  "nameRequired": "Name is required",
+  "iconRequired": "Icon is required",
+  "targetRequired": "Target amount is required",
+  "invalidAmount": "Please enter a valid amount"
+},
+"camera":{
+  "header": {
+    "camera": "Receipt Scanner"
+  },
+  "camera": {
+    "errors": {
+      "noPhoto": "No photo to send",
+      "cameraNotReady": "Camera not ready",
+      "processingFailed": "Failed to process receipt",
+      "missingInfo": "Missing required information to create transaction",
+      "transactionFailed": "Failed to add transaction"
+    },
+    "buttons": {
+      "takePhoto": "Take Photo",
+      "process": "Process",
+      "reset": "Reset"
+    }
+  },
+  "receipt": {
+    "title": "Receipt Details",
+    "fields": {
+      "vendor": "Vendor",
+      "date": "Date",
+      "amount": "Amount",
+      "store": "Store",
+      "description": "Description"
+    },
+    "placeholders": {
+      "selectStore": "Select a store...",
+      "addDescription": "Add additional details..."
+    },
+    "buttons": {
+      "edit": "Edit",
+      "save": "Save",
+      "close": "Close",
+      "addTransaction": "Add Transaction",
+      "addNewStore": "+ Add New Store",
+      "addFirstStore": "Add Your First Store"
+    },
+    "messages": {
+      "loadingStores": "Loading stores...",
+      "success": "Transaction added to {{category}} category!",
+      "duplicate": "This transaction appears to be a duplicate. Are you sure you want to add it?",
+      "addAnyway": "Add Anyway",
+      "cancel": "Cancel"
+    }
+  },
+"lineItems": {
+  "title": "Items",
+  "empty": "No items detected",
+  "fields": {
+    "item": "Item",
+    "price": "Price",
+    "quantity": "Quantity",
+    "total": "Total"
+  },
+  "buttons": {
+    "add": "Add Item"
+  }
+}
+,
+  "category": {
+    "title": "Category",
+    "select": "Select a category",
+    "loading": "Loading categories...",
+    "create": {
+      "title": "Create New Category",
+      "name": "Category Name",
+      "icon": "Choose Icon",
+      "placeholders": {
+        "name": "Enter category name"
+      },
+      "buttons": {
+        "create": "Create",
+        "cancel": "Cancel"
+      },
+      "errors": {
+        "emptyName": "Category name cannot be empty",
+        "duplicate": "A category with this name already exists",
+        "failed": "Failed to create category"
+      },
+      "success": "Category created successfully!"
+    },
+    "buttons": {
+      "addNew": "+ Add New Category"
+    }
+  }
+}
 }

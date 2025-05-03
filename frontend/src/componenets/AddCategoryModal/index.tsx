@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Modal,
@@ -11,6 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Theme from '@/theme';
 import { styles } from './style';
+import { useTranslation } from 'react-i18next';
 
 const CATEGORY_ICONS = [
   'wallet-outline',
@@ -72,6 +72,9 @@ const AddCategoryModal = ({
   targetError = '',
   isEditing = false,
 }: AddCategoryModalProps) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+  
   return (
     <Modal
       animationType="slide"
@@ -83,37 +86,39 @@ const AddCategoryModal = ({
         <View style={styles.modalView}>
           <Text style={styles.modalTitle}>
             {showTargetInput 
-              ? isEditing ? 'Edit Savings Goal' : 'Add Savings Goal' 
-              : isEditing ? 'Edit Category' : 'Add New Category'}
+              ? isEditing ? t('savingsGoal.edit') : t('savingsGoal.add') 
+              : isEditing ? t('categories.edit') : t('categories.add')}
           </Text>
 
-          <Text style={styles.inputLabel}>Name</Text>
+          <Text style={styles.inputLabel}>{t('categories.categoryName')}</Text>
           <TextInput
             style={[styles.input, nameError ? styles.inputError : null]}
             value={categoryName}
             onChangeText={onChangeName}
-            placeholder={showTargetInput ? "Goal name" : "Category name"}
+            placeholder={showTargetInput ? t('savingsGoal.namePlaceholder') : t('categories.namePlaceholder')}
             placeholderTextColor="#A0A0A0"
             maxLength={20}
+            textAlign={isRTL ? 'right' : 'left'}
           />
           {nameError ? (
             <Text style={styles.errorText}>{nameError}</Text>
           ) : (
             <Text style={styles.charCounter}>
-              {categoryName.length}/20 characters
+              {t('categories.characterCount', { count: categoryName.length })}
             </Text>
           )}
 
           {showTargetInput && (
             <>
-              <Text style={styles.inputLabel}>Target Amount</Text>
+              <Text style={styles.inputLabel}>{t('savingsGoal.targetAmount')}</Text>
               <TextInput
                 style={[styles.input, targetError ? styles.inputError : null]}
                 value={targetAmount}
                 onChangeText={onChangeTargetAmount}
-                placeholder="Enter target amount"
+                placeholder={t('savingsGoal.targetAmountPlaceholder')}
                 placeholderTextColor="#A0A0A0"
                 keyboardType="numeric"
+                textAlign={isRTL ? 'right' : 'left'}
               />
               {targetError ? (
                 <Text style={styles.errorText}>{targetError}</Text>
@@ -121,7 +126,7 @@ const AddCategoryModal = ({
             </>
           )}
 
-          <Text style={styles.inputLabel}>Select Icon</Text>
+          <Text style={styles.inputLabel}>{t('categories.selectCategoryIcon')}</Text>
           {iconError ? (
             <Text style={styles.errorText}>{iconError}</Text>
           ) : null}
@@ -152,7 +157,7 @@ const AddCategoryModal = ({
               style={[styles.button, styles.cancelButton]}
               onPress={onCancel}
             >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={styles.cancelButtonText}>{t('categories.cancel')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
@@ -164,7 +169,9 @@ const AddCategoryModal = ({
               onPress={onSave}
               disabled={!categoryName.trim() || !selectedIcon || (showTargetInput && !targetAmount.trim())}
             >
-              <Text style={styles.saveButtonText}>{isEditing ? 'Update' : 'Save'}</Text>
+              <Text style={styles.saveButtonText}>
+                {isEditing ? t('categories.update') : t('categories.save')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

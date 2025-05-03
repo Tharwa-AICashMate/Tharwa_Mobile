@@ -8,10 +8,12 @@ import {
   ActivityIndicator,
   Alert,
   Modal,
+  
 } from "react-native";
-import {  useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 import { useAppSelector, useAppDispatch } from "@/redux/hook";
 import { RootStackParamList } from "App";
 import styles from "./style";
@@ -35,6 +37,9 @@ type CategoriesScreenNavigationProp = NativeStackNavigationProp<
 const CategoriesScreen = () => {
   const navigation = useNavigation<CategoriesScreenNavigationProp>();
   const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+  
   const { items: categories, loading } = useAppSelector(
     (state) => state.categories
   );
@@ -45,15 +50,14 @@ const CategoriesScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("wallet-outline");
-  const [totalBalance, setTotalBalance] = useState(0);
   const [nameError, setNameError] = useState("");
   const [iconError, setIconError] = useState("");
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
-  // Filter out the income category
+
   const filteredCategories = categories.filter(
-    (category) => category.name.toLowerCase() !== "income"
+    (category) => category.name.toLowerCase() !== t("categories.income").toLowerCase()
   );
 
   useEffect(() => {
@@ -75,12 +79,10 @@ const CategoriesScreen = () => {
     loadData();
   }, [dispatch]);
 
-
-
   const handleCategoryPress = (item: any) => {
     if (!userId) return;
 
-    if (item.name.toLowerCase() === "more") {
+    if (item.name.toLowerCase() === t("categories.more").toLowerCase()) {
       openAddModal();
     } else {
       navigation.navigate("CategoryDetail", {
@@ -93,7 +95,7 @@ const CategoriesScreen = () => {
   };
 
   const handleCategoryLongPress = (item: any) => {
-    if (item.name.toLowerCase() === "more") return;
+    if (item.name.toLowerCase() === t("categories.more").toLowerCase()) return;
     
     setSelectedCategory(item);
     setActionModalVisible(true);
@@ -122,7 +124,7 @@ const CategoriesScreen = () => {
 
   const handleAddCategory = () => {
     if (!userId) {
-      setNameError("User not authenticated");
+      setNameError(t("categories.userNotAuthenticated"));
       return;
     }
 
@@ -131,12 +133,12 @@ const CategoriesScreen = () => {
     setIconError("");
 
     if (!trimmedName) {
-      setNameError("Category name cannot be empty");
+      setNameError(t("categories.categoryNameEmpty"));
       return;
     }
     
     if (trimmedName.length > 20) {
-      setNameError("Category name cannot exceed 20 characters");
+      setNameError(t("categories.categoryNameTooLong"));
       return;
     }
     
@@ -146,12 +148,12 @@ const CategoriesScreen = () => {
     );
     
     if (nameExists) {
-      setNameError("A category with this name already exists");
+      setNameError(t("categories.categoryNameExists"));
       return;
     }
     
     if (!selectedIcon) {
-      setIconError("Please select an icon for the category");
+      setIconError(t("categories.selectIcon"));
       return;
     }
 
@@ -196,15 +198,15 @@ const CategoriesScreen = () => {
     setActionModalVisible(false);
     
     Alert.alert(
-      "Delete Category",
-      `Are you sure you want to delete the category "${selectedCategory.name}"?`,
+      t("categories.deleteCategory"),
+      t("categories.confirmDeleteCategory", { categoryName: selectedCategory.name }),
       [
         {
-          text: "Cancel",
+          text: t("cancel"),
           style: "cancel",
         },
         {
-          text: "Delete",
+          text: t("delete"),
           style: "destructive",
           onPress: () => {
             dispatch(removeCategory(selectedCategory.id));
@@ -217,7 +219,7 @@ const CategoriesScreen = () => {
 
   const renderItem = ({ item }: { item: any }) => (
     <TouchableOpacity
-      style={styles.categoryCard}
+      style={[styles.categoryCard ]}
       onPress={() => handleCategoryPress(item)}
       onLongPress={() => handleCategoryLongPress(item)}
       delayLongPress={300}
@@ -225,7 +227,7 @@ const CategoriesScreen = () => {
       <View style={styles.categoryIconContainer}>
         <Ionicons
           name={
-            item.name.toLowerCase() === "more"
+            item.name.toLowerCase() === t("categories.more").toLowerCase()
               ? "add"
               : item.icon || "wallet-outline"
           }
@@ -234,9 +236,9 @@ const CategoriesScreen = () => {
         />
       </View>
       <Text style={styles.categoryName}>{item.name}</Text>
-      {item.name.toLowerCase() !== "more" && (
+      {item.name.toLowerCase() !== t("more").toLowerCase() && (
         <TouchableOpacity
-          style={styles.optionsButton}
+          style={[styles.optionsButton]}
           onPress={() => handleCategoryLongPress(item)}
         >
           <Ionicons name="ellipsis-vertical" size={18} color="white" />
@@ -246,10 +248,10 @@ const CategoriesScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Header title="Categories" />
+    <SafeAreaView style={[styles.container, isRTL && { direction: 'rtl' }]}>
+      <Header title={t("categories.name")} />
 
-     <ExpenseBrief/>
+      <ExpenseBrief />
 
       <View style={styles.categoriesContainer}>
         {loading || !categoriesLoaded ? (
@@ -261,14 +263,14 @@ const CategoriesScreen = () => {
           </View>
         ) : (
           <FlatList
-            data={[...filteredCategories, { name: "More" }]}
+            data={[...filteredCategories, { name: t("categories.more") }]}
             numColumns={3}
             keyExtractor={(item, index) => `item-${index}`}
             renderItem={renderItem}
             contentContainerStyle={styles.categoriesGrid}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>No categories found</Text>
+                <Text style={styles.emptyText}>{t("categories.noCategoriesFound")}</Text>
               </View>
             }
           />
@@ -288,21 +290,25 @@ const CategoriesScreen = () => {
         >
           <View style={styles.actionModalContainer}>
             <TouchableOpacity 
-              style={styles.actionButton} 
+              style={[styles.actionButton, isRTL && { flexDirection: 'row-reverse' }]} 
               onPress={openEditModal}
             >
               <Ionicons name="pencil" size={24} color={Theme.colors.primary} />
-              <Text style={styles.actionButtonText}>Edit</Text>
+              <Text style={[styles.actionButtonText, isRTL && { marginRight: 8, marginLeft: 0 }]}>{t("categories.edit")}</Text>
             </TouchableOpacity>
             
             <View style={styles.actionDivider} />
             
             <TouchableOpacity 
-              style={styles.actionButton} 
+              style={[styles.actionButton, isRTL && { flexDirection: 'row-reverse' }]} 
               onPress={handleRemoveCategory}
             >
               <Ionicons name="trash" size={24} color={Theme.colors.primary} />
-              <Text style={[styles.actionButtonText, { color: Theme.colors.text}]}>Delete</Text>
+              <Text style={[
+                styles.actionButtonText, 
+                { color: Theme.colors.text},
+                isRTL && { marginRight: 8, marginLeft: 0 }
+              ]}>{t("categories.delete")}</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -320,6 +326,7 @@ const CategoriesScreen = () => {
         iconError={iconError}
         targetAmount={""}
         isEditing={editMode}
+        
       />
     </SafeAreaView>
   );

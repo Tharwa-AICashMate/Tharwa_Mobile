@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'rea
 import { Ionicons } from '@expo/vector-icons';
 import {modalStyles} from './style';
 import { Category } from '@/types/category';
+import { useTranslation } from 'react-i18next';
 
 interface CategorySelectorProps {
   categories: Category[];
@@ -19,42 +20,44 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   onAddNewCategory,
   loading
 }) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
   return (
     <>
       <View style={modalStyles.sectionTitleRow}>
         <View style={modalStyles.sectionTitle}>
           <Ionicons name="list-outline" size={20} color="#555" />
-          <Text style={modalStyles.sectionTitleText}>Choose Category</Text>
+          <Text style={modalStyles.sectionTitleText}>{t("categories.selectCategory")}</Text>
         </View>
         <TouchableOpacity 
           style={modalStyles.addCategoryButton}
           onPress={onAddNewCategory}
         >
           <Ionicons name="add-circle-outline" size={20} color="#4CAF50" />
-          <Text style={modalStyles.addCategoryText}>New</Text>
+          <Text style={modalStyles.addCategoryText}>{t("categories.add")}</Text>
         </TouchableOpacity>
       </View>
 
       {loading ? (
         <View style={modalStyles.loadingContainer}>
           <ActivityIndicator size="small" color="#4CAF50" />
-          <Text style={modalStyles.loadingText}>Loading categories...</Text>
+          <Text style={modalStyles.loadingText}>{t("categories.noCategoriesFound")}</Text>
         </View>
       ) : categories.length === 0 ? (
         <View style={modalStyles.emptyContainer}>
-          <Text style={modalStyles.emptyText}>No categories found</Text>
+          <Text style={modalStyles.emptyText}>{t("categories.noCategoriesFound")}</Text>
           <TouchableOpacity 
             style={modalStyles.createFirstCategoryButton}
             onPress={onAddNewCategory}
           >
-            <Text style={modalStyles.createFirstCategoryText}>Create your first category</Text>
+            <Text style={modalStyles.createFirstCategoryText}>{t("categories.firstCategory")}</Text>
           </TouchableOpacity>
         </View>
       ) : (
         <ScrollView 
           horizontal 
           showsHorizontalScrollIndicator={false} 
-          style={modalStyles.categoriesContainer}
+          style={[modalStyles.categoriesContainer, isRTL && { direction: 'rtl' }]}
           contentContainerStyle={modalStyles.categoriesContent}
         >
           {categories.map((category) => (

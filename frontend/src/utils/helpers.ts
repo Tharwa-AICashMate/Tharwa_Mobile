@@ -1,4 +1,8 @@
-import { Transaction, TransactionSummary, TransactionsByMonth } from '@/types/transactionTypes';
+import { Transaction, TransactionSummary } from '@/types/transactionTypes';
+
+/**
+ * Format a number as a currency using compact notation (e.g., $1K, $1.5M).
+ */
 export const formatCurrency = (amount: number | undefined | null): string => {
   if (typeof amount !== 'number' || isNaN(amount)) {
     return new Intl.NumberFormat('en-US', {
@@ -6,58 +10,80 @@ export const formatCurrency = (amount: number | undefined | null): string => {
       currency: 'USD'
     }).format(0);
   }
-  let suffix =  ["", "K", "M", "B", "T"]
-  let index = 0;
 
-  while (amount >= 1000 && index < suffix.length - 1) {
-    amount /= 1000;
-    index++;
-  }
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    notation: "compact"
-  }).format(amount) + suffix[index]
+    notation: 'compact',
+    maximumFractionDigits: 2,
+  }).format(amount);
 };
 
-
-export const formatDate = (dateString: string): string => {
+/**
+ * Format a date string into a localized short date-time string.
+ * Example: "3:05 PM - Apr 2" (EN), "٣:٠٥ م - أبريل ٢" (AR)
+ */
+export const formatDate = (dateString: string, locale: string = 'en'): string => {
   const date = new Date(dateString);
-  console.log(date);
+  const time = date.toLocaleTimeString(locale, {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+  const month = date.toLocaleString(locale, { month: 'short' });
   const day = date.getDate();
-  const month = getMonthAbbreviation(date.getMonth());
 
-  let hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-
-  hours = hours % 12 || 12; 
-
-  return `${hours}:${minutes} - ${month} ${day}   ` ;
-};
-export const getMonthAbbreviation = (month: number): string => {
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  return months[month];
+  return `${time} - ${month} ${day}`;
 };
 
-export const getMonthName = (month: number): string => {
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  return months[month];
+
+export const formatArabicDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  
+  // Format time in Arabic (2:30 PM → ٢:٣٠ م)
+  const time = date.toLocaleTimeString('ar-EG', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+
+  const month = date.toLocaleString('ar-EG', { month: 'short' });
+
+  const day = new Intl.NumberFormat('ar-EG').format(date.getDate());
+
+  return `${time} - ${day} ${month}`;
 };
 
-export const groupTransactionsByMonth = (transactions: Transaction[]): TransactionsByMonth => {
-  const sorted = [...transactions].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  return sorted.reduce((acc: TransactionsByMonth, transaction) => {
+export const groupTransactionsByMonth = (
+  transactions: Transaction[],
+  locale: string = 'en'
+): Record<string, Transaction[]> => {
+  const sorted = [...transactions].sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
+
+  return sorted.reduce((acc, transaction) => {
     const date = new Date(transaction.created_at);
-     const monthYear = `${getMonthName(date.getMonth())} ${date.getFullYear()}`;
-     
-    if (!acc[monthYear]) {
-      acc[monthYear] = [];
+
+    const monthName = new Intl.DateTimeFormat(locale, {
+      year: 'numeric',
+      month: 'long',
+    }).format(date);
+
+    if (!acc[monthName]) {
+      acc[monthName] = [];
     }
-    acc[monthYear].push(transaction);
+
+    acc[monthName].push(transaction);
     return acc;
-  }, {});
+  }, {} as Record<string, Transaction[]>);
 };
 
+/**
+ * Calculate a summary (income, expense, total balance) from a list of transactions.
+ */
 export const calculateTransactionSummary = (transactions: Transaction[]): TransactionSummary => {
   return transactions.reduce(
     (summary: TransactionSummary, transaction) => {
@@ -72,4 +98,10 @@ export const calculateTransactionSummary = (transactions: Transaction[]): Transa
     },
     { totalBalance: 0, income: 0, expense: 0 }
   );
+};
+
+
+// utils/helpers.ts
+export const formatArabicNumber = (num: number) => {
+  return new Intl.NumberFormat('ar-EG').format(num);
 };
