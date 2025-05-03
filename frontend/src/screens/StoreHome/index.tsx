@@ -24,6 +24,7 @@ import AnalysisResult from "@/componenets/AnalysisResult";
 import Theme from "@/theme";
 import { Store } from "@/types/store";
 import { useSelector } from "react-redux";
+import { resetBestStore } from "@/redux/slices/storeSlice";
 
 type FilterType = "findBestStore" | "analysis";
 
@@ -49,9 +50,15 @@ const HomeScreen: React.FC = () => {
   };
 
   const handleFindBestStore = async () => {
+    dispatch(resetBestStore()); 
     setLoading(true);
-    await dispatch(findBestStore());
-    setLoading(false);
+    try {
+      await dispatch(findBestStore()).unwrap(); 
+    } catch (error) {
+      console.log("failed in loading", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleAnalysis = async (message: string) => {
