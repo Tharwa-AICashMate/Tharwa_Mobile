@@ -274,6 +274,12 @@
     "changePassword": "تغيير كلمة السر"
   },
   "savingsScreen": {
+    "savings": "الادخار",
+    "goal": "الهدف",
+    "amountSaved": "المبلغ المدخر",
+    "currencySymbol": "ر.س",
+    "addSavings": "إضافة ادخار",
+    "addToSavings": "إضافة إلى المدخرات",
     "noSavings": {
       "createYourFirstGoal": "إنشاء هدفك الأول",
       "startSavingForSomethingSpecial": "ابدأ الادخار لشيء مميز بإضافة هدفك الأول"
