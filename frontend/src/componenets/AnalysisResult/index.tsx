@@ -1,25 +1,23 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Theme from '@/theme';
-import Markdown from 'react-native-markdown-display';
-import { useTranslation } from 'react-i18next';
+import React from "react";
+import { View, Text, StyleSheet ,I18nManager} from "react-native";
+import Theme from "@/theme";
+import Markdown from "react-native-markdown-display";
+import { useTranslation } from "react-i18next";
+import i18next from "./../../../services/i18next";
+const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
 
+const AnalysisResultView: React.FC<{ result: string }> = ({ result }) => {
+  const { t } = useTranslation();
+  return (
+    <View style={styles.container}>
+      <Markdown>{result.replace(/```(markdown)?/, "")}</Markdown>
+    </View>
+  );
+};
 
-  
-  const AnalysisResultView: React.FC<{ result: string }> = ({ result }) => {
-      const { t, i18n } = useTranslation();
-      const isRTL = i18n.language === 'ar';
-    return (
-      <View style={styles.container}>
-        <Markdown>
-          {result.replace(/```(markdown)?/,"")}
-        </Markdown>
-      </View>
-    );
-  };
-  
 const styles = StyleSheet.create({
   container: {
+    direction: isRTL ? "rtl" : "ltr",
     padding: 16,
     backgroundColor: Theme.colors.background,
     borderRadius: 8,
@@ -27,7 +25,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: Theme.colors.primary,
     marginBottom: 10,
   },
@@ -36,7 +34,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Theme.colors.primary,
     marginBottom: 5,
   },

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import {
   StyleSheet,
-  Text,
+  I18nManager,
   View,
   ScrollView,
   Dimensions,
@@ -17,6 +17,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import Theme from "@/theme";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
+import i18next from "./../../../services/i18next";
+const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
 
 const { height, width } = Dimensions.get("window");
 
@@ -94,6 +96,7 @@ const SettingsScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
+    direction:isRTL?'rtl':'ltr',
     flex: 1,
     backgroundColor: "#FECD3E",
   },

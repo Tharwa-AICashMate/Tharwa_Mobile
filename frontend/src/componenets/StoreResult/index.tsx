@@ -47,16 +47,16 @@ const StoreResult: React.FC = () => {
 
   return (
     <View>
+      <Text style={[styles.title,{textAlign:isRTL?'right':'left'}]}>{t("SmartGrocery.bestStoresFound")}</Text>
       {bestStoreResult?.map((store, index) => (
         <View key={index} style={styles.container}>
-          <Text style={styles.title}>{t("SmartGrocery.bestStoresFound")}</Text>
           <View style={styles.storeInfo}>
             <Text style={styles.storeName}>{store.store.name}</Text>
             <Text style={styles.storeDetail}>
-              Distance: {store.distance != null ? `${store.distance} km` : `{t("SmartGrocery.distanceNotAvailable")}`}
+              Distance: {store.distance != null ? `${store.distance} km` : `${t("SmartGrocery.distanceNotAvailable")}`}
             </Text>
             <Text style={styles.storeDetail}>
-              Total Price: {store.totalPrice != null ? `$${store.totalPrice}` : `{t("SmartGrocery.priceNotAvailable")}`}
+              Total Price: {store.totalPrice != null ? `${store.totalPrice} EGP` : `${t("SmartGrocery.priceNotAvailable")}`}
             </Text>
           </View>
   

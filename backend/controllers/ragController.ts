@@ -22,16 +22,13 @@ export const findData = async (req: Request, res: Response): Promise<void> => {
     // Construct question with highlighted items between && for extraction
     const question = `find at least 5 stores to buy :&${items}& from considering price, quality, and distance is ${searchRadius}. order them based on the best options to save on price and distance`;
     
-    // Check if the items field contains Arabic text
-    const isArabic = isArabicText(items);
     
     let result = await ragService.findData(
       question, 
       userId, 
       { latitude: lat, longitude: lng },
-      { isArabic } // Pass Arabic detection as an option
     );
-    
+    console.log(result)
     res.status(200).json({ data: result });
   } catch (error: any) {
     console.error("Error in findData:", error);

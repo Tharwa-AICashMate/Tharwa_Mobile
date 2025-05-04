@@ -1,6 +1,7 @@
 import Theme from "@/theme";
-import { StyleSheet } from "react-native";
-
+import { StyleSheet, I18nManager } from "react-native";
+import i18next from "./../../../services/i18next";
+const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -65,9 +66,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
-
+  
   statusContainer: {
-    flexDirection: 'row',
+    flexDirection: isRTL?'row-reverse':'row',
     alignItems: 'center',
     justifyContent:"center",
     marginTop:10
@@ -162,6 +163,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   transactionList: {
+    direction:isRTL?'rtl':'ltr',
     flex: 1,
     backgroundColor: Theme.colors.background,
     borderTopLeftRadius: 50,

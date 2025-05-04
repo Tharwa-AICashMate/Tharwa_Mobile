@@ -13,8 +13,6 @@ const useDeleteAccountStyles = () => {
     },
     content: {
       flex: 1,
-      direction: isRTL ? 'rtl' : 'ltr',
-      writingDirection: isRTL ? 'rtl' : 'ltr',
       padding: 40,
       borderTopLeftRadius: 80,
       borderTopRightRadius: 80,

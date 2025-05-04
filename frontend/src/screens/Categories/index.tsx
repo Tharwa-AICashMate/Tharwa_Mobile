@@ -248,7 +248,7 @@ const CategoriesScreen = () => {
   );
 
   return (
-    <SafeAreaView style={[styles.container, isRTL && { direction: 'rtl' }]}>
+    <SafeAreaView style={[styles.container]}>
       <Header title={t("categories.name")} />
 
       <ExpenseBrief />

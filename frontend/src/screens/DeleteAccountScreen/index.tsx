@@ -170,7 +170,6 @@ const DeleteAccountScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
       <Header title={t('deleteAccount.deleteAccount')} />
 
       <View style={styles.content}>

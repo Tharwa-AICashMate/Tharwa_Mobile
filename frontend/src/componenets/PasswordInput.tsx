@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, View,I18nManager } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import i18next from "./../../services/i18next";
+const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
 interface PasswordInputProps {
   value: string;
   onChangeText: (text: string) => void;
@@ -44,7 +45,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: isRTL ?'row-reverse':'row',
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
@@ -52,6 +53,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   input: {
+    textAlign:isRTL?'right':'left',
     flex: 1,
     fontSize: 16,
     paddingVertical: 8,

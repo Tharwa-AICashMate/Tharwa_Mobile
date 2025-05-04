@@ -30,7 +30,7 @@ const GroceryList: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{direction:isRTL?'rtl':'ltr'}]}>
       <Text style={styles.title}>{t("SmartGrocery.yourGroceryList")}</Text>
       {items.length === 0 ? (
         <Text style={styles.emptyText}>{t("SmartGrocery.addItemsToYourGroceryList")}</Text>

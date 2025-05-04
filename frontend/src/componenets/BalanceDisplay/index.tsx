@@ -18,7 +18,7 @@ const BalanceDisplay: React.FC<BalanceDisplayProps> = ({
   const formatCurrency = (value: number): string => {
     return new Intl.NumberFormat(i18n.language, {
       style: 'currency',
-      currency: i18n.language === 'ar' ? 'SAR' : 'USD',
+      currency: 'EGP',
       minimumFractionDigits: 2
     }).format(value);
   };

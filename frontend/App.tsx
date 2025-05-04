@@ -89,14 +89,13 @@ export default function App() {
     const initLanguage = async () => {
       try {
         const storedLang = await AsyncStorage.getItem("user-language");
-        const lang = storedLang || "en"; // Default to English if no language is stored
+        const lang = storedLang || "en"; 
         await i18next.changeLanguage(lang);
 
         const isRTL = lang === "ar";
         if (I18nManager.isRTL !== isRTL) {
           I18nManager.forceRTL(isRTL);
           I18nManager.allowRTL(isRTL);
-          RNRestart.Restart(); // Restart the app to apply layout changes
         }
       } catch (error) {
         console.error("Failed to initialize language:", error);

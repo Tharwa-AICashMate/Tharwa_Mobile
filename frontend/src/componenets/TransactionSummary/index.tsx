@@ -58,9 +58,9 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   const availableBalance = balance - expenses - savings + income;
 
   // Format numbers in Arabic
-  const formatNumber = (number: number) => {
-    return new Intl.NumberFormat('ar', { style: 'decimal' }).format(number);
-  };
+  // const formatNumber = (number: number) => {
+  //   return new Intl.NumberFormat('ar', { style: 'decimal',minimumFractionDigits: 0, }).format(number);
+  // };
 
   const handleSaveBalance = async () => {
     const parsed = parseFloat(inputValue);
@@ -125,7 +125,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         onPress={() => onSelectTab("all")}
       >
         <Text style={styles.balanceLabel}>{t("transactionScreen.transactionSummary.totalBalance")}</Text>
-        <Text style={styles.balanceAmount}>{isRTL?formatNumber(availableBalance):availableBalance}</Text>
+        <Text style={styles.balanceAmount}>{availableBalance.toFixed(2)}</Text>
       </TouchableOpacity>
 
       <View style={styles.tabsContainer}>
@@ -142,7 +142,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
             {t("transactionScreen.transactionSummary.income")}
           </Text>
           <Text style={[styles.tabAmount, activeTab === "income" && styles.activeTabText]}>
-            {isRTL?formatNumber(income):income}
+            {income.toFixed(2)}
           </Text>
         </TouchableOpacity>
 
@@ -159,7 +159,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
             {t("transactionScreen.transactionSummary.expense")}
           </Text>
           <Text style={[styles.tabAmount, activeTab === "expense" && styles.activeTabText]}>
-            {isRTL?formatNumber(expenses):expenses}
+            {expenses.toFixed(2)}
           </Text>
         </TouchableOpacity>
       </View>
@@ -172,13 +172,13 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         </View>
       )}
 
-      {activeTab === "income" && (
+      {/* {activeTab === "income" && (
         <View style={styles.addExpenseContainer}>
           <TouchableOpacity style={styles.addButton} onPress={() => setModalIncomeVisible(true)}>
             <Text style={styles.addButtonText}>{t("transactionScreen.transactionSummary.editIncome")}</Text>
           </TouchableOpacity>
         </View>
-      )}
+      )} */}
 
       {activeTab === "expence" && (
         <View style={styles.addExpenseContainer}>

@@ -73,7 +73,8 @@
 
 
 
-import React from 'react';
+import React  from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 interface Props {
@@ -82,9 +83,10 @@ interface Props {
 }
 
 const CategoryTabs: React.FC<Props> = ({ selectedCategory, onCategorySelect }) => {
+  const {t} = useTranslation()
   return (
     <View style={styles.container}>
-      {["general", "account", "services"].map((cat) => (
+      {[t("help.general"),t("help.account"),t("help.services")].map((cat) => (
         <TouchableOpacity
           key={cat}
           style={[styles.tab, selectedCategory === cat && styles.selectedTab]}

@@ -71,6 +71,7 @@ export const loginUser = createAsyncThunk(
         email,
         password,
       });
+      console.log(isRTL)
       if (error) return rejectWithValue(isRTL?"الايميل او كلمة المرور غير صحيحة":"Invalid email or password");
       const { data: userData } = await axios.post(`${apiBase}/auth/login`, {
         userId: data.user.id,

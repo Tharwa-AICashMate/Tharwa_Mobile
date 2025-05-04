@@ -1,19 +1,13 @@
 import Theme from "@/theme";
 import { Dimensions, StyleSheet, I18nManager } from "react-native";
 import i18next from "../../../services/i18next";
-const getIsRTL = () => {
-  const isRTL = i18next.language === "ar" || I18nManager.isRTL;
-  console.log("i18next.language:", i18next.language);
-  console.log("I18nManager.isRTL:", I18nManager.isRTL);
-  console.log("isRTL:", isRTL);
-  return isRTL;
-};
+const isRTL = i18next.language === "ar" || I18nManager.isRTL;
+
 
 const screenWidth = Dimensions.get("window").width;
 const cardWidth = screenWidth / 3 - 18;
 const styles = StyleSheet.create({
   container: {
-    direction: getIsRTL() ? "rtl" : "ltr",
     flex: 1,
     backgroundColor: Theme.colors.primary,
   },
@@ -42,8 +36,9 @@ const styles = StyleSheet.create({
     color: Theme.colors?.text,
   },
   categoriesContainer: {
+    direction:isRTL?'rtl':'ltr',
     flex: 1,
-    flexDirection: getIsRTL() ? "row-reverse" : "row",
+    flexDirection:"row",
     justifyContent: "flex-start",
     backgroundColor: Theme.colors.background,
     borderTopLeftRadius: 50,
@@ -138,7 +133,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   actionButton: {
-    flexDirection: "row",
+    flexDirection: isRTL ?'row-reverse':"row",
     alignItems: "center",
     padding: 16,
     paddingVertical: 18,

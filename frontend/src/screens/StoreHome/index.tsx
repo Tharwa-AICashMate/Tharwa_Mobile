@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { findBestStore, runAnalysis } from "@/redux/slices/storeThunk";
+import { findBestStore, findBestStoreAi, runAnalysis } from "@/redux/slices/storeThunk";
 import { RootState } from "@/redux/store";
 import LocationDisplay from "@/componenets/LocationDisplay";
 import GroceryInput from "@/componenets/GroceryInput";
@@ -54,6 +54,7 @@ const HomeScreen: React.FC = () => {
 
   const handleFindBestStore = async () => {
     setLoading(true);
+   // await dispatch(findBestStoreAi());
     await dispatch(findBestStore());
     setLoading(false);
   };

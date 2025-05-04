@@ -30,7 +30,7 @@
       "highestExpense": "Highest Expense",
       "noHighlights": "No weekly highlights yet"
     },
-    "currencySymbol": "$"
+    "currencySymbol": "EGP"
   },
   "transactionForm": {
     "date": "Date",
@@ -46,7 +46,7 @@
     "storePlaceholder": "Select a store",
     "addStore": "+ Add Store",
     "amount": "Amount",
-    "amountPlaceholder": "$0.00",
+    "amountPlaceholder": "0.00 EGP",
     "amountError": {
       "required": "Amount is required",
       "validNumber": "Amount must be a valid number",

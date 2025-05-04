@@ -81,7 +81,7 @@ const AddCategoryModal = ({
       visible={visible}
       onRequestClose={onCancel}
     >
-      <View style={styles.centeredView}>
+      <View style={[styles.centeredView,{direction:isRTL?'rtl':'ltr'}]}>
         <View style={styles.modalView}>
           <Text style={styles.modalTitle}>
             {showTargetInput

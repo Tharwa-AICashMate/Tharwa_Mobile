@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   StatusBar,
+  I18nManager,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -18,76 +19,70 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Theme from "../../theme";
 import Header from "../../componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import { useTranslation } from "react-i18next";
-
+import i18next from "./../../../services/i18next";
+const isRTL = i18next.language === "ar" || I18nManager.isRTL;
 
 const HelpCenterScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("general");
-  const {t}=useTranslation();
+  const { t } = useTranslation();
   const staticFAQs = [
     {
       id: "1",
       question: t("generalFAQs.howDoIStartSaving_Q"),
       answer: t("generalFAQs.howDoIStartSaving_A"),
-      category: "general",
+      category: t("help.general"),
     },
     {
       id: "2",
       question: t("generalFAQs.howMuchDoesItCostToUseTharwa_Q"),
       answer: t("generalFAQs.howMuchDoesItCostToUseTharwa_A"),
-      category: "general",
+      category: t("help.general"),
     },
     {
       id: "3",
       question: t("generalFAQs.howToContactSupport_Q"),
       answer: t("generalFAQs.howToContactSupport_A"),
-      category: "general",
+      category:  t("help.general"),
     },
     {
       id: "4",
-      question: "How can I reset my password if I forget it?",
-      answer:
-        "Click on 'Forgot Password' on the login screen and follow the instructions sent to your registered email.",
-      category: "account",
+      question: t("accountFAQs.howToChangePassword_Q"),
+      answer: t("accountFAQs.howToChangePassword_Q"),
+      category: t("help.account")
     },
     {
       id: "5",
-      question: "How do I update my contact information?",
-      answer:
-        "Go to 'Profile', select 'Edit Profile', update your information, and save changes.",
-      category: "account",
+      question: t("accountFAQs.howToUpdateMySettings_Q"),
+      answer: t("accountFAQs.howToUpdateMySettings_A"),
+      category: t("help.account")
     },
     {
       id: "6",
-      question: "How can I update my settings within the application?",
-      answer:
-        "Navigate to 'Settings' from your profile page to manage notifications, security, and other preferences.",
-      category: "account",
+      question: t("accountFAQs.howToDeleteAccount_Q"),
+      answer: t("accountFAQs.howToDeleteAccount_A"),
+      category: t("help.account")
     },
     {
       id: "7",
-      question: "How can I delete my account?",
-      answer:
-        "Go to 'Settings', select 'Account', and click on 'Delete Account'. Follow the confirmation steps to complete the process.",
-      category: "account",
+      question: t("accountFAQs.howToUpdateMyProfile_Q"),
+      answer: t("accountFAQs.howToUpdateMyProfile_A"),
+      category: t("help.account")
     },
     {
       id: "8",
-      question: "How do I access my expense history?",
-      answer:
-        "Go to 'Transactions' in the main menu to view your complete expense history and filter by date or category.",
-      category: "services",
+      question: t("servicesFAQs.howToAccessTransactionsHistory_Q"),
+      answer: t("servicesFAQs.howToUpdateMyProfile_A"),
+      category: t("help.services")
     },
     {
       id: "9",
-      question: "Can I use the app offline?",
-      answer:
-        "Some features are available offline, but you'll need an internet connection for real-time updates and transactions.",
-      category: "services",
+      question: t("servicesFAQs.CanUseAppOffline_Q"),
+      answer: t("servicesFAQs.CanUseAppOffline_A"),
+      category: t("help.services")
     },
   ];
-  
 
   const filteredFAQs = useMemo(() => {
     return staticFAQs
@@ -156,6 +151,7 @@ const HelpCenterScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
+    direction: isRTL ? "rtl" : "ltr",
     backgroundColor: "#FECD3E",
     flex: 1,
   },

@@ -35,7 +35,7 @@ const AnalysisContent = ({ onAnalyze, isLoading }: AnalysisContentProps) => {
         disabled={isLoading}
       >
         <Text style={styles.buttonText}>
-          {isLoading ? t("SmartGrocery.analyzing") : t("SmartGrocery.analyzing")}
+          {isLoading ? t("SmartGrocery.analyzing") : t("SmartGrocery.analysis")}
         </Text>
       </TouchableOpacity>
       

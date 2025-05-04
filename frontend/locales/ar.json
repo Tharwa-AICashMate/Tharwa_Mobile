@@ -30,7 +30,7 @@
       "highestExpense": "أعلى مصروف",
       "noHighlights": "لا توجد أبرز أحداث للأسبوع حتى الآن"
     },
-    "currencySymbol": "ر.س"
+    "currencySymbol": "ج.م"
   },
   "transactionForm": {
     "date": "التاريخ",
@@ -46,7 +46,7 @@
     "storePlaceholder": "اختر المتجر",
     "addStore": "+ إضافة متجر",
     "amount": "المبلغ",
-    "amountPlaceholder": "ر.س 0.00",
+    "amountPlaceholder": "0.00 ج.م",
     "amountError": {
       "required": "المبلغ مطلوب",
       "validNumber": "يجب أن يكون المبلغ رقمًا صحيحًا",

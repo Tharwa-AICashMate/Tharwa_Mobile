@@ -1,108 +1,162 @@
-
 import { Request, Response } from "express";
 import { getStores, getStoreItems } from "../services/storeService";
 import { getDrivingDistance } from "../services/distanceService";
 import { calculateHaversineDistance } from "../utils/haversine";
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from "../utils/supabaseClient";
 import { Store } from "../types";
 
-import { getDistance } from '../utils/distanceUtils';
+import { getDistance } from "../utils/distanceUtils";
 
 export const getAllStores = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
-  const { data, error } = await supabase .rpc('get_stores_with_favourite', { user_uuid: userId });
+  const { data, error } = await supabase.rpc("get_stores_with_favourite", {
+    user_uuid: userId,
+  });
   if (error) return res.status(500).json({ error: error.message });
   return res.json(data);
 };
 
 export const getAllStoreItems = async (req: Request, res: Response) => {
-  const { data, error } = await supabase.from('store_items').select('*');
+  const { data, error } = await supabase.from("store_items").select("*");
   if (error) return res.status(500).json({ error: error.message });
   return res.json(data);
 };
 
 export const findBestStore = async (req: Request, res: Response) => {
   try {
-    const { lat, lng, items } = req.body;
-    
-    if (!lat || !lng || !items) {
-      return res.status(400).json({ error: 'Missing required parameters' });
+    const { lat, lng, items, radius = 10000, unit = "m" } = req.body;
+
+    if (!lat || !lng || !items || !Array.isArray(items)) {
+      return res.status(400).json({ error: "Missing or invalid parameters" });
     }
 
-    // جلب جميع المتاجر والعناصر
-    const [storesResult, itemsResult] = await Promise.all([
-      supabase.from('stores').select('*'),
-      supabase.from('store_items').select('*')
-    ]);
-
-    if (storesResult.error || itemsResult.error) {
-      console.log('Supabase error:', storesResult.error || itemsResult.error);
-      return res.status(500).json({ error: 'Database error' });
-    }
-
-    const stores = storesResult.data;
-    const allItems = itemsResult.data;
-
-    // حساب المسافات بشكل متوازي
-    const storesWithDistance = await Promise.all(
-      stores.map(async store => ({
-        ...store,
-        distance: await getDistance(
-          { lat, lng },
-          { lat: store.latitude, lng: store.longitude }
-        )
-      }))
+    // 1. Get nearby stores
+    const { data: nearbyStores, error: nearbyError } = await supabase.rpc(
+      "find_stores_nearby",
+      {
+        user_lat: lat,
+        user_lon: lng,
+        radius,
+        unit,
+      }
     );
 
-    // تصفية المتاجر التي تحتوي على جميع العناصر المطلوبة
-    const validStores = storesWithDistance.filter(store => {
-      const storeItems = allItems.filter(item => item.store_id === store.id);
-      return items.every(function (itemName: string) {
-        return storeItems.some(storeItem => storeItem.item_name.toLowerCase().includes(itemName.toLowerCase())
-        );
-      });
+    if (nearbyError) {
+      console.error("Error fetching nearby stores:", nearbyError);
+      return res.status(500).json({ error: "Failed to fetch nearby stores" });
+    }
+
+    if (!nearbyStores || nearbyStores.length === 0) {
+      return res.status(404).json({ error: "No stores found within radius" });
+    }
+
+    const storeIds = nearbyStores.map((store) => store.id);
+
+    // 2. Get transactions (items) for those stores
+    const { data: storeItems, error: itemsError } = await supabase
+      .from("transaction_with_category_and_store")
+      .select("transaction_id, store_id, title, amount, description, details")
+      .in("store_id", storeIds);
+
+    if (itemsError) {
+      console.error("Error fetching store items:", itemsError);
+      return res.status(500).json({ error: "Failed to fetch store items" });
+    }
+    console.log("startStore");
+
+    const normalize = (str: string) => str?.toLowerCase().trim();
+
+    const matchesSearch = (transaction: any, searchTerm: string) => {
+      const normalizedSearch = normalize(searchTerm);
+      const titleMatch = normalize(transaction.title)?.includes(
+        normalizedSearch
+      );
+      const descriptionMatch = normalize(transaction.description)?.includes(
+        normalizedSearch
+      );
+
+      let detailsMatch = false;
+      try {
+        const details = JSON.parse(transaction.details || "[]");
+        if (Array.isArray(details)) {
+          detailsMatch = details.some((d: any) =>
+            normalize(d.name)?.includes(normalizedSearch)
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
+      return titleMatch || descriptionMatch || detailsMatch;
+    };
+    console.log("matchStore");
+
+    // 3. Filter stores that have all required items
+    const validStores = nearbyStores.filter((store) => {
+      const transactions = storeItems.filter(
+        (item) => item.store_id === store.id
+      );
+      return items.every((item) =>
+        transactions.some((tx) => matchesSearch(tx, item))
+      );
     });
+
+    console.log("validStore");
 
     if (validStores.length === 0) {
-      return res.status(404).json({ error: 'No matching stores found' });
+      return res
+        .status(404)
+        .json({ error: "No stores match all requested items" });
     }
 
-    const bestStore = validStores.reduce((prev, current) => {
-      const currentItems = allItems.filter(
-        item => item.store_id === current.id && 
-        items.some((i: string) => item.item_name.toLowerCase().includes(i.toLowerCase()))
+    // 4. Score and sort valid stores
+    const scoredStores = validStores.map((store) => {
+      const matchedItems = storeItems.filter(
+        (tx) =>
+          tx.store_id === store.id &&
+          items.some((item) => matchesSearch(tx, item))
       );
+
+      const totalPrice = matchedItems.reduce(
+        (sum, item) => sum + item.amount,
+        0
+      );
+      const score = totalPrice * 0.7 + store.distance * 0.3;
+
+      return {
+        store: {
+          id: store.id,
+          latitude: store.latitude,
+          longitude: store.longitude,
+          name: store.name,
+          city: store.city,
+          country: store.country,
+        },
+        distance: store.distance,
+        matchedItems,
+        totalPrice,
+        score,
+      };
+    });
+
+    const topStores = scoredStores
+      .sort((a, b) => a.score - b.score)
+      .slice(0, 3)
+      .map((entry) => ({
+        store: {
+          id: entry.store.id,
+          name: entry.store.name,
+          latitude: entry.store.latitude,
+          longitude: entry.store.longitude,
+        },
+        totalPrice: entry.totalPrice.toFixed(2),
+        distance: (entry.distance/1000).toFixed(2),
+      }));
       
-      const prevItems = allItems.filter(
-        item => item.store_id === prev.id && 
-        items.some((i: string) => item.item_name.toLowerCase().includes(i.toLowerCase()))
-      );
-
-      const currentTotal = currentItems.reduce((sum, item) => sum + item.price, 0);
-      const prevTotal = prevItems.reduce((sum, item) => sum + item.price, 0);
-
-      const currentScore = (currentTotal * 0.7) + (current.distance * 0.3);
-      const prevScore = (prevTotal * 0.7) + (prev.distance * 0.3);
-
-      return currentScore < prevScore ? current : prev;
-    });
-
-    const resultItems = allItems.filter(
-      item => item.store_id === bestStore.id && 
-      items.some((i: string) => item.item_name.toLowerCase().includes(i.toLowerCase()))
-    );
-
-    res.json({
-      store: bestStore,
-      totalPrice: resultItems.reduce((sum, item) => sum + item.price, 0),
-      distance: bestStore.distance,
-      matchedItems: resultItems,
-      score: (resultItems.reduce((sum, item) => sum + item.price, 0) * 0.7 + bestStore.distance * 0.3)
-    });
-
+    res.json(topStores);
   } catch (error) {
-    console.log('Error in findBestStore:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.log("Error in findBestStores:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };

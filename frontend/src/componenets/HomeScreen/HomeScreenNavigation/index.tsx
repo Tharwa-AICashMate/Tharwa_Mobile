@@ -71,7 +71,7 @@ const HomeScreenNavigation: React.FC<HomeScreenNavigationProps> = ({
   ];
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, style,{flexDirection:isRTL?'row-reverse':'row'}]}>
       {tiles.map((tile) => (
         <TouchableOpacity
           key={tile.id}

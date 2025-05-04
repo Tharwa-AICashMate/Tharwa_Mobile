@@ -25,6 +25,23 @@ export const getStoreItems = async (): Promise<StoreItem[]> => {
 };
 
 export const getBestMatch = async (
+  lat: number, lng: number, items: string[], searchRadius: number
+): Promise<BestStoreResult> => {
+  try {
+    const response = await axiosInstance.post('/best-match', {
+      lat,
+      lng,
+      items,
+      searchRadius
+    });
+    console.log('fun2',response.data)
+    return response.data;
+  } catch (error) {
+    console.log('ererr in fetch best store', error);
+    throw error;
+  }
+};
+export const getBestMatchAi = async (
   lat: number, lng: number, items: string[], searchRadius: number,userId:string
 ): Promise<BestStoreResult[]> => {
   console.log(   userId,

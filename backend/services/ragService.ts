@@ -133,6 +133,8 @@ class RagService {
             includeBudget: options.includeBudget !== false,
           }
         );
+
+        console.log(documents)
         
         // Cache the new context
         this.userContextCache.set(cacheKey, {
@@ -405,25 +407,15 @@ Return only a JSON object with possible keys if nothing found don't return anyth
     options: any = {}
   ): Promise<any> {
     if (!this.initialized) {
-      throw new Error("RAG Service not initialized. Call initialize() first.");
+      return;
     }
     
-    // Adapt instruction based on language
-    const isArabic = options?.isArabic || false;
     let jsonInstruction = ` Return your answer JSON Array in the following exact object structure{
   store: {name,latitude,longitude},
   totalPrice for the requested items highlighted in between && as totalPrice,
   distance,
-  } if nothing found don't return anything`;
+  } `;
     
-    if (isArabic) {
-      // Add Arabic version of the instruction while keeping JSON structure in English
-      jsonInstruction = ` أعد إجابتك كمصفوفة JSON بالهيكل التالي بالضبط{
-  store: {name,latitude,longitude},
-  totalPrice for the requested items highlighted in between && as totalPrice,
-  distance,
-  } إذا لم تجد شيئًا فلا تعد أي شيء`;
-    }
     
     const enhancedQuestion = question + jsonInstruction;
     const inferred = await this.inferOptionsFromQuery(question);

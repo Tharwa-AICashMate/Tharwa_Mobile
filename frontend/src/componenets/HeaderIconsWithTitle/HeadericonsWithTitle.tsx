@@ -8,6 +8,7 @@ import Theme from "@/theme";
 import styles from "./HeadericonsWithTitle.styles";
 import { useTranslation } from "react-i18next";
 import i18next from "../../../services/i18next";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface HeaderProps {
   title: string;

@@ -96,9 +96,6 @@ const AllStoresPage: React.FC = () => {
     },
     viewMap: {
       flexDirection: isRTL ? 'row-reverse' : 'row',
-    },
-    locationContainer: {
-      flexDirection: isRTL ? 'row-reverse' : 'row',
     }
   };
   const handelToggleFavourites = (item) => {
@@ -146,7 +143,7 @@ const AllStoresPage: React.FC = () => {
             >
               <View>
                 <Text style={styles.storeName}>{item.name}</Text>
-                <View style={[styles.locationContainer, dynamicStyles.locationContainer]}>
+                <View style={[styles.locationContainer]}>
                   <Icon name="location-on" size={16} color="#4CAF50" />
                   <Text style={[styles.locationText, isRTL && { marginRight: 8, marginLeft: 0 }]}>
                     {item.city}, {item.country}
