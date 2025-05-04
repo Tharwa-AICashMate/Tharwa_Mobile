@@ -48,22 +48,22 @@ export default function MainNavigator() {
   const dispatch = useDispatch<AppDispatch>();
   const user = useAppSelector((state) => state.auth.user);
   console.log("from nav", user);
-  useEffect(() => {
-    dispatch(fetchCurrentUser()).then((res) => {
-      if (fetchCurrentUser.fulfilled.match(res)) setSession(true);
-    });
+  // useEffect(() => {
+  //   dispatch(fetchCurrentUser()).then((res) => {
+  //     if (fetchCurrentUser.fulfilled.match(res)) setSession(true);
+  //   });
 
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session ? true : false);
-    });
-  }, []);
+  //   supabase.auth.onAuthStateChange((_event, session) => {
+  //     setSession(session ? true : false);
+  //   });
+  // }, []);
 
   return (
     <>
       <NavigationContainer   >
         {!session ? (
           <OnBoardingNavigation />
-        ) : (
+        ) : ( */}
           <RootStack.Navigator
             initialRouteName={"MainApp"}
             screenOptions={{ headerShown: false }}
@@ -170,7 +170,7 @@ export default function MainNavigator() {
               component={PasswordChangeConfirmScreen}
             />
           </RootStack.Navigator>
-        )}
+        {/* )} */}
       </NavigationContainer>
     </>
   );

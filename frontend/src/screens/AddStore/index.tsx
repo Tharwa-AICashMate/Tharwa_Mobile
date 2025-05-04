@@ -6,14 +6,16 @@ import { Store } from '@/types/store';
 import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
 import Theme from '@/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from "react-i18next";
 
 const AddStorePage: React.FC = () => {
   const handleSuccess = (newStore: Store) => {
   };
-
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Add Store" />
+      <Header title={t("addStoreScreen.addStore")} />
       <View style={styles.content}>
       <StoreForm onSuccess={handleSuccess} />
 

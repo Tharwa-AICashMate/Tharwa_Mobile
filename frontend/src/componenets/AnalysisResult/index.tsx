@@ -2,11 +2,13 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Theme from '@/theme';
 import Markdown from 'react-native-markdown-display';
-
+import { useTranslation } from 'react-i18next';
 
 
   
   const AnalysisResultView: React.FC<{ result: string }> = ({ result }) => {
+      const { t, i18n } = useTranslation();
+      const isRTL = i18n.language === 'ar';
     return (
       <View style={styles.container}>
         <Markdown>

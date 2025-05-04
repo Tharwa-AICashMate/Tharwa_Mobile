@@ -3,10 +3,13 @@ import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-nativ
 import { useDispatch } from 'react-redux';
 import { addItem } from '@/redux/slices/grocerySlice';
 import Theme from '@/theme';
+import { useTranslation } from "react-i18next";
 
 const GroceryInput: React.FC = () => {
   const [itemName, setItemName] = useState('');
   const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
 
   const handleAddItem = () => {
     if (itemName.trim()) {
@@ -19,7 +22,7 @@ const GroceryInput: React.FC = () => {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Enter grocery item"
+        placeholder={t("SmartGrocery.enterGroceryItem")}
         value={itemName}
         onChangeText={setItemName}
         onSubmitEditing={handleAddItem}
@@ -28,7 +31,7 @@ const GroceryInput: React.FC = () => {
         style={styles.addButton}
         onPress={handleAddItem}
       >
-        <Text style={styles.addButtonText}>Add</Text>
+        <Text style={styles.addButtonText}>{t("SmartGrocery.add")}</Text>
       </TouchableOpacity>
     </View>
   );

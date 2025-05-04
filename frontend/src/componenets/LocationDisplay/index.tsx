@@ -5,8 +5,11 @@ import { RootState } from "@/redux/store";
 import { setUserLocation } from "@/redux/slices/storeSlice";
 import { getCurrentLocation } from "@/utils/locationutils";
 import Theme from "@/theme";
+import { useTranslation } from "react-i18next";
 
 const LocationDisplay: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const dispatch = useDispatch();
   const { userLocation, locationDetected } = useSelector(
     (state: RootState) => state.store
@@ -32,20 +35,20 @@ const LocationDisplay: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Your Location:</Text>
+      <Text style={styles.label}>{t("SmartGrocery.yourLocation")}</Text>
       <View style={styles.locationContainer}>
         <Text style={styles.locationText}>
-          Latitude: {userLocation?.latitude}
+         {t("SmartGrocery.latitude")} {userLocation?.latitude}
         </Text>
         <Text style={styles.locationText}>
-          Longitude: {userLocation?.longitude}
+        {t("SmartGrocery.longitude")} {userLocation?.longitude}
         </Text>
         {!locationDetected && (
           <TouchableOpacity
             style={styles.refreshButton}
             onPress={detectLocation}
           >
-            <Text style={styles.refreshButtonText}>Retry</Text>
+            <Text style={styles.refreshButtonText}>{t("SmartGrocery.retry")}</Text>
           </TouchableOpacity>
         )}
       </View>

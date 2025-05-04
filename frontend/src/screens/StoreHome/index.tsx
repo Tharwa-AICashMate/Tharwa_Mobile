@@ -23,11 +23,15 @@ import AnalysisContent from "@/componenets/AnalysisContent";
 import AnalysisResult from "@/componenets/AnalysisResult";
 import Theme from "@/theme";
 import { Store } from "@/types/store";
-import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 type FilterType = "findBestStore" | "analysis";
 
 const HomeScreen: React.FC = () => {
+     const { t, i18n } = useTranslation();
+     const isRTL = i18n.language === 'ar';
+      const [openModal, setOpenModal] = useState(false);
+    
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
   const { analysisResults, analysisStatus } = useAppSelector(
@@ -78,7 +82,7 @@ const HomeScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Header title="Smart Grocery Offers" />
+      <Header title= {t("SmartGrocery.smartGroceryOffers")}/>
       <LocationDisplay />
       <StoreSummary
         summary={{ findBestStore: [], analysis: [] }}
@@ -102,7 +106,7 @@ const HomeScreen: React.FC = () => {
                   <ActivityIndicator color="white" />
                 ) : (
                   <Text style={styles.findButtonText}>
-                    Find Best Store ({searchRadius}km)
+                    {t("SmartGrocery.findBestStore")} ({searchRadius}km)
                   </Text>
                 )}
               </TouchableOpacity>
@@ -119,7 +123,7 @@ const HomeScreen: React.FC = () => {
               )}
               {analysisStatus === "failed" && (
                 <Text style={styles.errorText}>
-                  Failed to load analysis results
+                  {t("SmartGrocery.failedToLoadAnalysis")}
                 </Text>
               )}
             </>

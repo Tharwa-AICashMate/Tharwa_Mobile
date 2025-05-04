@@ -26,7 +26,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "App";
 import { getCurrentUserId } from "@/utils/auth";
 import { reverseFavourite } from "@/redux/slices/storeSlice";
+import { useTranslation } from "react-i18next";
+
 const handleOpenMap = (lat: number, lon: number) => {
+ 
+
   const url = Platform.select({
     ios: `maps://?q=${lat},${lon}`,
     android: `geo:${lat},${lon}?q=${lat},${lon}`,
@@ -36,6 +40,8 @@ const handleOpenMap = (lat: number, lon: number) => {
   Linking.openURL(url).catch((err) => console.log("Error opening map:", err));
 };
 const AllStoresPage: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const dispatch = useAppDispatch();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { stores, loading } = useAppSelector((state: RootState) => state.store);
@@ -82,7 +88,19 @@ const AllStoresPage: React.FC = () => {
       })
     );
   };
-
+  const dynamicStyles = {
+    searchIcon: {
+      position: "absolute",
+      [isRTL ? 'right' : 'left']: 12,
+      top: 14,
+    },
+    viewMap: {
+      flexDirection: isRTL ? 'row-reverse' : 'row',
+    },
+    locationContainer: {
+      flexDirection: isRTL ? 'row-reverse' : 'row',
+    }
+  };
   const handelToggleFavourites = (item) => {
     dispatch(reverseFavourite(item.id));
     if (item.is_favourite) {
@@ -97,15 +115,16 @@ const AllStoresPage: React.FC = () => {
       });
     }
   };
+
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="All Stores" />
+      <Header title={t("allStoresScreen.allStores")} />
 
       <View style={styles.content}>
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder="Search stores..."
+            placeholder={t("allStoresScreen.searchPlaceholder")}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
@@ -113,7 +132,7 @@ const AllStoresPage: React.FC = () => {
             name="search"
             size={20}
             color="#666"
-            style={styles.searchIcon}
+            style={[styles.searchIcon, dynamicStyles.searchIcon]}
           />
         </View>
 
@@ -127,9 +146,9 @@ const AllStoresPage: React.FC = () => {
             >
               <View>
                 <Text style={styles.storeName}>{item.name}</Text>
-                <View style={styles.locationContainer}>
+                <View style={[styles.locationContainer, dynamicStyles.locationContainer]}>
                   <Icon name="location-on" size={16} color="#4CAF50" />
-                  <Text style={styles.locationText}>
+                  <Text style={[styles.locationText, isRTL && { marginRight: 8, marginLeft: 0 }]}>
                     {item.city}, {item.country}
                   </Text>
                 </View>
@@ -137,7 +156,7 @@ const AllStoresPage: React.FC = () => {
                   style={styles.viewMap}
                   onPress={() => handleOpenMap(item.latitude, item.longitude)}
                 >
-                  <Text>View In Map</Text>
+                  <Text>{t("allStoresScreen.viewInMap")}</Text>
                   <Icon
                     name="arrow-forward"
                     size={20}
@@ -157,7 +176,7 @@ const AllStoresPage: React.FC = () => {
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Icon name="storefront" size={60} color="#ccc" />
-              <Text style={styles.emptyText}>No stores found</Text>
+              <Text style={styles.emptyText}>{t("allStoresScreen.emptyListMessage")}</Text>
             </View>
           }
         />

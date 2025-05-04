@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import Theme from "@/theme";
+import { useTranslation } from "react-i18next";
 
 interface AnalysisContentProps {
   onAnalyze: (message: string) => void;
@@ -9,12 +10,20 @@ interface AnalysisContentProps {
 
 const AnalysisContent = ({ onAnalyze, isLoading }: AnalysisContentProps) => {
   const [message, setMessage] = useState("");
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
 
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.input}
-        placeholder="Enter Message"
+        style={[
+          styles.input,
+          { 
+            textAlign: isRTL ? 'right' : 'left',
+            writingDirection: isRTL ? 'rtl' : 'ltr'
+          }
+        ]}
+        placeholder={t("SmartGrocery.enterMessage")}
         placeholderTextColor={Theme.colors.primary}
         multiline={true}
         value={message}
@@ -26,7 +35,7 @@ const AnalysisContent = ({ onAnalyze, isLoading }: AnalysisContentProps) => {
         disabled={isLoading}
       >
         <Text style={styles.buttonText}>
-          {isLoading ? "Analyzing..." : "Analyze"}
+          {isLoading ? t("SmartGrocery.analyzing") : t("SmartGrocery.analyzing")}
         </Text>
       </TouchableOpacity>
       

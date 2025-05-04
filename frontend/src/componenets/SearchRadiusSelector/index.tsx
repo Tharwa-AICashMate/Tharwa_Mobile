@@ -4,20 +4,32 @@ import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { RootState } from '@/redux/store';
 import { setSearchRadius } from '@/redux/slices/storeSlice';
 import Theme from '@/theme';
+import { useTranslation } from "react-i18next";
 
 const radiusOptions = [5, 10, 20, 50, 100];
 
 const SearchRadiusSelector: React.FC = () => {
+   const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const dispatch = useAppDispatch();
   const { searchRadius } = useAppSelector((state: RootState) => state.store);
 
   const handleRadiusChange = (radius: number) => {
     dispatch(setSearchRadius(radius));
   };
-
+  const getTranslatedRadius = (radius: number) => {
+    switch (radius) {
+      case 5: return t("SmartGrocery.km5");
+      case 10: return t("SmartGrocery.km10");
+      case 20: return t("SmartGrocery.km20");
+      case 50: return t("SmartGrocery.km50");
+      case 100: return t("SmartGrocery.km100");
+      default: return `${radius} km`;
+    }
+  };
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Search scope:</Text>
+      <Text style={styles.label}>{t("SmartGrocery.searchScope")}</Text>
       <View style={styles.optionsContainer}>
         {radiusOptions.map((radius) => (
           <TouchableOpacity
@@ -34,7 +46,7 @@ const SearchRadiusSelector: React.FC = () => {
                 searchRadius === radius && styles.selectedOptionText,
               ]}
             >
-              {radius} km
+              {getTranslatedRadius(radius)}
             </Text>
           </TouchableOpacity>
         ))}

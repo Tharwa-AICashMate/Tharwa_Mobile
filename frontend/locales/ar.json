@@ -230,7 +230,16 @@
     "add": "إضافة",
     "yourGroceryList": "قائمة مشترياتك:",
     "addItemsToYourGroceryList": "أضف عناصر إلى قائمة مشترياتك",
-    "findBestStore": "البحث عن أفضل متجر ({searchRadius} كم)"
+    "findBestStore": "البحث عن أفضل متجر",
+    "findingBestStore": "جاري البحث عن أفضل متجر...",
+    "openInMaps": "فتح في الخرائط",
+    "bestStoresFound": "أفضل المتاجر التي تم العثور عليها:",
+    "distanceNotAvailable": "المسافة غير متوفرة",
+    "priceNotAvailable": "السعر غير متوفر",
+    "enterMessage": "أدخل الرسالة",
+    "analyze": "تحليل",
+    "analyzing": "جاري التحليل...",
+    "failedToLoadAnalysis": "فشل تحميل نتائج التحليل"
   },
   "favoriteStores": {
     "favoriteStores": "المتاجر المفضلة",
@@ -323,23 +332,32 @@
     "targetAmount": "المبلغ المستهدف",
     "targetAmountPlaceholder": "أدخل المبلغ المستهدف"
   },
-  "addStoreScreen": {
+"addStoreScreen": {
     "addStore": "إضافة متجر",
     "locationNote": "ملاحظة: تعذر الحصول على موقعك. قد لا تكون نتائج البحث خاصة بموقعك.",
     "searchForStoresByName": "ابحث عن متاجر بالاسم...",
     "search": "بحث",
-    "enterStoreNameToSearch": "أدخل اسم متجر للبحث أو اسمح بالوصول إلى الموقع للمتاجر القريبة."
+    "enterStoreNameToSearch": "أدخل اسم متجر للبحث أو اسمح بالوصول إلى الموقع للمتاجر القريبة.",
+    "searchResults": "نتائج البحث:",
+    "noStoresFound": "لم يتم العثور على متاجر. جرب كلمة بحث مختلفة.",
+    "addStoreButton": "إضافة متجر",
+    "viewInMap": "عرض على الخريطة",
+    "thankYou": "شكراً لك!",
+    "storeAdded": "تمت إضافة المتجر {storeName} إلى المفضلة!",
+    "ok": "موافق",
+    "addingStore": "جاري إضافة المتجر..."
   },
   "favoriteStoresScreen": {
     "favoriteStores": "المتاجر المفضلة",
-    "noFavoriteStores": "لا توجد متاجر مفضلة حتى الآن",
-    "viewInMap": "عرض على الخريطة"
+    "viewInMap": "عرض على الخريطة",
+    "noFavoriteStores": "لا توجد متاجر مفضلة حتى الآن"
   },
   "allStoresScreen": {
     "allStores": "جميع المتاجر",
     "noStores": "لم يتم العثور على متاجر",
     "searchPlaceholder": "ابحث عن متاجر",
-    "viewInMap": "عرض على الخريطة"
+    "viewInMap": "عرض على الخريطة",
+    "emptyListMessage": "لا توجد متاجر لعرضها"
   },
   "searchScreen": {
     "searchTitle": "بحث",

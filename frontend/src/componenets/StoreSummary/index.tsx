@@ -4,6 +4,7 @@ import Theme from '@/theme';
 import { StoreSummary as StoreSummaryType }  from '@/types/store';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 type FilterType = 'findBestStore' | 'analysis' ;
+import { useTranslation } from "react-i18next";
 
 interface StoreSummaryProps {
   summary: StoreSummaryType;
@@ -17,7 +18,8 @@ const StoreSummary: React.FC<StoreSummaryProps> = ({
   activeTab
 }) => {
   const { findBestStore , analysis} = summary;
-  
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   return (
     <View style={styles.container}>
       <View style={styles.tabsContainer}>
@@ -30,7 +32,7 @@ const StoreSummary: React.FC<StoreSummaryProps> = ({
           onTouchEnd={() => onSelectTab('findBestStore')}
         >
 <AntDesign name="find" size={24} color={Theme.colors.primary} />
-          <Text style={[styles.tabLabel,activeTab === 'findBestStore' && styles.activeTabText]}>Find by Map</Text>
+          <Text style={[styles.tabLabel,activeTab === 'findBestStore' && styles.activeTabText]}>{t("SmartGrocery.findByMap")}</Text>
          </View>
         
         <View 
@@ -42,7 +44,7 @@ const StoreSummary: React.FC<StoreSummaryProps> = ({
           onTouchEnd={() => onSelectTab('analysis')}
         >
 <Ionicons name="analytics" size={24} color={'202063'}/>
-          <Text style={[styles.tabLabel,activeTab === 'analysis' && styles.activeTabText]}>Analysis</Text>
+          <Text style={[styles.tabLabel,activeTab === 'analysis' && styles.activeTabText]}>{t("SmartGrocery.analysis")}</Text>
         </View>
       </View>
     </View>

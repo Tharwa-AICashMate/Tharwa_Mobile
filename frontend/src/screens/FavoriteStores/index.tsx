@@ -21,6 +21,7 @@ import axiosInstance from "@/config/axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fetchCurrentUser } from "@/redux/slices/AuthSlice";
 import { getCurrentUserId } from "@/utils/auth";
+import { useTranslation } from "react-i18next";
 
 
 const handleOpenMap = (lat: number, lon: number) => {
@@ -35,6 +36,8 @@ const handleOpenMap = (lat: number, lon: number) => {
     );
   };
 const FavoriteStores: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const dispatch = useAppDispatch();
   const [userId, setUserId] = useState("");
   const { userStores, loading } = useAppSelector(
@@ -83,14 +86,13 @@ const FavoriteStores: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title={"Favorite Stores"} />
+      <Header title={t("favoriteStoresScreen.favoriteStores")} />
       <View style={styles.content}>
         <FlatList
           data={userStores}
           refreshControl={
             <RefreshControl
               refreshing={refreshing || loading}
-              // onRefresh={handleRefresh}
               colors={[Theme.colors.primary]}
             />
           }
@@ -116,7 +118,7 @@ const FavoriteStores: React.FC = () => {
                     handleOpenMap(item.latitude, item.longitude)
                   }
                 >
-                  <Text>View In Map</Text>
+                  <Text>{t("favoriteStoresScreen.viewInMap")}</Text>
                   <Icon
                     name="arrow-forward"
                     size={20}
@@ -150,7 +152,7 @@ const FavoriteStores: React.FC = () => {
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Icon name="favorite-border" size={60} color="#ccc" />
-              <Text style={styles.emptyText}>No favorite stores yet</Text>
+              <Text style={styles.emptyText}>{t("favoriteStoresScreen.noFavoriteStores")}</Text>
             </View>
           }
         />
