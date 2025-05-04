@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  I18nManager,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
@@ -18,11 +19,17 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import TransactionSummary from "@/componenets/TransactionSummary";
 import Theme from "@/theme";
+
+// ✅ updated helper import
 import { groupTransactionsByMonth } from "@/utils/helpers";
 
-type FilterType = "all" | "income" | "expence";
+import { useTranslation } from 'react-i18next';
+
+type FilterType = "all" | "income" | "expense";
 
 const TransactionScreen: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const dispatch = useDispatch<AppDispatch>();
   const { transactions, summary, loading, error } = useSelector(
     (state: RootState) => state.transactions
@@ -32,22 +39,23 @@ const TransactionScreen: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
   const navigation = useNavigation();
 
+  useEffect(() => {
+    I18nManager.forceRTL(isRTL);
+  }, [isRTL]);
+
   const loadTransactions = async (reset = false) => {
     try {
       const newPage = reset ? 1 : page + 1;
-      console.log("Fetching page:", newPage);
-      
       const result = await dispatch(fetchTransactionsAsync({ page: newPage }));
       const payload = result.payload.transactions;
-      
+
       if (reset) {
         setPage(1);
       } else {
         setPage(newPage);
       }
-      
+
       if (!payload || payload.length < 20) {
-        console.log("No more transactions to load");
         setHasMore(false);
       }
     } catch (err) {
@@ -63,7 +71,6 @@ const TransactionScreen: React.FC = () => {
 
   const handleLoadMore = () => {
     if (hasMore && !loading) {
-      console.log("Loading more transactions, current page:", page);
       loadTransactions(false);
     }
   };
@@ -92,9 +99,11 @@ const TransactionScreen: React.FC = () => {
   const renderFooter = () => {
     if (loading && page > 1) {
       return (
-        <View style={styles.footerLoadingContainer}>
+        <View style={[styles.footerLoadingContainer, isRTL && styles.rtlRow]}>
           <ActivityIndicator size="large" color="#FFC107" />
-          <Text style={styles.loadingText}>Loading more transactions...</Text>
+          <Text style={styles.loadingText}>
+            {t('transactionScreen.transactions.loadingMore')}
+          </Text>
         </View>
       );
     }
@@ -104,36 +113,45 @@ const TransactionScreen: React.FC = () => {
   if (error) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Error: {error}</Text>
+        <Text style={styles.errorText}>
+          {t('transactionScreen.transactions.error', { error })}
+        </Text>
         <TouchableOpacity
           style={styles.retryButton}
           onPress={() => dispatch(fetchTransactionsAsync())}
         >
-          <Text style={styles.retryButtonText}>Retry</Text>
+          <Text style={styles.retryButtonText}>
+            {t('transactionScreen.common.retry')}
+          </Text>
         </TouchableOpacity>
       </View>
     );
   }
+
   const handleBack = () => {
     navigation.goBack();
   };
-  console.log(page)
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Header title="Transaction" />
+      <View style={[styles.container, isRTL && styles.rtlView]}>
+        <Header title={t('transactionScreen.transactions.title')} />
         <TransactionSummary
           activeTab={activeTab}
           onSelectTab={setActiveTab}
         />
-        {loading && transactions.length == 0 ? (
+        {loading && transactions.length === 0 ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#FFC107" />
+            <Text style={styles.loadingText}>
+              {t('transactionScreen.common.loading')}
+            </Text>
           </View>
         ) : (
           <View style={styles.contentContainer}>
             <FlatList
-              data={Object.entries(groupTransactionsByMonth(transactions))}
+            
+              data={Object.entries(groupTransactionsByMonth(transactions, i18n.language))}
               keyExtractor={(item) => item[0]}
               renderItem={renderMonthSection}
               showsVerticalScrollIndicator={false}
@@ -143,9 +161,9 @@ const TransactionScreen: React.FC = () => {
               onEndReached={handleLoadMore}
               onEndReachedThreshold={0.8}
               ListFooterComponent={renderFooter}
+              contentContainerStyle={isRTL && styles.rtlContent}
             />
           </View>
-
         )}
       </View>
     </SafeAreaView>
@@ -161,18 +179,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Theme.colors.highlight,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
+  rtlView: {
+    direction: 'rtl',
   },
-  title: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#32325D",
+  rtlContent: {
+    direction: 'rtl',
+  },
+  rtlRow: {
+    flexDirection: 'row-reverse',
   },
   contentContainer: {
     flex: 1,
@@ -180,7 +194,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     overflow: "hidden",
-    paddingTop: 16,
+    padding: 16,
   },
   loadingContainer: {
     flex: 1,
@@ -199,7 +213,7 @@ const styles = StyleSheet.create({
     color: "#FF3B30",
     fontSize: 16,
     marginBottom: 16,
-    textAlign: "center",
+    textAlign: 'center',
   },
   retryButton: {
     backgroundColor: "#FFC107",
@@ -211,26 +225,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "600",
   },
-  bottomNavigation: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    paddingVertical: 16,
-    borderTopWidth: 1,
-    borderTopColor: "#F6F8FA",
-  },
-  navItem: {
-    alignItems: "center",
-  },
-  addButton: {
-    backgroundColor: "#FFC107",
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   footerLoadingContainer: {
     padding: 16,
     alignItems: 'center',
@@ -239,9 +233,10 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginLeft: 10,
+    marginRight: 10,
     fontSize: 14,
     color: '#666',
-  }
+  },
 });
 
 export default TransactionScreen;

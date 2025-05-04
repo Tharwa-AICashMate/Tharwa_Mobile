@@ -99,5 +99,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
   },
+  rtlAmount:{
+  textAlign:"center"
+  },
+  rtlDropdownMenu:{
+    right: undefined, 
+    left: 16,
+  }
 });
 export default styles;

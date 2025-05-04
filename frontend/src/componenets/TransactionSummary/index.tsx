@@ -22,6 +22,7 @@ import {
   addTransaction,
   updateIncome,
 } from "@/redux/slices/financeSlice";
+import { useTranslation } from "react-i18next";
 
 interface TransactionSummaryProps {
   activeTab: "all" | "income" | "expence" | null;
@@ -32,13 +33,16 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   activeTab = null,
   onSelectTab,
 }) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modalIncomeVisible, setModalIncomeVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [inputIncomeValue, setInputIncomeValue] = useState("");
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const { balance, expenses, income, savings, loading, error } = useAppSelector(
+  const { balance, expenses, income, savings } = useAppSelector(
     (state) => state.finance
   );
 
@@ -48,16 +52,19 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
       dispatch(fetchFinanceData(userId));
       dispatch(fetchBalance(userId));
     }
-
     fetchAll();
   }, [dispatch]);
 
   const availableBalance = balance - expenses - savings + income;
 
+  // Format numbers in Arabic
+  const formatNumber = (number: number) => {
+    return new Intl.NumberFormat('ar', { style: 'decimal' }).format(number);
+  };
+
   const handleSaveBalance = async () => {
     const parsed = parseFloat(inputValue);
     if (isNaN(parsed)) return;
-
     try {
       const user_id = await getCurrentUserId();
       const url = balance
@@ -85,15 +92,10 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
 
   const handleSaveIncome = async () => {
     const parsedIncome = parseFloat(inputIncomeValue);
-    console.log(parsedIncome)
     if (isNaN(parsedIncome)) return;
-
     try {
       const user_id = await getCurrentUserId();
-      const url =
-        income == null
-          ? `${apiBase}/income/${user_id}`
-          : `${apiBase}/income/${user_id}`;
+      const url = `${apiBase}/income/${user_id}`;
       const method = income == null ? "POST" : "PUT";
 
       const response = await fetch(url, {
@@ -104,7 +106,6 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
 
       if (!response.ok) throw new Error("Failed to save income");
 
-      const data = await response.json();
       dispatch(updateIncome(parsedIncome));
     } catch (error) {
       console.log("Error saving income:", error);
@@ -123,10 +124,8 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         style={styles.balanceContainer}
         onPress={() => onSelectTab("all")}
       >
-        <Text style={styles.balanceLabel}>Total Balance</Text>
-        <Text style={styles.balanceAmount}>
-          ${availableBalance?.toFixed(2)}
-        </Text>
+        <Text style={styles.balanceLabel}>{t("transactionScreen.transactionSummary.totalBalance")}</Text>
+        <Text style={styles.balanceAmount}>{isRTL?formatNumber(availableBalance):availableBalance}</Text>
       </TouchableOpacity>
 
       <View style={styles.tabsContainer}>
@@ -139,21 +138,11 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
             size={24}
             color={activeTab === "income" ? "#fff" : Theme.colors.primary}
           />
-          <Text
-            style={[
-              styles.tabLabel,
-              activeTab === "income" && styles.activeTabText,
-            ]}
-          >
-            Income
+          <Text style={[styles.tabLabel, activeTab === "income" && styles.activeTabText]}>
+            {t("transactionScreen.transactionSummary.income")}
           </Text>
-          <Text
-            style={[
-              styles.tabAmount,
-              activeTab === "income" && styles.activeTabText,
-            ]}
-          >
-            ${income.toFixed(2)}
+          <Text style={[styles.tabAmount, activeTab === "income" && styles.activeTabText]}>
+            {isRTL?formatNumber(income):income}
           </Text>
         </TouchableOpacity>
 
@@ -166,43 +155,27 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
             size={24}
             color={activeTab === "expense" ? "#fff" : "#202063"}
           />
-          <Text
-            style={[
-              styles.tabLabel,
-              activeTab === "expense" && styles.activeTabText,
-            ]}
-          >
-            Expense
+          <Text style={[styles.tabLabel, activeTab === "expense" && styles.activeTabText]}>
+            {t("transactionScreen.transactionSummary.expense")}
           </Text>
-          <Text
-            style={[
-              styles.tabAmount,
-              activeTab === "expense" && styles.activeTabText,
-            ]}
-          >
-            ${expenses.toFixed(2)}
+          <Text style={[styles.tabAmount, activeTab === "expense" && styles.activeTabText]}>
+            {isRTL?formatNumber(expenses):expenses}
           </Text>
         </TouchableOpacity>
       </View>
 
       {activeTab === "all" && (
         <View style={styles.addExpenseContainer}>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => setModalVisible(true)}
-          >
-            <Text style={styles.addButtonText}>Edit Balance</Text>
+          <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+            <Text style={styles.addButtonText}>{t("transactionScreen.transactionSummary.editBalance")}</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      {activeTab === "incom" && (
+      {activeTab === "income" && (
         <View style={styles.addExpenseContainer}>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => setModalIncomeVisible(true)}
-          >
-            <Text style={styles.addButtonText}>Edit Income</Text>
+          <TouchableOpacity style={styles.addButton} onPress={() => setModalIncomeVisible(true)}>
+            <Text style={styles.addButtonText}>{t("transactionScreen.transactionSummary.editIncome")}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -210,35 +183,28 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
       {activeTab === "expence" && (
         <View style={styles.addExpenseContainer}>
           <TouchableOpacity style={styles.addButton} onPress={handleAddExpense}>
-            <Text style={styles.addButtonText}>Add Expense</Text>
+            <Text style={styles.addButtonText}>{t("transactionScreen.transactionSummary.addExpense")}</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      {/* Modals for Balance and Income */}
       <Modal animationType="slide" transparent visible={modalVisible}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Enter Total Balance</Text>
+            <Text style={styles.modalTitle}>{t("transactionScreen.transactionSummary.enterBalance")}</Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
               value={inputValue}
               onChangeText={setInputValue}
-              placeholder="Enter amount"
+              placeholder={t("transactionScreen.transactionSummary.enterAmount")}
             />
             <View style={styles.buttonRow}>
-              <TouchableOpacity
-                onPress={() => setModalVisible(false)}
-                style={styles.cancelButton}
-              >
-                <Text style={styles.cancelText}>Cancel</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
+                <Text style={styles.cancelText}>{t("transactionScreen.common.cancel")}</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleSaveBalance}
-                style={styles.saveButton}
-              >
-                <Text style={styles.saveText}>Save</Text>
+              <TouchableOpacity onPress={handleSaveBalance} style={styles.saveButton}>
+                <Text style={styles.saveText}>{t("transactionScreen.common.save")}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -248,26 +214,20 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
       <Modal animationType="slide" transparent visible={modalIncomeVisible}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Enter Income</Text>
+            <Text style={styles.modalTitle}>{t("transactionScreen.transactionSummary.enterIncome")}</Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
               value={inputIncomeValue}
               onChangeText={setInputIncomeValue}
-              placeholder="Enter amount"
+              placeholder={t("transactionScreen.transactionSummary.enterAmount")}
             />
             <View style={styles.buttonRow}>
-              <TouchableOpacity
-                onPress={() => setModalIncomeVisible(false)}
-                style={styles.cancelButton}
-              >
-                <Text style={styles.cancelText}>Cancel</Text>
+              <TouchableOpacity onPress={() => setModalIncomeVisible(false)} style={styles.cancelButton}>
+                <Text style={styles.cancelText}>{t("transactionScreen.common.cancel")}</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleSaveIncome}
-                style={styles.saveButton}
-              >
-                <Text style={styles.saveText}>Save</Text>
+              <TouchableOpacity onPress={handleSaveIncome} style={styles.saveButton}>
+                <Text style={styles.saveText}>{t("transactionScreen.common.save")}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -276,7 +236,8 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     </View>
   );
 };
-export default TransactionSummary;
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -404,3 +365,4 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+export default TransactionSummary;

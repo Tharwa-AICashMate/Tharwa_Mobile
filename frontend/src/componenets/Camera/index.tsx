@@ -81,7 +81,9 @@ export default function CameraScreen() {
   const [userId, setUserId] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [storesLoading, setStoresLoading] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+
   const { items: categories, loading: categoriesLoading } = useSelector(
     (state: RootState) => state.categories
   );
@@ -124,35 +126,35 @@ export default function CameraScreen() {
     loadData();
   }, [dispatch]);
 
-    // Fetch user stores when userId changes
-    useEffect(() => {
-      const loadUserStores = async () => {
-        try {
-          if (userId) {
-            setStoresLoading(true);
-            const response = await axiosInstance.get(`/user/stores/${userId}`);
-            dispatch(setUserStores(response.data));
-          }
-        } catch (error) {
-          console.log("Error loading stores:", error);
-        } finally {
-          setStoresLoading(false);
+  // Fetch user stores when userId changes
+  useEffect(() => {
+    const loadUserStores = async () => {
+      try {
+        if (userId) {
+          setStoresLoading(true);
+          const response = await axiosInstance.get(`/user/stores/${userId}`);
+          dispatch(setUserStores(response.data));
         }
-      };
-  
-      loadUserStores();
-    }, [dispatch, userId]);
-  
-    useEffect(() => {
-      if (result && categories.length > 0) {
-        const suggestedCategory = findCategoryByName(result.category);
-        setSelectedCategory(suggestedCategory || categories[0]);
-        setEditableResult({...result});
-        const generatedDescription = generateDescriptionFromLineItems(result);
-        setDescription(generatedDescription);
-        setModalVisible(true);
+      } catch (error) {
+        console.error("Error loading stores:", error);
+      } finally {
+        setStoresLoading(false);
       }
-    }, [result, categories]);
+    };
+
+    loadUserStores();
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    if (result && categories.length > 0) {
+      const suggestedCategory = findCategoryByName(result.category);
+      setSelectedCategory(suggestedCategory || categories[0]);
+      setEditableResult({...result});
+      // const generatedDescription = generateDescriptionFromLineItems(result);
+      // setDescription(generatedDescription);
+      setModalVisible(true);
+    }
+  }, [result, categories]);
 
   const checkForDuplicateCategory = (name: string): boolean => {
     return categories.some(
@@ -175,21 +177,6 @@ export default function CameraScreen() {
     }).format(amount);
   };
 
-  const generateDescriptionFromLineItems = (result: InvoiceResult): string => {
-    if (!result.line_items || result.line_items.length === 0) {
-      return result.description || `Receipt from ${result.supplier_name}`;
-    }
-    
-    const formattedItems = result.line_items.map(item => {
-      const quantityText = item.quantity ? `${item.quantity}x ` : '';
-      const priceText = formatCurrency(item.unitPrice);
-      const totalText = formatCurrency(item.unitPrice * (item.quantity || 1));
-      
-      return `${quantityText}${item.name} (${priceText} each) = ${totalText}`;
-    }).join('\n');
-    
-    return `Receipt from ${result.supplier_name}:\n${formattedItems}`;
-  };
 
   const findCategoryByName = (name?: string): Category | null => {
     if (!name || categories.length === 0) return null;
@@ -207,7 +194,7 @@ export default function CameraScreen() {
       transaction.amount.toFixed(2),
       transaction.title,
       transaction.user_id,
-      transaction.created_at.toISOString().split('T')[0]
+      transaction.created_at.toISOString().split('camera.T')[0]
     ].join('|');
     
     let hash = 0;
@@ -221,7 +208,7 @@ export default function CameraScreen() {
 
   const takePhoto = async () => {
     if (!cameraRef.current) {
-      Alert.alert("Error", "Camera not ready");
+      Alert.alert("Error", t('camera.camera.errors.cameraNotReady'));
       return;
     }
 
@@ -236,14 +223,14 @@ export default function CameraScreen() {
       if (!photo) throw new Error("No photo captured");
       setPhotoUri(photo.uri);
     } catch (error: any) {
-      console.log("Camera Error:", error);
-      Alert.alert("Camera Error", error.message || "Failed to take photo");
+      console.error("Camera Error:", error);
+      Alert.alert("Camera Error", error.message || t('camera.camera.errors.cameraNotReady'));
     }
   };
 
   const sendToBackend = async () => {
     if (!photoUri) {
-      Alert.alert("Error", "No photo to send");
+      Alert.alert("Error", t('camera.camera.errors.noPhoto'));
       return;
     }
 
@@ -297,7 +284,7 @@ export default function CameraScreen() {
       });
     
     } catch (error: any) {
-      Alert.alert("Error", error.message || "Failed to process receipt");
+      Alert.alert("Error", error.message || t('camera.camera.errors.processingFailed'));
     } finally {
       setIsProcessing(false);
     }
@@ -318,8 +305,6 @@ export default function CameraScreen() {
     setEditMode(!editMode);
   };
 
-
-
   const handleStoreSelection = (storeId: string) => {
     if (storeId === "add_new_store") {
       setModalVisible(false);
@@ -328,6 +313,7 @@ export default function CameraScreen() {
       setSelectedStore(storeId);
     }
   };
+  
   const handleAddTransaction = async () => {
     console.log("Add Transaction clicked", { 
       hasEditableResult: !!editableResult, 
@@ -336,7 +322,7 @@ export default function CameraScreen() {
     });
     
     if (!editableResult || !selectedCategory || !userId) {
-      Alert.alert("Error", "Missing required information to create transaction");
+      Alert.alert("Error", t('camera.camera.errors.missingInfo'));
       return;
     }
     
@@ -371,11 +357,11 @@ export default function CameraScreen() {
       if (processedTransactions.has(transactionHash)) {
         Alert.alert(
           "Duplicate Transaction", 
-          "This transaction appears to be a duplicate. Are you sure you want to add it?",
+          t('camera.receipt.messages.duplicate'),
           [
-            { text: "Cancel", style: "cancel" },
+            { text: t('camera.receipt.messages.cancel'), style: "cancel" },
             { 
-              text: "Add Anyway", 
+              text: t('camera.receipt.messages.addAnyway'), 
               style: "destructive",
               onPress: () => createTransactionRecord(transaction, transactionHash)
             }
@@ -386,8 +372,8 @@ export default function CameraScreen() {
       
       await createTransactionRecord(transaction, transactionHash);
     } catch (error) {
-      console.log("Error in handleAddTransaction:", error);
-      Alert.alert("Error", "Failed to process transaction");
+      console.error("Error in handleAddTransaction:", error);
+      Alert.alert("Error", t('camera.camera.errors.transactionFailed'));
     }
   };
   
@@ -406,18 +392,18 @@ export default function CameraScreen() {
         
         Alert.alert(
           "Success", 
-          `Transaction added to ${selectedCategory?.name} category!`,
+          t('camera.receipt.messages.success', { category: selectedCategory?.name }),
           [{ text: "OK", onPress: () => {
             setModalVisible(false);
             resetCamera();
           }}]
         );
       } else if (createTransaction.rejected.match(resultAction)) {
-        throw new Error(resultAction.payload as string || "Failed to create transaction");
+        throw new Error(resultAction.payload as string || t('camera.camera.errors.transactionFailed'));
       }
     } catch (error: any) {
-      console.log("Transaction creation error:", error);
-      Alert.alert("Error", error.message || "Failed to add transaction");
+      console.error("Transaction creation error:", error);
+      Alert.alert("Error", error.message || t('camera.camera.errors.transactionFailed'));
     } finally {
       setIsCreatingTransaction(false);
     }
@@ -425,12 +411,12 @@ export default function CameraScreen() {
 
   const handleCreateCategory = async () => {
     if (!newCategoryName.trim() || !userId) {
-      Alert.alert("Error", userId ? "Category name cannot be empty" : "User ID not available");
+      Alert.alert("Error", userId ? t('camera.category.create.errors.emptyName') : "User ID not available");
       return;
     }
 
     if (checkForDuplicateCategory(newCategoryName)) {
-      Alert.alert("Error", "A category with this name already exists");
+      Alert.alert("Error", t('camera.category.create.errors.duplicate'));
       return;
     }
 
@@ -446,12 +432,12 @@ export default function CameraScreen() {
         setNewCategoryModalVisible(false);
         setNewCategoryName("");
         setSelectedCategory(resultAction.payload);
-        Alert.alert("Success", "Category created successfully!");
+        Alert.alert("Success", t('camera.category.create.success'));
       } else if (addNewCategory.rejected.match(resultAction)) {
-        throw new Error(resultAction.payload as string || "Failed to create category");
+        throw new Error(resultAction.payload as string || t('camera.category.create.errors.failed'));
       }
     } catch (error: any) {
-      Alert.alert("Error", error.message || "Failed to create category");
+      Alert.alert("Error", error.message || t('camera.category.create.errors.failed'));
     }
   };
 
@@ -486,12 +472,12 @@ export default function CameraScreen() {
   }
 
   return (
-    <GestureHandlerRootView style={styles.flex}>
+    <GestureHandlerRootView style={[styles.flex, isRTL && { direction: 'rtl' }]}>
       <ScrollView
         contentContainerStyle={styles.flexGrow}
         keyboardShouldPersistTaps="handled"
       >
-        <Header title={t('header.camera')} />
+        <Header title={t('camera.header.camera')} />
         {!photoUri ? (
           <View style={styles.cameraContainer}>
             <CameraView
@@ -554,7 +540,7 @@ export default function CameraScreen() {
         >
            <View style={modalStyles.modalContent}>
             <View style={modalStyles.modalHeader}>
-              <Text style={modalStyles.modalTitle}>Receipt Details</Text>
+              <Text style={modalStyles.modalTitle}>{t('camera.receipt.title')}</Text>
               <View style={modalStyles.headerButtons}>
                 <TouchableOpacity 
                   style={modalStyles.editButton} 
@@ -575,21 +561,21 @@ export default function CameraScreen() {
               {editableResult && (
                 <>
                   <View style={modalStyles.receiptCard}>
-                    {renderEditableField("supplier_name", "Vendor", "business-outline")}
-                    {renderEditableField("invoice_date", "Date", "calendar-outline")}
-                    {renderEditableField("total_amount", "Amount", "cash-outline")}
+                    {renderEditableField("supplier_name", t('camera.receipt.fields.vendor'), "business-outline")}
+                    {renderEditableField("invoice_date", t('camera.receipt.fields.date'), "calendar-outline")}
+                    {renderEditableField("total_amount", t('camera.receipt.fields.amount'), "cash-outline")}
                     
                     {/* Store Selector */}
                     {storesLoading ? (
                       <View style={modalStyles.loadingContainer}>
                         <ActivityIndicator size="small" color={Theme.colors.primary} />
-                        <Text style={modalStyles.loadingText}>Loading stores...</Text>
+                        <Text style={modalStyles.loadingText}>{t('camera.receipt.messages.loadingStores')}</Text>
                       </View>
                     ) : userStores.length > 0 ? (
                       <View style={modalStyles.fieldContainer}>
                         <View style={modalStyles.fieldLabelContainer}>
                           <Ionicons name="storefront-outline" size={18} color="#666" style={modalStyles.fieldIcon} />
-                          <Text style={modalStyles.fieldLabel}>Store</Text>
+                          <Text style={modalStyles.fieldLabel}>{t('camera.receipt.fields.store')}</Text>
                         </View>
                         <View style={modalStyles.storeSelectorContainer}>
                           <Picker
@@ -598,7 +584,7 @@ export default function CameraScreen() {
                             onValueChange={handleStoreSelection}
                             dropdownIconColor={Theme.colors.primary}
                           >
-                            <Picker.Item label="Select a store..." value={null} />
+                            <Picker.Item label={t('camera.receipt.placeholders.selectStore')} value={null} />
                             {userStores.map((store) => (
                               <Picker.Item 
                                 key={store.id} 
@@ -607,7 +593,7 @@ export default function CameraScreen() {
                               />
                             ))}
                             <Picker.Item 
-                              label="+ Add New Store" 
+                              label={t('camera.receipt.buttons.addNewStore')} 
                               value="add_new_store"
                               color={Theme.colors.primary}
                             />
@@ -623,7 +609,7 @@ export default function CameraScreen() {
                         }}
                       >
                         <Text style={modalStyles.addStoreButtonText}>
-                          <Ionicons name="add-circle-outline" size={16} /> Add Your First Store
+                          <Ionicons name="add-circle-outline" size={16} /> {t('camera.receipt.buttons.addFirstStore')}
                         </Text>
                       </TouchableOpacity>
                     )}
@@ -637,13 +623,13 @@ export default function CameraScreen() {
                     />
                     
                     <View style={modalStyles.descriptionContainer}>
-                      <Text style={modalStyles.descriptionLabel}>Description</Text>
+                      <Text style={modalStyles.descriptionLabel}>{t('camera.receipt.fields.description')}</Text>
                       <TextInput
                         style={modalStyles.descriptionInput}
                         multiline
                         value={description}
                         onChangeText={setDescription}
-                        placeholder="Add additional details..."
+                        placeholder={t('camera.receipt.placeholders.addDescription')}
                       />
                     </View>
                   </View>
@@ -673,7 +659,7 @@ export default function CameraScreen() {
                 ) : (
                   <>
                     <Ionicons name="add-circle-outline" size={20} color="#fff" style={modalStyles.buttonIcon} />
-                    <Text style={modalStyles.buttonText}>Add Transaction</Text>
+                    <Text style={modalStyles.buttonText}>{t('camera.receipt.buttons.addTransaction')}</Text>
                   </>
                 )}
               </TouchableOpacity>
@@ -691,7 +677,7 @@ export default function CameraScreen() {
         <View style={modalStyles.centeredView}>
           <View style={modalStyles.modalView}>
             <View style={modalStyles.modalHeader}>
-              <Text style={modalStyles.modalTitle}>Create New Category</Text>
+              <Text style={modalStyles.modalTitle}>{t('camera.category.create.title')}</Text>
               <TouchableOpacity 
                 style={modalStyles.closeIcon} 
                 onPress={() => setNewCategoryModalVisible(false)}
@@ -701,15 +687,15 @@ export default function CameraScreen() {
             </View>
             
             <View style={modalStyles.formContainer}>
-              <Text style={modalStyles.formLabel}>Category Name</Text>
+              <Text style={modalStyles.formLabel}>{t('camera.category.create.name')}</Text>
               <TextInput
                 style={modalStyles.textInput}
-                placeholder="Enter category name"
+                placeholder={t('camera.category.create.placeholders.name')}
                 value={newCategoryName}
                 onChangeText={setNewCategoryName}
               />
               
-              <Text style={[modalStyles.formLabel, modalStyles.iconSectionLabel]}>Choose Icon</Text>
+              <Text style={[modalStyles.formLabel, modalStyles.iconSectionLabel]}>{t('camera.category.create.icon')}</Text>
               <ScrollView 
                 horizontal 
                 showsHorizontalScrollIndicator={false} 
@@ -739,7 +725,7 @@ export default function CameraScreen() {
                   style={modalStyles.cancelButton}
                   onPress={() => setNewCategoryModalVisible(false)}
                 >
-                  <Text style={modalStyles.cancelButtonText}>Cancel</Text>
+                  <Text style={modalStyles.cancelButtonText}>{t('camera.category.create.buttons.cancel')}</Text>
                 </TouchableOpacity>
                 
                 <TouchableOpacity 
@@ -750,7 +736,7 @@ export default function CameraScreen() {
                   onPress={handleCreateCategory}
                   disabled={!newCategoryName.trim() || !userId}
                 >
-                  <Text style={modalStyles.createButtonText}>Create</Text>
+                  <Text style={modalStyles.createButtonText}>{t('camera.category.create.buttons.create')}</Text>
                 </TouchableOpacity>
               </View>
             </View>

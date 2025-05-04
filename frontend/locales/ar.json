@@ -417,5 +417,169 @@
     "allFieldsRequired": "جميع الحقول مطلوبة",
     "passwordError": "كلمة السر يجب أن تحتوي على 8 أحرف على الأقل",
     "passwordErrorMatch": "كلمات المرور غير متطابقة"
+  },
+
+  "transactionScreen": {
+    "transactions": {
+      "title": "المعاملات",
+      "loadingMore": "جاري تحميل المزيد من المعاملات...",
+      "error": "خطأ: {error}"
+    },
+    "common": {
+      "loading": "جاري التحميل...",
+      "retry": "إعادة المحاولة",
+      "cancel": "إلغاء",
+      "save": "حفظ"
+    },
+    "transactionSummary": {
+      "totalBalance": "الرصيد الإجمالي",
+      "income": "الدخل",
+      "expense": "المصروفات",
+      "editBalance": "تعديل الرصيد",
+      "editIncome": "تعديل الدخل",
+      "addExpense": "إضافة مصروف",
+      "enterBalance": "أدخل رصيدك",
+      "enterIncome": "أدخل دخلك",
+      "enterAmount": "أدخل المبلغ"
+    }
+  },
+
+  "transactionItem": {
+    "edit": "تعديل",
+    "delete": "حذف",
+    "viewDetails": "عرض التفاصيل"
+  },
+
+  "categories": {
+    "name": "الفئات",
+    "more": "المزيد",
+    "income": "الدخل",
+    "noCategoriesFound": "لم يتم العثور على فئات",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "cancel": "إلغاء",
+    "deleteCategory": "حذف الفئة",
+    "confirmDeleteCategory": "هل أنت متأكد أنك تريد حذف الفئة \"{{categoryName}}\"؟",
+    "userNotAuthenticated": "المستخدم غير مصادق عليه",
+    "categoryNameEmpty": "لا يمكن أن يكون اسم الفئة فارغًا",
+    "categoryNameTooLong": "لا يمكن أن يتجاوز اسم الفئة 20 حرفًا",
+    "categoryNameExists": "توجد فئة بهذا الاسم بالفعل",
+    "selectIcon": "الرجاء اختيار أيقونة للفئة",
+    "addCategory": "إضافة فئة",
+    "editCategory": "تعديل الفئة",
+    "categoryName": "اسم الفئة",
+    "save": "حفظ",
+    "firstCategory": "أنشئ فئتك الأولى",
+    "selectIconPrompt": "اختر أيقونة",
+    "addNewCategory": "إضافة فئة جديدة",
+    "add": "إضافة فئة جديدة",
+    "namePlaceholder": "اسم الفئة",
+    "selectCategoryIcon": "اختر أيقونة",
+    "selectCategory": "اختر الفئة",
+    "update": "تحديث",
+    "characterCount": "{{count}}/20 حرف",
+    "addexpense": "إضافة مصروفات"
+  },
+  "savingsGoal": {
+    "add": "إضافة هدف توفير",
+    "edit": "تعديل هدف التوفير",
+    "name": "الاسم",
+    "namePlaceholder": "اسم الهدف",
+    "targetAmount": "المبلغ المستهدف",
+    "targetAmountPlaceholder": "أدخل المبلغ المستهدف"
+  },
+  "validation": {
+    "nameRequired": "الاسم مطلوب",
+    "iconRequired": "الأيقونة مطلوبة",
+    "targetRequired": "المبلغ المستهدف مطلوب",
+    "invalidAmount": "يرجى إدخال مبلغ صالح"
+  },
+  "camera": {
+    "header": {
+      "camera": "ماسح الإيصالات"
+    },
+    "camera": {
+      "errors": {
+        "noPhoto": "لا توجد صورة للإرسال",
+        "cameraNotReady": "الكاميرا غير جاهزة",
+        "processingFailed": "فشل في معالجة الإيصال",
+        "missingInfo": "معلومات مطلوبة مفقودة لإنشاء المعاملة",
+        "transactionFailed": "فشل في إضافة المعاملة"
+      },
+      "buttons": {
+        "takePhoto": "التقاط صورة",
+        "process": "معالجة",
+        "reset": "إعادة ضبط"
+      }
+    },
+    "receipt": {
+      "title": "تفاصيل الإيصال",
+      "fields": {
+        "vendor": "البائع",
+        "date": "التاريخ",
+        "amount": "المبلغ",
+        "store": "المتجر",
+        "description": "الوصف"
+      },
+      "placeholders": {
+        "selectStore": "اختر متجراً...",
+        "addDescription": "إضافة تفاصيل إضافية..."
+      },
+      "buttons": {
+        "edit": "تعديل",
+        "save": "حفظ",
+        "close": "إغلاق",
+        "addTransaction": "إضافة معاملة",
+        "addNewStore": "+ إضافة متجر جديد",
+        "addFirstStore": "إضافة أول متجر"
+      },
+      "messages": {
+        "loadingStores": "جاري تحميل المتاجر...",
+        "success": "تمت إضافة المعاملة إلى فئة {{category}}!",
+        "duplicate": "تبدو هذه المعاملة مكررة. هل أنت متأكد أنك تريد إضافتها؟",
+        "addAnyway": "إضافة على أي حال",
+        "cancel": "إلغاء"
+      }
+    },
+    "lineItems": {
+      "title": "العناصر",
+      "empty": "لم يتم اكتشاف أي عناصر",
+
+      "fields": {
+        "item": "العنصر",
+        "price": "السعر",
+        "quantity": "الكمية",
+        "total": "الإجمالي"
+      },
+      "buttons": {
+        "add": "إضافة عنصر"
+      }
+    },
+    "category": {
+      "title": "الفئة",
+      "select": "اختر فئة",
+      "loading": "جاري تحميل الفئات...",
+      "create": {
+        "title": "إنشاء فئة جديدة",
+        "name": "اسم الفئة",
+        "icon": "اختر أيقونة",
+        "placeholders": {
+          "name": "أدخل اسم الفئة"
+        },
+        "buttons": {
+          "create": "إنشاء",
+          "cancel": "إلغاء"
+        },
+        "errors": {
+          "emptyName": "لا يمكن أن يكون اسم الفئة فارغاً",
+          "duplicate": "توجد بالفعل فئة بهذا الاسم",
+          "failed": "فشل في إنشاء الفئة"
+        },
+        "success": "تم إنشاء الفئة بنجاح!"
+      },
+      "buttons": {
+        "addNew": "+ إضافة فئة جديدة"
+      }
+    }
   }
 }

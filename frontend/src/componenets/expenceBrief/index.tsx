@@ -14,32 +14,38 @@ interface ExpenseBriefProps {
   setTotalBalance?: (balance: number) => void;
 }
 
+// Utility: convert English digits to Arabic numerals
+const toArabicDigits = (input: string | number) => {
+  const arabicDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+  return input
+    .toString()
+    .replace(/\d/g, (d) => arabicDigits[parseInt(d)]);
+};
+
 const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
-  
+
   const dispatch = useAppDispatch();
   const { balance, expenses, income, savings, loading, error } = useAppSelector(
     (state) => state.finance
   );
-  
-  console.log({ balance, expenses, income, savings, loading, error });
 
   useEffect(() => {
     async function fetchAll() {
       const userId = await getCurrentUserId();
-      console.log(userId);
       dispatch(fetchFinanceData(userId));
       dispatch(fetchBalance(userId));
+      if (setTotalBalance) setTotalBalance(balance);
     }
 
     fetchAll();
   }, [dispatch]);
 
   const availableBalance = balance - expenses - savings + income;
-  const percentage = availableBalance
-    ? (expenses / (balance + income)) * 100
-    : 0;
+  const percentage = availableBalance ? (expenses / (balance + income)) * 100 : 0;
+  const percentageText = isRTL ? toArabicDigits(percentage.toFixed(2)) : percentage.toFixed(2);
+
   return (
     <View style={{ marginBottom: 30 }}>
       <View style={styles.budgetContainer}>
@@ -49,22 +55,23 @@ const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
       <View style={styles.budgetContainer}>
         <View style={styles.progressContainer}>
           <ProgressBar
-            percentage={parseFloat(percentage?.toFixed(2))}
+            percentage={parseFloat(percentage.toFixed(2))}
             amount={availableBalance || 0}
           />
         </View>
-        <View style={[styles.budgetStatus, { 
-          flexDirection: isRTL ? 'row-reverse' : 'row',
-          
-        }]}>
+
+        <View style={[
+          styles.budgetStatus,
+          { flexDirection: isRTL ? 'row-reverse' : 'row' }
+        ]}>
           <Ionicons
             name="checkbox-outline"
             size={16}
             color={Theme.colors.text}
           />
-          <Text style={[styles.budgetStatusText]}>
+          <Text style={styles.budgetStatusText}>
             {t('expenseBrief.statusMessage', {
-              percentage: percentage?.toFixed(2),
+              percentage: percentageText,
               status: percentage < 50 ? t('expenseBrief.good') : t('expenseBrief.bad')
             })}
           </Text>
