@@ -1,9 +1,19 @@
 import Theme from "@/theme";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, I18nManager } from "react-native";
+import i18next from "../../../services/i18next";
+const getIsRTL = () => {
+  const isRTL = i18next.language === "ar" || I18nManager.isRTL;
+  console.log("i18next.language:", i18next.language);
+  console.log("I18nManager.isRTL:", I18nManager.isRTL);
+  console.log("isRTL:", isRTL);
+  return isRTL;
+};
+
 const screenWidth = Dimensions.get("window").width;
-const cardWidth = screenWidth / 3 - 18; 
+const cardWidth = screenWidth / 3 - 18;
 const styles = StyleSheet.create({
   container: {
+    direction: getIsRTL() ? "rtl" : "ltr",
     flex: 1,
     backgroundColor: Theme.colors.primary,
   },
@@ -33,6 +43,8 @@ const styles = StyleSheet.create({
   },
   categoriesContainer: {
     flex: 1,
+    flexDirection: getIsRTL() ? "row-reverse" : "row",
+    justifyContent: "flex-start",
     backgroundColor: Theme.colors.background,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
@@ -69,8 +81,8 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   loadingText: {
@@ -80,8 +92,8 @@ const styles = StyleSheet.create({
   },
   emptyStateContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 10,
     minHeight: 300,
   },
@@ -89,23 +101,23 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.05)",
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 10,
     elevation: 1,
   },
   emptyStateTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: Theme.colors.text,
     marginBottom: 10,
   },
   emptyStateText: {
     fontSize: 14,
     color: Theme.colors.textDark,
-    textAlign: 'center',
-    maxWidth: '80%',
+    textAlign: "center",
+    maxWidth: "80%",
     lineHeight: 22,
   },
   actionModalOverlay: {
@@ -152,7 +164,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
-
-})
-  export default styles
+});
+export default styles;

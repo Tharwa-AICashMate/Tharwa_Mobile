@@ -281,12 +281,17 @@
     "currencySymbol": "ر.س",
     "addSavings": "إضافة ادخار",
     "addToSavings": "إضافة إلى المدخرات",
+    "more": "المزيد",
+    "loading": "جاري التحميل...",
     "noSavings": {
       "createYourFirstGoal": "إنشاء هدفك الأول",
       "startSavingForSomethingSpecial": "ابدأ الادخار لشيء مميز بإضافة هدفك الأول"
     },
     "savingsModal": {
       "addSavingsGoal": "إضافة هدف ادخار",
+      "editSavingsGoal": "تعديل هدف الادخار",
+      "deleteSavingsGoal": "حذف هدف الادخار",
+      "deleteSavingsGoalConfirmation": "هل أنت متأكد من حذف هدف الادخار {{selectedGoal.name}}?",
       "name": "الاسم",
       "goalNamePlaceholder": "اسم الهدف",
       "charactersLimit": "{0}/20 حرفًا",
@@ -294,8 +299,29 @@
       "enterTargetAmount": "أدخل المبلغ المستهدف",
       "selectIcon": "اختر أيقونة",
       "cancel": "إلغاء",
-      "save": "حفظ"
+      "save": "حفظ",
+      "update": "تحديث",
+      "delete": "حذف",
+      "edit": "تعديل"
+      
+    },
+    "savingsErrors": {
+      "goalName": "اسم الهدف مطلوب",
+      "goalNameLength": "اسم الهدف يجب أن يكون أقل من 3 حروف",
+      "goalNameDuplicate": "اسم الهدف موجود مسبقًا",
+      "targetAmount": "المبلغ المستهدف مطلوب",
+      "targetAmountNegative": "المبلغ المستهدف يجب أن يكون رقمًا موجبًا",
+      "targetAmountExceeding": "المبلغ المستهدف يجب أن يكون أقل من 1,000,000",
+      "iconError": "الرجاء اختيار أيقونة"
     }
+  },
+  "savingsGoal": {
+    "add": "إضافة هدف توفير",
+    "edit": "تعديل هدف التوفير",
+    "name": "الاسم",
+    "namePlaceholder": "اسم الهدف",
+    "targetAmount": "المبلغ المستهدف",
+    "targetAmountPlaceholder": "أدخل المبلغ المستهدف"
   },
   "addStoreScreen": {
     "addStore": "إضافة متجر",
@@ -479,14 +505,6 @@
     "update": "تحديث",
     "characterCount": "{{count}}/20 حرف",
     "addexpense": "إضافة مصروفات"
-  },
-  "savingsGoal": {
-    "add": "إضافة هدف توفير",
-    "edit": "تعديل هدف التوفير",
-    "name": "الاسم",
-    "namePlaceholder": "اسم الهدف",
-    "targetAmount": "المبلغ المستهدف",
-    "targetAmountPlaceholder": "أدخل المبلغ المستهدف"
   },
   "validation": {
     "nameRequired": "الاسم مطلوب",

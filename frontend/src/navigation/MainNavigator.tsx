@@ -80,17 +80,12 @@ export default function MainNavigator() {
               name="transDetails"
               component={TransactionsDetails}
             />
+            <RootStack.Screen name="AllStores" component={AllStoresPage} />
             <RootStack.Screen
-              name="AllStores"
-              component={AllStoresPage}
-            />
-             <RootStack.Screen
               name="FavoriteStores"
               component={FavoriteStores}
             />
-            <RootStack.Screen
-              name="AddStore"
-              component={AddStorePage}/>
+            <RootStack.Screen name="AddStore" component={AddStorePage} />
 
             {/* Settings & Profile */}
             <RootStack.Screen

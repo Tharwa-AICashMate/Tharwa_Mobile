@@ -10,8 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Theme from '@/theme';
 import { styles } from './style';
-import { useTranslation } from 'react-i18next';
-
+import { useTranslation } from "react-i18next";
 const CATEGORY_ICONS = [
   'wallet-outline',
   'cart-outline',
@@ -85,17 +84,21 @@ const AddCategoryModal = ({
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text style={styles.modalTitle}>
-            {showTargetInput 
-              ? isEditing ? t('savingsGoal.edit') : t('savingsGoal.add') 
-              : isEditing ? t('categories.edit') : t('categories.add')}
+            {showTargetInput
+              ? isEditing
+                ? t("savingsScreen.savingsModal.editSavingsGoal")
+                : t("savingsScreen.savingsModal.addSavingsGoal")
+              : isEditing
+                ? t("savingsScreen.savingsModal.edit")
+                : t("savingsScreen.savingsModal.addSavingsGoal")}
           </Text>
 
-          <Text style={styles.inputLabel}>{t('categories.categoryName')}</Text>
+          <Text style={styles.inputLabel}>{t("savingsScreen.savingsModal.name")}</Text>
           <TextInput
             style={[styles.input, nameError ? styles.inputError : null]}
             value={categoryName}
             onChangeText={onChangeName}
-            placeholder={showTargetInput ? t('savingsGoal.namePlaceholder') : t('categories.namePlaceholder')}
+            placeholder={t("savingsScreen.savingsModal.goalNamePlaceholder")}
             placeholderTextColor="#A0A0A0"
             maxLength={20}
             textAlign={isRTL ? 'right' : 'left'}
@@ -104,18 +107,18 @@ const AddCategoryModal = ({
             <Text style={styles.errorText}>{nameError}</Text>
           ) : (
             <Text style={styles.charCounter}>
-              {t('categories.characterCount', { count: categoryName.length })}
+              {t("savingsScreen.savingsModal.charactersLimit", { 0: categoryName.length })}
             </Text>
           )}
 
           {showTargetInput && (
             <>
-              <Text style={styles.inputLabel}>{t('savingsGoal.targetAmount')}</Text>
+              <Text style={styles.inputLabel}>{t("savingsScreen.savingsModal.targetAmount")}</Text>
               <TextInput
                 style={[styles.input, targetError ? styles.inputError : null]}
                 value={targetAmount}
                 onChangeText={onChangeTargetAmount}
-                placeholder={t('savingsGoal.targetAmountPlaceholder')}
+                placeholder={t("savingsScreen.savingsModal.enterTargetAmount")}
                 placeholderTextColor="#A0A0A0"
                 keyboardType="numeric"
                 textAlign={isRTL ? 'right' : 'left'}
@@ -126,7 +129,7 @@ const AddCategoryModal = ({
             </>
           )}
 
-          <Text style={styles.inputLabel}>{t('categories.selectCategoryIcon')}</Text>
+          <Text style={styles.inputLabel}>{t("savingsScreen.savingsModal.selectIcon")}</Text>
           {iconError ? (
             <Text style={styles.errorText}>{iconError}</Text>
           ) : null}
@@ -157,20 +160,20 @@ const AddCategoryModal = ({
               style={[styles.button, styles.cancelButton]}
               onPress={onCancel}
             >
-              <Text style={styles.cancelButtonText}>{t('categories.cancel')}</Text>
+              <Text style={styles.cancelButtonText}>{t("savingsScreen.savingsModal.cancel")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
                 styles.button,
                 styles.saveButton,
-                (!categoryName.trim() || !selectedIcon || (showTargetInput && !targetAmount.trim())) && 
-                styles.disabledButton,
+                (!categoryName.trim() || !selectedIcon || (showTargetInput && !targetAmount.trim())) &&
+                  styles.disabledButton,
               ]}
               onPress={onSave}
               disabled={!categoryName.trim() || !selectedIcon || (showTargetInput && !targetAmount.trim())}
             >
               <Text style={styles.saveButtonText}>
-                {isEditing ? t('categories.update') : t('categories.save')}
+                {isEditing ? t("savingsScreen.savingsModal.update") : t("savingsScreen.savingsModal.save")}
               </Text>
             </TouchableOpacity>
           </View>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { I18nManager, StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
 import {
@@ -32,7 +32,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Toast from "react-native-toast-message";
 import { Transaction } from "@/types/transactionTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import i18next from './services/i18next';
+import i18next from "./services/i18next";
+import RNRestart from "react-native-restart";
 
 export type RootStackParamList = {
   Categories: undefined;
@@ -42,8 +43,14 @@ export type RootStackParamList = {
     UserId: string;
     Icon: string;
   };
-  AddExpensesScreen: { transaction: Transaction|undefined,categoryName:string|undefined};
-  AddIncome: { transaction: Transaction|undefined,savingCategory:string|undefined};
+  AddExpensesScreen: {
+    transaction: Transaction | undefined;
+    categoryName: string | undefined;
+  };
+  AddIncome: {
+    transaction: Transaction | undefined;
+    savingCategory: string | undefined;
+  };
   Savings: { categoryName: string };
   SavingDetails: {
     categoryName: string;
@@ -77,20 +84,29 @@ export default function App() {
   });
 
   const fontsLoaded = interLoaded && poppinsLoaded && leagueSpartanLoaded;
+
   useEffect(() => {
     const initLanguage = async () => {
       try {
-        const storedLang = await AsyncStorage.getItem('user-language');
-        if (storedLang) {
-          await i18next.changeLanguage(storedLang);
+        const storedLang = await AsyncStorage.getItem("user-language");
+        const lang = storedLang || "en"; // Default to English if no language is stored
+        await i18next.changeLanguage(lang);
+
+        const isRTL = lang === "ar";
+        if (I18nManager.isRTL !== isRTL) {
+          I18nManager.forceRTL(isRTL);
+          I18nManager.allowRTL(isRTL);
+          RNRestart.Restart(); // Restart the app to apply layout changes
         }
       } catch (error) {
-        console.error('Failed to load language:', error);
-      } 
+        console.error("Failed to initialize language:", error);
+      }
     };
 
     initLanguage();
   }, []);
+  console.log("I18nManager.isRTL after initialization:", I18nManager.isRTL);
+  
   if (!fontsLoaded) return null;
 
   return (
@@ -106,6 +122,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff", 
+    backgroundColor: "#fff",
   },
 });

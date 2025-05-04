@@ -191,3 +191,4 @@ const CategoryDetailScreen = () => {
 };
 
 export default CategoryDetailScreen;
+export type { CategoryDetailNavigationProp };

@@ -1,16 +1,14 @@
-
 import React from "react";
-
 import { SafeAreaView } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-
 import { RootStackParamList } from "App";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import TransactionForm from "@/componenets/TransactionForm";
 import Theme from "@/theme";
 import { createDeposit } from "@/redux/slices/depositSlice";
+import { useTranslation } from "react-i18next";
 
 type AddSavingsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -19,6 +17,7 @@ type AddSavingsScreenNavigationProp = NativeStackNavigationProp<
 type editRouteProp = RouteProp<RootStackParamList, "AddIncome">;
 
 const AddSavingsScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation<AddSavingsScreenNavigationProp>();
   const dispatch = useAppDispatch();
   const { items: savingsGoals } = useAppSelector((state) => state.goals);
@@ -58,10 +57,10 @@ const AddSavingsScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Theme.colors.primary }}>
-      <Header title="Add to Savings" />
+      <Header title={t("savingsScreen.addToSavings")} />
       <TransactionForm
-        title="Savings"
-        buttonText="Add to Savings"
+        title={t("savingsScreen.savings")}
+        buttonText={t("savingsScreen.addToSavings")}
         onSubmit={handleSubmit}
         initialCategory={savingCategory}
         initialAmount=""
