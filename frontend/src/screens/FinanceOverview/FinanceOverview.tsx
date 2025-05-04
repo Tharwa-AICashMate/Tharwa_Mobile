@@ -5,7 +5,6 @@ import { PeriodSelector } from "../../componenets/FinanceOverviewComs/PeriodSele
 import { BarChart } from "../../componenets/FinanceOverviewComs/BarChart";
 import { FinanceSummary } from "../../componenets/FinanceOverviewComs/FinanceSummary";
 import { TargetProgress } from "../../componenets/FinanceOverviewComs/TargetProgress";
-import styles from "./style";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 
 import Theme from "@/theme";
@@ -14,6 +13,8 @@ import { getCurrentUserId } from "@/utils/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { apiBase } from "@/utils/axiosInstance";
 import ExpenseBrief from "@/componenets/expenceBrief";
+import { useTranslation } from "react-i18next";
+import useDynamicStyles from "./style";
 
 const TargetsContainer = styled.View`
   flex-direction: row;
@@ -24,16 +25,15 @@ const TargetsContainer = styled.View`
 `;
 
 export const FinanceOverview: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState<
-    "Weekly" | "Monthly" | "Year"
-  >("Weekly");
+  const [selectedPeriod, setSelectedPeriod] = useState<"Weekly" | "Monthly" | "Year">("Weekly");
   const [totalBalance, setTotalBalance] = useState(0);
   const [income, setIncome] = useState(0);
   const [expenses, setExpenses] = useState(0);
   const [weeklyData, setWeeklyData] = useState<any[]>([]);
   const [monthlyData, setMonthlyData] = useState<any[]>([]);
   const [yearlyData, setYearlyData] = useState<any[]>([]);
-
+  const { t } = useTranslation();
+  const styles = useDynamicStyles();
   const fetchData = async () => {
     try {
       const user_id = await getCurrentUserId();
@@ -90,8 +90,8 @@ export const FinanceOverview: React.FC = () => {
       setWeeklyData(
         weeklyIncomeArray.map((amount: number, index: number) => ({
           week: `Week ${index + 1}`,
-          income: amount, // <<< حطيت amount مباشرة
-          expenses: weeklyExpenseArray[index] || 0, // <<< expense برضه بناء على ال index
+          income: amount, 
+          expenses: weeklyExpenseArray[index] || 0, 
         }))
       );
 
@@ -117,7 +117,7 @@ export const FinanceOverview: React.FC = () => {
           expenses: monthlyExpenseArray[index] || 0,
         }))
       );
-      console.log('-----------',monthlyExpenseArray)
+      console.log('-----------', monthlyExpenseArray)
       // Handle Yearly Data
       setYearlyData(
         yearlyIncomeArray.map((item: any, index: number) => ({
@@ -148,7 +148,8 @@ export const FinanceOverview: React.FC = () => {
   );
   const totalExpenses = periodData.reduce(
     (sum, item) => {
-      return sum + (item.expenses || 0)},
+      return sum + (item.expenses || 0)
+    },
     0
   );
 
@@ -157,32 +158,36 @@ export const FinanceOverview: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Analysis" />
+      <Header title={t("analysis.analysis")} />
 
       <ExpenseBrief />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.categoriesContainer}>
-          <PeriodSelector
-            selectedPeriod={selectedPeriod}
-            onPeriodChange={setSelectedPeriod}
-          />
+      <View style={styles.baseContainer}>
 
-          <BarChart
-            data={periodData}
-            period={selectedPeriod}
-          />
+        <ScrollView showsVerticalScrollIndicator={false}>
 
-          <FinanceSummary income={averageIncome} expenses={totalExpenses} />
-
-          <TargetsContainer>
-            <TargetProgress
-              color={Theme.colors.accentDark}
+          <View style={styles.categoriesContainer}>
+            <PeriodSelector
+              selectedPeriod={selectedPeriod}
+              onPeriodChange={setSelectedPeriod}
             />
-          
-          </TargetsContainer>
-        </View>
-      </ScrollView>
+
+            <BarChart
+              data={periodData}
+              period={selectedPeriod}
+            />
+
+            <FinanceSummary income={averageIncome} expenses={totalExpenses} />
+
+            <TargetsContainer>
+              <TargetProgress
+                color={Theme.colors.accentDark}
+              />
+
+            </TargetsContainer>
+          </View>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

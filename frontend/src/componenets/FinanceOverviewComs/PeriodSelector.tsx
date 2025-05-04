@@ -1,9 +1,11 @@
 import React from "react";
 import styled from "styled-components/native";
-import { StyleSheet } from "react-native";
+import { I18nManager, StyleSheet } from "react-native";
 import Theme from "@/theme";
-
-type Period =  "Weekly" | "Monthly" | "Year";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
+const isRTL =i18next.language === "ar"|| I18nManager.isRTL;
+type Period =  "Weekly" | "Monthly" | "Yearly";
 
 interface PeriodSelectorProps {
   selectedPeriod: Period;
@@ -30,12 +32,29 @@ const PeriodText = styled.Text<{ isSelected: boolean }>`
   font-weight: ${(props) => (props.isSelected ? "600" : "400")};
 `;
 
-const periods: Period[] = [ "Weekly", "Monthly", "Year"];
+const periods: Period[] = [ "Weekly", "Monthly", "Yearly"];
+
 
 export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
   selectedPeriod,
   onPeriodChange,
 }) => {
+  const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
+
+  const styles = StyleSheet.create({
+    container: {
+      width: "88%",
+      marginLeft: isRTL ? 0 : "7%",
+      marginRight: isRTL ? "6%" : 0,
+    },
+    button: {
+      margin: -2,
+      marginBlock: 2,
+      marginLeft: 3,
+      marginRight:"8%",
+    },
+  });
+  const {t}=useTranslation();
   return (
     <Container style={styles.container}>
       {periods.map((period) => (
@@ -46,7 +65,7 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
           onPress={() => onPeriodChange(period)}
         >
           <PeriodText isSelected={selectedPeriod === period}>
-            {period}
+            {t(`analysis.${period}`)}
           </PeriodText>
         </PeriodButton>
       ))}
@@ -54,16 +73,4 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    width: "88%",
-    marginLeft: "7%",
-  },
-  button: {
-    margin: -2,
-    marginBlock: 2,
-    marginLeft: 3,
-    marginRight:"10%",
 
-  },
-});

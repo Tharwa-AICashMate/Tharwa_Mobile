@@ -11,9 +11,12 @@ import { getCurrentUserId } from '@/utils/auth';
 import { fetchUserCategories } from '@/redux/slices/categoriesSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import { apiBase } from '@/utils/axiosInstance';
-
+import { useTranslation } from "react-i18next";
+import { I18nManager } from 'react-native';
+import i18next from 'i18next';
 const SearchScreen: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
+    const {t}=useTranslation()
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
@@ -24,7 +27,164 @@ const SearchScreen: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [searchText, setSearchText] = useState<string>('');
     const { items: categories, loading } = useSelector((state: RootState) => state.categories);
+    const isRTL =i18next.language === 'ar' || I18nManager.isRTL;
 
+    const styles = StyleSheet.create({
+        baseContainer:{
+            flex:1,
+        },
+        container: { flex: 1, backgroundColor: Theme.colors.highlight },
+        contentBox: {
+            flex: 1,
+            direction:isRTL ? 'rtl' : 'ltr',
+            backgroundColor: Theme.colors.background,
+            borderTopLeftRadius: 60,
+            borderTopRightRadius: 60,
+            alignItems: 'center',
+            paddingVertical: 20,
+            paddingHorizontal: 20,
+        },
+        searchInput: {
+            width: '85%',
+            backgroundColor: Theme.colors.background,
+            borderRadius: 30,
+            paddingHorizontal: 20,
+            height: 40,
+            marginBottom: 20,
+            marginTop: 1,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            fontSize: 16,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 5,
+        },
+        label: {
+            alignSelf: 'flex-start',
+            marginBottom: 15,
+            marginTop: 20,
+            marginLeft:isRTL? 0:12,
+            marginRight:isRTL? 12:0,
+            fontSize: 16,
+            fontWeight: '500',
+            color: Theme.colors.text,
+        },
+        dropdown: {
+            width: '95%',
+            backgroundColor: '#ECECEC',
+            borderRadius: 20,
+            paddingHorizontal: 10,
+            marginBottom: 25,
+        },
+        dateInput: {
+            width: '95%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: '#ECECEC',
+            borderRadius: 20,
+            paddingHorizontal: 15,
+            height: 50,
+            marginBottom: 10,
+        },
+        radioGroup: {
+            flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+            alignSelf: 'flex-start',
+            marginBottom: 25,
+            marginTop: 8,
+        },
+        radioButton: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginHorizontal: 10,
+        },
+        radioOuter: {
+            width: 24,
+            height: 24,
+            borderRadius: 12,
+            borderWidth: 2,
+            borderColor: Theme.colors.primary,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        radioSelected: { borderColor: Theme.colors.primary },
+        radioInner: {
+            width: 12,
+            height: 12,
+            borderRadius: 6,
+            backgroundColor: Theme.colors.primary,
+        },
+        radioLabel: {
+            fontSize: 14,
+            color: Theme.colors.text,
+            marginLeft:isRTL? 0:10,
+            marginRight:isRTL? 10:0,
+        },
+        searchButton: {
+            width: '90%',
+            height: 45,
+            borderRadius: 30,
+            backgroundColor: Theme.colors.primary,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 20,
+            marginBottom:8
+        },
+        searchButtonText: {
+            fontSize: 18,
+            fontWeight: '500',
+            color: Theme.colors.textLight,
+        },
+        errorMessage: {
+            color: 'red',
+            fontSize: 16,
+            marginTop: 20,
+        },
+        resultsContainer: { marginTop: 10, flex: 1, width: '100%' },
+        resultsContentContainer: { paddingBottom: 10 },
+        resultItem: {
+            backgroundColor: Theme.colors.secondery,
+            borderRadius: 20,
+            marginVertical: 10,
+            padding: 15,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 5,
+        },
+        resultContent: { flexDirection: 'row', alignItems: 'center', width: '80%' },
+        iconContainer: {
+            width: 40,
+            height: 40,
+            borderRadius: 20,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginRight:isRTL? 0:10,
+            marginLeft:isRTL? 10:0,
+        },
+        resultTextContainer: { width: '80%' },
+        resultTitle: {
+            fontSize: 16,
+            fontWeight: '500',
+            color: Theme.colors.text,
+        },
+        resultDate: {
+            fontSize: 12,
+            fontWeight: '400',
+            color: Theme.colors.text,
+        },
+        resultAmount: {
+            fontSize: 16,
+            fontWeight: '600',
+        },
+        incomeAmount: { color: Theme.colors.accentLight },
+        expenseAmount: { color: Theme.colors.accentDark},
+    });
+    
+    
     const categoryIcons: { [key: string]: string } = {
         'Food': 'restaurant',
         'Transport': 'car',
@@ -100,17 +260,17 @@ const SearchScreen: React.FC = () => {
             const data = await response.json();
     
             if (data.length === 0) {
-                setErrorMessage('No data found.');
+                setErrorMessage(t('searchScreen.noData'));
                 setSearchResults([]);
-            } else {
+              } else {
                 setErrorMessage('');
                 setSearchResults(data);
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+              setErrorMessage(t('searchScreen.error'));
+              setSearchResults([]);
             }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            setErrorMessage('An error occurred while fetching data.');
-            setSearchResults([]);
-        }
     };
     
     
@@ -134,19 +294,20 @@ const SearchScreen: React.FC = () => {
     };
 
     return (
+        <View style={styles.baseContainer}>
         <View style={styles.container}>
             <StatusBar barStyle="light-content" backgroundColor={Theme.colors.highlight} />
-            <Header title="Search" />
+            <Header title={t("searchScreen.searchTitle")} />
             <TextInput
                 style={styles.searchInput}
-                placeholder="Search..."
+                placeholder={t("searchScreen.searchPlaceholder")}
                 placeholderTextColor="#999"
                 value={searchText}
                 onChangeText={(e) => setSearchText(e)}
             />
             <ScrollView>
             <View style={styles.contentBox}>
-                <Text style={styles.label}>Categories</Text>
+                <Text style={styles.label}>{t("searchScreen.categories")}</Text>
                 <View style={styles.dropdown}>
                     <Picker
                         selectedValue={selectedCategory}
@@ -155,14 +316,14 @@ const SearchScreen: React.FC = () => {
                         dropdownIconColor="#000"
                     >
                        
-                        <Picker.Item label="All" value="All" /> 
+                        <Picker.Item label={t("searchScreen.all")} value="All" /> 
                         {categories.map((cat) => (
                             <Picker.Item key={cat.id} label={cat.name} value={cat.name} />
                         ))}
                     </Picker>
                 </View>
 
-                <Text style={styles.label}>Start Date</Text>
+                <Text style={styles.label}>{t("searchScreen.startDate")}</Text>
                 <TouchableOpacity style={styles.dateInput} onPress={handleShowStartDatePicker}>
                     <Text>{formatDate(startDate)}</Text>
                     <Ionicons name="calendar-outline" size={24} color={Theme.colors.primary} />
@@ -176,7 +337,7 @@ const SearchScreen: React.FC = () => {
                     />
                 )}
 
-                <Text style={styles.label}>End Date</Text>
+                <Text style={styles.label}>{t("searchScreen.endDate")}</Text>
                 <TouchableOpacity style={styles.dateInput} onPress={handleShowEndDatePicker}>
                     <Text>{formatDate(endDate)}</Text>
                     <Ionicons name="calendar-outline" size={24} color={Theme.colors.primary} />
@@ -190,24 +351,24 @@ const SearchScreen: React.FC = () => {
                     />
                 )}
 
-                <Text style={styles.label}>Report</Text>
+                <Text style={styles.label}>{t("searchScreen.report")}</Text>
                 <View style={styles.radioGroup}>
                     <TouchableOpacity style={styles.radioButton} onPress={() => setReportType('Income')}>
                         <View style={[styles.radioOuter, reportType === 'Income' && styles.radioSelected]}>
                             {reportType === 'Income' && <View style={styles.radioInner} />}
                         </View>
-                        <Text style={styles.radioLabel}>Income</Text>
+                        <Text style={styles.radioLabel}>{t("searchScreen.income")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.radioButton} onPress={() => setReportType('Expense')}>
                         <View style={[styles.radioOuter, reportType === 'Expense' && styles.radioSelected]}>
                             {reportType === 'Expense' && <View style={styles.radioInner} />}
                         </View>
-                        <Text style={styles.radioLabel}>Expense</Text>
+                        <Text style={styles.radioLabel}>{t("searchScreen.expense")}</Text>
                     </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity style={styles.searchButton} onPress={fetchData}>
-                    <Text style={styles.searchButtonText}>Search</Text>
+                    <Text style={styles.searchButtonText}>{t("searchScreen.searchButton")}</Text>
                 </TouchableOpacity>
 
                 {errorMessage ? (
@@ -245,156 +406,10 @@ const SearchScreen: React.FC = () => {
             </ScrollView>
 
         </View>
+        </View>
     );
 };
 
-const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: Theme.colors.highlight },
-    contentBox: {
-        flex: 1,
-        backgroundColor: Theme.colors.background,
-        borderTopLeftRadius: 60,
-        borderTopRightRadius: 60,
-        alignItems: 'center',
-        paddingVertical: 20,
-        paddingHorizontal: 20,
-    },
-    searchInput: {
-        width: '85%',
-        backgroundColor: Theme.colors.background,
-        borderRadius: 30,
-        paddingHorizontal: 20,
-        height: 40,
-        marginBottom: 20,
-        marginTop: 1,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        fontSize: 16,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
-    },
-    label: {
-        alignSelf: 'flex-start',
-        marginBottom: 15,
-        marginTop: 20,
-        marginLeft: 12,
-        fontSize: 16,
-        fontWeight: '500',
-        color: Theme.colors.text,
-    },
-    dropdown: {
-        width: '95%',
-        backgroundColor: '#ECECEC',
-        borderRadius: 20,
-        paddingHorizontal: 10,
-        marginBottom: 25,
-    },
-    dateInput: {
-        width: '95%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: '#ECECEC',
-        borderRadius: 20,
-        paddingHorizontal: 15,
-        height: 50,
-        marginBottom: 10,
-    },
-    radioGroup: {
-        flexDirection: 'row',
-        alignSelf: 'flex-start',
-        marginBottom: 25,
-        marginTop: 8,
-    },
-    radioButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginHorizontal: 10,
-    },
-    radioOuter: {
-        width: 24,
-        height: 24,
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: Theme.colors.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    radioSelected: { borderColor: Theme.colors.primary },
-    radioInner: {
-        width: 12,
-        height: 12,
-        borderRadius: 6,
-        backgroundColor: Theme.colors.primary,
-    },
-    radioLabel: {
-        fontSize: 14,
-        color: Theme.colors.text,
-        marginLeft: 10,
-    },
-    searchButton: {
-        width: '90%',
-        height: 45,
-        borderRadius: 30,
-        backgroundColor: Theme.colors.primary,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 20,
-        marginBottom:8
-    },
-    searchButtonText: {
-        fontSize: 18,
-        fontWeight: '500',
-        color: Theme.colors.textLight,
-    },
-    errorMessage: {
-        color: 'red',
-        fontSize: 16,
-        marginTop: 20,
-    },
-    resultsContainer: { marginTop: 10, flex: 1, width: '100%' },
-    resultsContentContainer: { paddingBottom: 10 },
-    resultItem: {
-        backgroundColor: Theme.colors.secondery,
-        borderRadius: 20,
-        marginVertical: 10,
-        padding: 15,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
-    },
-    resultContent: { flexDirection: 'row', alignItems: 'center', width: '80%' },
-    iconContainer: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 10,
-    },
-    resultTextContainer: { width: '80%' },
-    resultTitle: {
-        fontSize: 16,
-        fontWeight: '500',
-        color: Theme.colors.text,
-    },
-    resultDate: {
-        fontSize: 12,
-        fontWeight: '400',
-        color: Theme.colors.text,
-    },
-    resultAmount: {
-        fontSize: 16,
-        fontWeight: '600',
-    },
-    incomeAmount: { color: Theme.colors.accentLight },
-    expenseAmount: { color: Theme.colors.accentDark},
-});
 
 export default SearchScreen;
 

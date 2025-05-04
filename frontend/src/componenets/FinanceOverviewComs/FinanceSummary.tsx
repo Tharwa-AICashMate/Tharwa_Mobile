@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, I18nManager, StyleSheet } from "react-native";
 import Icon from 'react-native-vector-icons/Feather';
 import Theme from "@/theme";
+import i18next, { t } from "i18next";
 
 interface FinanceSummaryProps {
   income: number;
@@ -47,32 +48,38 @@ export const FinanceSummary: React.FC<FinanceSummaryProps> = ({
   income,
   expenses,
 }) => {
+  const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
+
+  const styles = StyleSheet.create({
+    icon1:{
+      borderWidth:2,
+      borderColor:Theme.colors.highlight,
+      borderRadius:10
+    },
+    icon2:{
+      borderWidth:2,
+      borderColor:Theme.colors.accentDark,
+      borderRadius:10
+    },
+    container:{
+      width:"88%",
+      marginLeft:isRTL?0:"7%",
+      marginRight:isRTL?"6%":0
+    }
+  })
   return (
-    <Container>
+    <Container style={styles.container}>
       <SummaryBox >
         <Icon style={styles.icon1} name="arrow-up-right" size={30} color={Theme.colors.highlight} />
-        <Label>Income</Label>
+        <Label>{t("analysis.income")}</Label>
         <Amount isIncome>{formatCurrency(income)}</Amount>
       </SummaryBox>
       <SummaryBox >
         <Icon style={styles.icon2} name="arrow-down-right" size={30} color={Theme.colors.accentDark} />
-        <Label>Expenses</Label>
+        <Label>{t("analysis.expense")}</Label>
         <Amount>{formatCurrency(expenses)}</Amount>
       </SummaryBox>
     </Container>
   );
 };
 
-
-const styles = StyleSheet.create({
-  icon1:{
-    borderWidth:2,
-    borderColor:Theme.colors.highlight,
-    borderRadius:10
-  },
-  icon2:{
-    borderWidth:2,
-    borderColor:Theme.colors.accentDark,
-    borderRadius:10
-  }
-})

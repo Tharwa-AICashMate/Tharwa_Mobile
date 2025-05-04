@@ -14,7 +14,7 @@ import { fetchUserSettings } from "../../redux/slices/settingsSlice";
 import SettingsItem from "../../componenets/SettingsItem";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useTranslation } from "react-i18next";
 import Theme from "@/theme";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 
@@ -28,6 +28,7 @@ const SettingsScreen: React.FC = () => {
   const { userSettings, loading } = useSelector(
     (state: RootState) => state.settings
   );
+  const { t } = useTranslation();
   const handleBack = () => {
     navigation.goBack();
   };
@@ -42,7 +43,7 @@ const SettingsScreen: React.FC = () => {
         backgroundColor={Theme.colors.highlight}
         translucent={false}
       />
-      <Header title="Settings" />
+      <Header title={t("settings.settings")} />
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.section}>
@@ -58,12 +59,12 @@ const SettingsScreen: React.FC = () => {
             onPress={() => navigation.navigate("NotificationSettingsScreen")}
           /> */}
           <SettingsItem
-            title="Password Settings"
+            title={t("settings.passwordSettings")}
             icon={<Ionicons name="key-outline" size={20} color="#FECD3E" />}
             onPress={() => navigation.navigate("PasswordSettingsScreen")}
           />
           <SettingsItem
-            title="Terms And Conditions"
+            title={t("settings.termsAndConditions")}
             icon={
               <Ionicons
                 name="document-text-outline"
@@ -73,15 +74,15 @@ const SettingsScreen: React.FC = () => {
             }
             onPress={() => navigation.navigate("TermsAndConditions")}
           />
-          <SettingsItem
-            title="Help Center"
+          {/* <SettingsItem
+            title={t("settings.helpCenter")}
             icon={
               <Ionicons name="help-circle-outline" size={20} color="#FECD3E" />
             }
             onPress={() => navigation.navigate("HelpCenterScreen")}
-          />
+          /> */}
           <SettingsItem
-            title="Delete Account"
+            title={t("settings.deleteAccount")}
             icon={<Ionicons name="trash-outline" size={20} color="#FECD3E" />}
             onPress={() => navigation.navigate("DeleteAccountScreen")}
           />

@@ -17,77 +17,77 @@ import CategoryTabs from "../../componenets/CategoryTab";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Theme from "../../theme";
 import Header from "../../componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
+import { useTranslation } from "react-i18next";
 
-const staticFAQs = [
-  {
-    id: "1",
-    question: "How do I start investing?",
-    answer:
-      "To begin investing, create an account, add funds to your wallet, and choose from various investment options available on our platform.",
-    category: "general",
-  },
-  {
-    id: "2",
-    question: "How much does it cost to use Finvesto?",
-    answer:
-      "Our platform is free to use. We only charge minimal fees on transactions and successful investments.",
-    category: "general",
-  },
-  {
-    id: "3",
-    question: "How to contact support?",
-    answer:
-      "You can reach our support team through the 'Contact Us' button in the Help Center, or via any of our support channels.",
-    category: "general",
-  },
-  {
-    id: "4",
-    question: "How can I reset my password if I forget it?",
-    answer:
-      "Click on 'Forgot Password' on the login screen and follow the instructions sent to your registered email.",
-    category: "account",
-  },
-  {
-    id: "5",
-    question: "How do I update my contact information?",
-    answer:
-      "Go to 'Profile', select 'Edit Profile', update your information, and save changes.",
-    category: "account",
-  },
-  {
-    id: "6",
-    question: "How can I update my settings within the application?",
-    answer:
-      "Navigate to 'Settings' from your profile page to manage notifications, security, and other preferences.",
-    category: "account",
-  },
-  {
-    id: "7",
-    question: "How can I delete my account?",
-    answer:
-      "Go to 'Settings', select 'Account', and click on 'Delete Account'. Follow the confirmation steps to complete the process.",
-    category: "account",
-  },
-  {
-    id: "8",
-    question: "How do I access my expense history?",
-    answer:
-      "Go to 'Transactions' in the main menu to view your complete expense history and filter by date or category.",
-    category: "services",
-  },
-  {
-    id: "9",
-    question: "Can I use the app offline?",
-    answer:
-      "Some features are available offline, but you'll need an internet connection for real-time updates and transactions.",
-    category: "services",
-  },
-];
 
 const HelpCenterScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("general");
+  const {t}=useTranslation();
+  const staticFAQs = [
+    {
+      id: "1",
+      question: t("generalFAQs.howDoIStartSaving_Q"),
+      answer: t("generalFAQs.howDoIStartSaving_A"),
+      category: "general",
+    },
+    {
+      id: "2",
+      question: t("generalFAQs.howMuchDoesItCostToUseTharwa_Q"),
+      answer: t("generalFAQs.howMuchDoesItCostToUseTharwa_A"),
+      category: "general",
+    },
+    {
+      id: "3",
+      question: t("generalFAQs.howToContactSupport_Q"),
+      answer: t("generalFAQs.howToContactSupport_A"),
+      category: "general",
+    },
+    {
+      id: "4",
+      question: "How can I reset my password if I forget it?",
+      answer:
+        "Click on 'Forgot Password' on the login screen and follow the instructions sent to your registered email.",
+      category: "account",
+    },
+    {
+      id: "5",
+      question: "How do I update my contact information?",
+      answer:
+        "Go to 'Profile', select 'Edit Profile', update your information, and save changes.",
+      category: "account",
+    },
+    {
+      id: "6",
+      question: "How can I update my settings within the application?",
+      answer:
+        "Navigate to 'Settings' from your profile page to manage notifications, security, and other preferences.",
+      category: "account",
+    },
+    {
+      id: "7",
+      question: "How can I delete my account?",
+      answer:
+        "Go to 'Settings', select 'Account', and click on 'Delete Account'. Follow the confirmation steps to complete the process.",
+      category: "account",
+    },
+    {
+      id: "8",
+      question: "How do I access my expense history?",
+      answer:
+        "Go to 'Transactions' in the main menu to view your complete expense history and filter by date or category.",
+      category: "services",
+    },
+    {
+      id: "9",
+      question: "Can I use the app offline?",
+      answer:
+        "Some features are available offline, but you'll need an internet connection for real-time updates and transactions.",
+      category: "services",
+    },
+  ];
+  
 
   const filteredFAQs = useMemo(() => {
     return staticFAQs
@@ -108,18 +108,18 @@ const HelpCenterScreen: React.FC = () => {
         backgroundColor={Theme.colors.highlight}
         translucent={false}
       />
-      <Header title="Help & FAQs" />
+      <Header title={t("help.helpAndFAQs")} />
       <View style={styles.mainContent}>
-        <Text style={styles.searchText}>How Can We Help You?</Text>
+        <Text style={styles.searchText}>{t("help.howCanWeHelpYou")}</Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.actionButton, styles.activeButton]}>
-            <Text style={styles.buttonText}>FAQ</Text>
+            <Text style={styles.buttonText}>{t("help.faq")}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.actionButton]}
             onPress={handleContactUsPress}
           >
-            <Text style={styles.buttonText}>Contact Us</Text>
+            <Text style={styles.buttonText}>{t("help.contactUs")}</Text>
           </TouchableOpacity>
         </View>
 

@@ -1,10 +1,12 @@
 import React from "react";
-import { Dimensions, StyleSheet, ScrollView } from "react-native";
+import { Dimensions, StyleSheet, ScrollView, I18nManager } from "react-native";
 import styled from "styled-components/native";
 import Icon from 'react-native-vector-icons/Feather';
 import Theme from "@/theme";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 
 type RootStackParamList = {
   SearchScreen: undefined;
@@ -123,6 +125,7 @@ const getDynamicYAxis = (maxValue: number) => {
 
 export const BarChart: React.FC<BarChartProps> = ({ data, period }) => {
   const navigation = useNavigation<NavigationProp>();
+  const {t}=useTranslation();
 
   const maxValue = Math.max(
     ...data.map((item) => Math.max(item.income, item.expenses)),
@@ -143,17 +146,27 @@ export const BarChart: React.FC<BarChartProps> = ({ data, period }) => {
       return (availableWidth / totalItems) * 0.85;
     } else if (period === "Monthly") {
       return (availableWidth / totalItems) * 1;
-    } else if (period === "Year") {
+    } else if (period === "Yearly") {
       return (availableWidth / totalItems) * 0.8;
     }
     return availableWidth / totalItems;
   };
 
-  const barWidth = calculateBarWidth(data.length, period);
+  const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
 
+  const barWidth = calculateBarWidth(data.length, period);
+  const styles = StyleSheet.create({
+  
+    container: {
+      width: "88%",
+      marginLeft: isRTL ? 0 : "7%",
+      marginRight: isRTL ? "6%" : 0,
+      marginTop: "7%",
+    },
+  });
   return (
     <Container style={styles.container}>
-      <Title>Income & Expenses</Title>
+      <Title>{t("analysis.incomeExpense")}</Title>
 
       <IconContainer>
         <IconButton onPress={() => navigation.navigate('SearchScreen')}>
@@ -169,7 +182,7 @@ export const BarChart: React.FC<BarChartProps> = ({ data, period }) => {
         </YAxis>
 
         {period === "Monthly" ? (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} >
             <ChartContainer>
               {data.map((item, index) => (
                 <BarGroup key={index} width={calculateBarWidth(data.length, "Monthly")}>
@@ -200,10 +213,4 @@ export const BarChart: React.FC<BarChartProps> = ({ data, period }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    width: "88%",
-    marginLeft: "7%",
-    marginTop: "7%",
-  },
-});
+

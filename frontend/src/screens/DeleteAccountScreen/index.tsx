@@ -9,6 +9,7 @@ import {
   Modal,
   Dimensions,
   StatusBar,
+  I18nManager,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -23,6 +24,12 @@ import { logoutUser } from "@/redux/slices/AuthSlice";
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
+import useDeleteAccountStyles from './deleteAccount.styles';
+
+// import i18next from 'i18next';
+import i18next from 'i18next';
+
 
 type RootStackParamList = {
   EditProfile: undefined;
@@ -33,13 +40,17 @@ type RootStackParamList = {
   Profile: undefined;
 };
 
+
 const { height, width } = Dimensions.get('window');
 
 type DeleteAccountScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DeleteAccountScreen'>;
 
 const API_BASE_URL = apiBase;
+const styles = useDeleteAccountStyles();
 
 const DeleteAccountScreen: React.FC = () => {
+
+  const {t}=useTranslation();
   const navigation = useNavigation<DeleteAccountScreenNavigationProp>();
   const [password, setPassword] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -51,7 +62,7 @@ const DeleteAccountScreen: React.FC = () => {
 
   const handleDeleteRequest = async () => {
     if (!password) {
-      Alert.alert('Error', 'Please enter your password to confirm');
+      Alert.alert(t('deleteAccount.error'), t('deleteAccount.enterPassword'));
       return;
     }
 
@@ -59,7 +70,7 @@ const DeleteAccountScreen: React.FC = () => {
     try {
       const userId = await getCurrentUserId();
       if (!userId) {
-        Alert.alert('Error', 'Unable to fetch user information');
+        Alert.alert(t('deleteAccount.error'), t('deleteAccount.unableToFetchUser'));
         return;
       }
 
@@ -67,7 +78,7 @@ const DeleteAccountScreen: React.FC = () => {
       const result = await response.json();
 
       if (!response.ok || !result.email) {
-        Alert.alert('Error', 'Unable to fetch user email');
+        Alert.alert(t('deleteAccount.error'), t('deleteAccount.unableToFetchUser'));
         return;
       }
 
@@ -84,12 +95,12 @@ const DeleteAccountScreen: React.FC = () => {
       const verifyResult = await verifyResponse.json();
 
       if (!verifyResponse.ok) {
-        throw new Error(verifyResult.error || 'Password verification failed');
+        throw new Error(verifyResult.error || t('deleteAccount.passVerifyFailed'));
       }
 
       setShowModal(true);
     } catch (error) {
-      Alert.alert('Error', 'Incorrect password or server error. Please try again.');
+      Alert.alert(t('deleteAccount.error'), t('deleteAccount.Incorrectpasswordorservererror'));
     } finally {
       setLoading(false);
     }
@@ -100,7 +111,7 @@ const DeleteAccountScreen: React.FC = () => {
     try {
       const userId = await getCurrentUserId();
       if (!userId) {
-        Alert.alert('Error', 'Unable to fetch user information');
+        Alert.alert(t('deleteAccount.error'), t('deleteAccount.unableToFetchUser'));
         return;
       }
 
@@ -113,7 +124,7 @@ const DeleteAccountScreen: React.FC = () => {
 
       const result = await response.json();
       if (!response.ok) {
-        throw new Error(result.error || 'Account deletion failed');
+        throw new Error(result.error || t('deleteAccount.AccountDelFailed'));
       }
 
       // Clear local storage
@@ -123,8 +134,8 @@ const DeleteAccountScreen: React.FC = () => {
       setShowModal(false);
 
       Alert.alert(
-        'Account Deleted',
-        'Your account has been successfully deleted.',
+        t('deleteAccount.AccountDeleted'),
+        t('deleteAccount.accounrDeletedSuccessfully'),
         [{
           text: 'OK',
           onPress: async () => {
@@ -139,8 +150,8 @@ const DeleteAccountScreen: React.FC = () => {
       setShowModal(false);
 
       Alert.alert(
-        'Account Deleted',
-        'Your account may have already been deleted.',
+        t('deleteAccount.AccountDeleted'),
+        t('deleteAccount.Youraccountmayhavealreadybeendeleted'),
         [{
           text: 'OK',
           onPress: async () => {
@@ -160,25 +171,25 @@ const DeleteAccountScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
-      <Header title="Delete Account" />
+      <Header title={t('deleteAccount.deleteAccount')} />
 
       <View style={styles.content}>
         <Text style={styles.warningTitle}>
-          Are You Sure You Want To Delete Your Account?
+          {t('deleteAccount.areusure')}
         </Text>
 
         <Text style={styles.warningText}>
-          By deleting your account, you will lose all your data permanently including:
+          {t('deleteAccount.bydeleting')}
         </Text>
 
         <View style={styles.bulletPoints}>
-          <Text style={styles.bulletPoint}>• Transaction history</Text>
-          <Text style={styles.bulletPoint}>• Saved budgets and goals</Text>
-          <Text style={styles.bulletPoint}>• Account settings and preferences</Text>
-          <Text style={styles.bulletPoint}>• All personal information</Text>
+          <Text style={styles.bulletPoint}>{t("deleteAccount.Transactionhistory")}</Text>
+          <Text style={styles.bulletPoint}>{t("deleteAccount.Savedbudgets")}</Text>
+          <Text style={styles.bulletPoint}>{t("deleteAccount.Accountsetting")}</Text>
+          <Text style={styles.bulletPoint}>{t("deleteAccount.Allpersonalinformation")}</Text>
         </View>
 
-        <Text style={styles.passwordLabel}>Please enter your password to confirm:</Text>
+        <Text style={styles.passwordLabel}>{t("deleteAccount.plzenterpasswordtoconfirm")}</Text>
 
         <PasswordInput value={password} onChangeText={setPassword} />
 
@@ -186,12 +197,12 @@ const DeleteAccountScreen: React.FC = () => {
           {loading ? (
             <ActivityIndicator color="#fff" size="small" />
           ) : (
-            <Text style={styles.deleteButtonText}>Delete Account</Text>
+            <Text style={styles.deleteButtonText}>{t('deleteAccount.deleteAccount')}</Text>
           )}
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.mainCancelButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.mainCancelButtonText}>Cancel</Text>
+          <Text style={styles.mainCancelButtonText}>{t('deleteAccount.cancel')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -199,12 +210,12 @@ const DeleteAccountScreen: React.FC = () => {
       <Modal visible={showModal} transparent={true} animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Delete Account</Text>
-            <Text style={styles.modalSubTitle}>Are You Sure You Want To Delete Your Account?</Text>
+            <Text style={styles.modalTitle}>{t('deleteAccount.deleteAccount')}</Text>
+            <Text style={styles.modalSubTitle}>{t('deleteAccount.doyouwanttodelete')}</Text>
 
             <Text style={styles.modalText}>
-              By deleting your account, you agree that you understand the consequences of this action.
-              Your account will be permanently deleted with all associated data.
+              {t('deleteAccount.bydeleting')}
+             
             </Text>
 
             <TouchableOpacity
@@ -215,12 +226,12 @@ const DeleteAccountScreen: React.FC = () => {
               {loading ? (
                 <ActivityIndicator color="#fff" size="small" />
               ) : (
-                <Text style={styles.confirmDeleteButtonText}>Yes, Delete Account</Text>
+                <Text style={styles.confirmDeleteButtonText}>{t('deleteAccount.YesDeleteAccount')}</Text>
               )}
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.cancelButton} onPress={handleCancel} disabled={loading}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
+              <Text style={styles.cancelButtonText}>{t('deleteAccount.cancel')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -230,135 +241,5 @@ const DeleteAccountScreen: React.FC = () => {
 };
 
 // const { height, width } = Dimensions.get('window');
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FECD3E',
-  },
-  content: {
-    flex: 1,
-    padding: 40,
-    borderTopLeftRadius: 80,
-    borderTopRightRadius: 80,
-    height: height,
-    width: width,
-    backgroundColor: 'white',
-  },
-  warningTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  warningText: {
-    fontSize: 16,
-    marginBottom: 12,
-    textAlign: 'left',
-  },
-  bulletPoints: {
-    marginBottom: 24,
-  },
-  bulletPoint: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 8,
-    textAlign: 'left',
-  },
-  passwordLabel: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 12,
-    textAlign: 'left',
-  },
-  deleteButton: {
-    backgroundColor: '#FECD3E',
-    borderRadius: 25,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 24,
-    marginBottom: 16,
-  },
-  deleteButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  mainCancelButton: {
-    backgroundColor: '#f0f0f0',
-    borderRadius: 25,
-    paddingVertical: 14,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  mainCancelButtonText: {
-    color: '#666',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  modalContainer: {
-    backgroundColor: 'white',
-    borderRadius: 16,
-    padding: 24,
-    width: '100%',
-    maxWidth: 320,
-    alignItems: 'center',
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  modalSubTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 16,
-  },
-  modalText: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 24,
-    lineHeight: 20,
-  },
-  confirmDeleteButton: {
-    backgroundColor: '#FECD3E',
-    borderRadius: 25,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 12,
-  },
-  confirmDeleteButtonText: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  cancelButton: {
-    backgroundColor: '#f5f5f5',
-    borderRadius: 25,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    alignItems: 'center',
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  cancelButtonText: {
-    color: '#666',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-});
 
 export default DeleteAccountScreen;

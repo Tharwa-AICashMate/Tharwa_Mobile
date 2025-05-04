@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   StatusBar,
+  I18nManager,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
@@ -18,7 +19,9 @@ import Theme from "@/theme";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getCurrentUserId } from '@/utils/auth';
 import { apiBase } from "@/utils/axiosInstance";
-
+import { useTranslation } from "react-i18next";
+import i18next from 'i18next';
+import { changePassword } from "@/redux/slices/settingsSlice";
 // Base URL for API calls
 const API_BASE_URL = apiBase; // Replace 3000 with your actual port number
 
@@ -26,12 +29,72 @@ type PasswordSettingsScreenNavigationProp = any;
 
 const PasswordSettingsScreen: React.FC = () => {
   const navigation = useNavigation<PasswordSettingsScreenNavigationProp>();
-
+  const { t } = useTranslation();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [localError, setLocalError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#FECD3E",
+    },
+    scrollView: {
+      flex: 1,
+      direction:isRTL? 'rtl' : 'ltr',
+      writingDirection: isRTL ? 'rtl' : 'ltr',
+    },
+    section: {
+      backgroundColor: "white",
+      borderTopLeftRadius: 80,
+      borderTopRightRadius: 80,
+      height: height,
+      width: width,
+      padding: 40,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+    },
+    label: {
+      fontSize: 14,
+      color: "#666",
+      marginTop: 12,
+      marginBottom: 4,
+    },
+    errorText: {
+      color: "red",
+      marginTop: 16,
+      textAlign: "center",
+    },
+    changeButton: {
+      backgroundColor: "#FECD3E",
+      borderRadius: 25,
+      paddingVertical: 12,
+      paddingHorizontal: 24,
+      alignItems: "center",
+      marginTop: 24,
+    },
+    changeButtonText: {
+      color: "white",
+      fontSize: 16,
+      fontWeight: "600",
+    },
+    disabledButton: {
+      opacity: 0.7,
+    }
+  });
+
+
+
+
+
+
 
   const handleBack = () => {
     navigation.goBack();
@@ -39,17 +102,17 @@ const PasswordSettingsScreen: React.FC = () => {
 
   const validateInputs = () => {
     if (!currentPassword || !newPassword || !confirmNewPassword) {
-      setLocalError("All fields are required");
+      setLocalError(t("passwordChange.requiredFields"));
       return false;
     }
 
     if (newPassword !== confirmNewPassword) {
-      setLocalError("Passwords do not match");
+      setLocalError(t("passwordChange.Passwordsdonotmatch"));
       return false;
     }
 
     if (newPassword.length < 8) {
-      setLocalError("Password must be at least 8 characters");
+      setLocalError(t("passwordChange.Passwordmustbeatleast8characters"));
       return false;
     }
 
@@ -72,7 +135,7 @@ const PasswordSettingsScreen: React.FC = () => {
       );
 
       if (emailRes.status !== 200) {
-        setLocalError("Failed to retrieve email");
+        setLocalError(t("passwordChange.emailError"));
         return;
       }
 
@@ -88,7 +151,7 @@ const PasswordSettingsScreen: React.FC = () => {
       );
 
       if (verifyRes.status !== 200) {
-        setLocalError("Incorrect current password");
+        setLocalError(t("passwordChange.Incorrectcurrentpassword"));
         return;
       }
 
@@ -103,23 +166,23 @@ const PasswordSettingsScreen: React.FC = () => {
       if (updateRes.status === 200) {
         navigation.navigate("PasswordChangeConfirm");
       } else {
-        setLocalError("Failed to update password");
+        setLocalError(t("passwordChange.Failedtoupdatepassword"));
       }
     } catch (error: any) {
       console.log("Error changing password:", error);
 
       if (axios.isAxiosError(error)) {
         if (!error.response) {
-          setLocalError("Network error. Please check your connection.");
+          setLocalError(t("passwordChange.Networkerror"));
         } else if (error.response.status === 401) {
-          setLocalError("Incorrect current password");
+          setLocalError(t("passwordChange.Incorrectcurrentpassword"));
         } else if (error.response.status === 404) {
-          setLocalError("User not found");
+          setLocalError(t("passwordChange.Usernotfound"));
         } else {
-          setLocalError(`Server error: ${error.response.status}`);
+          setLocalError(t("passwordChange.Servererror"));
         }
       } else {
-        setLocalError("Something went wrong. Please try again.");
+        setLocalError(t("passwordChange.Somethingwentwrong"));
       }
     } finally {
       setIsLoading(false);
@@ -133,20 +196,20 @@ const PasswordSettingsScreen: React.FC = () => {
         backgroundColor={Theme.colors.highlight}
         translucent={false}
       />
-      <Header title="Password Settings" />
+      <Header title={t("passwordChange.passwordChange")} />
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.section}>
-          <Text style={styles.label}>Current Password</Text>
+          <Text style={styles.label}>{t("passwordChange.currentPassword")}</Text>
           <PasswordInput
             value={currentPassword}
             onChangeText={setCurrentPassword}
           />
 
-          <Text style={styles.label}>New Password</Text>
+          <Text style={styles.label}>{t("passwordChange.newPassword")}</Text>
           <PasswordInput value={newPassword} onChangeText={setNewPassword} />
 
-          <Text style={styles.label}>Confirm New Password</Text>
+          <Text style={styles.label}>{t("passwordChange.confirmNewPassword")}</Text>
           <PasswordInput
             value={confirmNewPassword}
             onChangeText={setConfirmNewPassword}
@@ -162,7 +225,7 @@ const PasswordSettingsScreen: React.FC = () => {
             disabled={isLoading}
           >
             <Text style={styles.changeButtonText}>
-              {isLoading ? "Processing..." : "Change Password"}
+              {isLoading ? t("passwordChange.Processing") : t("passwordChange.changePassword")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -171,54 +234,5 @@ const PasswordSettingsScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FECD3E",
-  },
-  scrollView: {
-    flex: 1,
-  },
-  section: {
-    backgroundColor: "white",
-    borderTopLeftRadius: 80,
-    borderTopRightRadius: 80,
-    height: height,
-    width: width,
-    padding: 40,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  label: {
-    fontSize: 14,
-    color: "#666",
-    marginTop: 12,
-    marginBottom: 4,
-  },
-  errorText: {
-    color: "red",
-    marginTop: 16,
-    textAlign: "center",
-  },
-  changeButton: {
-    backgroundColor: "#FECD3E",
-    borderRadius: 25,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    alignItems: "center",
-    marginTop: 24,
-  },
-  changeButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  disabledButton: {
-    opacity: 0.7,
-  }
-});
 
 export default PasswordSettingsScreen;
