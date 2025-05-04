@@ -229,7 +229,16 @@
     "add": "Add",
     "yourGroceryList": "Your Grocery List:",
     "addItemsToYourGroceryList": "Add items to your grocery list",
-    "findBestStore": "Find Best Store ({searchRadius}km)"
+    "findBestStore": "Find Best Store ",
+    "findingBestStore": "Finding the best store...",
+    "openInMaps": "Open in Maps",
+    "bestStoresFound": "Best Stores Found:",
+    "distanceNotAvailable": "Distance not available",
+    "priceNotAvailable": "Price not available",
+    "enterMessage": "Enter Message",
+    "analyze": "Analyze",
+    "analyzing": "Analyzing...",
+    "failedToLoadAnalysis": "Failed to load analysis results"
   },
   "favoriteStores": {
     "favoriteStores": "Favorite Stores",
@@ -295,16 +304,27 @@
     "locationNote": "Note: Could not get your location. Search results may not be location-specific.",
     "searchForStoresByName": "Search for stores by name...",
     "search": "Search",
-    "enterStoreNameToSearch": "Enter a store name to search or allow location access for nearby stores."
+    "enterStoreNameToSearch": "Enter a store name to search or allow location access for nearby stores.",
+    "searchResults": "Search Results:",
+    "noStoresFound": "No stores found. Try a different search term.",
+    "addStoreButton": "Add Store",
+    "viewInMap": "View in Map",
+    "thankYou": "Thank You!",
+    "storeAdded": "Store {storeName} has been added to your favorites!",
+    "ok": "OK",
+    "addingStore": "Adding store..."
   },
   "favoriteStoresScreen": {
     "favoriteStores": "Favorite Stores",
+    "viewInMap": "View in Map",
     "noFavoriteStores": "No favorite stores yet"
   },
   "allStoresScreen": {
     "allStores": "All Stores",
     "noStores": "No stores found",
-    "searchPlaceholder": "Search stores"
+    "searchPlaceholder": "Search stores",
+    "viewInMap": "View In Map",
+    "emptyListMessage": "No stores to display"
   },
   "searchScreen": {
     "searchTitle": "Search",

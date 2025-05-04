@@ -4,10 +4,14 @@ import { useAppSelector, useAppDispatch } from '@/redux/hook';
 import { RootState } from '@/redux/store';
 import { removeItem } from '@/redux/slices/grocerySlice';
 import { GroceryItem } from '@/types/store';
+import { useTranslation } from "react-i18next";
+
 
 const GroceryList: React.FC = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector((state: RootState) => state.grocery.items);
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
 
   const handleRemoveItem = (id: string) => {
     dispatch(removeItem(id));
@@ -27,9 +31,9 @@ const GroceryList: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Your Grocery List:</Text>
+      <Text style={styles.title}>{t("SmartGrocery.yourGroceryList")}</Text>
       {items.length === 0 ? (
-        <Text style={styles.emptyText}>Add items to your grocery list</Text>
+        <Text style={styles.emptyText}>{t("SmartGrocery.addItemsToYourGroceryList")}</Text>
       ) : (
         <FlatList
           data={items}

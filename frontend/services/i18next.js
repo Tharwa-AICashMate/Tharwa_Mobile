@@ -30,7 +30,7 @@ export const languageResources = {
   ar: { translation: ar },
 };
 
-// Initialize i18n
+// Initialize i18n 
 i18next.use(initReactI18next).init({
   compatibilityJSON: 'v3',
   lng: 'en', // Default language

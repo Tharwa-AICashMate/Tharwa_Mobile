@@ -24,6 +24,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Theme from "@/theme";
 import * as Location from "expo-location";
+import { useTranslation } from "react-i18next";
 interface StoreFormProps {
   onSuccess: (newStore: Store) => void;
 }
@@ -40,6 +41,21 @@ interface GeoapifySuggestion {
 }
 
 const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
+  const dynamicStyles = {
+    buttonsContainer: {
+      flexDirection: isRTL ? 'row-reverse' : 'row' as const,
+    },
+    input: {
+      textAlign: (isRTL ? 'right' : 'left') as 'right' | 'left',
+    },
+    searchButton: {
+      marginLeft: isRTL ? 0 : 200,
+      marginRight: isRTL ? 200 : 0
+    }
+  };
+
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [suggestions, setSuggestions] = useState<GeoapifySuggestion[]>([]);
   const [userLocation, setUserLocation] = useState<{
@@ -57,9 +73,7 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
       default: `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`,
     });
 
-    Linking.openURL(url).catch((err) =>
-      console.log("Error opening map:", err)
-    );
+    Linking.openURL(url).catch((err) => console.log("Error opening map:", err));
   };
   console.log(userLocation);
   const dispatch = useAppDispatch();
@@ -186,36 +200,40 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Icon name="check-circle" size={60} color={Theme.colors.primary} />
-            <Text style={styles.modalTitle}>Thank You!</Text>
+            <Text style={styles.modalTitle}>
+              {t("addStoreScreen.thankYou")}
+            </Text>
             <Text style={styles.modalText}>
-              Store {addedStore?.name} has been added to your favorites!
+              {t("addStoreScreen.storeAdded", { storeName: addedStore?.name })}
             </Text>
             <Pressable
               style={styles.modalButton}
               onPress={() => setShowSuccessModal(false)}
             >
-              <Text style={styles.modalButtonText}>OK</Text>
+              <Text style={styles.modalButtonText}>
+                {t("addStoreScreen.ok")}
+              </Text>
             </Pressable>
           </View>
         </View>
       </Modal>
       {locationError && (
         <Text style={styles.warningText}>
-          Note: {locationError}. Search results may not be location-specific.
+          {t("addStoreScreen.locationNote")}
         </Text>
       )}
 
       <View style={styles.searchSection}>
         <TextInput
-          style={styles.input}
-          placeholder="Search for stores by name..."
+          style={[styles.input, dynamicStyles.input]}
+          placeholder={t("addStoreScreen.searchForStoresByName")}
           value={searchQuery}
           onChangeText={setSearchQuery}
           onSubmitEditing={handleSearch}
           returnKeyType="search"
         />
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Text style={styles.buttonText}>Search</Text>
+        <TouchableOpacity style={[styles.searchButton, dynamicStyles.searchButton]} onPress={handleSearch}>
+          <Text style={styles.buttonText}>{t("addStoreScreen.search")}</Text>
         </TouchableOpacity>
       </View>
 
@@ -238,12 +256,14 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
                         {item.properties.address_line2}
                       </Text>
                     )}
-                    <View style={styles.buttonsContainer}>
+                    <View style={[styles.buttonsContainer, dynamicStyles.buttonsContainer]}>
                       <TouchableOpacity
                         style={[styles.actionButton, styles.addButton]}
                         onPress={() => handleAddStore(item)}
                       >
-                        <Text style={styles.buttonText}>Add Store</Text>
+                        <Text style={styles.buttonText}>
+                          {t("addStoreScreen.addStoreButton")}
+                        </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         style={[styles.actionButton, styles.mapButton]}
@@ -255,7 +275,7 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
                         }
                       >
                         <Text style={styles.buttontext}>
-                          View in Map{" "}
+                          {t("addStoreScreen.viewInMap")}{" "}
                           <EvilIcons
                             name="arrow-right"
                             size={24}
@@ -277,13 +297,13 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
       ) : (
         <Text style={styles.hintText}>
           {searchQuery
-            ? "No stores found. Try a different search term."
-            : "Enter a store name to search or allow location access for nearby stores."}
+            ? t("addStoreScreen.noStoresFound")
+            : t("addStoreScreen.enterStoreNameToSearch")}
         </Text>
       )}
 
       {addStoreStatus === "loading" && (
-        <Text style={styles.loadingText}>Adding store...</Text>
+        <Text style={styles.loadingText}>{t("addStoreScreen.addingStore")}</Text>
       )}
       {addStoreStatus === "failed" && (
         <Text style={styles.errorText}>{addStoreError}</Text>
@@ -321,12 +341,12 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     color: Theme.colors.text,
+
   },
   searchButton: {
     backgroundColor: Theme.colors.primary,
     paddingHorizontal: 16,
-    marginLeft: 200,
-    borderRadius: 10,
+     borderRadius: 10,
     paddingVertical: 5,
     justifyContent: "center",
     alignItems: "center",
@@ -368,7 +388,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   buttonsContainer: {
-    flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 10,
   },
