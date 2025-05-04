@@ -275,25 +275,42 @@
   },
   "savingsScreen": {
     "savings": "Savings",
-    "goal" : "Goal",
+    "goal": "Goal",
     "amountSaved": "Amount Saved",
     "currencySymbol": "$",
     "addSavings": "Add Savings",
     "addToSavings": "Add to Savings",
+    "more": "More",
+    "loading": "Loading savings goals...",
     "noSavings": {
       "createYourFirstGoal": "Create Your First Goal",
       "startSavingForSomethingSpecial": "Start saving for something special by adding your first goal"
     },
     "savingsModal": {
       "addSavingsGoal": "Add Savings Goal",
+      "editSavingsGoal": "Edit Savings Goal",
+      "deleteSavingsGoal": "Delete Savings Goal",
+      "deleteSavingsGoalConfirmation": "Are you sure you want to delete the goal {{selectedGoal.name}}?",
       "name": "Name",
       "goalNamePlaceholder": "Goal name",
-      "charactersLimit": "{0}/20 characters",
+      "charactersLimit": "{{0}}/20 characters",
       "targetAmount": "Target Amount",
       "enterTargetAmount": "Enter target amount",
       "selectIcon": "Select Icon",
       "cancel": "Cancel",
-      "save": "Save"
+      "save": "Save",
+      "update": "Update",
+      "delete": "Delete",
+      "edit": "Edit"
+    },
+    "savingsErrors": {
+      "goalName": "Goal name is required",
+      "goalNameLength": "Goal name must be at least 3 characters",
+      "goalNameDuplicate": "A savings goal with this name already exists",
+      "targetAmount": "Target amount is required",
+      "targetAmountNegative": "Please enter a valid positive amount",
+      "targetAmountExceeding": "Target amount cannot exceed 1,000,000",
+      "iconError": "Please select an icon"
     }
   },
   "addStoreScreen": {

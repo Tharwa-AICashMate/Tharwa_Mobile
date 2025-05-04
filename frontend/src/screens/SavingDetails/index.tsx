@@ -24,6 +24,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native";
 import MonthSection from "@/componenets/MonthSection";
 import { groupTransactionsByMonth } from "@/utils/helpers";
+import { useTranslation } from "react-i18next";
 
 dayjs.extend(utc);
 
@@ -34,6 +35,7 @@ type SavingDetailsProps = NativeStackScreenProps<
 
 const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
   const data = route.params;
+  const { t } = useTranslation();
   const { categoryName, goalID, Target, Icon } = data
   const dispatch = useAppDispatch();
 
@@ -61,7 +63,7 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
   const groupedDeposits = groupTransactionsByMonth(deposits);
 
   const formatCurrency = (amount?: number): string => {
-    if (typeof amount !== "number") return "$0";
+    if (typeof amount !== "number") return t("savingsScreen.currencySymbol") + "0";
     return amount
       .toLocaleString("en-US", {
         style: "currency",
@@ -77,9 +79,9 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
       ? Math.min(Math.round((currentAmount / Target) * 100), 100)
       : 0;
 
-  const addSavings = () => {
-    navigation.navigate("AddSavings",{savingCategory:categoryName});
-  };
+ const addSavings = () => {
+   navigation.navigate("AddSavings", { savingCategory: categoryName });
+ };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -94,7 +96,7 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
               color={Theme.colors.text}
               style={styles.infoIcon}
             />
-            <Text style={styles.infoLabel}>Goal</Text>
+            <Text style={styles.infoLabel}>{t("savingsScreen.goal")}</Text>
           </View>
           <Text style={styles.goalAmount}>{formatCurrency(Target)}</Text>
 
@@ -105,7 +107,9 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
               color={Theme.colors.text}
               style={styles.infoIcon}
             />
-            <Text style={styles.infoLabel}>Amount Saved</Text>
+            <Text style={styles.infoLabel}>
+              {t("savingsScreen.amountSaved")}
+            </Text>
           </View>
           <Text style={styles.savedAmount}>
             {formatCurrency(currentAmount)}
@@ -136,37 +140,47 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
               color={Theme.colors.text}
             />
             <Text style={styles.statusText}>
-              {percentage}% Of Your Goal,{" "}
-              {percentage < 50 ? "Keep Going!" : "Looks Good."}
+              {t("expenseBrief.statusMessage", {
+                percentage: percentage,
+                status:
+                  percentage < 50
+                    ? t("expenseBrief.bad")
+                    : t("expenseBrief.good"),
+              })}
             </Text>
           </View>
         </View>
 
-
-
         <ScrollView style={styles.transactionList}>
-                {isLoading ? (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      minHeight: 200,
-                      
-                    }}
-                  >
-                    <ActivityIndicator size="large" color={Theme.colors.primary} />
-                  </View>
-                ) : (
-                  Object.keys(groupedDeposits).map((month) => (
-                    <MonthSection key={month} month={month} transactions={groupedDeposits[month]} showCategory={false} icon={Icon}/>
-                  ))
-                )}
-              </ScrollView>
+          {isLoading ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: 200,
+              }}
+            >
+              <ActivityIndicator size="large" color={Theme.colors.primary} />
+            </View>
+          ) : (
+            Object.keys(groupedDeposits).map((month) => (
+              <MonthSection
+                key={month}
+                month={month}
+                transactions={groupedDeposits[month]}
+                showCategory={false}
+                icon={Icon}
+              />
+            ))
+          )}
+        </ScrollView>
 
         <View style={styles.addSavingContainer}>
           <TouchableOpacity style={styles.addButton} onPress={addSavings}>
-            <Text style={styles.addButtonText}>Add Savings</Text>
+            <Text style={styles.addButtonText}>
+              {t("savingsScreen.addSavings")}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

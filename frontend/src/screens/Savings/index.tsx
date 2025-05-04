@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -9,31 +8,40 @@ import {
   ActivityIndicator,
   Modal,
   Alert,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import {  useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from 'App';
-import Header from '@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle';
-import Theme from '@/theme';
-import styles from './style';
-import { useAppDispatch, useAppSelector } from '@/redux/hook';
-import { fetchUserGoals, createGoal, updateGoal, deleteGoal } from '@/redux/slices/savingSlice';
-import { Goal } from '@/types/goal';
-import AddCategoryModal from '@/componenets/AddCategoryModal';
-import { getCurrentUserId } from '@/utils/auth';
-import ExpenseBrief from '@/componenets/expenceBrief';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "App";
+import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
+import Theme from "@/theme";
+import styles from "./style";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import {
+  fetchUserGoals,
+  createGoal,
+  updateGoal,
+  deleteGoal,
+} from "@/redux/slices/savingSlice";
+import { Goal } from "@/types/goal";
+import AddCategoryModal from "@/componenets/AddCategoryModal";
+import { getCurrentUserId } from "@/utils/auth";
+import ExpenseBrief from "@/componenets/expenceBrief";
+import { useTranslation } from "react-i18next";
 
 type SavingsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'Savings'
+  "Savings"
 >;
 
 const Savings = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation<SavingsScreenNavigationProp>();
   const dispatch = useAppDispatch();
 
-  const { items: savingsGoals, loading: isLoading } = useAppSelector((state) => state.goals);
+  const { items: savingsGoals, loading: isLoading } = useAppSelector(
+    (state) => state.goals
+  );
   const [userId, setUserId] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [actionModalVisible, setActionModalVisible] = useState(false);
@@ -42,7 +50,7 @@ const Savings = () => {
   const [targetAmount, setTargetAmount] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("wallet-outline");
   const [isEditMode, setIsEditMode] = useState(false);
-  
+
   // Add validation state
   const [nameError, setNameError] = useState("");
   const [targetError, setTargetError] = useState("");
@@ -70,7 +78,7 @@ const Savings = () => {
     Target: number,
     Icon: string
   ) => {
-    navigation.navigate('SavingDetails', {
+    navigation.navigate("SavingDetails", {
       categoryName,
       goalID,
       Target,
@@ -80,9 +88,10 @@ const Savings = () => {
 
   const checkForDuplicateName = (name: string) => {
     const normalizedName = name.trim().toLowerCase();
-    return savingsGoals.some(goal => 
-      goal.name.toLowerCase() === normalizedName && 
-      (!isEditMode || (isEditMode && goal.id !== selectedGoal?.id))
+    return savingsGoals.some(
+      (goal) =>
+        goal.name.toLowerCase() === normalizedName &&
+        (!isEditMode || (isEditMode && goal.id !== selectedGoal?.id))
     );
   };
 
@@ -91,13 +100,13 @@ const Savings = () => {
 
     // Validate name
     if (!newGoalName.trim()) {
-      setNameError("Goal name is required");
+      setNameError(t("savingsScreen.savingsErrors.goalName"));
       isValid = false;
     } else if (newGoalName.trim().length < 3) {
-      setNameError("Goal name must be at least 3 characters");
+      setNameError(t("savingsScreen.savingsErrors.goalNameLength"));
       isValid = false;
     } else if (checkForDuplicateName(newGoalName)) {
-      setNameError("A savings goal with this name already exists");
+      setNameError(t("savingsScreen.savingsErrors.goalNameDuplicate"));
       isValid = false;
     } else {
       setNameError("");
@@ -105,15 +114,15 @@ const Savings = () => {
 
     // Validate target amount
     if (!targetAmount.trim()) {
-      setTargetError("Target amount is required");
+      setTargetError(t("savingsScreen.savingsErrors.targetAmount"));
       isValid = false;
     } else {
       const amount = parseFloat(targetAmount);
       if (isNaN(amount) || amount <= 0) {
-        setTargetError("Please enter a valid positive amount");
+        setTargetError(t("savingsScreen.savingsErrors.targetAmountNegative"));
         isValid = false;
       } else if (amount > 1000000) {
-        setTargetError("Target amount cannot exceed 1,000,000");
+        setTargetError(t("savingsScreen.savingsErrors.targetAmountExceeding"));
         isValid = false;
       } else {
         setTargetError("");
@@ -122,7 +131,7 @@ const Savings = () => {
 
     // Validate icon
     if (!selectedIcon) {
-      setIconError("Please select an icon");
+      setIconError(t("savingsScreen.savingsErrors.iconError"));
       isValid = false;
     } else {
       setIconError("");
@@ -164,17 +173,16 @@ const Savings = () => {
   };
 
   const resetForm = () => {
-    setNewGoalName('');
-    setTargetAmount('');
-    setSelectedIcon('wallet-outline');
-    setNameError('');
-    setTargetError('');
-    setIconError('');
+    setNewGoalName("");
+    setTargetAmount("");
+    setSelectedIcon("wallet-outline");
+    setNameError("");
+    setTargetError("");
+    setIconError("");
     setIsEditMode(false);
     setSelectedGoal(null);
   };
 
- 
   const handleCancel = () => {
     resetForm();
     setModalVisible(false);
@@ -183,35 +191,35 @@ const Savings = () => {
   const handleChangeTargetAmount = (value: string) => {
     // Only allow numeric input with up to 2 decimal places
     const regex = /^\d*\.?\d{0,2}$/;
-    if (value === '' || regex.test(value)) {
+    if (value === "" || regex.test(value)) {
       setTargetAmount(value);
-      
+
       // Clear error if there was one
       if (targetError) {
-        setTargetError('');
+        setTargetError("");
       }
     }
   };
 
   const handleChangeName = (value: string) => {
     setNewGoalName(value);
-    
+
     // Clear error if name is valid but check for duplicates
     if (value.trim().length >= 3) {
       if (checkForDuplicateName(value)) {
         setNameError("A savings goal with this name already exists");
       } else {
-        setNameError('');
+        setNameError("");
       }
     }
   };
 
   const handleSelectIcon = (icon: string) => {
     setSelectedIcon(icon);
-    
+
     // Clear error if there was one
     if (iconError) {
-      setIconError('');
+      setIconError("");
     }
   };
 
@@ -222,33 +230,33 @@ const Savings = () => {
 
   const openEditModal = () => {
     if (!selectedGoal) return;
-    
+
     setIsEditMode(true);
     setNewGoalName(selectedGoal.name);
     setTargetAmount(selectedGoal.target_amount.toString());
-    setSelectedIcon(selectedGoal.icon || 'wallet-outline');
-    setNameError('');
-    setTargetError('');
-    setIconError('');
+    setSelectedIcon(selectedGoal.icon || "wallet-outline");
+    setNameError("");
+    setTargetError("");
+    setIconError("");
     setModalVisible(true);
     setActionModalVisible(false);
   };
 
   const handleDeleteGoal = () => {
     if (!selectedGoal) return;
-    
+
     setActionModalVisible(false);
-    
+
     Alert.alert(
-      "Delete Savings Goal",
-      `Are you sure you want to delete the goal "${selectedGoal.name}"?`,
+      t("savingsScreen.savingsModal.deleteSavingsGoal"),
+      t("savingsScreen.savingsModal.deleteSavingsGoalConfirmation"),
       [
         {
-          text: "Cancel",
+          text: t("savingsScreen.savingsModal.cancel"),
           style: "cancel",
         },
         {
-          text: "Delete",
+          text: t("savingsScreen.savingsModal.delete"),
           style: "destructive",
           onPress: () => {
             dispatch(deleteGoal(selectedGoal.id as number));
@@ -259,9 +267,13 @@ const Savings = () => {
     );
   };
 
-  const renderGoalCard = ({ item }: { item: Goal | { name: string, isMoreButton?: boolean } }) => {
+  const renderGoalCard = ({
+    item,
+  }: {
+    item: Goal | { name: string; isMoreButton?: boolean };
+  }) => {
     // If this is the "More" button item
-    if ('isMoreButton' in item && item.isMoreButton) {
+    if ("isMoreButton" in item && item.isMoreButton) {
       return (
         <TouchableOpacity
           style={styles.categoryCard}
@@ -274,7 +286,7 @@ const Savings = () => {
           <View style={styles.categoryIconContainer}>
             <Ionicons name="add" size={45} color="white" />
           </View>
-          <Text style={styles.categoryName}>More</Text>
+          <Text style={styles.categoryName}>{t("savingsScreen.more")}</Text>
         </TouchableOpacity>
       );
     }
@@ -289,7 +301,7 @@ const Savings = () => {
             goal.name,
             goal.id as number,
             goal.target_amount,
-            goal.icon || 'wallet-outline'
+            goal.icon || "wallet-outline"
           )
         }
         onLongPress={() => handleGoalLongPress(goal)}
@@ -297,7 +309,7 @@ const Savings = () => {
       >
         <View style={styles.categoryIconContainer}>
           <Ionicons
-            name={(goal.icon || 'wallet-outline') as any}
+            name={(goal.icon || "wallet-outline") as any}
             size={45}
             color="white"
           />
@@ -318,7 +330,9 @@ const Savings = () => {
       return (
         <View style={styles.emptyStateContainer}>
           <ActivityIndicator size="large" color={Theme.colors.primary} />
-          <Text style={styles.emptyStateText}>Loading savings goals...</Text>
+          <Text style={styles.emptyStateText}>
+            {t("savingsScreen.loading")}
+          </Text>
         </View>
       );
     }
@@ -334,11 +348,17 @@ const Savings = () => {
               setModalVisible(true);
             }}
           >
-            <Ionicons name="add-circle" size={80} color={Theme.colors.primary} />
+            <Ionicons
+              name="add-circle"
+              size={80}
+              color={Theme.colors.primary}
+            />
           </TouchableOpacity>
-          <Text style={styles.emptyStateTitle}>Create Your First Goal</Text>
+          <Text style={styles.emptyStateTitle}>
+            {t("savingsScreen.noSavings.createYourFirstGoal")}
+          </Text>
           <Text style={styles.emptyStateText}>
-            Start saving for something special by adding your first goal
+            {t("savingsScreen.noSavings.startSavingForSomethingSpecial")}
           </Text>
         </View>
       );
@@ -346,9 +366,12 @@ const Savings = () => {
 
     return (
       <FlatList
-        data={[...savingsGoals, { name: 'More', isMoreButton: true }]}
+        data={[
+          ...savingsGoals,
+          { name: t("savingsScreen.more"), isMoreButton: true },
+        ]}
         keyExtractor={(item, index) =>
-          'id' in item ? String((item as Goal).id) : `more-${index}`
+          "id" in item ? String((item as Goal).id) : `more-${index}`
         }
         numColumns={3}
         renderItem={renderGoalCard}
@@ -359,13 +382,11 @@ const Savings = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Savings" />
+      <Header title={t("savingsScreen.savings")} />
 
-      <ExpenseBrief/>
+      <ExpenseBrief />
 
-      <View style={styles.categoriesContainer}>
-        {renderContent()}
-      </View>
+      <View style={styles.categoriesContainer}>{renderContent()}</View>
 
       {/* Action Modal for Edit/Delete */}
       <Modal
@@ -380,22 +401,28 @@ const Savings = () => {
           onPress={() => setActionModalVisible(false)}
         >
           <View style={styles.actionModalContainer}>
-            <TouchableOpacity 
-              style={styles.actionButton} 
+            <TouchableOpacity
+              style={styles.actionButton}
               onPress={openEditModal}
             >
               <Ionicons name="pencil" size={24} color={Theme.colors.primary} />
-              <Text style={styles.actionButtonText}>Edit</Text>
+              <Text style={styles.actionButtonText}>
+                {t("savingsScreen.savingsModal.edit")}
+              </Text>
             </TouchableOpacity>
-            
+
             <View style={styles.actionDivider} />
-            
-            <TouchableOpacity 
-              style={styles.actionButton} 
+
+            <TouchableOpacity
+              style={styles.actionButton}
               onPress={handleDeleteGoal}
             >
               <Ionicons name="trash" size={24} color={Theme.colors.primary} />
-              <Text style={[styles.actionButtonText, { color: Theme.colors.text}]}>Delete</Text>
+              <Text
+                style={[styles.actionButtonText, { color: Theme.colors.text }]}
+              >
+                {t("savingsScreen.savingsModal.delete")}
+              </Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
