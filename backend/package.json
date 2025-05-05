@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "start": "tsx app.ts",
+    "start": "npm run build && npm run serve",
     "dev": "tsx watch app.ts",
     "build": "tsc",
     "serve": "node dist/app.js"
