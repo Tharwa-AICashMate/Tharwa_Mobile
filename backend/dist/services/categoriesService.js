@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCategory = exports.updateCategory = exports.getCategoryById = exports.getCategories = exports.createCategory = void 0;
-const supabase_js_1 = require("../config/supabase.js");
-const createCategory = async (categoryData) => {
-    const { data, error } = await supabase_js_1.supabase
+import { supabase } from "../config/supabase.js";
+export const createCategory = async (categoryData) => {
+    const { data, error } = await supabase
         .from("categories")
         .insert(categoryData)
         .select()
@@ -13,9 +10,8 @@ const createCategory = async (categoryData) => {
         throw error;
     return data;
 };
-exports.createCategory = createCategory;
-const getCategories = async (userId) => {
-    let query = supabase_js_1.supabase.from("categories").select("*").neq("name", "Income");
+export const getCategories = async (userId) => {
+    let query = supabase.from("categories").select("*").neq("name", "Income");
     if (userId) {
         query = query.eq("user_id", userId);
     }
@@ -24,9 +20,8 @@ const getCategories = async (userId) => {
         throw error;
     return data || [];
 };
-exports.getCategories = getCategories;
-const getCategoryById = async (id) => {
-    const { data, error } = await supabase_js_1.supabase
+export const getCategoryById = async (id) => {
+    const { data, error } = await supabase
         .from('categories')
         .select('*')
         .eq('id', id)
@@ -35,9 +30,8 @@ const getCategoryById = async (id) => {
         throw error;
     return data;
 };
-exports.getCategoryById = getCategoryById;
-const updateCategory = async (id, updates) => {
-    const { data, error } = await supabase_js_1.supabase
+export const updateCategory = async (id, updates) => {
+    const { data, error } = await supabase
         .from('categories')
         .update(updates)
         .eq('id', id)
@@ -47,9 +41,7 @@ const updateCategory = async (id, updates) => {
         throw error;
     return data;
 };
-exports.updateCategory = updateCategory;
-const deleteCategory = async (id) => {
-    const { error } = await supabase_js_1.supabase.from("categories").delete().eq("id", id);
+export const deleteCategory = async (id) => {
+    const { error } = await supabase.from("categories").delete().eq("id", id);
     return !error;
 };
-exports.deleteCategory = deleteCategory;

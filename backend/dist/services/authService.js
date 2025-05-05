@@ -1,12 +1,7 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const supabase_js_1 = require("../config/supabase.js");
-const node_mailjet_1 = __importDefault(require("node-mailjet"));
-const categoriesService_js_1 = require("./categoriesService.js");
-const mailjetClient = node_mailjet_1.default.apiConnect(process.env.MAILJET_API_KEY, process.env.MAILJET_API_SECRET);
+import { supabase } from "../config/supabase.js";
+import mailjet from "node-mailjet";
+import { createCategory } from "./categoriesService.js";
+const mailjetClient = mailjet.apiConnect(process.env.MAILJET_API_KEY, process.env.MAILJET_API_SECRET);
 const intialCategories = [
     { name: "Income", icon: "cash-outline" },
     { name: "Food", icon: "restaurant-outline" },
@@ -31,7 +26,7 @@ class AuthService {
             return { status: 400, message: error };
         }
         // // If the email does not exist, proceed with signup
-        const { data, error: signupError } = await supabase_js_1.supabase.auth.signUp({
+        const { data, error: signupError } = await supabase.auth.signUp({
             email,
             password,
         });
@@ -46,13 +41,13 @@ class AuthService {
         console.log(updatedUserData, updateError);
         if (data) {
             intialCategories.forEach(category => {
-                (0, categoriesService_js_1.createCategory)({ ...category, user_id: data.user.id });
+                createCategory({ ...category, user_id: data.user.id });
             });
         }
         return updatedUserData;
     }
     static async login(userId) {
-        const { data: userData, error } = await supabase_js_1.supabase
+        const { data: userData, error } = await supabase
             .from("users")
             .select(`*,
           balance (
@@ -73,7 +68,7 @@ class AuthService {
         };
     }
     static async getuserByEmail(email) {
-        const { data, error } = await supabase_js_1.supabase
+        const { data, error } = await supabase
             .from("users")
             .select("*")
             .eq("email", email)
@@ -81,13 +76,13 @@ class AuthService {
         return { data, error };
     }
     static async upadateUserProfile(email, profileData) {
-        const status = await supabase_js_1.supabase
+        const status = await supabase
             .from("users")
             .update(profileData)
             .eq("email", email);
         if (status.error)
             throw { status: 400, message: status.error };
-        const { data, error } = await supabase_js_1.supabase.from("users").select("*").eq("email", email);
+        const { data, error } = await supabase.from("users").select("*").eq("email", email);
         return { data, error };
     }
     static async forgetPassword(email) {
@@ -106,7 +101,7 @@ class AuthService {
         const expiresAt = new Date();
         expiresAt.setMinutes(expiresAt.getMinutes() + 10);
         // Store OTP in database
-        const { error: otpError } = await supabase_js_1.supabase
+        const { error: otpError } = await supabase
             .from("password_reset_tokens")
             .upsert([
             {
@@ -158,7 +153,7 @@ class AuthService {
         }
     }
     static async verifyOtp(email, otp) {
-        const { data: tokens, error: tokenError } = await supabase_js_1.supabase
+        const { data: tokens, error: tokenError } = await supabase
             .from("password_reset_tokens")
             .select("*")
             .eq("email", email)
@@ -170,7 +165,7 @@ class AuthService {
             return { status: 400, message: "Invalid or expired OTP" };
         }
         // Mark token as used
-        await supabase_js_1.supabase
+        await supabase
             .from("password_reset_tokens")
             .update({ used: true })
             .eq("email", email)
@@ -182,7 +177,7 @@ class AuthService {
         const { data: user, error: userError } = await AuthService.getuserByEmail(email);
         console.log("Tokens:", user, userError);
         const userId = user?.id;
-        const { data, error } = await supabase_js_1.supabase.auth.admin.updateUserById(userId, {
+        const { data, error } = await supabase.auth.admin.updateUserById(userId, {
             password: newPassword,
         });
         console.log("Password reset data:", data, error);
@@ -195,4 +190,4 @@ class AuthService {
 function generateOTP() {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
-exports.default = AuthService;
+export default AuthService;

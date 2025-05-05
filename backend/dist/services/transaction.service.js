@@ -1,11 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.editTransaction = exports.deleteTransaction = exports.getTransactionsByCategory = exports.getAllTransactions = exports.createTransaction = void 0;
-const supabase_js_1 = require("../config/supabase.js");
-const createTransaction = async (transaction) => {
+import { supabase } from "../config/supabase.js";
+export const createTransaction = async (transaction) => {
     console.log(transaction);
     if (transaction.type === "income") {
-        const { data, error } = await supabase_js_1.supabase
+        const { data, error } = await supabase
             .from("categories")
             .select("id")
             .eq("name", "Income")
@@ -27,14 +24,14 @@ const createTransaction = async (transaction) => {
         ...Transaction,
         details: Transaction.details ? JSON.stringify(Transaction.details) : null,
     };
-    const { data, error } = await supabase_js_1.supabase
+    const { data, error } = await supabase
         .from("transactions")
         .insert([transactionToInsert])
         .select();
     console.log(error);
     if (error)
         throw new Error(error.message);
-    const { data: storeData, error: storeError } = await supabase_js_1.supabase
+    const { data: storeData, error: storeError } = await supabase
         .from("items_store")
         .insert([{ item_id: data[0].id, store_id: storeId }]);
     return data?.[0]
@@ -44,12 +41,11 @@ const createTransaction = async (transaction) => {
         }
         : null;
 };
-exports.createTransaction = createTransaction;
 // Update other functions to handle details parsing
-const getAllTransactions = async (userId, page = 1) => {
+export const getAllTransactions = async (userId, page = 1) => {
     const from = (page - 1) * 20;
     const to = from + 20 - 1;
-    const { data, error } = await supabase_js_1.supabase
+    const { data, error } = await supabase
         .from("transaction_with_category")
         .select("*")
         .eq("user_id", userId)
@@ -63,7 +59,6 @@ const getAllTransactions = async (userId, page = 1) => {
         throw new Error(error.message);
     return formated;
 };
-exports.getAllTransactions = getAllTransactions;
 const parseTransactionDetails = (details) => {
     if (!details || typeof details !== "string")
         return [];
@@ -90,10 +85,10 @@ const parseTransactionDetails = (details) => {
         return [];
     }
 };
-const getTransactionsByCategory = async (userId, categoryId, page = 1) => {
+export const getTransactionsByCategory = async (userId, categoryId, page = 1) => {
     const from = (page - 1) * 20;
     const to = from + 20 - 1;
-    const { data, error } = await supabase_js_1.supabase
+    const { data, error } = await supabase
         .from("transaction_with_category")
         .select("*")
         .eq("user_id", userId)
@@ -108,9 +103,8 @@ const getTransactionsByCategory = async (userId, categoryId, page = 1) => {
         throw new Error(error.message);
     return formated;
 };
-exports.getTransactionsByCategory = getTransactionsByCategory;
-const deleteTransaction = async (transactionId) => {
-    const { data, error } = await supabase_js_1.supabase
+export const deleteTransaction = async (transactionId) => {
+    const { data, error } = await supabase
         .from("transactions")
         .delete()
         .eq("id", transactionId);
@@ -118,8 +112,7 @@ const deleteTransaction = async (transactionId) => {
         throw new Error(error.message);
     return;
 };
-exports.deleteTransaction = deleteTransaction;
-const editTransaction = async (transaction) => {
+export const editTransaction = async (transaction) => {
     const { user_id, storeId, ...Transaction } = transaction;
     console.log('---------', Transaction);
     // Prepare transaction object for DB
@@ -128,7 +121,7 @@ const editTransaction = async (transaction) => {
         details: Transaction.details ? JSON.stringify(Transaction.details) : null,
     };
     // Update transaction
-    const { data, error } = await supabase_js_1.supabase
+    const { data, error } = await supabase
         .from("transactions")
         .update(transactionToUpdate)
         .eq("id", Transaction.id)
@@ -138,7 +131,7 @@ const editTransaction = async (transaction) => {
         throw new Error(error.message);
     // Handle store upsert
     if (storeId) {
-        const { error: storeError } = await supabase_js_1.supabase
+        const { error: storeError } = await supabase
             .from("items_store")
             .upsert([{ item_id: Transaction.id, store_id: storeId }], {
             onConflict: "item_id",
@@ -152,4 +145,3 @@ const editTransaction = async (transaction) => {
         store_id: storeId,
     };
 };
-exports.editTransaction = editTransaction;

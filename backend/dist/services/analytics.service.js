@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateFinancialReports = exports.getFinancialTrends = exports.getFinancialSummary = exports.getIncomeAnalytics = exports.getSpendingAnalytics = void 0;
-const supabase_1 = require("../config/supabase");
+import { supabase } from "../config/supabase";
 // Spending Analytics
-const getSpendingAnalytics = async () => {
-    const { data, error } = await supabase_1.supabase
+export const getSpendingAnalytics = async () => {
+    const { data, error } = await supabase
         .from("transactions")
         .select("*")
         .eq("type", "expense");
@@ -14,10 +11,9 @@ const getSpendingAnalytics = async () => {
     }
     return data;
 };
-exports.getSpendingAnalytics = getSpendingAnalytics;
 // Income Analytics
-const getIncomeAnalytics = async () => {
-    const { data, error } = await supabase_1.supabase
+export const getIncomeAnalytics = async () => {
+    const { data, error } = await supabase
         .from("transactions")
         .select("*")
         .eq("type", "income");
@@ -27,14 +23,13 @@ const getIncomeAnalytics = async () => {
     }
     return data;
 };
-exports.getIncomeAnalytics = getIncomeAnalytics;
 // Financial Summary
-const getFinancialSummary = async () => {
-    const { data: incomeData } = await supabase_1.supabase
+export const getFinancialSummary = async () => {
+    const { data: incomeData } = await supabase
         .from("transactions")
         .select("amount")
         .eq("type", "income");
-    const { data: expenseData } = await supabase_1.supabase
+    const { data: expenseData } = await supabase
         .from("transactions")
         .select("amount")
         .eq("type", "expense");
@@ -46,10 +41,9 @@ const getFinancialSummary = async () => {
         net: totalIncome - totalExpense,
     };
 };
-exports.getFinancialSummary = getFinancialSummary;
 // Financial Trends
-const getFinancialTrends = async () => {
-    const { data, error } = await supabase_1.supabase
+export const getFinancialTrends = async () => {
+    const { data, error } = await supabase
         .from("transactions")
         .select("*")
         .order("date", { ascending: false });
@@ -59,11 +53,10 @@ const getFinancialTrends = async () => {
     }
     return data;
 };
-exports.getFinancialTrends = getFinancialTrends;
 // Financial Reports
-const generateFinancialReports = async () => {
-    const summary = await (0, exports.getFinancialSummary)();
-    const trends = await (0, exports.getFinancialTrends)();
+export const generateFinancialReports = async () => {
+    const summary = await getFinancialSummary();
+    const trends = await getFinancialTrends();
     return {
         title: "Financial Report",
         data: {
@@ -73,4 +66,3 @@ const generateFinancialReports = async () => {
         generatedAt: new Date(),
     };
 };
-exports.generateFinancialReports = generateFinancialReports;

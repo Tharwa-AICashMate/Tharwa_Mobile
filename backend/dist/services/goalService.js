@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCurrentAmountByGoalId = exports.deleteGoal = exports.updateGoal = exports.getUserGoals = exports.getGoal = exports.createGoal = void 0;
-const supabase_js_1 = require("../config/supabase.js");
-const createGoal = async (goalData) => {
-    const { data, error } = await supabase_js_1.supabase
+import { supabase } from "../config/supabase.js";
+export const createGoal = async (goalData) => {
+    const { data, error } = await supabase
         .from('goals')
         .insert(goalData)
         .select()
@@ -12,9 +9,8 @@ const createGoal = async (goalData) => {
         throw error;
     return data;
 };
-exports.createGoal = createGoal;
-const getGoal = async (id) => {
-    const { data, error } = await supabase_js_1.supabase
+export const getGoal = async (id) => {
+    const { data, error } = await supabase
         .from('goals')
         .select('*')
         .eq('id', id)
@@ -23,9 +19,8 @@ const getGoal = async (id) => {
         return null;
     return data;
 };
-exports.getGoal = getGoal;
-const getUserGoals = async (userId) => {
-    const { data, error } = await supabase_js_1.supabase
+export const getUserGoals = async (userId) => {
+    const { data, error } = await supabase
         .from('goals')
         .select('*')
         .eq('user_id', userId);
@@ -33,9 +28,8 @@ const getUserGoals = async (userId) => {
         return [];
     return data;
 };
-exports.getUserGoals = getUserGoals;
-const updateGoal = async (id, goalData) => {
-    const { data, error } = await supabase_js_1.supabase
+export const updateGoal = async (id, goalData) => {
+    const { data, error } = await supabase
         .from('goals')
         .update(goalData)
         .eq('id', id)
@@ -45,17 +39,15 @@ const updateGoal = async (id, goalData) => {
         return null;
     return data;
 };
-exports.updateGoal = updateGoal;
-const deleteGoal = async (id) => {
-    const { error } = await supabase_js_1.supabase
+export const deleteGoal = async (id) => {
+    const { error } = await supabase
         .from('goals')
         .delete()
         .eq('id', id);
     return !error;
 };
-exports.deleteGoal = deleteGoal;
-const getCurrentAmountByGoalId = async (goalId) => {
-    const { data, error } = await supabase_js_1.supabase
+export const getCurrentAmountByGoalId = async (goalId) => {
+    const { data, error } = await supabase
         .from("goals_progress")
         .select("current_amount")
         .eq("id", goalId)
@@ -65,7 +57,6 @@ const getCurrentAmountByGoalId = async (goalId) => {
     }
     return data.current_amount;
 };
-exports.getCurrentAmountByGoalId = getCurrentAmountByGoalId;
 // export const getGoalProgress = async (goalId: string): Promise<{ current: number; target: number } | null> => {
 //     const goal = await getGoal(goalId);
 //     if (!goal) return null;
