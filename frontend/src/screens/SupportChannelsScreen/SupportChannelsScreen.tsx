@@ -8,6 +8,7 @@ import {
   FlatList,
   TextInput,
   StatusBar,
+  I18nManager,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -16,6 +17,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import Theme from "@/theme";
 import { Linking } from "react-native";
+import { useTranslation } from "react-i18next";
+import i18next from "./../../../services/i18next";
 
 const staticSupportChannels = [
   {
@@ -57,8 +60,8 @@ const staticSupportChannels = [
 const SupportChannelsScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<'contact'>('contact'); // Only the 'contact' tab remains
-
+  const [activeTab, setActiveTab] = useState<"contact" | "اتصل بنا">("contact"); // Only the 'contact' tab remains
+  const { t } = useTranslation();
   const handleBack = () => {
     navigation.goBack();
   };
@@ -84,7 +87,10 @@ const SupportChannelsScreen: React.FC = () => {
   };
 
   const renderChannelItem = ({ item }: { item: any }) => (
-    <TouchableOpacity style={styles.channelItem} onPress={() => Linking.openURL(item.link)}>
+    <TouchableOpacity
+      style={styles.channelItem}
+      onPress={() => Linking.openURL(item.link)}
+    >
       <View style={styles.iconContainer}>{renderChannelIcon(item.name)}</View>
       <Text style={styles.channelName}>{item.name}</Text>
       <Ionicons name="chevron-forward" size={20} color="#888" />
@@ -96,6 +102,7 @@ const SupportChannelsScreen: React.FC = () => {
         channel.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : staticSupportChannels;
+  const isRTL = i18next.language === "ar" || I18nManager.isRTL;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -104,26 +111,25 @@ const SupportChannelsScreen: React.FC = () => {
         backgroundColor={Theme.colors.highlight}
         translucent={false}
       />
-      <Header title="Help & FAQs" />
-      <View style={styles.mainContent}>
-        <Text style={styles.searchText}>How Can We Help You?</Text>
+      <Header title={t("help.helpAndFAQs")} />
+      <View style={[styles.mainContent, { direction: isRTL ? "rtl" : "ltr" }]}>
+        <Text style={styles.searchText}>{t("help.howCanWeHelpYou")}</Text>
         <View style={styles.buttonContainer}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity 
-            onPress={handleFAQtUsPress}
-            style={[styles.actionButton]}
-          >
-            <Text style={styles.buttonText}
-            >FAQ</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            // style={[styles.actionButton]}
-            // onPress={handleContactUsPress}
-            style={[styles.actionButton, styles.activeButton]}
-          >
-            <Text style={styles.buttonText}>Contact Us</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={handleFAQtUsPress}
+              style={[styles.actionButton]}
+            >
+              <Text style={styles.buttonText}>{t("help.faq")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              // style={[styles.actionButton]}
+              // onPress={handleContactUsPress}
+              style={[styles.actionButton, styles.activeButton]}
+            >
+              <Text style={styles.buttonText}>{t("help.contactUs")}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={styles.searchInputContainer}>
@@ -141,16 +147,22 @@ const SupportChannelsScreen: React.FC = () => {
             placeholderTextColor="#888"
           />
         </View>
-
-        <FlatList
-          data={filteredChannels}
-          renderItem={renderChannelItem}
-          keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
-          style={styles.list}
-          ListEmptyComponent={
-            <Text style={styles.emptyText}>No support channels available</Text>
-          }
-        />
+        <View style={{ flex: 1, direction: "ltr" }}>
+          <FlatList
+            data={filteredChannels}
+            renderItem={renderChannelItem}
+            keyExtractor={(item) =>
+              item.id?.toString() || Math.random().toString()
+            }
+            showsVerticalScrollIndicator={false}
+            style={styles.list}
+            ListEmptyComponent={
+              <Text style={styles.emptyText}>
+                No support channels available
+              </Text>
+            }
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

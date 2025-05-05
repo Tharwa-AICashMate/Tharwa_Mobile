@@ -56,7 +56,7 @@ const AddSavingsScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Theme.colors.primary }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Theme.colors.primary}}>
       <Header title={t("savingsScreen.addToSavings")} />
       <TransactionForm
         title={t("savingsScreen.savings")}

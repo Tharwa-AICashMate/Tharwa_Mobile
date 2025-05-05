@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   Platform,
   Linking,
+  Modal,
+  Pressable,
 } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { RootState } from "@/redux/store";
@@ -25,12 +27,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "App";
 import { getCurrentUserId } from "@/utils/auth";
-import { reverseFavourite } from "@/redux/slices/storeSlice";
+import {
+  resetAddStoreStatus,
+  reverseFavourite,
+} from "@/redux/slices/storeSlice";
 import { useTranslation } from "react-i18next";
 
 const handleOpenMap = (lat: number, lon: number) => {
- 
-
   const url = Platform.select({
     ios: `maps://?q=${lat},${lon}`,
     android: `geo:${lat},${lon}?q=${lat},${lon}`,
@@ -41,13 +44,16 @@ const handleOpenMap = (lat: number, lon: number) => {
 };
 const AllStoresPage: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
+  const isRTL = i18n.language === "ar";
   const dispatch = useAppDispatch();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const [addedStore, setAddedStore] = useState<Store | null>(null);
+
   const { stores, loading } = useAppSelector((state: RootState) => state.store);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredStores, setFilteredStores] = useState(stores);
   const [userId, setUserId] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,12 +97,12 @@ const AllStoresPage: React.FC = () => {
   const dynamicStyles = {
     searchIcon: {
       position: "absolute",
-      [isRTL ? 'right' : 'left']: 12,
+      [isRTL ? "right" : "left"]: 12,
       top: 14,
     },
     viewMap: {
-      flexDirection: isRTL ? 'row-reverse' : 'row',
-    }
+      flexDirection: isRTL ? "row-reverse" : "row",
+    },
   };
   const handelToggleFavourites = (item) => {
     dispatch(reverseFavourite(item.id));
@@ -112,12 +118,53 @@ const AllStoresPage: React.FC = () => {
       });
     }
   };
-
+  const { addStoreStatus, newlyAddedStore } = useAppSelector(
+    (state: RootState) => state.store
+  );
+  useEffect(() => {
+    if (addStoreStatus === "succeeded" && newlyAddedStore) {
+      setAddedStore(newlyAddedStore);
+      setShowSuccessModal(true);
+      dispatch(resetAddStoreStatus());
+    }
+  }, [addStoreStatus, newlyAddedStore, dispatch]);
   return (
     <SafeAreaView style={styles.container}>
       <Header title={t("allStoresScreen.allStores")} />
 
       <View style={styles.content}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showSuccessModal}
+          onRequestClose={() => setShowSuccessModal(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Icon
+                name="check-circle"
+                size={60}
+                color={Theme.colors.primary}
+              />
+              <Text style={styles.modalTitle}>
+                {t("addStoreScreen.thankYou")}
+              </Text>
+              <Text style={styles.modalText}>
+                {t("addStoreScreen.storeAdded", {
+                  storeName: addedStore?.name,
+                })}
+              </Text>
+              <Pressable
+                style={styles.modalButton}
+                onPress={() => setShowSuccessModal(false)}
+              >
+                <Text style={styles.modalButtonText}>
+                  {t("addStoreScreen.ok")}
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchInput}
@@ -145,7 +192,12 @@ const AllStoresPage: React.FC = () => {
                 <Text style={styles.storeName}>{item.name}</Text>
                 <View style={[styles.locationContainer]}>
                   <Icon name="location-on" size={16} color="#4CAF50" />
-                  <Text style={[styles.locationText, isRTL && { marginRight: 8, marginLeft: 0 }]}>
+                  <Text
+                    style={[
+                      styles.locationText,
+                      isRTL && { marginRight: 8, marginLeft: 0 },
+                    ]}
+                  >
                     {item.city}, {item.country}
                   </Text>
                 </View>
@@ -173,7 +225,9 @@ const AllStoresPage: React.FC = () => {
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Icon name="storefront" size={60} color="#ccc" />
-              <Text style={styles.emptyText}>{t("allStoresScreen.emptyListMessage")}</Text>
+              <Text style={styles.emptyText}>
+                {t("allStoresScreen.emptyListMessage")}
+              </Text>
             </View>
           }
         />
@@ -252,6 +306,51 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 16,
     color: "#888",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginVertical: 15,
+    color: "#333",
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: "center",
+    color: "#555",
+  },
+  modalButton: {
+    backgroundColor: "#4CAF50",
+    borderRadius: 10,
+    padding: 12,
+    width: "100%",
+    alignItems: "center",
+  },
+  modalButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

@@ -40,6 +40,7 @@ import AllStoresPage from "@/screens/AllStore";
 import FavoriteStores from "@/screens/FavoriteStores";
 import AddStorePage from "@/screens/AddStore";
 import TransactionsDetails from "@/screens/transactionsDetails";
+import TermsAndConditions from "@/screens/Security/TermsAndConditions/TermsAndConditions";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const isRTL = I18nManager.isRTL;
@@ -100,7 +101,10 @@ export default function MainNavigator() {
               name="PasswordSettingsScreen"
               component={PasswordSettingsScreen}
             />
-
+            <RootStack.Screen
+              name="TermsAndCondition"
+              component={TermsAndConditions}
+            />
             <RootStack.Screen
               name="NotificationSettingsScreen"
               component={NotificationSettingsScreen}

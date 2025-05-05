@@ -249,7 +249,7 @@ const Savings = () => {
 
     Alert.alert(
       t("savingsScreen.savingsModal.deleteSavingsGoal"),
-      t("savingsScreen.savingsModal.deleteSavingsGoalConfirmation"),
+      `${t("savingsScreen.savingsModal.deleteSavingsGoalConfirmation")} ${selectedGoal.name} `,
       [
         {
           text: t("savingsScreen.savingsModal.cancel"),

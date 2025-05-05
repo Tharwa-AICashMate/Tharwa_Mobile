@@ -76,13 +76,13 @@ export const storeSlice = createSlice({
       })
       .addCase(findBestStore.fulfilled, (state, action:{payload:any[]}) => {
         state.loading = false;
-        console.log('payload',action.payload);
+      //  console.log('payload',action.payload);
         try{
           state.bestStoreResult = [...action.payload];
         }catch(error){
           console.log(error)
         }
-        console.log(state)
+       // console.log(state)
       })
       .addCase(findBestStore.rejected, (state, action) => {
         state.loading = false;

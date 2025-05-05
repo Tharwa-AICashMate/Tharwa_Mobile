@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, Image, TextInput, I18nManager } from "react-native";
 
 import styles from "./styles";
 import { navigationProps } from "@/types";
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { clearError, verifyPin } from "@/redux/slices/AuthSlice";
 import { useTranslation } from "react-i18next";
+import i18next from "../../../../services/i18next";
 
 const SecurityPinScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [pin, setPin] = useState<String[]>([...Array(6)]);
@@ -15,6 +16,8 @@ const SecurityPinScreen: React.FC<navigationProps> = ({ navigation }) => {
   const { error, loading } = useSelector((state: any) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
+  const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
+
   const handlePinChange = (num: string, index: number) => {
     if (index < 5 && !(num == "")) {
       inputs.current[index + 1]?.focus();
@@ -46,7 +49,7 @@ const SecurityPinScreen: React.FC<navigationProps> = ({ navigation }) => {
     dispatch(clearError());
   }, []);
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{direction:isRTL?'rtl':'ltr'}]}>
       <View style={styles.header}>
         <Text style={styles.title}>{t("securityPinScreen.securityPin")}</Text>
       </View>
@@ -56,7 +59,7 @@ const SecurityPinScreen: React.FC<navigationProps> = ({ navigation }) => {
           {t("securityPinScreen.enterPin")}
         </Text>
         <View style={styles.pinContainer}>
-          <View style={styles.pinDots}>
+          <View style={[styles.pinDots,{flexDirection:isRTL?"row-reverse":"row"}]}>
             {pin.map((val, index) => (
               <View key={index} style={styles.pinDot}>
                 <TextInput

@@ -11,7 +11,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 import { fetchTransactionsAsync } from "@/redux/slices/transactionSlice";
-import { Ionicons } from "@expo/vector-icons";
 import MonthSection from "@/componenets/MonthSection";
 import { Transaction } from "@/types/transactionTypes";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -99,7 +98,7 @@ const TransactionScreen: React.FC = () => {
   const renderFooter = () => {
     if (loading && page > 1) {
       return (
-        <View style={[styles.footerLoadingContainer, isRTL && styles.rtlRow]}>
+        <View style={[styles.footerLoadingContainer]}>
           <ActivityIndicator size="large" color="#FFC107" />
           <Text style={styles.loadingText}>
             {t('transactionScreen.transactions.loadingMore')}
@@ -134,7 +133,7 @@ const TransactionScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={[styles.container, isRTL && styles.rtlView]}>
+      <View style={[styles.container]}>
         <Header title={t('transactionScreen.transactions.title')} />
         <TransactionSummary
           activeTab={activeTab}
@@ -161,7 +160,6 @@ const TransactionScreen: React.FC = () => {
               onEndReached={handleLoadMore}
               onEndReachedThreshold={0.8}
               ListFooterComponent={renderFooter}
-              contentContainerStyle={isRTL && styles.rtlContent}
             />
           </View>
         )}
@@ -178,15 +176,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Theme.colors.highlight,
-  },
-  rtlView: {
-    direction: 'rtl',
-  },
-  rtlContent: {
-    direction: 'rtl',
-  },
-  rtlRow: {
-    flexDirection: 'row-reverse',
   },
   contentContainer: {
     flex: 1,

@@ -28,6 +28,7 @@ class AuthService {
       const { data, error } = await AuthService.getuserByEmail(email);
       if (data) throw new Error("Email already exists");
     } catch (error) {
+      console.log(error)
       return { status: 400, message: error };
     }
     // // If the email does not exist, proceed with signup
@@ -35,7 +36,7 @@ class AuthService {
       email,
       password,
     });
-    console.log(userData)
+    console.log(userData,signupError)
     // update user profile data
     const { data: updatedUserData, error: updateError } =
       await AuthService.upadateUserProfile(email, {
@@ -45,7 +46,7 @@ class AuthService {
         DOB: profileData.dob,
       });
 
-      console.log(updatedUserData)
+      console.log(updatedUserData,updateError)
      if(data){
       intialCategories.forEach(category => {
         createCategory({...category,user_id:data.user!.id})

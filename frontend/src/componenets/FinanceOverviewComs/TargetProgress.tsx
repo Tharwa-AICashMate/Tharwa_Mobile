@@ -61,7 +61,7 @@ export const TargetProgress: React.FC<TargetProgressProps> = ({
       const user_id = await getCurrentUserId();
       const response = await axios.get(`${apiBase}/goal/progress/${user_id}`);
 
-      console.log("Fetched Goals:", response.data);
+    //  console.log("Fetched Goals:", response.data);
 
       if (Array.isArray(response.data) && response.data.length > 0) {
         setGoals(response.data);

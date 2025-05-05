@@ -6,14 +6,13 @@ import { Transaction, TransactionSummary } from '@/types/transactionTypes';
 export const formatCurrency = (amount: number | undefined | null): string => {
   if (typeof amount !== 'number' || isNaN(amount)) {
     return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
+      style: 'decimal',
+      notation: 'compact',
     }).format(0);
   }
 
   return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+    style: 'decimal',
     notation: 'compact',
     maximumFractionDigits: 2,
   }).format(amount);

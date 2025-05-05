@@ -27,7 +27,7 @@ const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getWeeklyHighs());
+      dispatch(getWeeklyHighs());
   }, []);
   console.log("------", weeklyHighlights);
   const { highest_income: maxIncome, highest_expense: maxExpense } =

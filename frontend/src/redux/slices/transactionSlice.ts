@@ -74,7 +74,7 @@ export const deleteTransactionsAsync = createAsyncThunk(
 
     const state = thunkAPI.getState();
     const transactions = state.transactions.transactions || state.transactionsByCategory.data;
-    console.log(transactions,'-----dfghgfh------',state.transactions.items,'-----dfghgfh------',state.transactionsByCategory)
+    //console.log(transactions,'-----dfghgfh------',state.transactions.items,'-----dfghgfh------',state.transactionsByCategory)
     const transaction = transactions.find(
       (t: Transaction) => t.transaction_id == transactionId
     );
@@ -99,7 +99,7 @@ export const deleteTransactionsAsync = createAsyncThunk(
 export const editTransactionsAsync = createAsyncThunk(
   "transactions/editTransactions",
   async (transaction: Transaction, thunkAPI) => {
-    console.log(transaction);
+   // console.log(transaction);
     const res = await api.editTransactions(transaction);
     thunkAPI.dispatch(
       updateCategoryTransactions({ id: transaction.id, item: transaction })
@@ -118,7 +118,7 @@ export const editTransactionsAsync = createAsyncThunk(
         oldAmount: existingTx.amount,
       })
     );
-    console.log(res);
+   // console.log(res);
     return res;
   }
 );
@@ -149,10 +149,10 @@ const transactionSlice = createSlice({
         state.transactionsByMonth = groupTransactionsByMonth(
           state.transactions
         );
-        console.log(
-          "---------------hdsfgjl------------------",
-          state.transactions.length
-        );
+        // console.log(
+        //   "---------------hdsfgjl------------------",
+        //   state.transactions.length
+        // );
         state.summary = calculateTransactionSummary(state.transactions);
       })
       .addCase(fetchTransactionsAsync.rejected, (state, action) => {
@@ -170,24 +170,24 @@ const transactionSlice = createSlice({
         }
       )
       .addCase(deleteTransactionsAsync.fulfilled, (state, action) => {
-        console.log(Number(action.payload), state.transactions[0]);
+        //console.log(Number(action.payload), state.transactions[0]);
         state.transactions = state.transactions.filter(
           (item) => item.transaction_id !== Number(action.payload)
         );
         state.transactionsByMonth = groupTransactionsByMonth(
           state.transactions
         );
-        console.log("new---------------", state.transactions);
+        //console.log("new---------------", state.transactions);
       })
       .addCase(editTransactionsAsync.fulfilled, (state, action) => {
-        console.log(action.payload)
+        //console.log(action.payload)
         state.transactions = state.transactions.map(
           (item) => item.transaction_id !== action.payload.transaction_id ? item :action.payload
         );
         state.transactionsByMonth = groupTransactionsByMonth(
           state.transactions
         );
-        console.log("new---------------", state.transactions);
+        //console.log("new---------------", state.transactions);
       });
   },
 });

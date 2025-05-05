@@ -38,7 +38,8 @@ const Amount = styled.Text<{ isIncome?: boolean }>`
 `;
 
 const formatCurrency = (amount: number) => {
-  return `$${amount.toLocaleString("en-US", {
+  return `${amount.toLocaleString("en-US", {
+    style: "decimal",    
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
   })}`;
@@ -72,12 +73,12 @@ export const FinanceSummary: React.FC<FinanceSummaryProps> = ({
       <SummaryBox >
         <Icon style={styles.icon1} name="arrow-up-right" size={30} color={Theme.colors.highlight} />
         <Label>{t("analysis.income")}</Label>
-        <Amount isIncome>{formatCurrency(income)}</Amount>
+        <Amount isIncome>{formatCurrency(income)} {!isRTL?'EGP':'ج.م'}</Amount>
       </SummaryBox>
       <SummaryBox >
         <Icon style={styles.icon2} name="arrow-down-right" size={30} color={Theme.colors.accentDark} />
         <Label>{t("analysis.expense")}</Label>
-        <Amount>{formatCurrency(expenses)}</Amount>
+        <Amount>{formatCurrency(expenses)} {!isRTL?'EGP':'ج.م'}</Amount>
       </SummaryBox>
     </Container>
   );

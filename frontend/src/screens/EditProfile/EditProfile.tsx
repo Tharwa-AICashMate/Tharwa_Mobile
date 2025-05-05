@@ -74,7 +74,7 @@ const Profile: React.FC = () => {
         mobile_num: phone,
         email,
       });
-      console.log('Updated user:', response.data);
+    //  console.log('Updated user:', response.data);
 
       setUpdateMessage('Data Updated Successfully');
 

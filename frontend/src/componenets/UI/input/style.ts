@@ -5,7 +5,6 @@ const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
 console.log(isRTL);
 const styles = StyleSheet.create({
   container: {
-    direction:isRTL?'rtl':'ltr',
     marginBottom: 20,
   },
   label: {

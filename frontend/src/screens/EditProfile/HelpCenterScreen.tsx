@@ -20,13 +20,13 @@ import Theme from "../../theme";
 import Header from "../../componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import { useTranslation } from "react-i18next";
 import i18next from "./../../../services/i18next";
-const isRTL = i18next.language === "ar" || I18nManager.isRTL;
 
 const HelpCenterScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("general");
   const { t } = useTranslation();
+  const isRTL = i18next.language === "ar" || I18nManager.isRTL;
+  const [selectedCategory, setSelectedCategory] = useState(t("help.general"));
   const staticFAQs = [
     {
       id: "1",
@@ -44,43 +44,43 @@ const HelpCenterScreen: React.FC = () => {
       id: "3",
       question: t("generalFAQs.howToContactSupport_Q"),
       answer: t("generalFAQs.howToContactSupport_A"),
-      category:  t("help.general"),
+      category: t("help.general"),
     },
     {
       id: "4",
       question: t("accountFAQs.howToChangePassword_Q"),
       answer: t("accountFAQs.howToChangePassword_Q"),
-      category: t("help.account")
+      category: t("help.account"),
     },
     {
       id: "5",
       question: t("accountFAQs.howToUpdateMySettings_Q"),
       answer: t("accountFAQs.howToUpdateMySettings_A"),
-      category: t("help.account")
+      category: t("help.account"),
     },
     {
       id: "6",
       question: t("accountFAQs.howToDeleteAccount_Q"),
       answer: t("accountFAQs.howToDeleteAccount_A"),
-      category: t("help.account")
+      category: t("help.account"),
     },
     {
       id: "7",
       question: t("accountFAQs.howToUpdateMyProfile_Q"),
       answer: t("accountFAQs.howToUpdateMyProfile_A"),
-      category: t("help.account")
+      category: t("help.account"),
     },
     {
       id: "8",
       question: t("servicesFAQs.howToAccessTransactionsHistory_Q"),
       answer: t("servicesFAQs.howToUpdateMyProfile_A"),
-      category: t("help.services")
+      category: t("help.services"),
     },
     {
       id: "9",
       question: t("servicesFAQs.CanUseAppOffline_Q"),
       answer: t("servicesFAQs.CanUseAppOffline_A"),
-      category: t("help.services")
+      category: t("help.services"),
     },
   ];
 
@@ -104,7 +104,7 @@ const HelpCenterScreen: React.FC = () => {
         translucent={false}
       />
       <Header title={t("help.helpAndFAQs")} />
-      <View style={styles.mainContent}>
+      <View style={[styles.mainContent, { direction: isRTL ? "rtl" : "ltr" }]}>
         <Text style={styles.searchText}>{t("help.howCanWeHelpYou")}</Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.actionButton, styles.activeButton]}>
@@ -151,7 +151,6 @@ const HelpCenterScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    direction: isRTL ? "rtl" : "ltr",
     backgroundColor: "#FECD3E",
     flex: 1,
   },

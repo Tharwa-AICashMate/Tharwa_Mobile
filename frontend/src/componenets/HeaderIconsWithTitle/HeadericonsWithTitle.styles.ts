@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 import Theme from '@/theme';
+
+
 const styles = StyleSheet.create({
     header: {
       height: 60,
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
       margin:2
     },
     title: {
-      color: Theme.colors.textLight,
+      color: Theme.colors.text,
       fontSize: 20,
       fontWeight: '900',
     },

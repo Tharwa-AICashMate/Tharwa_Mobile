@@ -18,7 +18,8 @@ const grocerySlice = createSlice({
         id: Date.now().toString(),
         name: action.payload.toLowerCase(),
       };
-      state.items.push(newItem);
+      if(!state.items.find(item => item.name  == newItem.name))
+      state.items = [...state.items ,newItem];
     },
     removeItem: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter(item => item.id !== action.payload);

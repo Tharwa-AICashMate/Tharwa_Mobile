@@ -59,7 +59,7 @@ const FavoriteStores: React.FC = () => {
 
     loadData();
   }, [dispatch, userId]);
-  console.log(userStores);
+ // console.log(userStores);
 
   const handleShare = (store) => {
     Share.share({

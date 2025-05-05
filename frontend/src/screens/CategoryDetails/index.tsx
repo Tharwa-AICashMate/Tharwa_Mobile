@@ -84,7 +84,7 @@ const CategoryDetailScreen = () => {
           setHasMore(true);
         }
       } else {
-        console.log("Failed to load category transactions:", result.payload);
+       // console.log("Failed to load category transactions:", result.payload);
         setHasMore(false);
       }
     } catch (err) {
@@ -143,7 +143,7 @@ const CategoryDetailScreen = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, isRTL && { direction: "rtl" }]}>
+    <SafeAreaView style={[styles.container]}>
       <Header title={categoryName} />
       <ExpenseBrief />
       <View style={styles.transactionList}>

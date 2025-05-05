@@ -40,6 +40,7 @@ const GroceryList: React.FC = () => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           style={styles.list}
+          scrollEnabled={false}
         />
       )}
     </View>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  I18nManager,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -15,10 +16,13 @@ import { AppDispatch } from "@/redux/store";
 import { doPasswordsMatch, isStrongPassword } from "@/utils/validators";
 import { clearError, resetPassword } from "@/redux/slices/AuthSlice";
 import { useTranslation } from "react-i18next";
+import i18next from "../../../../services/i18next";
 
 const NewPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -43,7 +47,8 @@ const NewPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <View style={styles.container}>
+          <View style={[styles.container,{direction:isRTL?'rtl':'ltr'}]}>
+
         <View style={styles.header}>
           <Text style={styles.title}>{t("newPasswordScreen.newPassword")}</Text>
         </View>

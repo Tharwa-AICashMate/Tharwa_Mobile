@@ -15,12 +15,12 @@ interface ExpenseBriefProps {
 }
 
 // Utility: convert English digits to Arabic numerals
-const toArabicDigits = (input: string | number) => {
-  const arabicDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-  return input
-    .toString()
-    .replace(/\d/g, (d) => arabicDigits[parseInt(d)]);
-};
+// const toArabicDigits = (input: string | number) => {
+//   const arabicDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+//   return input
+//     .toString()
+//     .replace(/\d/g, (d) => arabicDigits[parseInt(d)]);
+// };
 
 const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
   const { t, i18n } = useTranslation();
@@ -44,7 +44,7 @@ const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
 
   const availableBalance = balance - expenses - savings + income;
   const percentage = availableBalance ? (expenses / (balance + income)) * 100 : 0;
-  const percentageText = isRTL ? toArabicDigits(percentage.toFixed(2)) : percentage.toFixed(2);
+  const percentageText = percentage.toFixed(2) 
 
   return (
     <View style={{ marginBottom: 30 }}>

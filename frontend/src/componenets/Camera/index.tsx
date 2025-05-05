@@ -136,7 +136,7 @@ export default function CameraScreen() {
           dispatch(setUserStores(response.data));
         }
       } catch (error) {
-        console.error("Error loading stores:", error);
+        console.log("Error loading stores:", error);
       } finally {
         setStoresLoading(false);
       }
@@ -223,7 +223,7 @@ export default function CameraScreen() {
       if (!photo) throw new Error("No photo captured");
       setPhotoUri(photo.uri);
     } catch (error: any) {
-      console.error("Camera Error:", error);
+      console.log("Camera Error:", error);
       Alert.alert("Camera Error", error.message || t('camera.camera.errors.cameraNotReady'));
     }
   };
@@ -372,7 +372,7 @@ export default function CameraScreen() {
       
       await createTransactionRecord(transaction, transactionHash);
     } catch (error) {
-      console.error("Error in handleAddTransaction:", error);
+      console.log("Error in handleAddTransaction:", error);
       Alert.alert("Error", t('camera.camera.errors.transactionFailed'));
     }
   };
@@ -402,7 +402,7 @@ export default function CameraScreen() {
         throw new Error(resultAction.payload as string || t('camera.camera.errors.transactionFailed'));
       }
     } catch (error: any) {
-      console.error("Transaction creation error:", error);
+      console.log("Transaction creation error:", error);
       Alert.alert("Error", error.message || t('camera.camera.errors.transactionFailed'));
     } finally {
       setIsCreatingTransaction(false);

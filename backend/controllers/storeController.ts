@@ -6,6 +6,7 @@ import { supabase } from "../utils/supabaseClient";
 import { Store } from "../types";
 
 import { getDistance } from "../utils/distanceUtils";
+import { getStoreFromUrl } from "../services/StoreByLocationLinkService";
 
 export const getAllStores = async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -23,6 +24,26 @@ export const getAllStoreItems = async (req: Request, res: Response) => {
   return res.json(data);
 };
 
+export const resolveLocationFromUrl = async (req: Request, res: Response) => {
+  const { url } = req.body;
+
+  if (!url || typeof url !== "string") {
+    return res.status(400).json({ error: "Missing or invalid 'url' in request body." });
+  }
+
+  try {
+    const locations = await getStoreFromUrl(url);
+
+    if (!locations || locations.length === 0) {
+      return res.status(404).json({ message: "No location data found for the provided URL." });
+    }
+
+    return res.status(200).json({ locations });
+  } catch (error: any) {
+    console.error("Controller error:", error.message);
+    return res.status(500).json({ error: "Failed to resolve location from URL." });
+  }
+}
 export const findBestStore = async (req: Request, res: Response) => {
   try {
     const { lat, lng, items, radius = 10000, unit = "m" } = req.body;
@@ -122,7 +143,7 @@ export const findBestStore = async (req: Request, res: Response) => {
         (sum, item) => sum + item.amount,
         0
       );
-      const score = totalPrice * 0.7 + store.distance * 0.3;
+      const score = totalPrice * 0.6 + store.distance * 0.4;
 
       return {
         store: {
@@ -141,7 +162,7 @@ export const findBestStore = async (req: Request, res: Response) => {
     });
 
     const topStores = scoredStores
-      .sort((a, b) => a.score - b.score)
+      .sort((a, b) => b.score - a.score)
       .slice(0, 3)
       .map((entry) => ({
         store: {

@@ -29,8 +29,8 @@ import Theme from "@/theme";
 import { useTranslation } from "react-i18next";
 import { I18nManager } from "react-native";
 import i18next from "../../../../services/i18next";
-const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
 const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
+  const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
   const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setphone] = useState<string>("");
@@ -76,7 +76,7 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
     >
       <StatusBar style="light" backgroundColor={Theme.colors.highlight} translucent={false} />
 
-      <View style={styles.container}>
+      <View style={[styles.container,{direction:isRTL?'rtl':'ltr'}]}>
         <View style={styles.header}>
           <Text style={styles.title}>{t("SignUpScreen.welcome")}</Text>
         </View>

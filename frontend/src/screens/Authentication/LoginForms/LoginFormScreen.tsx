@@ -1,6 +1,6 @@
 import { navigationProps } from "@/types";
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image, StatusBar } from "react-native";
+import { View, Text, TouchableOpacity, Image, StatusBar, I18nManager } from "react-native";
 import styles from "./styles";
 import Input from "@/componenets/UI/input";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import { isStrongPassword, isValidEmail } from "@/utils/validators";
 import SocialSignIn from "@/componenets/Login/SocialSignIn";
 import Theme from "@/theme";
 import { useTranslation } from "react-i18next";
+import i18next from "../../../../services/i18next";
 
 const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [email, setEmail] = useState<string>("");
@@ -17,6 +18,7 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState<boolean>(true);
   const { error, loading } = useSelector((state: any) => state.auth);
   const { t } = useTranslation();
+  const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -29,7 +31,7 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{direction:isRTL?'rtl':'ltr'}]}>
       <StatusBar
         barStyle="light-content"
         backgroundColor={Theme.colors.highlight}
@@ -95,14 +97,14 @@ const LoginFormScreen: React.FC<navigationProps> = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.fingerprintButton}
           onPress={() => navigation.navigate("Fingerprint")}
         >
           <Text style={styles.fingerprintText}>
             {t("loginScreen.fingerprint")}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <SocialSignIn />
         <View style={styles.link}>

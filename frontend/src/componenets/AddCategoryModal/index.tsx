@@ -107,7 +107,7 @@ const AddCategoryModal = ({
             <Text style={styles.errorText}>{nameError}</Text>
           ) : (
             <Text style={styles.charCounter}>
-              {t("savingsScreen.savingsModal.charactersLimit", { 0: categoryName.length })}
+              {categoryName.length}{t("savingsScreen.savingsModal.charactersLimit")}
             </Text>
           )}
 

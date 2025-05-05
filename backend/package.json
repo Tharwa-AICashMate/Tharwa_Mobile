@@ -32,6 +32,7 @@
     "esbuild-wasm": "^0.25.3",
     "express": "^5.1.0",
     "langchain": "^0.3.23",
+    "node-fetch": "^3.3.2",
     "node-mailjet": "^6.0.8",
     "react-native-markdown-display": "^7.0.2"
   },

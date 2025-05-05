@@ -3,87 +3,13 @@ import {
   findBestStore,
   getAllStores,
   getAllStoreItems,
+  resolveLocationFromUrl,
 } from "../controllers/storeController";
 import { supabase } from "../config/supabase.js";
 
 const router = Router();
 
-// router.post('/add', async (req, res) => {
-//   const { name, latitude, longitude, city, country, userId } = req.body;
-
-//   if (!name || !latitude || !longitude || !city || !country || !userId) {
-//     return res.status(400).json({ error: 'Missing required fields' });
-//   }
-
-//   try {
-//     const { data, error } = await supabase
-//       .from('stores')
-//       .insert([{
-//         name,
-//         latitude,
-//         longitude,
-//         city,
-//         country,
-//         added_by: userId
-//       }])
-//       .select();
-
-//     if (error) throw error;
-
-//     res.status(201).json({ message: 'Store added successfully', store: data[0] });
-//   } catch (err) {
-//     console.log('Error adding store:', err);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// });
-// routes/storeRoutes.ts
-// router.post('/stores', async (req, res) => {
-//   const { name, latitude, longitude, city, country, userId } = req.body;
-
-//   try {
-//     const { data: newStore, error } = await supabase
-//       .from('stores')
-//       .insert([{
-//         name,
-//         latitude,
-//         longitude,
-//         city,
-//         country,
-//         added_by: userId
-//       }])
-//       .select()
-//       .single();
-
-//     if (error?.code === '23505') {
-//       return res.status(400).json({
-//         error: 'المتجر موجود بالفعل',
-//         code: 'DUPLICATE_STORE'
-//       });
-//     }
-
-//     if (error) throw error;
-
-//     // إضافة العلاقة للمستخدم
-//     const { error: relationError } = await supabase
-//       .from('user_stores')
-//       .insert({
-//         user_id: userId,
-//         store_id: newStore.id
-//       });
-
-//     if (relationError) throw relationError;
-
-//     res.status(201).json(newStore);
-//   } catch (error) {
-//     console.log('Error:', error);
-//     res.status(500).json({
-//       error: 'فشل إضافة المتجر',
-//       details: error.message
-//     });
-//   }
-// });
-// routes/storeRoutes.ts
-// في ملف storeRoutes.ts
+router.post("/stores/url", resolveLocationFromUrl);
 router.post("/stores", async (req, res) => {
   const { name, latitude, longitude, city, country, userId } = req.body;
 

@@ -98,7 +98,7 @@ export default function App() {
           I18nManager.allowRTL(isRTL);
         }
       } catch (error) {
-        console.error("Failed to initialize language:", error);
+        console.log("Failed to initialize language:", error);
       }
     };
 

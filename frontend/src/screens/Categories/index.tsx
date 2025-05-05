@@ -147,7 +147,7 @@ const CategoriesScreen = () => {
       (!editMode || (editMode && cat.id !== selectedCategory.id))
     );
     
-    if (nameExists) {
+    if (nameExists || trimmedName.toLowerCase() == 'income') {
       setNameError(t("categories.categoryNameExists"));
       return;
     }

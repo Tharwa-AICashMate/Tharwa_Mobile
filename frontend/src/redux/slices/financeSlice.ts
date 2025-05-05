@@ -156,9 +156,10 @@ const financeSlice = createSlice({
     },
     updateWeeklyHighs: (state, action: PayloadAction<Transaction>) => {
       const { type, amount } = action.payload;
+      console.log(type,amount)
       if (
         type == "income" &&
-        amount > state.weeklyHighlights.highest_income.amount
+        (amount > state.weeklyHighlights.highest_income.amount  || !state.weeklyHighlights.highest_income)
       )
         state.weeklyHighlights = {
           highest_expense: state.weeklyHighlights.highest_expense,
@@ -166,7 +167,7 @@ const financeSlice = createSlice({
         };
       else if (
         type == "expense" &&
-        amount > state.weeklyHighlights.highest_income.amount
+        (amount > state.weeklyHighlights.highest_expense.amount || !state.weeklyHighlights.highest_expense)
       )
         state.weeklyHighlights = {
           highest_income: state.weeklyHighlights.highest_income,

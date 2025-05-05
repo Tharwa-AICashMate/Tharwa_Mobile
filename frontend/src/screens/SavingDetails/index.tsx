@@ -14,7 +14,6 @@ import { fetchGoalCurrentAmount } from "@/redux/slices/savingSlice";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import ProgressBar from "@/componenets/ProgressBar";
 import ProgressCircle from "@/componenets/ProgressCircle";
-import TransactionItem from "@/componenets/TransactionItem";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import styles from "./style";
@@ -35,7 +34,7 @@ type SavingDetailsProps = NativeStackScreenProps<
 
 const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
   const data = route.params;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { categoryName, goalID, Target, Icon } = data
   const dispatch = useAppDispatch();
 
@@ -60,14 +59,13 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
   useEffect(()=>{
     dispatch(fetchGoalCurrentAmount(goalIdNumber));
   },[deposits])
-  const groupedDeposits = groupTransactionsByMonth(deposits);
+  const groupedDeposits = groupTransactionsByMonth(deposits,i18n.language);
 
   const formatCurrency = (amount?: number): string => {
     if (typeof amount !== "number") return t("savingsScreen.currencySymbol") + "0";
     return amount
       .toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
+        style: "decimal",    
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })

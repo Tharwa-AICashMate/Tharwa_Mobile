@@ -18,7 +18,6 @@ import { useTranslation } from "react-i18next";
 import Theme from "@/theme";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import i18next from "./../../../services/i18next";
-const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
 
 const { height, width } = Dimensions.get("window");
 
@@ -31,6 +30,8 @@ const SettingsScreen: React.FC = () => {
     (state: RootState) => state.settings
   );
   const { t } = useTranslation();
+  const isRTL = i18next.language === "ar" || I18nManager.isRTL;
+
   const handleBack = () => {
     navigation.goBack();
   };
@@ -39,7 +40,9 @@ const SettingsScreen: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { direction: isRTL ? "rtl" : "ltr" }]}
+    >
       <StatusBar
         barStyle="light-content"
         backgroundColor={Theme.colors.highlight}
@@ -96,7 +99,6 @@ const SettingsScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    direction:isRTL?'rtl':'ltr',
     flex: 1,
     backgroundColor: "#FECD3E",
   },

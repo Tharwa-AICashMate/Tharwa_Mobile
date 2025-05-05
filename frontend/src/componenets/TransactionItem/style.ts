@@ -1,10 +1,12 @@
 import Theme from "@/theme";
-import { StyleSheet } from "react-native";
-
+import { StyleSheet, I18nManager } from "react-native";
+import i18next from "./../../../services/i18next";
+const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
+console.log(isRTL)
 const styles = StyleSheet.create({
   transactionItem: {
     position:'relative',
-    flexDirection: "row",
+    flexDirection:"row",
     alignItems: "center",
     paddingVertical: 12,
     borderBottomWidth: 1,
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
   transactionAmount: {
     fontSize: 14,
     fontWeight: "600",
-    width: 80,
+    width: 70,
     height: 30,
     lineHeight: 30,
     paddingLeft: 15,
@@ -79,12 +81,10 @@ const styles = StyleSheet.create({
     color: Theme.colors.text,
   },
   menuIcon: {
-    
     padding: 5,
   },
   dropdownMenu: {
     position: "absolute",
-    right: 20,
     top: 10, 
     backgroundColor: "white",
     paddingVertical: 5,

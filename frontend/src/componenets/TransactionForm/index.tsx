@@ -203,7 +203,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             scrollViewRef.current,
             (_x: number, y: number) => {
               scrollViewRef.current?.scrollTo({
-                y: y - 100,
+                y: y - 130,
                 animated: true,
               });
             },
@@ -437,6 +437,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
   
   useEffect(()=>{
+    if(isIncome || !descriptionItems.length)return;
     const amount = descriptionItems.reduce((acc,item)=>{
       console.log(acc,Number(item.quantity),Number(item.unitPrice))
       return acc += (Number(item.quantity) || 1) * Number(item.unitPrice)
@@ -488,7 +489,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           ref={scrollViewRef}
           contentContainerStyle={[
             styles.scrollContainer,
-            { paddingBottom: keyboardHeight + 100 },
+            { paddingBottom: keyboardHeight },
           ]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={true}

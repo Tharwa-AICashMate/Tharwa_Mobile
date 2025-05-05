@@ -61,8 +61,10 @@
 
 // export default SettingsItem;
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { I18nManager, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import i18next from "./../../services/i18next";
+
 interface SettingsItemProps {
   title: string;
   onPress: () => void;
@@ -78,6 +80,7 @@ const SettingsItem: React.FC<SettingsItemProps> = ({
   rightElement, 
   showArrow = true 
 }) => {
+  const isRTL = i18next.language === "ar" || I18nManager.isRTL;
   return (
     <TouchableOpacity 
       style={styles.container}
@@ -92,7 +95,7 @@ const SettingsItem: React.FC<SettingsItemProps> = ({
         <View style={styles.rightContent}>
           {rightElement}
           {showArrow && (
-            <Ionicons name="chevron-forward" size={20} color="#888" />
+            <Ionicons name={isRTL?"chevron-back":"chevron-forward"} size={20} color="#888" />
           )}
         </View>
       </View>

@@ -59,7 +59,7 @@ export const createTransaction = createAsyncThunk(
   "transactions/create",
   async (transaction: CreateTransactionPayload, { rejectWithValue,dispatch }) => {
     try {
-      console.log(transaction);
+     // console.log(transaction);
       const response = await axios.post(`${apiBase}/transactions`, transaction);
       dispatch(
         addTransaction({
@@ -67,7 +67,7 @@ export const createTransaction = createAsyncThunk(
           amount: transaction.amount,
         })
       );
-      console.log("Transaction created:", response.data);
+     // console.log("Transaction created:", response.data);
       return response.data;
     } catch (error: any) {
       console.log("Create transaction error:", error);
@@ -85,14 +85,14 @@ const transactionSlice = createSlice({
       state.data = [];
     },
     deleteCategoryTransactions: (state, action) => {
-      console.log(state.data[0]);
+      //console.log(state.data[0]);
       state.data = state.data.filter(
         (item) => item.transaction_id !== action.payload
       );
     },
     updateCategoryTransactions: (state, action) => {
-      console.log(state.data[0]);
-      console.log(action.payload);
+    //  console.log(state.data[0]);
+    //  console.log(action.payload);
       state.data = state.data.map((item) =>
         item.transaction_id == action.payload.id ? action.payload.item : item
       );

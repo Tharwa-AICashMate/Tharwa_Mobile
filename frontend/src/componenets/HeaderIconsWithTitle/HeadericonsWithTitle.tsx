@@ -28,7 +28,8 @@ export default function Header({
   bellNavigateTo,
 }: HeaderProps) {
   const navigation = useNavigation<NavigationProp<any>>();
-  const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const isRTL = i18n.language === 'ar';
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
 
   const languages: LanguageOption[] = [
@@ -50,7 +51,7 @@ export default function Header({
       await AsyncStorage.setItem('user-language', langCode);
       setShowLanguageSelector(false);
     } catch (error) {
-      console.error('Failed to change language:', error);
+      console.log('Failed to change language:', error);
     }
   };
 
@@ -91,7 +92,7 @@ export default function Header({
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack}>
           <Ionicons
-            name={i18next.language === "ar" ? "arrow-forward" : "arrow-back"}
+            name={ "arrow-back"}
             size={24}
             color={Theme.colors.secondery}
           />
@@ -138,6 +139,7 @@ export default function Header({
 
       {/* Language selector modal */}
       <Modal
+   
         visible={showLanguageSelector}
         transparent={true}
         animationType="fade"
@@ -171,9 +173,9 @@ export default function Header({
               }}
             >
               <Text
-                style={{ color: "white", fontSize: 18, fontWeight: "bold" }}
+                style={{ color: "white", fontSize: 18, fontWeight: "bold",textAlign:isRTL?'right':'left'}}
               >
-                {t("Select Language")}
+                {t("SelectLanguage")}
               </Text>
             </View>
 

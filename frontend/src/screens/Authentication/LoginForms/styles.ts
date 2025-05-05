@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   socialIcons: {
-    flexDirection: isRTL?"row-reverse":"row",
+    flexDirection:"row",
     justifyContent: "center",
     marginVertical: 20,
   },
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   link: {
-    flexDirection:isRTL?"row-reverse": "row",
+    flexDirection: "row",
     justifyContent: "center",
     padding: 20,
   },
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     fontFamily: Theme.typography.fonts.leagueSpartan.light,
   },
   termsContainer: {
-    flexDirection: isRTL?"row-reverse":"row",
+    flexDirection: "row",
     width: "70%",
   },
   termsText: {
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
 
   pinDots: {
-    flexDirection: isRTL?"row-reverse":"row",
+    flexDirection:"row",
   },
   pinDot: {
     width: 40,

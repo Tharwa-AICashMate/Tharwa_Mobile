@@ -64,10 +64,10 @@ const AddIncomeScreen = () => {
       created_at: data.created_at,
     };
     if (transaction?.transaction_id) {
-      console.log("----------------------test ", {
-        ...newTransaction,
-        id: transaction.transaction_id,
-      });
+      // console.log("----------------------test ", {
+      //   ...newTransaction,
+      //   id: transaction.transaction_id,
+      // });
       dispatch(
         editTransactionsAsync({
           ...newTransaction,

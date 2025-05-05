@@ -8,13 +8,14 @@ import { Document } from "langchain/document";
 import dotenv from "dotenv";
 import { supabase } from "../config/supabase";
 import dataFormaterService from "./dataFormaterService";
+import { MistralAIEmbeddings } from "@langchain/mistralai";
 
 dotenv.config();
 
 class RagService {
   private static instance: RagService;
   private model: ChatMistralAI;
-  private embeddingModel: HuggingFaceInferenceEmbeddings;
+  private embeddingModel: MistralAIEmbeddings;
   private vectorStore: SupabaseVectorStore;
   private promptTemplates: Map<string, any>;
   private graphs: Map<string, any>;
@@ -32,9 +33,9 @@ class RagService {
       temperature: 0,
     });
 
-    this.embeddingModel = new HuggingFaceInferenceEmbeddings({
-      apiKey: process.env.HUGGINGFACE_API_KEY!,
-      model: "sentence-transformers/all-MiniLM-L6-v2",
+    this.embeddingModel = new MistralAIEmbeddings({
+      model: "mistral-embed", 
+      apiKey: process.env.MISTRAL_API_KEY!,
     });
 
     this.vectorStore = new SupabaseVectorStore(this.embeddingModel, {

@@ -46,7 +46,7 @@ export const deleteTransactions = async (
     const response = await axios.delete(
       `${API_URL}/transactions/${transactionId}`
     );
-    console.log('----- ',response.data == "deleted sucessesfully",transactionId);
+ //   console.log('----- ',response.data == "deleted sucessesfully",transactionId);
     return response.data == "deleted sucessesfully";
   } catch (error) {
     console.log("API Error:", error);
@@ -57,7 +57,7 @@ export const deleteTransactions = async (
 export const editTransactions = async (
   transaction: Transaction
 ): Promise<Transaction> => {
-  console.log(transaction);
+ // console.log(transaction);
   try {
     const response = await axios.put(
       `${API_URL}/transactions/${transaction.id}`,

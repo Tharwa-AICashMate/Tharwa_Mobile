@@ -7,6 +7,7 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   Alert,
+  I18nManager,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/theme";
@@ -25,7 +26,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "App";
 import { deleteDeposit } from "@/redux/slices/depositSlice";
 import { useTranslation } from "react-i18next";
-
+import i18next from "./../../../services/i18next";
 interface TransactionItemProps {
   transaction: Transaction;
   iconBgColor?: string;
@@ -48,7 +49,8 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
   const dispatch = useAppDispatch();
   const navigation = useNavigation<navProps>();
   const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === "ar";
+  const isRTL =  i18next.language === 'ar' || I18nManager.isRTL
+
 
   const handleEdit = () => {
     onToggleMenu(null);
@@ -75,19 +77,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
   };
 
   const renderAmount = () => {
-    if (isRTL) {
-      return `${formatArabicNumber(transaction.amount)}${
-        transaction.type === "expense" ? "−" : "+"
-      }`;
-    } else {
-      return `${transaction.type === "expense" ? "-" : "+"}${formatCurrency(
-        transaction.amount
-      )}`;
-    }
+    return `${transaction.type === "expense" ? "-" : "+"}${formatCurrency(transaction.amount)}`;
   };
 
   return (
-    <View style={styles.transactionItem}>
+    <View style={[styles.transactionItem]}>
       <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
         <Ionicons
           name={transaction.icon || (icon as any)}
@@ -113,11 +107,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
 
       {showCategory && (
         <View style={styles.seperator}>
-          <Text
-            style={styles.category}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
+          <Text style={styles.category} numberOfLines={1} ellipsizeMode="tail">
             {transaction.category_name}
           </Text>
         </View>
@@ -141,7 +131,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
         }
         style={styles.menuIcon}
       >
-        <Ionicons name="ellipsis-vertical" size={20} color={Theme.colors.text} />
+        <Ionicons
+          name="ellipsis-vertical"
+          size={20}
+          color={Theme.colors.text}
+        />
       </TouchableOpacity>
 
       {isMenuVisible && (
@@ -150,26 +144,28 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
             <View style={StyleSheet.absoluteFillObject} />
           </TouchableWithoutFeedback>
 
-          <View style={[styles.dropdownMenu, isRTL && styles.rtlDropdownMenu]}>
-            {transaction.details?.length > 0 && (
+          <View style={[styles.dropdownMenu,{right:isRTL?undefined:20,left:isRTL?20:undefined}]}>
+          
               <Pressable
                 onPress={() =>
                   navigation.navigate("transDetails", {
-                    transaction: transaction.details,
+                    transaction: transaction,
                   })
                 }
                 style={styles.menuItem}
               >
                 <Text>{t("transactionItem.viewDetails")}</Text>
               </Pressable>
-            )}
+            
             {transaction.type && (
               <Pressable onPress={handleEdit} style={styles.menuItem}>
                 <Text>{t("transactionItem.edit")}</Text>
               </Pressable>
             )}
             <Pressable onPress={handleDelete} style={styles.menuItem}>
-              <Text style={{ color: "red" }}>{t("transactionItem.delete")}</Text>
+              <Text style={{ color: "red" }}>
+                {t("transactionItem.delete")}
+              </Text>
             </Pressable>
           </View>
         </>

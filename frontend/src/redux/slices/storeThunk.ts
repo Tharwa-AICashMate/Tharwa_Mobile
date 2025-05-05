@@ -98,7 +98,7 @@ export const runAnalysis = createAsyncThunk(
           "Content-Type": "application/json",
         },
       });
-      console.log("Analysis response:", response.data);
+    //  console.log("Analysis response:", response.data);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -136,7 +136,7 @@ export const findBestStore = createAsyncThunk<
       items.map((item) => item.name),
       searchRadius
     ).catch((apiError) => {
-      console.warn("API request failed, trying client calculation:", apiError);
+      console.log("API request failed, trying client calculation:", apiError);
       throw apiError;
     });
 
@@ -216,7 +216,7 @@ export const findBestStore = createAsyncThunk<
 
       return bestStore;
     } catch (error) {
-      console.error("Error in client-side calculation:", error);
+      console.log("Error in client-side calculation:", error);
       return rejectWithValue("Failed to find best store");
     }
   }

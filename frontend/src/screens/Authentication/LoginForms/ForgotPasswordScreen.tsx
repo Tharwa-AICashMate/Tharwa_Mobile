@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, I18nManager } from "react-native";
 import styles from "./styles";
 import Input from "@/componenets/UI/input";
 import { navigationProps } from "@/types";
@@ -9,10 +9,13 @@ import { isValidEmail } from "@/utils/validators";
 import { clearError, forgetPassword } from "@/redux/slices/AuthSlice";
 import { AppDispatch } from "@/redux/store";
 import { useTranslation } from "react-i18next";
+import i18next from "../../../../services/i18next";
 
 const ForgotPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
   const [email, setEmail] = useState<string>("");
   const { error, loading } = useSelector((state: any) => state.auth);
+  const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
+
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
 
@@ -29,7 +32,7 @@ const ForgotPasswordScreen: React.FC<navigationProps> = ({ navigation }) => {
     dispatch(clearError());
   }, []);
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{direction:isRTL?'rtl':'ltr'}]}>
       <View style={styles.header}>
         <Text style={styles.title}>
           {t("forgotPasswordScreen.forgotPassword")}

@@ -18,6 +18,7 @@ import { RootStackParamList } from "App";
 import { editTransactionsAsync } from "@/redux/slices/transactionSlice";
 import { fetchUserCategories } from "@/redux/slices/categoriesSlice";
 import { updateWeeklyHighs } from "@/redux/slices/financeSlice";
+import { useTranslation } from "react-i18next";
 
 type AddExpensesScreenNavigationProp = NativeStackNavigationProp<{
   CategoryDetail: {
@@ -35,7 +36,7 @@ const AddExpensesScreen = () => {
   const dispatch = useAppDispatch();
   const { items: categories } = useAppSelector((state) => state.categories);
   const route = useRoute<editRouteProp>();
-
+  const { t } = useTranslation();
   const [userId, setUserId] = useState<string | null>(null);
   const data = route.params;
   const transaction = data?.transaction;
@@ -107,21 +108,30 @@ const AddExpensesScreen = () => {
         })
       ).then((res) => {
         navigation.goBack();
-        dispatch(updateWeeklyHighs({...newTransaction,created_at:newTransaction.created_at.toString()}));
-
+        dispatch(
+          updateWeeklyHighs({
+            ...newTransaction,
+            created_at: newTransaction.created_at.toString(),
+          })
+        );
       });
     } else
       dispatch(createTransaction(newTransaction)).then((res) => {
         if (res.meta.requestStatus === "fulfilled") {
           navigation.goBack();
         }
-        dispatch(updateWeeklyHighs({...newTransaction,created_at:newTransaction.created_at.toString()}));
+        dispatch(
+          updateWeeklyHighs({
+            ...newTransaction,
+            created_at: newTransaction.created_at.toString(),
+          })
+        );
       });
   };
-  console.log(transaction);
+  //console.log(transaction);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Theme.colors.primary }}>
-      <Header title="Add Expenses" />
+      <Header title={t("transactionScreen.transactions.title")} />
       <View style={{ flex: 1, backgroundColor: Theme.colors.background }}>
         {transaction ? (
           <TransactionForm
