@@ -57,7 +57,7 @@ const CategoriesScreen = () => {
 
 
   const filteredCategories = categories.filter(
-    (category) => category.name.toLowerCase() !== t("categories.income").toLowerCase()
+    (category) => category.name.toLowerCase() !== t("categories.income")?.toLowerCase()
   );
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const CategoriesScreen = () => {
   const handleCategoryPress = (item: any) => {
     if (!userId) return;
 
-    if (item.name.toLowerCase() === t("categories.more").toLowerCase()) {
+    if (item.name?.toLowerCase() === t("categories.more")?.toLowerCase()) {
       openAddModal();
     } else {
       navigation.navigate("CategoryDetail", {
@@ -95,7 +95,7 @@ const CategoriesScreen = () => {
   };
 
   const handleCategoryLongPress = (item: any) => {
-    if (item.name.toLowerCase() === t("categories.more").toLowerCase()) return;
+    if (item.name?.toLowerCase() === t("categories.more")?.toLowerCase()) return;
     
     setSelectedCategory(item);
     setActionModalVisible(true);
@@ -143,11 +143,11 @@ const CategoriesScreen = () => {
     }
     
     const nameExists = filteredCategories.some(cat => 
-      cat.name.toLowerCase() === trimmedName.toLowerCase() && 
+      cat.name?.toLowerCase() === trimmedName?.toLowerCase() && 
       (!editMode || (editMode && cat.id !== selectedCategory.id))
     );
     
-    if (nameExists || trimmedName.toLowerCase() == 'income') {
+    if (nameExists || trimmedName?.toLowerCase() == 'income') {
       setNameError(t("categories.categoryNameExists"));
       return;
     }
@@ -227,7 +227,7 @@ const CategoriesScreen = () => {
       <View style={styles.categoryIconContainer}>
         <Ionicons
           name={
-            item.name.toLowerCase() === t("categories.more").toLowerCase()
+            item.name?.toLowerCase() === t("categories.more")?.toLowerCase()
               ? "add"
               : item.icon || "wallet-outline"
           }
@@ -236,7 +236,7 @@ const CategoriesScreen = () => {
         />
       </View>
       <Text style={styles.categoryName}>{item.name}</Text>
-      {item.name.toLowerCase() !== t("more").toLowerCase() && (
+      {item.name?.toLowerCase() !== t("more")?.toLowerCase() && (
         <TouchableOpacity
           style={[styles.optionsButton]}
           onPress={() => handleCategoryLongPress(item)}
