@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router , RequestHandler} from "express";
 import {
   findBestStore,
   getAllStores,
@@ -9,7 +9,11 @@ import { supabase } from "../config/supabase.js";
 
 const router = Router();
 
-router.post("/stores/url", resolveLocationFromUrl);
+router.post("/stores/url", resolveLocationFromUrl as any);
+router.get("/stores/:userId", getAllStores as any);
+
+router.get("/store_items", getAllStoreItems as any);
+router.post("/best-match", findBestStore as RequestHandler);
 router.post("/stores", async (req, res) => {
   const { name, latitude, longitude, city, country, userId } = req.body;
 
@@ -49,7 +53,7 @@ router.post("/stores", async (req, res) => {
     if (relationError) throw relationError;
 
     res.status(201).json(newStore);
-  } catch (error) {
+  } catch (error: any) {
     console.log("Error:", error);
     res.status(500).json({
       error: "Failed to add store",
@@ -80,7 +84,7 @@ router.get("/user/stores/:userId", async (req, res) => {
       .order("created_at", { ascending: false });
     if (error) throw error;
 
-    const stores = data.map((item) => ({
+    const stores = data.map((item:any) => ({
       id: item.store.id,
       name: item.store.name,
       latitude: item.store.latitude,
@@ -116,9 +120,5 @@ router.delete("/user/stores/:userId/:storeId", async (req, res) => {
   }
 });
 
-router.get("/stores/:userId", getAllStores);
-
-router.get("/store_items", getAllStoreItems);
-router.post("/best-match", findBestStore);
 
 export default router;

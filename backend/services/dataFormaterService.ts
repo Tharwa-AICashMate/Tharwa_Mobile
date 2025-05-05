@@ -183,13 +183,13 @@ class dataFormaterService {
       }, {} as Record<string, number>);
 
     const topCategories = Object.entries(categoriesTotal)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3);
+    .sort((a: [string, unknown], b: [string, unknown]) => (a[1] as number) - (b[1] as number))
+    .slice(0, 3);
 
     if (topCategories.length > 0) {
       let content = `Your top spending categories in the past ${timeframe} were:\n`;
       topCategories.forEach(([category, amount], idx) => {
-        content += `${idx + 1}. ${category}: $${amount.toFixed(2)}\n`;
+        content += `${idx + 1}. ${category}: $${(amount as number).toFixed(2)}\n`;
       });
 
       summary.push(
@@ -367,10 +367,10 @@ class dataFormaterService {
       }, {} as Record<string, number>);
 
     const totalSpent = Object.values(categorySpending).reduce(
-      (sum, amount) => sum + amount,
+      (sum: unknown, amount: unknown) => (sum as number) + (amount as number),
       0
     );
-    const remainingBudget = Number(budgetLimit) - totalSpent;
+    const remainingBudget = Number(budgetLimit) - (totalSpent as number);
     const daysInMonth = new Date(
       new Date().getFullYear(),
       new Date().getMonth() + 1,
@@ -383,8 +383,8 @@ class dataFormaterService {
 
     // Budget summary
     let budgetSummary = `Monthly Budget: $${Number(budgetLimit).toFixed(2)}\n`;
-    budgetSummary += `Spent so far: $${totalSpent.toFixed(2)} (${(
-      (totalSpent / Number(budgetLimit)) *
+    budgetSummary += `Spent so far: $${(totalSpent as number).toFixed(2)} (${(
+      ((totalSpent as number) / Number(budgetLimit)) *
       100
     ).toFixed(1)}%)\n`;
     budgetSummary += `Remaining: $${remainingBudget.toFixed(2)}\n`;
@@ -417,7 +417,7 @@ class dataFormaterService {
       documents.push(
         new Document({
           pageContent: `⚠️ Budget Warning: You've used ${(
-            (totalSpent / Number(budgetLimit)) *
+            ((totalSpent as number) / Number(budgetLimit)) *
             100
           ).toFixed(
             1
@@ -432,7 +432,7 @@ class dataFormaterService {
     }
 
     // Spending pattern insights
-    const avgDailySpend = totalSpent / dayOfMonth;
+    const avgDailySpend = (totalSpent as number) / dayOfMonth;
     const projectedMonthlySpend = avgDailySpend * daysInMonth;
 
     if (projectedMonthlySpend > Number(budgetLimit)) {
@@ -455,13 +455,13 @@ class dataFormaterService {
 
     // Top spending categories
     const topCategories = Object.entries(categorySpending)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3);
+    .sort((a: [string, unknown], b: [string, unknown]) => (b[1] as number) - (a[1] as number))
+    .slice(0, 3);
 
     let categorySummary = "Top spending categories this month:\n";
     topCategories.forEach(([category, amount], idx) => {
-      categorySummary += `${idx + 1}. ${category}: $${amount.toFixed(2)} (${(
-        (amount / totalSpent) *
+      categorySummary += `${idx + 1}. ${category}: $${(amount as number).toFixed(2)} (${(
+        ((amount as number) / (totalSpent as number)) *
         100
       ).toFixed(1)}% of total)\n`;
     });
@@ -836,9 +836,9 @@ class dataFormaterService {
       const storeIndex = storeDetails.findIndex((s) => s.id === store.id);
       const userIndex = locations.length - 1; // User is the last one in the locations array
       const distance =
-        distanceData?.data?.distances?.[storeIndex]?.[userIndex] || null;
+      (distanceData?.data as any)?.distances?.[storeIndex]?.[userIndex] || null;
       const duration =
-        distanceData?.data?.durations?.[storeIndex]?.[userIndex] || null;
+      (distanceData?.data as any)?.distances?.[storeIndex]?.[userIndex] || null;
 
       // Calculate relevance score
       // More visits, more spent, closer distance = higher relevance

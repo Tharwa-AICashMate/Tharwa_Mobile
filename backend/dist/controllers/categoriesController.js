@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCategory = exports.getCategories = exports.createCategory = void 0;
+exports.updateCategory = exports.deleteCategory = exports.getCategories = exports.createCategory = void 0;
 const categoryService = __importStar(require("../services/categoriesService.js"));
 const createCategory = async (req, res) => {
     try {
@@ -72,6 +72,21 @@ const deleteCategory = async (req, res) => {
     }
 };
 exports.deleteCategory = deleteCategory;
+const updateCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updates = req.body;
+        const updatedCategory = await categoryService.updateCategory(Number(id), updates);
+        if (!updatedCategory) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+        res.status(200).json(updatedCategory);
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Error updating category', error: error.message });
+    }
+};
+exports.updateCategory = updateCategory;
 // // Get all categories
 // const getCategories = async (req: Request, res: Response) => {
 //   try {

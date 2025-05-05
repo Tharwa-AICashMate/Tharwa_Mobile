@@ -53,6 +53,7 @@ class DepositService {
             .from('goals_deposite')
             .delete()
             .eq('id', id);
+        console.log(id, error);
         return !error;
     }
 }

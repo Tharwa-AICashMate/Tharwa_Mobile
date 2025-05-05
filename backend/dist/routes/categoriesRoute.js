@@ -39,4 +39,5 @@ const router = (0, express_1.Router)();
 router.post('/', categoriesController.createCategory);
 router.get('/', categoriesController.getCategories);
 router.delete('/:id', categoriesController.deleteCategory);
+router.put('/:id', categoriesController.updateCategory);
 exports.default = router;

@@ -33,13 +33,15 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addTransaction = exports.getTransactions = void 0;
+exports.deleteTransaction = exports.editTransaction = exports.getTransactionsByCategory = exports.addTransaction = exports.getTransactions = void 0;
 // import { Request, Response } from 'express';
 const transactionService = __importStar(require("../services/transaction.service.js"));
 const getTransactions = async (req, res) => {
     try {
         const userId = req.params.userId;
-        const transactions = await transactionService.getAllTransactions(userId);
+        const page = parseInt(req.query.page) || 1;
+        const transactions = await transactionService.getAllTransactions(userId, page);
+        console.log(transactions);
         res.json(transactions);
     }
     catch (err) {
@@ -52,16 +54,20 @@ const getTransactions = async (req, res) => {
 exports.getTransactions = getTransactions;
 const addTransaction = async (req, res) => {
     try {
-        const { user_id, category_id, amount, type, title } = req.body;
-        if (!user_id || !category_id || !amount || !type || !title) {
+        const { category_id, user_id, amount, type, title, created_at, details, storeId, description } = req.body;
+        if ((type == 'income' && !user_id) || (type == 'expense' && !category_id) || !amount || !type || !title) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
         const newTransaction = await transactionService.createTransaction({
             user_id,
+            created_at,
             category_id,
             amount,
             type,
-            title
+            title,
+            details,
+            storeId,
+            description
         });
         res.status(201).json(newTransaction);
     }
@@ -73,57 +79,62 @@ const addTransaction = async (req, res) => {
     }
 };
 exports.addTransaction = addTransaction;
-// import { TransactionService } from '../services/transaction.service.js';
-// export class TransactionController {
-//   static async getAllTransactions(req: Request, res: Response) {
-//     try {
-//       const transactions = await TransactionService.getAllTransactions();
-//       res.json(transactions);
-//     } catch (error:any) {
-//       res.status(500).json({ error: error.message });
-//     }
-//   }
-//   static async getByCategory(req: Request, res: Response) {
-//     try {
-//       const categoryId = parseInt(req.params.categoryId);
-//       if (isNaN(categoryId)) {
-//         return res.status(400).json({ error: 'Invalid category ID' });
-//       }
-//       const transactions = await TransactionService.getTransactionsByCategory(categoryId);
-//       res.json(transactions);
-//     } catch (error:any) {
-//       res.status(500).json({ error: error.message });
-//     }
-//   }
-//   static async getByType(req: Request, res: Response) {
-//     try {
-//       const type = req.params.type as 'income' | 'expence';
-//       if (!['income', 'expence'].includes(type)) {
-//         return res.status(400).json({ error: 'Invalid transaction type' });
-//       }
-//       const transactions = await TransactionService.getTransactionsByType(type);
-//       res.json(transactions);
-//     } catch (error:any) {
-//       res.status(500).json({ error: error.message });
-//     }
-//   }
-//   static async create(req: Request, res: Response) {
-//     try {
-//       const { category_id, amount, title, type, description } = req.body;
-//       // Validate required fields
-//       if (!category_id || !amount || !title || !type) {
-//         return res.status(400).json({ error: 'Missing required fields' });
-//       }
-//       const transaction = await TransactionService.createTransaction({
-//         category_id,
-//         amount,
-//         title,
-//         type,
-//         description
-//       });
-//       res.status(201).json(transaction);
-//     } catch (error:any) {
-//       res.status(500).json({ error: error.message });
-//     }
-//   }
-// }
+const getTransactionsByCategory = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const categoryId = Number(req.params.categoryId);
+        const page = parseInt(req.query.page) || 1;
+        const transactions = await transactionService.getTransactionsByCategory(userId, categoryId, page);
+        res.json(transactions);
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+exports.getTransactionsByCategory = getTransactionsByCategory;
+const editTransaction = async (req, res) => {
+    try {
+        const { category_id, amount, type, title, created_at, storeId, user_id, details, description } = req.body;
+        const id = req.params.transactionId;
+        console.log(req.body);
+        if ((type == 'expense' && !category_id) || !amount || !type || !title) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+        const newTransaction = await transactionService.editTransaction({
+            user_id,
+            created_at,
+            category_id,
+            amount,
+            type,
+            title,
+            id,
+            storeId,
+            details,
+            description
+        });
+        console.log(req.body);
+        res.status(201).json(newTransaction);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: 'Error creating transaction',
+            error: err.message
+        });
+    }
+};
+exports.editTransaction = editTransaction;
+const deleteTransaction = async (req, res) => {
+    try {
+        const transactionId = req.params.transactionId;
+        await transactionService.deleteTransaction(transactionId);
+        res.status(201).json('deleted sucessesfully');
+    }
+    catch (err) {
+        res.status(500).json({
+            message: 'Error deleting transaction',
+            error: err.message
+        });
+    }
+};
+exports.deleteTransaction = deleteTransaction;

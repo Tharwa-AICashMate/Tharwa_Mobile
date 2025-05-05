@@ -105,7 +105,7 @@ export const updatePassword = async (
     // The password will be securely hashed and stored in the `auth.users` table
     console.log('Password updated successfully');
     return true;
-  } catch (error) {
+  } catch (error :any) {
     console.log('Unexpected error updating password:', error.message);
     return false;
   }

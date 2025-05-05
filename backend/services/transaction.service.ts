@@ -52,7 +52,7 @@ export const createTransaction = async (transaction: Transaction) => {
   console.log(error);
   if (error) throw new Error(error.message);
 
-  const { storeData, storeError } = await supabase
+  const { data:storeData, error:storeError } = await supabase
     .from("items_store")
     .insert([{ item_id: data[0].id, store_id: storeId }]);
 

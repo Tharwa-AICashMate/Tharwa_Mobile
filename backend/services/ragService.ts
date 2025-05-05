@@ -435,7 +435,7 @@ Return only a JSON object with possible keys if nothing found don't return anyth
         .toString()
         .match(/```(?:json)?\s*([\s\S]*?)```/i);
 
-      let data: string;
+      let data: string|null;
       if (fenceMatch) {
         data = fenceMatch[1].trim();
       } else {

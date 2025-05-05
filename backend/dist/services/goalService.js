@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteGoal = exports.updateGoal = exports.getUserGoals = exports.getGoal = exports.createGoal = void 0;
+exports.getCurrentAmountByGoalId = exports.deleteGoal = exports.updateGoal = exports.getUserGoals = exports.getGoal = exports.createGoal = void 0;
 const supabase_js_1 = require("../config/supabase.js");
 const createGoal = async (goalData) => {
     const { data, error } = await supabase_js_1.supabase
@@ -54,6 +54,18 @@ const deleteGoal = async (id) => {
     return !error;
 };
 exports.deleteGoal = deleteGoal;
+const getCurrentAmountByGoalId = async (goalId) => {
+    const { data, error } = await supabase_js_1.supabase
+        .from("goals_progress")
+        .select("current_amount")
+        .eq("id", goalId)
+        .single(); // Get one row only
+    if (error || !data) {
+        throw new Error("Goal not found or fetch error");
+    }
+    return data.current_amount;
+};
+exports.getCurrentAmountByGoalId = getCurrentAmountByGoalId;
 // export const getGoalProgress = async (goalId: string): Promise<{ current: number; target: number } | null> => {
 //     const goal = await getGoal(goalId);
 //     if (!goal) return null;

@@ -72,7 +72,7 @@ export const findBestStore = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "No stores found within radius" });
     }
 
-    const storeIds = nearbyStores.map((store) => store.id);
+    const storeIds = nearbyStores.map((store:any) => store.id);
 
     // 2. Get transactions (items) for those stores
     const { data: storeItems, error: itemsError } = await supabase
@@ -114,7 +114,7 @@ export const findBestStore = async (req: Request, res: Response) => {
     console.log("matchStore");
 
     // 3. Filter stores that have all required items
-    const validStores = nearbyStores.filter((store) => {
+    const validStores = nearbyStores.filter((store:any) => {
       const transactions = storeItems.filter(
         (item) => item.store_id === store.id
       );
@@ -132,7 +132,7 @@ export const findBestStore = async (req: Request, res: Response) => {
     }
 
     // 4. Score and sort valid stores
-    const scoredStores = validStores.map((store) => {
+    const scoredStores = validStores.map((store:any) => {
       const matchedItems = storeItems.filter(
         (tx) =>
           tx.store_id === store.id &&
@@ -162,9 +162,9 @@ export const findBestStore = async (req: Request, res: Response) => {
     });
 
     const topStores = scoredStores
-      .sort((a, b) => b.score - a.score)
+      .sort((a:any, b:any) => b.score - a.score)
       .slice(0, 3)
-      .map((entry) => ({
+      .map((entry:any) => ({
         store: {
           id: entry.store.id,
           name: entry.store.name,

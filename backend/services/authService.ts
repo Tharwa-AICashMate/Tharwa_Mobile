@@ -40,8 +40,8 @@ class AuthService {
     // update user profile data
     const { data: updatedUserData, error: updateError } =
       await AuthService.upadateUserProfile(email, {
-        username:profileData.fullName,
-        full_name: profileData.fullName,
+        username:profileData.fullName ,
+        full_name: profileData.fullName ,
         mobile_num: profileData.phone,
         DOB: profileData.dob,
       });

@@ -69,7 +69,7 @@ async function reverseGeocode(lat: number, lon: number, title?: string): Promise
       `https://api.openrouteservice.org/geocode/reverse?api_key=${ORS_API_KEY}&point.lon=${lon}&point.lat=${lat}`
     );
 
-    const features = response.data?.features;
+    const features =(response.data as { features: any }).features;
     if (!features || features.length === 0) {
       throw new Error("No location results found.");
     }

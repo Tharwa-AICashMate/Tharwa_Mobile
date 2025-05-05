@@ -40,13 +40,8 @@ const transactionController = __importStar(require("../controllers/transaction.c
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 router.get('/:userId', transactionController.getTransactions);
+router.delete('/:transactionId', transactionController.deleteTransaction);
+router.put('/:transactionId', transactionController.editTransaction);
 router.post('/', transactionController.addTransaction);
+router.get("/:userId/category/:categoryId", transactionController.getTransactionsByCategory);
 exports.default = router;
-// import { TransactionController } from '../controllers/transaction.controller.js';
-// import express from "express";
-// const router = express.Router();
-// router.get('/', TransactionController.getAllTransactions);
-// router.get('/category/:categoryId', TransactionController.getByCategory as any);
-// router.get('/type/:type', TransactionController.getByType as any);
-// router.post('/', TransactionController.create as any);
-// export default router;

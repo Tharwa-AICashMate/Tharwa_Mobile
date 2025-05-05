@@ -9,7 +9,7 @@ const getSpendingAnalytics = async () => {
         .select("*")
         .eq("type", "expense");
     if (error) {
-        console.error("Error fetching spending analytics:", error);
+        console.log("Error fetching spending analytics:", error);
         return null;
     }
     return data;
@@ -22,7 +22,7 @@ const getIncomeAnalytics = async () => {
         .select("*")
         .eq("type", "income");
     if (error) {
-        console.error("Error fetching income analytics:", error);
+        console.log("Error fetching income analytics:", error);
         return null;
     }
     return data;
@@ -54,7 +54,7 @@ const getFinancialTrends = async () => {
         .select("*")
         .order("date", { ascending: false });
     if (error) {
-        console.error("Error fetching financial trends:", error);
+        console.log("Error fetching financial trends:", error);
         return null;
     }
     return data;

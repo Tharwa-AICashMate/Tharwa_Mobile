@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteGoal = exports.updateGoal = exports.getUserGoals = exports.getGoal = exports.createGoal = void 0;
+exports.fetchCurrentAmount = exports.deleteGoal = exports.updateGoal = exports.getUserGoals = exports.getGoal = exports.createGoal = void 0;
 const goalService = __importStar(require("../services/goalService.js"));
 const createGoal = async (req, res) => {
     try {
@@ -103,3 +103,14 @@ const deleteGoal = async (req, res) => {
     }
 };
 exports.deleteGoal = deleteGoal;
+const fetchCurrentAmount = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const currentAmount = await goalService.getCurrentAmountByGoalId(Number(id));
+        res.json({ current_amount: currentAmount });
+    }
+    catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+};
+exports.fetchCurrentAmount = fetchCurrentAmount;
