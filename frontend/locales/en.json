@@ -374,7 +374,14 @@
     "report": "Report",
     "income": "Income",
     "expense": "Expense",
-    "searchButton": "Search"
+    "searchButton": "Search",
+    "all": "All",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "noData": "No data found",
+    "error": "An error occurred while fetching data",
+    "rtl": "right",
+    "ltr": "left"
   },
   "transactionScreen": {
     "transactions": {
