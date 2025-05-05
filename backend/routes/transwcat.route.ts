@@ -1,5 +1,5 @@
 
-import { TranswcatController } from '../controllers/transwcat.controller';
+import { TranswcatController } from '../controllers/transwcat.controller.js';
 import { Router, RequestHandler } from 'express';
 
 const router = Router();

@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyPassword, deleteAccount, getEmailByUserId, updatePassword } from '../controllers/deleteAccount.controller';
+import { verifyPassword, deleteAccount, getEmailByUserId, updatePassword } from '../controllers/deleteAccount.controller.js';
 
 const router = express.Router();
 

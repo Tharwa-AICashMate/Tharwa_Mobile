@@ -4,7 +4,7 @@ import {
   getAllStores,
   getAllStoreItems,
   resolveLocationFromUrl,
-} from "../controllers/storeController";
+} from "../controllers/storeController.js";
 import { supabase } from "../config/supabase.js";
 
 const router = Router();
