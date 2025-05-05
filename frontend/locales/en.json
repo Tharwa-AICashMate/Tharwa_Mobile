@@ -561,5 +561,39 @@
     "Servererror": "Server error",
     "Somethingwentwrong": "Something went wrong. Please try again.",
     "Processing": "Processing..."
+  },
+  "termsAndConditions":{
+    "accept":"I accept all the terms and conditions",
+    "termsAndConditionsTitle": "Terms And Conditions",
+    "termsAndConditionsText": "Please read and agree to our basic terms and conditions before proceeding.\n\n1. Account Usage: You are responsible for maintaining the security of your account.\n2. Data Privacy: We respect your privacy and handle your data according to our privacy policy.\n3. Service Changes: We may update our services and terms from time to time.\n\nBy continuing, you agree to these terms.",
+    "acceptButton":"Accept",
+    "title":"Read all there and confirm on it",
+    "readMore":"Read the terms and conditions in more detail at"
+  },
+  "deleteAccount":{
+    "deleteAccount":"Delete Account",
+    "error":"Error",
+    "enterPassword":" Please enter your password to confirm ",
+    "unableToFetchUser":"Unable to fetch user information",
+    "emailError":"Unable to fetch user information",
+    "passVerifyFailed":"Password verification failed",
+    "Incorrectpasswordorservererror":"Incorrect password or server error. Please try again.",
+    "AccountDelFailed":"Account deletion failed",
+    "AccountDeleted":"Account Deleted",
+    "accounrDeletedSuccessfully":"Account Deleted Successfully",
+    "OK":"OK",
+    "Youraccountmayhavealreadybeendeleted":"Your account may have already been deleted.",
+    "doyouwanttodelete":"Are You Sure You Want To Delete Your Account?",
+    "bydeleting":"By deleting your account, you will lose all your data permanently including:",
+    "Transactionhistory":"• Transaction history",
+    "Savedbudgets":"• Saved budgets and goals",
+    "Accountsetting":"• Account settings and preferences",
+    "Allpersonalinformation":"• All personal information",
+    "plzenterpasswordtoconfirm":"Please enter your password to confirm:",
+    "doDeleteAccount":"Delete Account",
+    "cancel":"Cancel",
+    "areusure":"Are You Sure You Want To Delete Your Account?",
+    "bydeletinguraccount":" By deleting your account, you agree that you understand the consequences of this action.Your account will be permanently deleted with all associated data.",
+    "yesdelete":"Yes, Delete Account"
   }
 }
