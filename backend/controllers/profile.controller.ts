@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as profileService from '../services/profile.service';
+import * as profileService from '../services/profile.service.js';
 
 export const getAllUsers = async (_req: Request, res: Response) => {
   try {

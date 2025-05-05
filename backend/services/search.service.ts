@@ -1,6 +1,6 @@
 
 
-import { supabase } from '../config/supabase';
+import { supabase } from '../config/supabase.js';
 
 
 interface SearchParams {

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { processInvoice } from '../services/veryfiService';
+import { processInvoice } from '../services/veryfiService.js';
 
 export const processReceipt = async (req: Request, res: Response) => {
   try {

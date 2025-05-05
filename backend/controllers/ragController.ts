@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import ragService from "../services/ragService";
+import ragService from "../services/ragService.js";
 
 /**
  * Language detection utility function

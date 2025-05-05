@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { getStores, getStoreItems } from "../services/storeService";
-import { getDrivingDistance } from "../services/distanceService";
-import { calculateHaversineDistance } from "../utils/haversine";
-import { supabase } from "../utils/supabaseClient";
-import { Store } from "../types";
+import { getStores, getStoreItems } from "../services/storeService.js";
+import { getDrivingDistance } from "../services/distanceService.js";
+import { calculateHaversineDistance } from "../utils/haversine.js";
+import { supabase } from "../utils/supabaseClient.js";
+//import { Store } from "../types.js";
 
-import { getDistance } from "../utils/distanceUtils";
-import { getStoreFromUrl } from "../services/StoreByLocationLinkService";
+import { getDistance } from "../utils/distanceUtils.js";
+import { getStoreFromUrl } from "../services/StoreByLocationLinkService.js";
 
 export const getAllStores = async (req: Request, res: Response) => {
   const { userId } = req.params;

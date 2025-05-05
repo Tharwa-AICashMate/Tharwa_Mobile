@@ -5,7 +5,7 @@ import {
   getFinancialSummary,
   getFinancialTrends,
   generateFinancialReports,
-} from "../services/analytics.service";
+} from "../services/analytics.service.js";
 
 export const getSpendingAnalyticsHandler = async (
   req: Request,

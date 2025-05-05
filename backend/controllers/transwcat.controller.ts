@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { TranswcatService } from '../services/transwcat.service';
+import { TranswcatService } from '../services/transwcat.service.js';
 export class TranswcatController {
     static async getWeeklyAmounts(req: Request, res: Response) {
         try {

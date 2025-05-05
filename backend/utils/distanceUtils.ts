@@ -1,6 +1,6 @@
 // في ملف utils/distanceUtils.ts
 import axios from 'axios';
-import { calculateHaversineDistance } from './haversine';
+import { calculateHaversineDistance } from './haversine.js';
 
 export const getDistance = async (
   origin: { lat: number; lng: number },

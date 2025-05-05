@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabase";
+import { supabase } from "../config/supabase.js";
 
 export const getFinanceSummary = async (userId: string) => {
   const [expensesRes, incomeRes, savingsRes] = await Promise.all([

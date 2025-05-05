@@ -1,6 +1,6 @@
 
 import { Request, Response } from 'express';
-import { searchService } from '../services/search.service';
+import { searchService } from '../services/search.service.js';
 
 export const searchController = {
   async searchTransactions(req: Request, res: Response) {

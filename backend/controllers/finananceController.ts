@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getFinanceSummary } from '../services/finanaceService';
+import { getFinanceSummary } from '../services/finanaceService.js';
 
 export const getUserFinance = async (req: Request, res: Response) => {
   const userId = req.params.userId;

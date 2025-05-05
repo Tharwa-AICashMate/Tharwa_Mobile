@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { supabase } from '../utils/supabase'; // Import Supabase client from utils
-import * as deleteAccountService from '../services/deleteAccount.service';
+import { supabase } from '../utils/supabase.js'; // Import Supabase client from utils
+import * as deleteAccountService from '../services/deleteAccount.service.js';
 
 // Verify user password
 export const verifyPassword = async (req: Request, res: Response) => {

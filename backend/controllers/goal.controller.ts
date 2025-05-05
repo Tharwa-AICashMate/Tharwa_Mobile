@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { GoalService } from "../services/goal.service";
+import { GoalService } from "../services/goal.service.js";
 
 export class GoalController {
   static async getGoalsByUserId(req: Request, res: Response) {

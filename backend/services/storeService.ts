@@ -1,6 +1,6 @@
 
 import { Store } from "../types";
-import { supabase } from "../utils/supabaseClient";
+import { supabase } from "../utils/supabaseClient.js";
 
 export const getStores = async (): Promise<Store[]> => {
   const { data, error } = await supabase

@@ -6,8 +6,8 @@ import { ChatMistralAI } from "@langchain/mistralai";
 import { StateGraph } from "@langchain/langgraph";
 import { Document } from "langchain/document";
 import dotenv from "dotenv";
-import { supabase } from "../config/supabase";
-import dataFormaterService from "./dataFormaterService";
+import { supabase } from "../config/supabase.js";
+import dataFormaterService from "./dataFormaterService.js";
 import { MistralAIEmbeddings } from "@langchain/mistralai";
 
 dotenv.config();
