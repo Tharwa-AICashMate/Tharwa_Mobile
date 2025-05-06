@@ -10,14 +10,16 @@ const LaunchScreen: React.FC<navigationProps> = ({ navigation }) => {
   const {t}=useTranslation()
 
   useEffect(() => {
+   
     const timer = setTimeout(() => {
+      if( navigation){
       Animated.timing(logoOpacity, {
         toValue: 0,
         duration: 500,
         useNativeDriver: true,
       }).start(() => {
-        navigation.replace("Onboarding");
-      });
+        navigation?.replace("Onboarding");
+      });}
     }, 3000);
     return () => clearTimeout(timer);
 
@@ -31,6 +33,7 @@ const LaunchScreen: React.FC<navigationProps> = ({ navigation }) => {
 
           <Image source={require("@/assets/logo.png")} style={styles.logo} />
           <Text style={styles.logoText}>{t("logo")}</Text>
+          {!navigation && <Text style={styles.noInternet}>{t("noInternet")}</Text>}
         </View>
       </Animated.View>
     </SafeAreaView>

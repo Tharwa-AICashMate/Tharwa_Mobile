@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 // Proper navigation prop typing for the Login screen
 export type navigationProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, "Login">;
+  navigation?: NativeStackNavigationProp<RootStackParamList, "Login">;
 };
 
 // Transaction type

@@ -195,7 +195,7 @@ export const forgetPassword = createAsyncThunk(
       const { data } = await axios.post(`${apiBase}/auth/forgetPassword`, {
         email,
       });
-      console.log("-----------", data.data);
+     // console.log("-----------", data.data);
       if (data.data.status !== 200) {
         return rejectWithValue(data.message);
       }
@@ -225,7 +225,7 @@ export const verifyPin = createAsyncThunk(
         otp: payload,
         email,
       });
-      console.log("-----------", data);
+     // console.log("-----------", data);
       if (data.data.status !== 200) {
         return rejectWithValue(data.message);
       }
@@ -246,7 +246,7 @@ export const resetPassword = createAsyncThunk(
         email,
         password: payload,
       });
-      console.log("-----------", data);
+     // console.log("-----------", data);
       if (data.data.status !== 200) {
         return rejectWithValue(data.message);
       }

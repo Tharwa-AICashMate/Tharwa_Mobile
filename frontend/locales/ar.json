@@ -1,6 +1,7 @@
 {
   "Cancel": "الغاء",
   "SelectLanguage": "اختر اللغة",
+  "noInternet":".من فضلك تحقق من اتصالك بالشبكة",
   "header": {
     "invoice": "الفاتورة",
     "camera": "الكاميرا",

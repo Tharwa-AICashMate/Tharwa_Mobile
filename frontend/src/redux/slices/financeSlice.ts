@@ -30,7 +30,7 @@ const initialState: FinanceState = {
 export const fetchFinanceData = createAsyncThunk(
   "finance/fetchData",
   async (userId: string, thunkAPI) => {
-    console.log("----------------", userId);
+  //  console.log("----------------", userId);
     try {
       const res = await axios.get(`${apiBase}/finance/${userId}`);
       if (!res.data || typeof res.data !== "object") {
@@ -70,7 +70,7 @@ export const getWeeklyHighs = createAsyncThunk(
         console.log("Error fetching weekly highs:", error);
         return { success: false, error };
       }
-      console.log("Weekly highs:", { data });
+     // console.log("Weekly highs:", { data });
       return data[0];
     } catch (error) {
       console.log("Error fetching weekly highlights:", error);

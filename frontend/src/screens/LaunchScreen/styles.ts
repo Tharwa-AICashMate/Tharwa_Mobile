@@ -92,6 +92,11 @@ const styles = StyleSheet.create({
     color: Theme.colors.textLight,
     fontSize: 14,
   },
+  noInternet:{
+    color: Theme.colors.accentDark,
+    fontSize: 14,
+  }
+
 
 });
 

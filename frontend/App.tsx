@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { I18nManager, StyleSheet, View } from "react-native";
+import { Alert, I18nManager, StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import NetInfo from '@react-native-community/netinfo';
 
 import {
   useFonts as useInterFonts,
@@ -24,7 +25,6 @@ import {
 } from "@expo-google-fonts/league-spartan";
 
 import { Provider } from "react-redux";
-import { NavigationContainer } from "@react-navigation/native";
 import { store } from "./src/redux/store";
 import MainNavigator from "@/navigation/MainNavigator";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -33,7 +33,6 @@ import Toast from "react-native-toast-message";
 import { Transaction } from "@/types/transactionTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import i18next from "./services/i18next";
-import RNRestart from "react-native-restart";
 
 export type RootStackParamList = {
   Categories: undefined;

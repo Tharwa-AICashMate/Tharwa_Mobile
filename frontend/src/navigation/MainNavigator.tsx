@@ -19,7 +19,13 @@ import { supabase } from "@/utils/supabase";
 import Savings from "@/screens/Savings";
 import SavingDetails from "@/screens/SavingDetails";
 import AddSavingsScreen from "@/screens/AddSavings";
-import { ActivityIndicator, I18nManager, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  I18nManager,
+  StyleSheet,
+  View,
+  Text,
+} from "react-native";
 import BottomTabs from "@/componenets/BottomNav/BottomTabs";
 import Theme from "@/theme";
 import { Session } from "@supabase/supabase-js";
@@ -41,27 +47,44 @@ import FavoriteStores from "@/screens/FavoriteStores";
 import AddStorePage from "@/screens/AddStore";
 import TransactionsDetails from "@/screens/transactionsDetails";
 import TermsAndConditions from "@/screens/Security/TermsAndConditions/TermsAndConditions";
+import NetInfo from "@react-native-community/netinfo";
+import LaunchScreen from "@/screens/LaunchScreen/launchScreen";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const isRTL = I18nManager.isRTL;
 export default function MainNavigator() {
+  const [isConnected, setIsConnected] = useState(true);
   const [session, setSession] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const user = useAppSelector((state) => state.auth.user);
-  console.log("from nav", user);
+  //console.log("from nav", user);
+
   useEffect(() => {
-    dispatch(fetchCurrentUser()).then((res) => {
-      if (fetchCurrentUser.fulfilled.match(res)) setSession(true);
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(!!state.isConnected);
     });
 
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session ? true : false);
-    });
+    return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (isConnected) {
+      dispatch(fetchCurrentUser()).then((res) => {
+        if (fetchCurrentUser.fulfilled.match(res)) setSession(true);
+      });
+      
+      supabase.auth.onAuthStateChange((_event, session) => {
+        setSession(session ? true : false);
+      });
+    }
+  }, [isConnected]);
+  
+  if (!isConnected) {
+    return (<LaunchScreen /> );
+  }
   return (
     <>
-      <NavigationContainer   >
+      <NavigationContainer>
         {!session ? (
           <OnBoardingNavigation />
         ) : (
@@ -72,7 +95,12 @@ export default function MainNavigator() {
             {/* Main App */}
             <RootStack.Screen name="MainApp">
               {() => (
-                <View style={[styles.container, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                <View
+                  style={[
+                    styles.container,
+                    { flexDirection: isRTL ? "row-reverse" : "row" },
+                  ]}
+                >
                   <BottomTabs />
                 </View>
               )}
@@ -174,7 +202,7 @@ export default function MainNavigator() {
               component={PasswordChangeConfirmScreen}
             />
           </RootStack.Navigator>
-       )}
+        )}
       </NavigationContainer>
     </>
   );

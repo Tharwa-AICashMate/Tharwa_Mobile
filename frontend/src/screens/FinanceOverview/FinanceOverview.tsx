@@ -44,7 +44,7 @@ export const FinanceOverview: React.FC = () => {
       const newIncome = incomeDataJson.income || 0; // Save the income to a variable
 
       setIncome(newIncome);
-      console.log("Fetched Income:", newIncome);
+     // console.log("Fetched Income:", newIncome);
       // console.log("Weekly Data:", weeklyData);
 
       // Fetch weekly data
@@ -117,7 +117,7 @@ export const FinanceOverview: React.FC = () => {
           expenses: monthlyExpenseArray[index] || 0,
         }))
       );
-      console.log('-----------', monthlyExpenseArray)
+      //console.log('-----------', monthlyExpenseArray)
       // Handle Yearly Data
       setYearlyData(
         yearlyIncomeArray.map((item: any, index: number) => ({

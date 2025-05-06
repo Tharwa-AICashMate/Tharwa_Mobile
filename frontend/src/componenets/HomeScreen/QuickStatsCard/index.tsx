@@ -29,7 +29,7 @@ const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
   useEffect(() => {
       dispatch(getWeeklyHighs());
   }, []);
-  console.log("------", weeklyHighlights);
+  //console.log("------", weeklyHighlights);
   const { highest_income: maxIncome, highest_expense: maxExpense } =
     weeklyHighlights || {};
 

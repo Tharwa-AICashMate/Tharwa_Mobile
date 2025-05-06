@@ -1,6 +1,7 @@
 {
   "Cancel": "Cancel",
   "SelectLanguage": "Select Language",
+  "noInternet":"Please check your Internet Connection.",
   "header": {
     "invoice": "Invoice",
     "camera": "Camera",
