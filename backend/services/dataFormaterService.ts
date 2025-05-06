@@ -183,13 +183,18 @@ class dataFormaterService {
       }, {} as Record<string, number>);
 
     const topCategories = Object.entries(categoriesTotal)
-    .sort((a: [string, unknown], b: [string, unknown]) => (a[1] as number) - (b[1] as number))
-    .slice(0, 3);
+      .sort(
+        (a: [string, unknown], b: [string, unknown]) =>
+          (a[1] as number) - (b[1] as number)
+      )
+      .slice(0, 3);
 
     if (topCategories.length > 0) {
       let content = `Your top spending categories in the past ${timeframe} were:\n`;
       topCategories.forEach(([category, amount], idx) => {
-        content += `${idx + 1}. ${category}: $${(amount as number).toFixed(2)}\n`;
+        content += `${idx + 1}. ${category}: $${(amount as number).toFixed(
+          2
+        )}\n`;
       });
 
       summary.push(
@@ -455,12 +460,17 @@ class dataFormaterService {
 
     // Top spending categories
     const topCategories = Object.entries(categorySpending)
-    .sort((a: [string, unknown], b: [string, unknown]) => (b[1] as number) - (a[1] as number))
-    .slice(0, 3);
+      .sort(
+        (a: [string, unknown], b: [string, unknown]) =>
+          (b[1] as number) - (a[1] as number)
+      )
+      .slice(0, 3);
 
     let categorySummary = "Top spending categories this month:\n";
     topCategories.forEach(([category, amount], idx) => {
-      categorySummary += `${idx + 1}. ${category}: $${(amount as number).toFixed(2)} (${(
+      categorySummary += `${idx + 1}. ${category}: $${(
+        amount as number
+      ).toFixed(2)} (${(
         ((amount as number) / (totalSpent as number)) *
         100
       ).toFixed(1)}% of total)\n`;
@@ -642,6 +652,78 @@ class dataFormaterService {
     return documents;
   }
 
+  private static _processTransactionForStore(
+    transaction: any,
+    itemsMap: Record<string, any[]>,
+    notesMap: Record<string, string[]>
+  ) {
+    // Process transaction title - could be an item name
+    if (transaction.title) {
+      // Add title as a potential item with the transaction amount as price
+      // Only add if it's not already in the items list
+      const existingItem = itemsMap[transaction.store_id].find(
+        (existing) => existing.item === transaction.title
+      );
+
+      if (!existingItem) {
+        itemsMap[transaction.store_id].push({
+          item: transaction.title,
+          price: transaction.amount || 0,
+          store_id: transaction.store_id,
+          source: "title",
+          user_id: transaction.user_id, // Track which user this came from
+        });
+      }
+
+      // Also capture the transaction title as contextual information
+      notesMap[transaction.store_id].push(transaction.title);
+    }
+
+    // Process transaction description
+    if (transaction.description) {
+      // Capture the description as additional context
+      notesMap[transaction.store_id].push(transaction.description);
+    }
+
+    // Process the JSON details if it exists
+    if (transaction.details) {
+      try {
+        const detailsItems = JSON.parse(transaction.details);
+
+        // Add each item to the store's items collection
+        if (Array.isArray(detailsItems)) {
+          detailsItems.forEach((item) => {
+            // Only add unique items
+            const existingItem = itemsMap[transaction.store_id].find(
+              (existing) => existing.item === item.name
+            );
+
+            if (!existingItem) {
+              itemsMap[transaction.store_id].push({
+                item: item.name,
+                price: item.unitPrice,
+                quantity: item.quantity,
+                store_id: transaction.store_id,
+                source: "details",
+                user_id: transaction.user_id, // Track which user this came from
+              });
+            }
+          });
+        }
+      } catch (e) {
+        // Handle JSON parsing errors silently
+        console.error(
+          `Failed to parse transaction details for ID ${transaction.transaction_id}`
+        );
+
+        // If we can't parse JSON, still use the details string as a note
+        if (typeof transaction.details === "string") {
+          notesMap[transaction.store_id].push(transaction.details);
+        }
+      }
+    }
+  }
+
   // Enhance location context with dynamic radius and relevance filtering
   static async getSmartLocationContext(
     userId: string,
@@ -687,10 +769,14 @@ class dataFormaterService {
     const storeIds = stores.map((store) => store.id);
 
     // Get user's transaction history with these stores
-    const { data: storeTransactions } = await supabase
+    const { data: allStoreTransactions } = await supabase
       .from("transaction_with_category_and_store")
       .select("*")
       .in("store_id", storeIds);
+
+    const userStoreTransactions = allStoreTransactions?.filter(
+      (tx) => tx.user_id == userId
+    );
 
     // Get store details
     const { data: storeDetails } = await supabase
@@ -707,13 +793,14 @@ class dataFormaterService {
       ];
     }
 
-    // Extract item details from transaction details, titles, and descriptions
     // Create maps to store items and transaction notes per store
-    const storeItemsMap: Record<string, any[]> = {};
-    const storeNotesMap: Record<string, string[]> = {};
+    const storeItemsMap: Record<string, any[]> = {}; // All items from any user at this store
+    const userStoreItemsMap: Record<string, any[]> = {}; // Only items from this user at this store
+    const storeNotesMap: Record<string, string[]> = {}; // All notes from any user at this store
+    const userStoreNotesMap: Record<string, string[]> = {}; // Only notes from this user at this store
 
-    if (storeTransactions?.length) {
-      for (const transaction of storeTransactions) {
+    if (allStoreTransactions?.length) {
+      for (const transaction of allStoreTransactions) {
         if (transaction.store_id) {
           // Initialize store collections if needed
           if (!storeItemsMap[transaction.store_id]) {
@@ -722,70 +809,11 @@ class dataFormaterService {
           if (!storeNotesMap[transaction.store_id]) {
             storeNotesMap[transaction.store_id] = [];
           }
-
-          // Process transaction title - could be an item name
-          if (transaction.title) {
-            // Add title as a potential item with the transaction amount as price
-            // Only add if it's not already in the items list
-            const existingItem = storeItemsMap[transaction.store_id].find(
-              (existing) => existing.item === transaction.title
-            );
-
-            if (!existingItem) {
-              storeItemsMap[transaction.store_id].push({
-                item: transaction.title,
-                price: transaction.amount || 0,
-                store_id: transaction.store_id,
-                source: "title",
-              });
-            }
-
-            // Also capture the transaction title as contextual information
-            storeNotesMap[transaction.store_id].push(transaction.title);
-          }
-
-          // Process transaction description
-          if (transaction.description) {
-            // Capture the description as additional context
-            storeNotesMap[transaction.store_id].push(transaction.description);
-          }
-
-          // Process the JSON details if it exists
-          if (transaction.details) {
-            try {
-              const detailsItems = JSON.parse(transaction.details);
-
-              // Add each item to the store's items collection
-              if (Array.isArray(detailsItems)) {
-                detailsItems.forEach((item) => {
-                  // Only add unique items
-                  const existingItem = storeItemsMap[transaction.store_id].find(
-                    (existing) => existing.item === item.name
-                  );
-
-                  if (!existingItem) {
-                    storeItemsMap[transaction.store_id].push({
-                      item: item.name,
-                      price: item.unitPrice,
-                      quantity: item.quantity,
-                      store_id: transaction.store_id,
-                      source: "details",
-                    });
-                  }
-                });
-              }
-            } catch (e) {
-              // Handle JSON parsing errors silently
-              console.error(
-                `Failed to parse transaction details for ID ${transaction.transaction_id}`
-              );
-
-              // If we can't parse JSON, still use the details string as a note
-              if (typeof transaction.details === "string") {
-                storeNotesMap[transaction.store_id].push(transaction.details);
-              }
-            }
-          }
+          this._processTransactionForStore(
+            transaction,
+            storeItemsMap,
+            storeNotesMap
+          );
         }
       }
     }
@@ -802,23 +830,27 @@ class dataFormaterService {
     // Process and rank stores by relevance
     let rankedStores = storeDetails.map((store) => {
       // Find user's history with this store
-      const storeHistory =
-        storeTransactions?.filter((t) => t.store_id === store.id) || [];
-      const visitCount = storeHistory.length;
-      const totalSpent = storeHistory.reduce(
+      const userStoreHistory =
+        userStoreTransactions?.filter((t) => t.store_id === store.id) || [];
+      const visitCount = userStoreHistory.length;
+      const totalSpent = userStoreHistory.reduce(
         (sum, t) => sum + Number(t.amount),
         0
       );
 
-      // Get store's items from our processed map
-      const items = storeItemsMap[store.id] || [];
+      // Get all store's items from our processed map
+      const allItems = storeItemsMap[store.id] || [];
+      // Get user's items from our processed map
+      const userItems = userStoreItemsMap[store.id] || [];
 
-      // Get store's transaction notes
-      const notes = storeNotesMap[store.id] || [];
+      // Get all store's transaction notes
+      const allNotes = storeNotesMap[store.id] || [];
+      // Get user's transaction notes
+      const userNotes = userStoreNotesMap[store.id] || [];
 
-      // Get most frequent categories for this store
+      // Get most frequent categories for this store from user transactions
       const categoryFrequency: Record<string, number> = {};
-      storeHistory.forEach((transaction) => {
+      userStoreHistory.forEach((transaction) => {
         if (transaction.category_name) {
           categoryFrequency[transaction.category_name] =
             (categoryFrequency[transaction.category_name] || 0) + 1;
@@ -835,9 +867,11 @@ class dataFormaterService {
       const storeIndex = storeDetails.findIndex((s) => s.id === store.id);
       const userIndex = locations.length - 1; // User is the last one in the locations array
       const distance =
-      (distanceData?.data as any)?.distances?.[storeIndex]?.[userIndex] || null;
+        (distanceData?.data as any)?.distances?.[storeIndex]?.[userIndex] ||
+        null;
       const duration =
-      (distanceData?.data as any)?.distances?.[storeIndex]?.[userIndex] || null;
+        (distanceData?.data as any)?.durations?.[storeIndex]?.[userIndex] ||
+        null;
 
       // Calculate relevance score
       // More visits, more spent, closer distance = higher relevance
@@ -854,8 +888,10 @@ class dataFormaterService {
 
       return {
         store,
-        items,
-        notes,
+        allItems,
+        userItems,
+        allNotes,
+        userNotes,
         topCategories,
         visitCount,
         totalSpent,
@@ -878,35 +914,56 @@ class dataFormaterService {
       rankedStores = rankedStores
         .map((storeData) => {
           const store = storeData.store;
-          const items = storeData.items;
-          const notes = storeData.notes || [];
+          const allItems = storeData.allItems;
+          const userItems = storeData.userItems;
+          const allNotes = storeData.allNotes || [];
+          const userNotes = storeData.userNotes || [];
           const categories = storeData.topCategories || [];
-
           // Check if store name matches keywords
           const nameMatchScore = keywords.reduce(
             (score, keyword) =>
               score + (store.name.toLowerCase().includes(keyword) ? 5 : 0),
             0
           );
-
-          // Check if items match keywords
-          const itemMatchScore = items.reduce((score, item) => {
+          // Check if user's items match keywords (higher score for user's items)
+          const userItemMatchScore = userItems.reduce((score, item) => {
             const matches = keywords.reduce(
               (count, keyword) =>
                 count + (item.item.toLowerCase().includes(keyword) ? 1 : 0),
               0
             );
-            return score + (matches > 0 ? 3 * matches : 0);
+            return score + (matches > 0 ? 5 * matches : 0); // Higher weight for user items
           }, 0);
 
-          // Check if notes/titles match keywords
-          const notesMatchScore = notes.reduce((score, note) => {
+          // Check if any items in the store match keywords (lower score)
+          const allItemMatchScore = allItems.reduce((score, item) => {
+            const matches = keywords.reduce(
+              (count, keyword) =>
+                count + (item.item.toLowerCase().includes(keyword) ? 1 : 0),
+              0
+            );
+            return score + (matches > 0 ? 2 * matches : 0); // Lower weight for general items
+          }, 0);
+
+          // Check if user's notes/titles match keywords (higher score)
+          const userNotesMatchScore = userNotes.reduce((score, note) => {
             const matches = keywords.reduce(
               (count, keyword) =>
                 count + (note.toLowerCase().includes(keyword) ? 1 : 0),
               0
             );
-            return score + (matches > 0 ? 2 * matches : 0);
+            return score + (matches > 0 ? 3 * matches : 0); // Higher weight for user notes
+          }, 0);
+
+          // Check if any notes/titles match keywords (lower score)
+          const allNotesMatchScore = allNotes.reduce((score, note) => {
+            if (userNotes.includes(note)) return 0; // Skip if already counted in user notes
+            const matches = keywords.reduce(
+              (count, keyword) =>
+                count + (note.toLowerCase().includes(keyword) ? 1 : 0),
+              0
+            );
+            return score + (matches > 0 ? 1 * matches : 0); // Lower weight for general notes
           }, 0);
 
           // Check if categories match keywords
@@ -924,8 +981,10 @@ class dataFormaterService {
             relevanceScore:
               storeData.relevanceScore +
               nameMatchScore +
-              itemMatchScore +
-              notesMatchScore +
+              userItemMatchScore +
+              allItemMatchScore +
+              userNotesMatchScore +
+              allNotesMatchScore +
               categoryMatchScore,
           };
         })
@@ -961,11 +1020,16 @@ class dataFormaterService {
             total_spent: storeData.totalSpent,
             relevance_score: storeData.relevanceScore,
             categories: storeData.topCategories || [],
-            items: storeData.items.map((item) => ({
+            all_items: storeData.allItems.map((item) => ({
               name: item.item,
               price: item.price,
             })),
-            notes: storeData.notes || [],
+            user_items: storeData.userItems.map((item) => ({
+              name: item.item,
+              price: item.price,
+            })),
+            all_notes: storeData.allNotes || [],
+            user_notes: storeData.userNotes || [],
           })),
         },
       })
@@ -988,8 +1052,10 @@ class dataFormaterService {
     for (const storeData of topStores) {
       const {
         store,
-        items,
-        notes,
+        allItems,
+        userItems,
+        allNotes,
+        userNotes,
         topCategories,
         visitCount,
         totalSpent,
@@ -1009,6 +1075,7 @@ class dataFormaterService {
         }
       }
 
+      // User-specific information section
       if (visitCount > 0) {
         storeInfo += `You've visited ${visitCount} times and spent ${totalSpent.toFixed(
           2
@@ -1020,27 +1087,51 @@ class dataFormaterService {
         }
       }
 
-      // Include some representative items from the store
-      if (items.length > 0) {
-        const displayItems = items; // Display up to 3 items
-        storeInfo += `Popular items at this store:\n`;
+      // Include some representative items from the user's purchases
+      if (userItems.length > 0) {
+        const displayItems = userItems.slice(0, 3); // Display up to 3 items
+        storeInfo += `Items you've purchased at this store:\n`;
         displayItems.forEach((item) => {
           storeInfo += `- ${item.item} for ${item.price}\n`;
         });
 
-        if (items.length > 3) {
-          storeInfo += `And ${items.length - 3} more items...\n`;
+        if (userItems.length > 3) {
+          storeInfo += `And ${
+            userItems.length - 3
+          } more items you've purchased...\n`;
         }
       }
 
-      // Include a sample of transaction notes/titles if available
-      if (notes && notes.length > 0) {
+      // Include a sample of user's transaction notes/titles if available
+      if (userNotes && userNotes.length > 0) {
         // Get up to 3 unique notes
-        const uniqueNotes = Array.from(new Set(notes)).slice(0, 3);
-        if (uniqueNotes.length > 0) {
-          storeInfo += `Your notes about this store include: "${uniqueNotes.join(
+        const uniqueUserNotes = Array.from(new Set(userNotes)).slice(0, 3);
+        if (uniqueUserNotes.length > 0) {
+          storeInfo += `Your notes about this store include: "${uniqueUserNotes.join(
             '", "'
           )}".\n`;
+        }
+      }
+
+      // General store information section (from all users)
+      if (allItems.length > 0 && allItems.length !== userItems.length) {
+        // Only show this section if there are items from other users
+        const otherUsersItems = allItems.filter(
+          (item) => !userItems.some((userItem) => userItem.item === item.item)
+        );
+
+        if (otherUsersItems.length > 0) {
+          const displayItems = otherUsersItems.slice(0, 3); // Display up to 3 items
+          storeInfo += `Popular items at this store:\n`;
+          displayItems.forEach((item) => {
+            storeInfo += `- ${item.item} for ${item.price}\n`;
+          });
+
+          if (otherUsersItems.length > 3) {
+            storeInfo += `And ${
+              otherUsersItems.length - 3
+            } more popular items...\n`;
+          }
         }
       }
 
@@ -1054,7 +1145,8 @@ class dataFormaterService {
             longitude: store.longitude,
             relevance_score: storeData.relevanceScore,
             categories: topCategories || [],
-            item_count: items.length,
+            all_item_count: allItems.length,
+            user_item_count: userItems.length,
             visit_count: visitCount,
             total_spent: totalSpent,
           },
@@ -1300,7 +1392,7 @@ class dataFormaterService {
       includeBudget: true,
     }
   ) {
-    console.log(options)
+    console.log(options);
     try {
       // Set defaults
       let {
@@ -1316,10 +1408,10 @@ class dataFormaterService {
         maxDocuments = 20,
       } = options;
 
-      includeNearbyStores = true
-      includeTransactions = true
-      includeGoals = true
-      includeBudget = true
+      includeNearbyStores = true;
+      includeTransactions = true;
+      includeGoals = true;
+      includeBudget = true;
       // Validate inputs
       if (!userId) {
         return [
