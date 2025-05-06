@@ -41,7 +41,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         ]}
       >
         <Text style={styles.amountText}>
-          {amount.toLocaleString(undefined, { minimumFractionDigits: 2 })} {!isRTL ?'EGP' :'ج.م'} 
+          {amount.toLocaleString(undefined, { minimumFractionDigits: 2 })} 
         </Text>
       </View>
     </View>

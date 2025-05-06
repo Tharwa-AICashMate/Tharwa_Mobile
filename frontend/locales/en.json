@@ -108,6 +108,10 @@
       "message": "This expense is {{percentage}}% of your available balance. Are you sure you want to proceed?"
     }
   },
+  "savingsSuccess": {
+    "title": "Success",
+    "message": "Amount of {{amount}} will be deducted from your balance and allocated to {{goal}}"
+  },
   "common": {
     "ok": "OK",
     "cancel": "Cancel",

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/theme";
 import BalanceDisplay from "@/componenets/BalanceDisplay";
@@ -14,18 +14,11 @@ interface ExpenseBriefProps {
   setTotalBalance?: (balance: number) => void;
 }
 
-// Utility: convert English digits to Arabic numerals
-// const toArabicDigits = (input: string | number) => {
-//   const arabicDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-//   return input
-//     .toString()
-//     .replace(/\d/g, (d) => arabicDigits[parseInt(d)]);
-// };
 
 const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
-
+  const [alertShown, setAlertShown] = useState(false);
   const dispatch = useAppDispatch();
   const { balance, expenses, income, savings, loading, error } = useAppSelector(
     (state) => state.finance
@@ -43,8 +36,20 @@ const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
   }, [dispatch]);
 
   const availableBalance = balance - expenses - savings + income;
-  const percentage = availableBalance ? (expenses / ( balance - expenses - savings + income)) * 100 : 0;
+  const percentage = availableBalance ? (expenses / ( balance - savings + income)) * 100 : 0;
   const percentageText = percentage.toFixed(2) 
+
+  useEffect(() => {
+    if (percentage > 50 && !alertShown) {
+      Alert.alert(
+        t('expenseBrief.alertTitle'),
+        t('expenseBrief.alertMessage', { percentage: percentageText }),
+        [{ text: t('common.ok'), onPress: () => setAlertShown(true) }]
+      );
+    } else if (percentage <= 50) {
+      setAlertShown(false);
+    }
+  }, [percentage, alertShown, percentageText]);
 
   return (
     <View style={{ marginBottom: 30 }}>

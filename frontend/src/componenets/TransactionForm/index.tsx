@@ -393,13 +393,12 @@ const { balance, expenses, income, savings } = useAppSelector(
   const handleSubmit = () => {
     if (isSubmitting) return;
     if (!validateForm()) return;
-
-    // Check if transaction would reduce balance to zero or negative
-    const transactionAmount = parseFloat(amount);
-    const currentBalance =  balance - expenses - savings + income|| 0;
-    
   
-    if (!isIncome && !isSavings && transactionAmount >= currentBalance) {
+    const transactionAmount = parseFloat(amount);
+    const currentBalance = balance - expenses - savings + income || 0;
+    
+    // Check for negative balance
+    if (!isIncome && transactionAmount >= currentBalance) {
       Alert.alert(
         t("transactionForm.balanceError.title"),
         t("transactionForm.balanceError.message"),
@@ -408,7 +407,7 @@ const { balance, expenses, income, savings } = useAppSelector(
       return;
     }
     
-  
+    // Check for high expense percentage
     if (!isIncome && !isSavings) {
       const percentage = (transactionAmount / currentBalance) * 100;
       if (percentage > 50) {
@@ -422,6 +421,24 @@ const { balance, expenses, income, savings } = useAppSelector(
         );
         return;
       }
+    }
+    
+    // Show success alert for savings
+    if (isSavings) {
+      Alert.alert(
+        t("savingsSuccess.title"),
+        t("savingsSuccess.message", { 
+          amount: amount,
+          goal: category 
+        }),
+        [
+          { 
+            text: t("common.ok"), 
+            onPress: () => proceedWithSubmission() 
+          }
+        ]
+      );
+      return;
     }
     
     proceedWithSubmission();
