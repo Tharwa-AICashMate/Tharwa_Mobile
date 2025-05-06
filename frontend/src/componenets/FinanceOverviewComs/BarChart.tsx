@@ -119,7 +119,7 @@ const getDynamicYAxis = (maxValue: number) => {
   if (step === 0) step = 1;  const labels = [];
 
   for (let i = 5; i >= 0; i--) {
-    labels.push(i * step);
+    labels.push(Math.round(i * step));
   }
 
   return labels;

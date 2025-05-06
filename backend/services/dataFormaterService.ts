@@ -1301,6 +1301,7 @@ class dataFormaterService {
       includeBudget: true,
     }
   ) {
+    console.log(options)
     try {
       // Set defaults
       const {

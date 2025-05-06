@@ -13,6 +13,7 @@ import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
+import { PieChart } from 'react-native-chart-kit';
 
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import Theme from "@/theme";
@@ -23,6 +24,7 @@ import { apiBase } from "@/utils/axiosInstance";
 import { useTranslation } from "react-i18next";
 import { I18nManager } from "react-native";
 import i18next from "i18next";
+
 const SearchScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
@@ -33,12 +35,35 @@ const SearchScreen: React.FC = () => {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [reportType, setReportType] = useState<"Income" | "Expense">("Income");
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [categoryData, setCategoryData] = useState<any[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [searchText, setSearchText] = useState<string>("");
   const { items: categories, loading } = useSelector(
     (state: RootState) => state.categories
   );
   const isRTL = i18next.language === "ar" || I18nManager.isRTL;
+
+  // Calculate category percentages for pie chart based on filtered transactions
+  const categoryTotals = categoryData.reduce((acc, item) => {
+    const category = item.category_name;
+    const amount = parseFloat(item.amount);
+    acc[category] = (acc[category] || 0) + amount;
+    return acc;
+  }, {} as { [key: string]: number });
+
+  const totalAmount = Object.values(categoryTotals).reduce((sum, val) => sum + val, 0);
+
+  const chartData = Object.keys(categoryTotals).map((category, index) => {
+    const percentage = totalAmount > 0 ? (categoryTotals[category] / totalAmount) * 100 : 0;
+    const colors = ['#1E2761', '#4D77FF', '#96BAFF', '#78D6C6', '#FF9843', '#FF7070', '#A9D38E', '#B5A9D3', '#FFB6C1', '#87CEEB', '#FFDB58'];
+    return {
+      name: category,
+      population: percentage,
+      color: colors[index % colors.length],
+      legendFontColor: '#7F7F7F',
+      legendFontSize: 12,
+    };
+  });
 
   const styles = StyleSheet.create({
     baseContainer: {
@@ -193,6 +218,39 @@ const SearchScreen: React.FC = () => {
     },
     incomeAmount: { color: Theme.colors.accentDark },
     expenseAmount: { color: Theme.colors.accentDark },
+    categoriesContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 20,
+      width: '100%',
+    },
+    chartContainer: {
+      flexDirection: 'row', 
+      alignItems: 'center',
+      justifyContent: 'center', 
+    },
+    legendContainer: {
+      marginLeft: 1, 
+      flex: 1, 
+      paddingHorizontal: 0, 
+    },
+    legendItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 8, 
+    },
+    legendColor: {
+      width: 15,
+      height: 15,
+      borderRadius: 7.5,
+      marginRight: isRTL ? 0 : 5,
+      marginLeft: isRTL ? 5 : 0,
+    },
+    legendText: {
+      fontSize: 12, 
+      color: Theme.colors.text,
+    },
   });
 
   const categoryIcons: { [key: string]: string } = {
@@ -254,6 +312,7 @@ const SearchScreen: React.FC = () => {
     const year = date.getFullYear();
     return `${day < 10 ? "0" + day : day} / ${month} / ${year}`;
   };
+
   const fetchData = async () => {
     try {
       const user_id = await getCurrentUserId();
@@ -282,10 +341,35 @@ const SearchScreen: React.FC = () => {
         setErrorMessage("");
         setSearchResults(data);
       }
+
+      // Fetch all categories data for pie chart
+      await fetchAllCategoriesData();
     } catch (error) {
       console.log("Error fetching data:", error);
       setErrorMessage(t("searchScreen.error"));
       setSearchResults([]);
+      setCategoryData([]);
+    }
+  };
+
+  const fetchAllCategoriesData = async () => {
+    try {
+      const user_id = await getCurrentUserId();
+
+      const params = new URLSearchParams();
+      params.append("start_date", startDate.toISOString().split("T")[0]);
+      params.append("end_date", endDate.toISOString().split("T")[0]);
+      params.append("type", reportType.toLowerCase());
+
+      const searchUrl = `${apiBase}/search/${user_id}?${params.toString()}`;
+
+      const response = await fetch(searchUrl);
+      const data = await response.json();
+
+      setCategoryData(data);
+    } catch (error) {
+      console.log("Error fetching all categories data:", error);
+      setCategoryData([]);
     }
   };
 
@@ -445,9 +529,7 @@ const SearchScreen: React.FC = () => {
                         style={[
                           styles.iconContainer,
                           {
-                            backgroundColor: getCategoryColor(
-                              item.category_name
-                            ),
+                            backgroundColor: getCategoryColor(item.category_name),
                           },
                         ]}
                       >
@@ -472,7 +554,7 @@ const SearchScreen: React.FC = () => {
                       <Text
                         style={[
                           styles.resultAmount,
-                          item.type === "Income"
+                          item.type === "income"
                             ? styles.incomeAmount
                             : styles.expenseAmount,
                         ]}
@@ -483,6 +565,37 @@ const SearchScreen: React.FC = () => {
                     </View>
                   </View>
                 ))}
+                {searchResults.length > 0 && (
+                  <View style={styles.categoriesContainer}>
+                    <View style={[styles.chartContainer, { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }]}>
+                      <PieChart
+                        data={chartData}
+                        width={180}
+                        height={180}
+                        chartConfig={{
+                          backgroundColor: '#ffffff',
+                          backgroundGradientFrom: '#ffffff',
+                          backgroundGradientTo: '#ffffff',
+                          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                        }}
+                        accessor="population"
+                        backgroundColor="transparent"
+                        paddingLeft="40"
+                        hasLegend={false}
+                      />
+                      <View style={[styles.legendContainer, { marginLeft: 10, flex: 1 }]}>
+                        {chartData.map((category, index) => (
+                          <View key={index} style={styles.legendItem}>
+                            <View style={[styles.legendColor, { backgroundColor: category.color }]} />
+                            <Text style={styles.legendText} numberOfLines={1} ellipsizeMode="tail">
+                              {category.name}: {category.population.toFixed(2)}%
+                            </Text>
+                          </View>
+                        ))}
+                      </View>
+                    </View>
+                  </View>
+                )}
               </ScrollView>
             )}
           </View>
