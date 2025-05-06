@@ -140,10 +140,10 @@ class RagService {
             distance: options.distance || "5",
             unit: options.unit || "km",
             timeframe: options.timeframe || "month",
-            includeNearbyStores: options.includeNearbyStores == false ? false : true,
-            includeTransactions: options.includeTransactions == false ? false : true,
-            includeGoals: options.includeGoals == false ? false : true,
-            includeBudget: options.includeBudget == false ? false : true,
+            includeNearbyStores: options.includeNearbyStores !== false,
+            includeTransactions: options.includeTransactions !== false,
+            includeGoals: options.includeGoals !== false,
+            includeBudget: options.includeBudget !== false,
           }
         );
   
@@ -363,14 +363,19 @@ Return only a JSON object with possible keys if nothing found don't return anyth
     question: string,
     userId: string,
     coordinates: { latitude: number; longitude: number },
-    options: any = {}
+    options: any = {
+      includeNearbyStores:true,
+      includeTransactions:true,
+      includeGoals:true,
+      includeBudget:true,
+    }
   ): Promise<string> {
     if (!this.initialized) {
       throw new Error("RAG Service not initialized. Call initialize() first.");
     }
     // Infer missing options from question
     const inferred = await this.inferOptionsFromQuery(question);
-    const mergedOptions = { ...inferred, ...options };
+    const mergedOptions = { ...options,...inferred };
     
     const graphType = this.determineQueryType(question);
     const isArabic = options?.isArabic || false;
