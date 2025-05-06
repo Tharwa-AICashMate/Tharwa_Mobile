@@ -93,7 +93,7 @@ export const styles = StyleSheet.create(
     },
     button: {
       flex: 1,
-      height: 50,
+      height: 40,
       borderRadius: 10,
       justifyContent: 'center',
       alignItems: 'center',

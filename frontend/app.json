@@ -21,6 +21,8 @@
       }
     },
     "android": {
+      "package": "com.tharwa.mobile",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -47,6 +49,11 @@
           "locationWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "fc1fb9cb-a180-4c4d-87f2-5c559fafa7fb"
+      }
+    }
   }
 }

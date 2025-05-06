@@ -164,8 +164,8 @@ export const loginWithProvider = createAsyncThunk(
         provider,
         options: {
           scopes: "email",
-          redirectTo,
-          skipBrowserRedirect: false,
+          redirectTo// :"tharwa-mobile://auth/callback"
+          ,skipBrowserRedirect: false,
         },
       });
       if (error)

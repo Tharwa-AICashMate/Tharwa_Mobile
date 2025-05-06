@@ -155,7 +155,8 @@ export const FinanceOverview: React.FC = () => {
 
   const averageIncome =
     periodData.length > 0 ? totalIncome / periodData.length : 0;
-
+ const averageExpence =
+    periodData.length > 0 ? totalExpenses / periodData.length : 0;
   return (
     <SafeAreaView style={styles.container}>
       <Header title={t("analysis.analysis")} />
@@ -177,7 +178,7 @@ export const FinanceOverview: React.FC = () => {
               period={selectedPeriod}
             />
 
-            <FinanceSummary income={averageIncome} expenses={totalExpenses} />
+            <FinanceSummary income={averageIncome} expenses={averageExpence} />
 
             <TargetsContainer>
               <TargetProgress

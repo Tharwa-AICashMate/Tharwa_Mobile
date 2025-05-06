@@ -567,7 +567,10 @@
     "Networkerror": "Network error. Please check your connection.",
     "Servererror": "Server error",
     "Somethingwentwrong": "Something went wrong. Please try again.",
-    "Processing": "Processing..."
+    "Processing": "Processing...",
+    "weakPassword":"Password must include upper & lower Case letters, numbers & special character."
+
+
   },
   "termsAndConditions":{
     "accept":"I accept all the terms and conditions",
@@ -602,5 +605,12 @@
     "areusure":"Are You Sure You Want To Delete Your Account?",
     "bydeletinguraccount":" By deleting your account, you agree that you understand the consequences of this action.Your account will be permanently deleted with all associated data.",
     "yesdelete":"Yes, Delete Account"
+  },
+  "PasswordChangeConfirm":{
+    "PasswordChanged":"Password Changed",
+    "changeSucesses":"Password has been changed successfully",
+    "sucessDetails":"Your account is now secured with your new password. Please use it for future logins.",
+    "return":"Return to Settings"
   }
+  
 }

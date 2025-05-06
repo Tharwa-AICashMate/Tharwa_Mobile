@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { TextInput, Text, View,  TextInputProps, TouchableOpacity } from 'react-native';
+import { TextInput, Text, View,  TextInputProps, TouchableOpacity, I18nManager } from 'react-native';
 import styles from './style';
-
+import i18next from "../../../../services/i18next";
 interface InputProps extends TextInputProps {
   label: string;
   errorMessage?: string;
@@ -29,6 +29,8 @@ const Input: React.FC<InputProps> = ({
     if(validator && !validator(props?.value?.trim()!))
       setError(errorMessage || 'Invalid input');
   }
+  const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
+
 
   return (
     <View style={[styles.container, containerStyle]}>
@@ -36,13 +38,13 @@ const Input: React.FC<InputProps> = ({
       <View style={styles.inputContainer}>
         <TextInput
           {...props}
-          style={[styles.input, inputStyle]}
+          style={[styles.input, inputStyle,{textAlign:isRTL?'right':'left'}]}
           placeholder={props.placeholder || label}
           onBlur={handelValidation}
           onFocus={()=>setError('')}
         />
         {endIcon && (
-          <TouchableOpacity onPress={onEndIconPress} style={styles.iconContainer}>
+          <TouchableOpacity onPress={onEndIconPress} style={[styles.iconContainer,{right:isRTL? "100%": 0,}]}>
             {endIcon}
           </TouchableOpacity>
         )}

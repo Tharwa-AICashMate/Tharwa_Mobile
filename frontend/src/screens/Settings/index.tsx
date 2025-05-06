@@ -41,7 +41,7 @@ const SettingsScreen: React.FC = () => {
 
   return (
     <SafeAreaView
-      style={[styles.container, { direction: isRTL ? "rtl" : "ltr" }]}
+      style={[styles.container]}
     >
       <StatusBar
         barStyle="light-content"
@@ -50,7 +50,7 @@ const SettingsScreen: React.FC = () => {
       />
       <Header title={t("settings.settings")} />
 
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={[styles.scrollView, { direction: isRTL ? "rtl" : "ltr" }]}>
         <View style={styles.section}>
           {/* <SettingsItem
             title=" Notifications Settings"

@@ -112,8 +112,11 @@ const DayLabel = styled.Text`
 `;
 
 const getDynamicYAxis = (maxValue: number) => {
-  const step = Math.ceil(maxValue / 5 / 1000) * 1000; 
-  const labels = [];
+  const rawStep = maxValue / 5;
+  let magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)));
+  let step = Math.ceil(rawStep / magnitude) * magnitude;
+  
+  if (step === 0) step = 1;  const labels = [];
 
   for (let i = 5; i >= 0; i--) {
     labels.push(i * step);
