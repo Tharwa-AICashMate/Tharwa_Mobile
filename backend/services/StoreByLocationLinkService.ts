@@ -32,54 +32,124 @@ async function expandShortUrl(shortUrl: string): Promise<string> {
   }
 }
 
+interface LocationData {
+  name?: string;
+  latitude: number;
+  longitude: number;
+}
+
 function extractLocationData(url: string): LocationData | undefined {
   if (!url) return;
 
-  // Try to extract place name
+  // Try to extract name from /place/NAME
   const nameMatch = url.match(/\/place\/([^/]+)/);
-  const name = nameMatch
+  const baseName = nameMatch
     ? decodeURIComponent(nameMatch[1].replace(/\+/g, " "))
     : undefined;
 
-  const coordMatchurl = url.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
-  if (coordMatchurl) {
+  // 1. /place/...!3dLAT!4dLNG
+  const coordMatch14 = url.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
+  if (coordMatch14) {
     return {
-      name,
-      latitude: parseFloat(coordMatchurl[1]),
-      longitude: parseFloat(coordMatchurl[2]),
+      name: baseName,
+      latitude: parseFloat(coordMatch14[1]),
+      longitude: parseFloat(coordMatch14[2]),
     };
   }
 
-  const placeMatch = url.match(/\/place\/([^/]+)\/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-  if (placeMatch) {
+  // 2. /place/NAME/@LAT,LNG,...
+  const placeAtMatch = url.match(/\/place\/([^/]+)\/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (placeAtMatch) {
     return {
-      name: decodeURIComponent(placeMatch[1]),
-      latitude: parseFloat(placeMatch[2]),
-      longitude: parseFloat(placeMatch[3]),
+      name: decodeURIComponent(placeAtMatch[1].replace(/\+/g, " ")),
+      latitude: parseFloat(placeAtMatch[2]),
+      longitude: parseFloat(placeAtMatch[3]),
     };
   }
 
-  const searchMatch = url.match(
-    /\/search\/([^/]+)[+@]?(-?\d+\.\d+),(-?\d+\.\d+)/
-  );
+  // 3. /search/NAME@LAT,LNG
+  const searchMatch = url.match(/\/search\/([^/]+)[+@](-?\d+\.\d+),(-?\d+\.\d+)/);
   if (searchMatch) {
     return {
-      name: decodeURIComponent(searchMatch[1]),
+      name: decodeURIComponent(searchMatch[1].replace(/\+/g, " ")),
       latitude: parseFloat(searchMatch[2]),
       longitude: parseFloat(searchMatch[3]),
     };
   }
 
-  const coordMatch = url.match(/([-+]?\d+\.\d+),\s*([-+]?\d+\.\d+)/);
-  if (coordMatch) {
+  // 4. @LAT,LNG (maps/@LAT,LNG)
+  const atMatch = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (atMatch) {
     return {
-      latitude: parseFloat(coordMatch[1]),
-      longitude: parseFloat(coordMatch[2]),
+      name: baseName,
+      latitude: parseFloat(atMatch[1]),
+      longitude: parseFloat(atMatch[2]),
+    };
+  }
+
+  // 5. q=LAT,LNG
+  const qCoordMatch = url.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (qCoordMatch) {
+    return {
+      name: baseName,
+      latitude: parseFloat(qCoordMatch[1]),
+      longitude: parseFloat(qCoordMatch[2]),
+    };
+  }
+
+  // 6. q=PLACE (if not coordinates)
+  const qNameMatch = url.match(/[?&]q=([^&]+)/);
+  if (qNameMatch && !qNameMatch[1].match(/^-?\d+\.\d+,-?\d+\.\d+$/)) {
+    const decodedName = decodeURIComponent(qNameMatch[1].replace(/\+/g, " "));
+    return {
+      name: decodedName,
+      latitude: NaN,
+      longitude: NaN,
+    };
+  }
+
+  // 7. destination=LAT,LNG
+  const destMatch = url.match(/[?&]destination=(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (destMatch) {
+    return {
+      name: baseName,
+      latitude: parseFloat(destMatch[1]),
+      longitude: parseFloat(destMatch[2]),
+    };
+  }
+
+  // 8. Generic LAT,LNG (no clear context)
+  const coordOnlyMatch = url.match(/([-+]?\d+\.\d+),\s*([-+]?\d+\.\d+)/);
+  if (coordOnlyMatch) {
+    return {
+      name: baseName,
+      latitude: parseFloat(coordOnlyMatch[1]),
+      longitude: parseFloat(coordOnlyMatch[2]),
+    };
+  }
+
+  // 9. Embed URL (pb=!2dLNG!3dLAT)
+  const pbMatch = url.match(/!2d(-?\d+\.\d+)!3d(-?\d+\.\d+)/);
+  if (pbMatch) {
+    return {
+      name: baseName,
+      latitude: parseFloat(pbMatch[2]),
+      longitude: parseFloat(pbMatch[1]),
+    };
+  }
+
+  // 10. Place with coords in name: /place/LAT,LNG
+  const latLngNameMatch = url.match(/\/place\/(-?\d+\.\d+),\s*(-?\d+\.\d+)/);
+  if (latLngNameMatch) {
+    return {
+      latitude: parseFloat(latLngNameMatch[1]),
+      longitude: parseFloat(latLngNameMatch[2]),
     };
   }
 
   return undefined;
 }
+
 
 async function reverseGeocode(
   lat: number,
