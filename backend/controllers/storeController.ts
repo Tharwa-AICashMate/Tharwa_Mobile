@@ -24,11 +24,31 @@ export const getAllStoreItems = async (req: Request, res: Response) => {
   return res.json(data);
 };
 
-export const resolveLocationFromUrl = async (req: Request, res: Response) => {
-  const { url } = req.body;
+// export const resolveLocationFromUrl = async (req: Request, res: Response) => {
+//   const { url } = req.body;
 
-  if (!url || typeof url !== "string") {
-    return res.status(400).json({ error: "Missing or invalid 'url' in request body." });
+//   if (!url || typeof url !== "string") {
+//     return res.status(400).json({ error: "Missing or invalid 'url' in request body." });
+//   }
+
+//   try {
+//     const locations = await getStoreFromUrl(url);
+
+//     if (!locations || locations.length === 0) {
+//       return res.status(404).json({ message: "No location data found for the provided URL." });
+//     }
+
+//     return res.status(200).json({ locations });
+//   } catch (error: any) {
+//     console.error("Controller error:", error.message);
+//     return res.status(500).json({ error: "Failed to resolve location from URL." });
+//   }
+// }
+export const resolveLocationFromUrl = async (req: Request, res: Response) => {
+  const { url } = req.query; // Use req.query for GET requests
+
+  if (!url || typeof url !== 'string') {
+    return res.status(400).json({ error: "Missing or invalid 'url' parameter." });
   }
 
   try {
@@ -38,7 +58,7 @@ export const resolveLocationFromUrl = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "No location data found for the provided URL." });
     }
 
-    return res.status(200).json({ locations });
+    return res.status(200).json(locations); // Return the data directly
   } catch (error: any) {
     console.error("Controller error:", error.message);
     return res.status(500).json({ error: "Failed to resolve location from URL." });

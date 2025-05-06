@@ -43,6 +43,7 @@ import AllStoresPage from "@/screens/AllStore";
 import FavoriteStores from "@/screens/FavoriteStores";
 import AddStorePage from "@/screens/AddStore";
 import SettingsStore from "@/screens/SettingsStores";
+
 // import TransactionScreen from "@/screens/Transaction";
 
 type ProfileStackParamList = {
@@ -60,6 +61,7 @@ type ProfileStackParamList = {
   AddFingerPrint: undefined;
   SettingsScreen: undefined;
   HelpCenterScreen: undefined;
+  FavoriteStores: undefined;
   PasswordSettingsScreen: undefined;
   NotificationSettingsScreen: undefined;
   DeleteAccountScreen: undefined;
@@ -69,6 +71,9 @@ type ProfileStackParamList = {
   TransactionForm: undefined; // Added this line
   Camera: undefined;
   SavingDetails: undefined; // Added this line
+  SearchByLocationScreen: undefined;
+  AddStore: undefined;
+  AllStores: undefined;
 };
 
 type BottomTabParamList = {
@@ -138,7 +143,7 @@ function ProfileStackScreen() {
       />
 
       <ProfileStack.Screen name="TransactionForm" component={Home} />
-      <ProfileStack.Screen name="SettingsStore" component={SettingsStore} />
+      <ProfileStack.Screen name="SettingsScreen" component={SettingsStore} />
       <ProfileStack.Screen
         name="AllStores"
         component={AllStoresPage}
@@ -151,6 +156,7 @@ function ProfileStackScreen() {
       name="AddStore"
       component={AddStorePage}
       />
+  
     </ProfileStack.Navigator>
   );
 }

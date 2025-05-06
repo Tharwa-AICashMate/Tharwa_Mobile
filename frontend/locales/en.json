@@ -337,21 +337,26 @@
       "iconError": "Please select an icon"
     }
   },
-  "addStoreScreen": {
-    "addStore": "Add Store",
-    "locationNote": "Note: Could not get your location. Search results may not be location-specific.",
-    "searchForStoresByName": "Search for stores by name...",
-    "search": "Search",
-    "enterStoreNameToSearch": "Enter a store name to search or allow location access for nearby stores.",
-    "searchResults": "Search Results:",
-    "noStoresFound": "No stores found. Try a different search term.",
-    "addStoreButton": "Add Store",
-    "viewInMap": "View in Map",
-    "thankYou": "Thank You!",
-    "storeAdded": "Store {{storeName}} has been added to your favorites!",
-    "ok": "OK",
-    "addingStore": "Adding store..."
-  },
+ "addStoreScreen": {
+  "addStore": "Add Store",
+  "howToAddStore": "How do you want to add the store?",
+   "locationNote": "Note: Could not get your location. Search results may not be location-specific.",
+   "enterStoreName": "Enter store name here",
+  "pasteGoogleMapsURL": "Paste Google Maps URL here",
+   "enterStoreNameToSearch": "Enter store name to search or allow location access for nearby stores.",
+  "searching": "Searching...",
+  "search": "Search",
+  "noStoresFound": "No stores found. Try a different search term.",
+  "searchResults": "Search Results",
+  "byName": "by Name",
+  "byLocation": "by Location",
+  "addStoreButton": "Add Store",
+  "viewInMap": "View in Map",
+  "thankYou": "Thank You!",
+  "storeAdded": "Store {{storeName}} has been added to favorites!",
+  "ok": "OK",
+  "addingStore": "Adding store..."
+},
   "favoriteStoresScreen": {
     "favoriteStores": "Favorite Stores",
     "viewInMap": "View in Map",

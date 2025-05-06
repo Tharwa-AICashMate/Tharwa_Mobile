@@ -5,6 +5,7 @@ import {
   getBestMatch,
   addStore as apiAddStore,
   getBestMatchAi,
+  getLocationSuggestions,
 } from "../../api/storeapi";
 import { RootState } from "../store";
 import {
@@ -256,3 +257,50 @@ export const findBestStoreAi = createAsyncThunk<
     console.log('error fetch store',error)
   }
 });
+/////////////////////////
+// export const fetchLocationSuggestions = createAsyncThunk(
+//   'store/fetchLocationSuggestions',
+//   async (url: string, { rejectWithValue }) => {
+//     try {
+//       const response = await axiosInstance.get(`/stores/url?url=${encodeURIComponent(url)}`);
+//       return response.data;
+//     } catch (error: any) {
+//       return rejectWithValue(error.response?.data?.message || "Failed to fetch suggestions");
+//     }
+//   }
+// );
+// أضف هذا الجزء بدلاً من الدالة المحذوفة
+export const fetchLocationSuggestions = createAsyncThunk(
+  'store/fetchLocationSuggestions',
+  async (url: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/stores/location-search?url=${encodeURIComponent(url)}`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error fetching suggestions:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch suggestions");
+    }
+  }
+);
+export const addStoreByLocation = createAsyncThunk(
+  'store/addStoreByLocation',
+  async (payload: {
+    name: string;
+    lat: number;
+    lon: number;
+    city: string;
+    country: string;
+    userId: string;
+  }, { rejectWithValue }) => {
+    try {
+      const response = await apiAddStoreByLocation(payload);
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);

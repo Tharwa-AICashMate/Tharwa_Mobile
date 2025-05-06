@@ -25,8 +25,11 @@ import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Theme from "@/theme";
 import * as Location from "expo-location";
 import { useTranslation } from "react-i18next";
+import StoreResultItem from "@/componenets/StoreResultItem";
+
 interface StoreFormProps {
   onSuccess: (newStore: Store) => void;
+  searchMethod: "name" | "location";
 }
 
 interface GeoapifySuggestion {
@@ -45,15 +48,15 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
   const isRTL = i18n.language === "ar";
   const dynamicStyles = {
     buttonsContainer: {
-      flexDirection: isRTL ? 'row-reverse' : 'row' as const,
+      flexDirection: isRTL ? "row-reverse" : ("row" as const),
     },
     input: {
-      textAlign: (isRTL ? 'right' : 'left') as 'right' | 'left',
+      textAlign: (isRTL ? "right" : "left") as "right" | "left",
     },
     searchButton: {
       marginLeft: isRTL ? 0 : 200,
-      marginRight: isRTL ? 200 : 0
-    }
+      marginRight: isRTL ? 200 : 0,
+    },
   };
 
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -226,67 +229,38 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
       <View style={styles.searchSection}>
         <TextInput
           style={[styles.input, dynamicStyles.input]}
-          placeholder={t("addStoreScreen.searchForStoresByName")}
+          placeholder={t("addStoreScreen.enterStoreName")}
           value={searchQuery}
           onChangeText={setSearchQuery}
           onSubmitEditing={handleSearch}
           returnKeyType="search"
         />
-        <TouchableOpacity style={[styles.searchButton, dynamicStyles.searchButton]} onPress={handleSearch}>
+        <TouchableOpacity
+          style={[styles.searchButton, dynamicStyles.searchButton]}
+          onPress={handleSearch}
+        >
           <Text style={styles.buttonText}>{t("addStoreScreen.search")}</Text>
         </TouchableOpacity>
       </View>
 
       {suggestions.length > 0 ? (
         <View style={styles.suggestionsContainer}>
-          <Text style={styles.suggestionsTitle}>Search Results:</Text>
+          <Text style={styles.suggestionsTitle}>
+            {t("addStoreScreen.searchResults")}
+          </Text>
           <FlatList
             data={suggestions}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.suggestionItem}
-                onPress={() => handleAddStore(item)}
-              >
-                <View style={styles.suggestionContent}>
-                  <View style={styles.textContainer}>
-                    <Text style={styles.storeName}>{item.properties.name}</Text>
-                    {item.properties.address_line2 && (
-                      <Text style={styles.addressText}>
-                        {item.properties.address_line2}
-                      </Text>
-                    )}
-                    <View style={[styles.buttonsContainer, dynamicStyles.buttonsContainer]}>
-                      <TouchableOpacity
-                        style={[styles.actionButton, styles.addButton]}
-                        onPress={() => handleAddStore(item)}
-                      >
-                        <Text style={styles.buttonText}>
-                          {t("addStoreScreen.addStoreButton")}
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={[styles.actionButton, styles.mapButton]}
-                        onPress={() =>
-                          handleOpenMap(
-                            item.properties.lat,
-                            item.properties.lon
-                          )
-                        }
-                      >
-                        <Text style={styles.buttontext}>
-                          {t("addStoreScreen.viewInMap")}{" "}
-                          <EvilIcons
-                            name="arrow-right"
-                            size={24}
-                            color="rgba(32, 32, 99, 1)"
-                          />{" "}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
+              <StoreResultItem
+                name={item.properties.name}
+                address={item.properties.address_line2}
+                lat={item.properties.lat}
+                lon={item.properties.lon}
+                onAddPress={() => handleAddStore(item)}
+                onMapPress={(lat, lon) => handleOpenMap(lat, lon)}
+                isRTL={isRTL}
+              />
             )}
           />
         </View>
@@ -303,7 +277,9 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
       )}
 
       {addStoreStatus === "loading" && (
-        <Text style={styles.loadingText}>{t("addStoreScreen.addingStore")}</Text>
+        <Text style={styles.loadingText}>
+          {t("addStoreScreen.addingStore")}
+        </Text>
       )}
       {addStoreStatus === "failed" && (
         <Text style={styles.errorText}>{addStoreError}</Text>
@@ -316,6 +292,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     flex: 1,
+    // direction: isRTL ? "rtl" : "ltr",
   },
   title: {
     fontSize: 20,
@@ -341,12 +318,11 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     color: Theme.colors.text,
-
   },
   searchButton: {
     backgroundColor: Theme.colors.primary,
     paddingHorizontal: 16,
-     borderRadius: 10,
+    borderRadius: 10,
     paddingVertical: 5,
     justifyContent: "center",
     alignItems: "center",

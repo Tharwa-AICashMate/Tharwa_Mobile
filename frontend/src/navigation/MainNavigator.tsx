@@ -41,6 +41,7 @@ import FavoriteStores from "@/screens/FavoriteStores";
 import AddStorePage from "@/screens/AddStore";
 import TransactionsDetails from "@/screens/transactionsDetails";
 import TermsAndConditions from "@/screens/Security/TermsAndConditions/TermsAndConditions";
+import SearchByLocationScreen from "@/screens/SearchByLocationScreen";
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const isRTL = I18nManager.isRTL;
@@ -62,9 +63,9 @@ export default function MainNavigator() {
   return (
     <>
       <NavigationContainer   >
-        {!session ? (
+        {/* {!session ? (
           <OnBoardingNavigation />
-        ) : (
+        ) : ( */}
           <RootStack.Navigator
             initialRouteName={"MainApp"}
             screenOptions={{ headerShown: false }}
@@ -137,6 +138,8 @@ export default function MainNavigator() {
               name="AddExpensesScreen"
               component={AddExpensesScreen}
             />
+           
+
             {/* <RootStack.Screen
               name="TransactionForm"
               component={TransactionForm}
@@ -174,7 +177,7 @@ export default function MainNavigator() {
               component={PasswordChangeConfirmScreen}
             />
           </RootStack.Navigator>
-       )}
+       {/* )} */}
       </NavigationContainer>
     </>
   );

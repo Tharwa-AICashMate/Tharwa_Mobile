@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserLocation, BestStoreResult, Store } from '../../types/store';
-import { addStore, fetchStores, fetchUserStores, findBestStore ,removeUserStore,runAnalysis} from './storeThunk';
+import { addStore, addStoreByLocation, fetchLocationSuggestions, fetchStores, fetchUserStores, findBestStore ,removeUserStore,runAnalysis} from './storeThunk';
 
 interface StoreState {
   userLocation: UserLocation | null;
@@ -17,7 +17,9 @@ interface StoreState {
     newlyAddedStore: Store | null;
     userStores: Store[],
     removeStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-}
+    locationSuggestions: any[];
+    addLocationStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  }
 
 const initialState: StoreState = {
   userLocation: null,
@@ -33,7 +35,9 @@ const initialState: StoreState = {
   addStoreError: null,
   newlyAddedStore: null,
   userStores: [],
-   removeStatus: 'idle'
+   removeStatus: 'idle',
+     locationSuggestions: [],
+    addLocationStatus: 'idle'
 };
 
 export const storeSlice = createSlice({
@@ -73,16 +77,13 @@ export const storeSlice = createSlice({
       .addCase(findBestStore.pending, (state) => {
         state.loading = true;
         state.error = null;
-      })
-      .addCase(findBestStore.fulfilled, (state, action:{payload:any[]}) => {
+      }).addCase(findBestStore.fulfilled, (state, action:{payload:any[]}) => {
         state.loading = false;
-      //  console.log('payload',action.payload);
         try{
           state.bestStoreResult = [...action.payload];
         }catch(error){
           console.log(error)
         }
-       // console.log(state)
       })
       .addCase(findBestStore.rejected, (state, action) => {
         state.loading = false;
@@ -144,7 +145,27 @@ export const storeSlice = createSlice({
     .addCase(removeUserStore.rejected, (state, action) => {
       state.removeStatus = 'failed';
       state.error = action.payload as string || 'Failed to remove store';
-    });
+    }) .addCase(fetchLocationSuggestions.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(fetchLocationSuggestions.fulfilled, (state, action) => {
+      state.locationSuggestions = action.payload;
+      state.loading = false;
+    })
+    .addCase(fetchLocationSuggestions.rejected, (state, action) => {
+      state.error = action.payload as string;
+      state.loading = false;
+    }).addCase(addStoreByLocation.pending, (state) => {
+      state.addLocationStatus = 'loading';
+    })
+    .addCase(addStoreByLocation.fulfilled, (state, action) => {
+      state.addLocationStatus = 'succeeded';
+      state.stores.push(action.payload);
+    })
+    .addCase(addStoreByLocation.rejected, (state, action) => {
+      state.addLocationStatus = 'failed';
+      state.error = action.payload as string;
+    });    
   },
 });
 
