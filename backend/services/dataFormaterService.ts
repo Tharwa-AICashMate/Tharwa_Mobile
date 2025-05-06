@@ -1304,7 +1304,7 @@ class dataFormaterService {
     console.log(options)
     try {
       // Set defaults
-      const {
+      let {
         query = "",
         mode = "walk",
         distance = "5",
@@ -1317,6 +1317,10 @@ class dataFormaterService {
         maxDocuments = 20,
       } = options;
 
+      includeNearbyStores = true
+      includeTransactions = true
+      includeGoals = true
+      includeBudget = true
       // Validate inputs
       if (!userId) {
         return [
