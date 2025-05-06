@@ -690,7 +690,6 @@ class dataFormaterService {
     const { data: storeTransactions } = await supabase
       .from("transaction_with_category_and_store")
       .select("*")
-      .eq("user_id", userId)
       .in("store_id", storeIds);
 
     // Get store details
