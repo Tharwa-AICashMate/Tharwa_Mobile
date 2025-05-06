@@ -33,8 +33,23 @@ async function expandShortUrl(shortUrl: string): Promise<string> {
 
 function extractLocationData(url: string): LocationData | undefined {
   if (!url) return;
+// Try to extract place name
+const nameMatch = url.match(/\/place\/([^/]+)/);
+const name = nameMatch ? decodeURIComponent(nameMatch[1].replace(/\+/g, ' ')) : undefined;
+
+const coordMatchurl = url.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
+if (coordMatchurl) {
+  return {
+    name,
+    latitude: parseFloat(coordMatchurl[1]),
+    longitude: parseFloat(coordMatchurl[2]),
+  };
+}
+
+
 
   const placeMatch = url.match(/\/place\/([^/]+)\/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  console.log(placeMatch)
   if (placeMatch) {
     return {
       name: decodeURIComponent(placeMatch[1]),
@@ -44,6 +59,7 @@ function extractLocationData(url: string): LocationData | undefined {
   }
 
   const searchMatch = url.match(/\/search\/([^/]+)[+@]?(-?\d+\.\d+),(-?\d+\.\d+)/);
+  console.log(searchMatch)
   if (searchMatch) {
     return {
       name: decodeURIComponent(searchMatch[1]),
@@ -53,6 +69,7 @@ function extractLocationData(url: string): LocationData | undefined {
   }
 
   const coordMatch = url.match(/([-+]?\d+\.\d+),\s*([-+]?\d+\.\d+)/);
+  console.log(coordMatch)
   if (coordMatch) {
     return {
       latitude: parseFloat(coordMatch[1]),
@@ -108,12 +125,15 @@ function extractPlaceDetails(features: any[]): Place[] {
 }
 
 export async function getStoreFromUrl(url: string): Promise<Place[] | undefined> {
+  console.log(url)
   if (!url || typeof url !== "string") {
+    
     throw new Error("Invalid URL input.");
   }
 
   try {
     const fullUrl = await expandShortUrl(url);
+    console.log(fullUrl)
     const data = extractLocationData(fullUrl);
     if (!data || isNaN(data.latitude) || isNaN(data.longitude)) {
       throw new Error("Unable to extract coordinates from the URL.");

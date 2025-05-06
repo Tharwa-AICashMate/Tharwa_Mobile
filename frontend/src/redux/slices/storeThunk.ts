@@ -62,7 +62,9 @@ export const fetchUserStores = createAsyncThunk(
   "store/fetchUserStores",
   async (userId: string, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/user/stores?userId=${userId}`);
+      const testId="6ff828c1-a284-4aaf-a24f-4387a20dda5e"
+
+      const response = await axiosInstance.get(`/user/stores?userId=${testId}`);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -79,7 +81,9 @@ export const removeUserStore = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      await axiosInstance.delete(`/user/stores/${userId}/${storeId}`);
+      const testId="6ff828c1-a284-4aaf-a24f-4387a20dda5e"
+      // await axiosInstance.delete(`/user/stores/${userId}/${storeId}`);
+      await axiosInstance.delete(`/user/stores/${testId}/${storeId}`);
       return storeId;
     } catch (error: any) {
       return rejectWithValue(
@@ -257,31 +261,15 @@ export const findBestStoreAi = createAsyncThunk<
     console.log('error fetch store',error)
   }
 });
-/////////////////////////
-// export const fetchLocationSuggestions = createAsyncThunk(
-//   'store/fetchLocationSuggestions',
-//   async (url: string, { rejectWithValue }) => {
-//     try {
-//       const response = await axiosInstance.get(`/stores/url?url=${encodeURIComponent(url)}`);
-//       return response.data;
-//     } catch (error: any) {
-//       return rejectWithValue(error.response?.data?.message || "Failed to fetch suggestions");
-//     }
-//   }
-// );
-// أضف هذا الجزء بدلاً من الدالة المحذوفة
+
 export const fetchLocationSuggestions = createAsyncThunk(
   'store/fetchLocationSuggestions',
   async (url: string, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/stores/location-search?url=${encodeURIComponent(url)}`);
-      return response.data;
+      const response = await getLocationSuggestions(url)
+      return response;
     } catch (error: any) {
-      console.error('Error fetching suggestions:', {
-        status: error.response?.status,
-        data: error.response?.data,
-        message: error.message
-      });
+      console.log('Error fetching suggestions:', error);
       return rejectWithValue(error.response?.data?.message || "Failed to fetch suggestions");
     }
   }
@@ -297,8 +285,10 @@ export const addStoreByLocation = createAsyncThunk(
     userId: string;
   }, { rejectWithValue }) => {
     try {
-      const response = await apiAddStoreByLocation(payload);
-      return response;
+      // const response = await addStore();
+      const response = await axiosInstance.post("/stores", payload);
+
+      return response
     } catch (error: any) {
       return rejectWithValue(error.response?.data);
     }

@@ -26,10 +26,10 @@ import Theme from "@/theme";
 import * as Location from "expo-location";
 import { useTranslation } from "react-i18next";
 import StoreResultItem from "@/componenets/StoreResultItem";
-
+import { LocationSearchResult } from "@/types/store";
 interface StoreFormProps {
   onSuccess: (newStore: Store) => void;
-  searchMethod: "name" | "location";
+  searchMethod: "name";
 }
 
 interface GeoapifySuggestion {
@@ -172,11 +172,11 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
   };
 
   const handleAddStore = (suggestion: GeoapifySuggestion) => {
-    if (!user?.id) {
-      console.log("User not authenticated");
-      return;
-    }
-
+  //   if (!user?.id) {
+  //     console.log("User not authenticated");
+  //     return;
+  //   }
+  const testId="6ff828c1-a284-4aaf-a24f-4387a20dda5e"
     const { name, lat, lon, city, country } = suggestion.properties;
     dispatch(
       addStore({
@@ -185,7 +185,8 @@ const StoreForm: React.FC<StoreFormProps> = ({ onSuccess }) => {
         longitude: lon,
         city: city || "Unknown",
         country: country || "Unknown",
-        userId: user.id,
+        // userId: user.id,
+        userId:testId
       })
     );
     setSuggestions([]);
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   modalButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: Theme.colors.accentDark,
     borderRadius: 10,
     padding: 12,
     width: "100%",

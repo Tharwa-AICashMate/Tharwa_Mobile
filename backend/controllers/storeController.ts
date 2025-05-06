@@ -45,8 +45,8 @@ export const getAllStoreItems = async (req: Request, res: Response) => {
 //   }
 // }
 export const resolveLocationFromUrl = async (req: Request, res: Response) => {
-  const { url } = req.query; // Use req.query for GET requests
-
+  const { url } = req.body; // Use req.query for GET requests
+  console.log(req.body)
   if (!url || typeof url !== 'string') {
     return res.status(400).json({ error: "Missing or invalid 'url' parameter." });
   }

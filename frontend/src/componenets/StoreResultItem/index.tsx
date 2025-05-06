@@ -59,7 +59,7 @@ const StoreResultItem: React.FC<StoreResultItemProps> = ({
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: Theme.colors.secondary,
+    backgroundColor: Theme.colors.secondery,
     borderRadius: 8,
     marginBottom: 12,
   },

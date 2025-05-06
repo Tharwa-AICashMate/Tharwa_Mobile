@@ -104,38 +104,40 @@ export const removeUserStore = async (storeId: string): Promise<void> => {
   }
 };
 
-// export const getLocationSuggestions = async (url: string): Promise<any> => {
-//   try {
-//     const response = await axiosInstance.get(`/stores/url?url=${encodeURIComponent(url)}`);
-//     return response.data;
-//   } catch (error) {
-//     console.log('Error fetching location suggestions', error);
-//     throw error;
-//   }
-// };
+
 export const getLocationSuggestions = async (url: string): Promise<any> => {
   try {
-    // Make sure the URL is properly encoded
-    const response = await axiosInstance.get(`/stores/location-search?url=${encodeURIComponent(url)}`);
+    console.log(url)
+    const response = await axiosInstance.post(`/stores/url`, {url} );
+
+    console.log( response.data )
     return response.data;
   } catch (error) {
     console.log('Error fetching location suggestions', error);
     throw error;
   }
 };
-export const addStoreByLocation = async (payload: {
-  name: string;
-  lat: number;
-  lon: number;
-  city: string;
-  country: string;
-  userId: string;
-}): Promise<Store> => {
-  try {
-    const response = await axiosInstance.post('/stores/location', payload);
-    return response.data;
-  } catch (error) {
-    console.log('Error adding store by location', error);
-    throw error;
-  }
-};
+// export const addStoreByLocation = async (payload: {
+//   name: string;
+//   lat: number;
+//   lon: number;
+//   city: string;
+//   country: string;
+//   userId: string;
+// }): Promise<Store> => {
+//   try {
+//     const response = await axiosInstance.post('/stores', {
+//       name,
+//       latitude,
+//       longitude,
+//       city,
+//       country,
+//       userId
+//   });
+//       console.log("API Response:", response.data);
+//     return response.data;
+//   } catch (error) {
+//     console.log('Error adding store by location', error);
+//     throw error;
+//   }
+// };

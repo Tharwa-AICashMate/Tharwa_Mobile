@@ -364,7 +364,8 @@
   "thankYou": "شكراً لك!",
   "storeAdded": "تمت إضافة المتجر {{storeName}} إلى المفضلة!",
   "ok": "موافق",
-  "addingStore": "جاري إضافة المتجر..."
+  "addingStore": "جاري إضافة المتجر...",
+  "cancel": "الغاء"
 },
   "favoriteStoresScreen": {
     "favoriteStores": "المتاجر المفضلة",

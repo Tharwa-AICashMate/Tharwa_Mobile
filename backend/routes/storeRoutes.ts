@@ -9,8 +9,8 @@ import { supabase } from "../config/supabase.js";
 
 const router = Router();
 
-// router.post("/stores/url", resolveLocationFromUrl);
-router.get('/stores/location-search', resolveLocationFromUrl);
+router.post("/stores/url", resolveLocationFromUrl);
+// router.get('/stores/location-search', resolveLocationFromUrl);
 router.post("/stores", async (req, res) => {
   const { name, latitude, longitude, city, country, userId } = req.body;
 

@@ -47,3 +47,16 @@ export interface AnalysisPayload {
   };
   inputs: string;
 }
+export interface LocationSearchResult {
+  name: string;
+  latitude: number;
+  longitude: number;
+  city?: string;
+  country?: string;
+  address_line2?: string;
+}
+
+export interface LocationSearchRequest {
+  url: string;
+  userId: string;
+}

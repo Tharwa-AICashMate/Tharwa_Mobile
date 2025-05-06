@@ -7,6 +7,7 @@ import {
   TextInput,
   Linking,
   Platform,
+  Alert,
 } from "react-native";
 import StoreForm from "@/componenets/StoreForm";
 import { Store } from "@/types/store";
@@ -17,6 +18,7 @@ import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { addStoreByLocation, fetchLocationSuggestions } from "@/redux/slices/storeThunk";
 import StoreResultItem from "@/componenets/StoreResultItem";
+import StoreLocationForm from "@/componenets/StoreLocationForm";
 const AddStorePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { locationSuggestions } = useAppSelector((state) => state.store);
@@ -62,11 +64,11 @@ const AddStorePage: React.FC = () => {
     setLoadingLocationSearch(true);
     try {
       if (!searchUrl.trim()) {
-        throw new Error("Please enter a valid Google Maps URL");
+        Alert.alert("Please enter a valid Google Maps URL");
       }
       await dispatch(fetchLocationSuggestions(searchUrl)).unwrap();
     } catch (error) {
-      console.error("Error searching by location:", error);
+      console.log("Error searching by location:", error);
       // Add an error state to display to the user
     } finally {
       setLoadingLocationSearch(false);
@@ -119,46 +121,51 @@ const AddStorePage: React.FC = () => {
             <StoreForm onSuccess={handleSearchByNameSuccess} />
           </View>
         ) : (
-          <View style={styles.searchByLocationContainer}>
-            <TextInput
-              placeholder={t("addStoreScreen.pasteGoogleMapsURL")}
-              value={searchUrl}
-              onChangeText={setSearchUrl}
-              style={styles.input}
-            />
-            <TouchableOpacity
-              style={styles.searchButton}
-              onPress={handleSearchByLocation}
-              disabled={loadingLocationSearch}
-            >
-              <Text style={styles.buttonText}>
-                {loadingLocationSearch
-                  ? t("addStoreScreen.searching")
-                  : t("addStoreScreen.search")}
-              </Text>
-            </TouchableOpacity>
+          // <View style={styles.searchByLocationContainer}>
+          //   <TextInput
+          //     placeholder={t("addStoreScreen.pasteGoogleMapsURL")}
+          //     value={searchUrl}
+          //     onChangeText={setSearchUrl}
+          //     style={styles.input}
+          //   />
+          //   <TouchableOpacity
+          //     style={styles.searchButton}
+          //     onPress={handleSearchByLocation}
+          //     disabled={loadingLocationSearch}
+          //   >
+          //     <Text style={styles.buttonText}>
+          //       {loadingLocationSearch
+          //         ? t("addStoreScreen.searching")
+          //         : t("addStoreScreen.search")}
+          //     </Text>
+          //   </TouchableOpacity>
 
-            {loadingLocationSearch && (
-              <Text>{t("addStoreScreen.searchingForNearbyStores")}</Text>
-            )}
-            {searchResults.length > 0 && (
-              <View>
-                <Text>{t("addStoreScreen.searchResults")}:</Text>
-                {searchResults.map((result, index) => (
-                    <StoreResultItem
-                    key={index}
-                    name={result.name}
-                    address={result.address_line2 || `${result.city}, ${result.country}`}
-                    lat={result.lat}
-                    lon={result.lon}
-                    onAddPress={() => handleAddStore(result)}
-                    onMapPress={(lat, lon) => handleOpenMap(lat, lon)}
-                    isRTL={i18n.language === "ar"}
-                  />
-                ))}
-              </View>
-            )}
-          </View>
+          //   {loadingLocationSearch && (
+          //     <Text>{t("addStoreScreen.searchingForNearbyStores")}</Text>
+          //   )}
+          //   {searchResults.length > 0 && (
+          //     <View>
+          //       <Text>{t("addStoreScreen.searchResults")}:</Text>
+          //       {searchResults.map((result, index) => (
+          //           <StoreResultItem
+          //           key={index}
+          //           name={result.name}
+          //           address={result.address_line2 || `${result.city}, ${result.country}`}
+          //           lat={result.lat}
+          //           lon={result.lon}
+          //           onAddPress={() => handleAddStore(result)}
+          //           onMapPress={(lat, lon) => handleOpenMap(lat, lon)}
+          //           isRTL={i18n.language === "ar"}
+          //         />
+          //       ))}
+          //     </View>
+          //   )}
+          // </View>
+          <View style={styles.searchByLocationContainer}>
+          <StoreLocationForm 
+            onSuccess={() => console.log("Location store added successfully")}
+          />
+        </View>
         )}
       </View>
     </SafeAreaView>

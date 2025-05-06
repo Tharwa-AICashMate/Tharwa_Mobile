@@ -355,7 +355,8 @@
   "thankYou": "Thank You!",
   "storeAdded": "Store {{storeName}} has been added to favorites!",
   "ok": "OK",
-  "addingStore": "Adding store..."
+  "addingStore": "Adding store...",
+  "cancel": "Cancel"
 },
   "favoriteStoresScreen": {
     "favoriteStores": "Favorite Stores",
