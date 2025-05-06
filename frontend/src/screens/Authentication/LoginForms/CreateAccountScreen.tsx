@@ -121,7 +121,7 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
 
             <Input
               label={t("SignUpScreen.dateOfBirth")}
-              value={dob.toLocaleDateString()}
+              value={DOB.toLocaleDateString()}
               autoCapitalize="none"
               placeholder={t("SignUpScreen.dateOfBirthPlaceholder")}
               errorMessage={t("SignUpScreen.dateOfBirthError")}

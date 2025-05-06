@@ -23,6 +23,7 @@ const intialCategories = [
 class AuthService {
   static async signup(userData: user) {
     const { email, password, ...profileData } = userData;
+    console.log(profileData)
     // check If the email exists, throw an error
     try {
       const { data, error } = await AuthService.getuserByEmail(email);
@@ -90,8 +91,11 @@ class AuthService {
       .from("users")
       .update(profileData)
       .eq("email", email);
+      console.log(status);
     if (status.error) throw{ status: 400, message: status.error };
-    const {data,error} = await supabase.from("users").select("*").eq("email",email);
+    const {data,error} = await AuthService.getuserByEmail(email)
+    console.log(data);
+
     return {data,error};
   }
 

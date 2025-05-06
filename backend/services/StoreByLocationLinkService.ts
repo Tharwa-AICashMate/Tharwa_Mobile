@@ -23,7 +23,8 @@ async function expandShortUrl(shortUrl: string): Promise<string> {
       method: "HEAD",
       redirect: "follow",
     });
-    if (!response.ok) throw new Error(`Failed to expand URL: ${response.statusText}`);
+    if (!response.ok)
+      throw new Error(`Failed to expand URL: ${response.statusText}`);
     return response.url;
   } catch (error) {
     console.error("Error expanding short URL:", error);
@@ -34,6 +35,21 @@ async function expandShortUrl(shortUrl: string): Promise<string> {
 function extractLocationData(url: string): LocationData | undefined {
   if (!url) return;
 
+  // Try to extract place name
+  const nameMatch = url.match(/\/place\/([^/]+)/);
+  const name = nameMatch
+    ? decodeURIComponent(nameMatch[1].replace(/\+/g, " "))
+    : undefined;
+
+  const coordMatchurl = url.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
+  if (coordMatchurl) {
+    return {
+      name,
+      latitude: parseFloat(coordMatchurl[1]),
+      longitude: parseFloat(coordMatchurl[2]),
+    };
+  }
+
   const placeMatch = url.match(/\/place\/([^/]+)\/@(-?\d+\.\d+),(-?\d+\.\d+)/);
   if (placeMatch) {
     return {
@@ -43,7 +59,9 @@ function extractLocationData(url: string): LocationData | undefined {
     };
   }
 
-  const searchMatch = url.match(/\/search\/([^/]+)[+@]?(-?\d+\.\d+),(-?\d+\.\d+)/);
+  const searchMatch = url.match(
+    /\/search\/([^/]+)[+@]?(-?\d+\.\d+),(-?\d+\.\d+)/
+  );
   if (searchMatch) {
     return {
       name: decodeURIComponent(searchMatch[1]),
@@ -63,13 +81,17 @@ function extractLocationData(url: string): LocationData | undefined {
   return undefined;
 }
 
-async function reverseGeocode(lat: number, lon: number, title?: string): Promise<Place[]> {
+async function reverseGeocode(
+  lat: number,
+  lon: number,
+  title?: string
+): Promise<Place[]> {
   try {
     const response = await axios.get(
       `https://api.openrouteservice.org/geocode/reverse?api_key=${ORS_API_KEY}&point.lon=${lon}&point.lat=${lat}`
     );
 
-    const features =(response.data as { features: any }).features;
+    const features = (response.data as { features: any }).features;
     if (!features || features.length === 0) {
       throw new Error("No location results found.");
     }
@@ -107,7 +129,9 @@ function extractPlaceDetails(features: any[]): Place[] {
   });
 }
 
-export async function getStoreFromUrl(url: string): Promise<Place[] | undefined> {
+export async function getStoreFromUrl(
+  url: string
+): Promise<Place[] | undefined> {
   if (!url || typeof url !== "string") {
     throw new Error("Invalid URL input.");
   }
