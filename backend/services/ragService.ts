@@ -140,10 +140,10 @@ class RagService {
             distance: options.distance || "5",
             unit: options.unit || "km",
             timeframe: options.timeframe || "month",
-            includeNearbyStores: options.includeNearbyStores !== false,
-            includeTransactions: options.includeTransactions !== false,
-            includeGoals: options.includeGoals !== false,
-            includeBudget: options.includeBudget !== false,
+            includeNearbyStores: options.includeNearbyStores == false ? false : true,
+            includeTransactions: options.includeTransactions == false ? false : true,
+            includeGoals: options.includeGoals == false ? false : true,
+            includeBudget: options.includeBudget == false ? false : true,
           }
         );
   
