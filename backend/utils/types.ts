@@ -5,9 +5,6 @@ export type user = {
   DOB: Date;
   email: string;
   password: string;
-  fullName?: string;
-  phone?: string;
-  dob?: Date;
 };
 
 

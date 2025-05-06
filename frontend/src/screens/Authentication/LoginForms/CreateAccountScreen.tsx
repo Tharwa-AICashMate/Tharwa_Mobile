@@ -31,10 +31,10 @@ import { I18nManager } from "react-native";
 import i18next from "../../../../services/i18next";
 const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
   const isRTL = i18next.language === 'ar' || I18nManager.isRTL;
-  const [fullName, setFullName] = useState<string>("");
+  const [full_name, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [phone, setphone] = useState<string>("");
-  const [dob, setDob] = useState<Date>(new Date(2000, 0, 1));
+  const [mobile_num, setphone] = useState<string>("");
+  const [DOB, setDob] = useState<Date>(new Date(2000, 0, 1));
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -48,10 +48,10 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
   async function signUpWithEmail() {
     if (!doPasswordsMatch(confirmPassword, password)) return;
     const user: User = {
-      fullName,
+      full_name,
       email,
-      phone,
-      dob,
+      mobile_num,
+      DOB,
     };
     const resultAction = await dispatch(
       registerUser({ user, password })
@@ -90,7 +90,7 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
           >
             <Input
               label={t("SignUpScreen.FullName")}
-              value={fullName}
+              value={full_name}
               onChangeText={setFullName}
               errorMessage={t("SignUpScreen.fullNameError")}
               autoCapitalize="none"
@@ -111,7 +111,7 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
 
             <Input
               label={t("SignUpScreen.phoneNumber")}
-              value={phone}
+              value={mobile_num}
               onChangeText={setphone}
               errorMessage={t("SignUpScreen.phoneNumberError")}
               autoCapitalize="none"
@@ -138,7 +138,7 @@ const CreateAccountScreen: React.FC<navigationProps> = ({ navigation }) => {
 
             {showDatePicker && (
               <DateTimePicker
-                value={dob}
+                value={DOB}
                 mode="date"
                 display="default"
                 locale={isRTL ?"ar" :'en'} 

@@ -51,7 +51,7 @@ export const registerUser = createAsyncThunk(
     const { user, password } = payload;
     try {
       const response = await axios.post(`${apiBase}/auth/signup`, {
-        user: { ...user, dob: user.dob?.toISOString(), password },
+        user: { ...user, DOB: user.DOB?.toISOString(), password },
       });
       console.log(response.data.data.status == 400)
       if (response.data.data.status == 400)
@@ -61,7 +61,7 @@ export const registerUser = createAsyncThunk(
             : "User Email already Registered"
         );
       console.log("User registered successfully", user);
-      return { ...user, dob: user.dob?.toISOString() };
+      return { ...user, DOB: user.DOB?.toISOString() };
     } catch (error) {
       console.log("Error registering user:", error);
       rejectWithValue(

@@ -83,12 +83,12 @@ export interface SavingsState {
 
 export type User = {
   username?: string;
-  fullName: string;
+  full_name: string;
   email: string;
-  phone?:string,
-  dob?: Date,  
-  id: string;
-  balance:number|null;
+  mobile_num?:string,
+  DOB?: Date,  
+  id?: string;
+  balance?:number|null;
 };
 
 interface SavingDeposit {
