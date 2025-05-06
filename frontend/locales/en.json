@@ -10,7 +10,11 @@
   "expenseBrief": {
     "statusMessage": "{{percentage}}% Of Your Expenses, Looks {{status}}.",
     "good": "Good",
-    "bad": "Bad"
+    "bad": "Bad",
+    "alertTitle": "Budget Warning",
+    "alertMessage": "Your expenses have exceeded {{percentage}}% of your available balance. Consider reducing your spending.",
+
+    "ok": "OK"
   },
   "balanceDisplay": {
     "totalBalance": "Total Balance",
@@ -94,7 +98,20 @@
       "default": "Save",
       "processing": "Processing..."
     },
-    "deleteItem": "Remove item"
+    "deleteItem": "Remove item",
+    "balanceError": {
+      "title": "Insufficient Balance",
+      "message": "This expense exceeds your available balance. Please adjust the amount."
+    },
+    "budgetWarning": {
+      "title": "High Expense Warning", 
+      "message": "This expense is {{percentage}}% of your available balance. Are you sure you want to proceed?"
+    }
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "continue": "Continue"
   },
   "logo": "Tharwa",
   "onboarding": {

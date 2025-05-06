@@ -43,7 +43,7 @@ const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
   }, [dispatch]);
 
   const availableBalance = balance - expenses - savings + income;
-  const percentage = availableBalance ? (expenses / (balance + income)) * 100 : 0;
+  const percentage = availableBalance ? (expenses / ( balance - expenses - savings + income)) * 100 : 0;
   const percentageText = percentage.toFixed(2) 
 
   return (

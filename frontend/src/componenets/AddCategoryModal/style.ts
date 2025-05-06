@@ -90,14 +90,17 @@ export const styles = StyleSheet.create(
     buttonContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
+      padding:0,
+      margin:0
     },
     button: {
       flex: 1,
-      height: 50,
+      height: 40,
       borderRadius: 10,
       justifyContent: 'center',
       alignItems: 'center',
       marginHorizontal: 5,
+      
     },
     cancelButton: {
       backgroundColor: '#F0F0F0',

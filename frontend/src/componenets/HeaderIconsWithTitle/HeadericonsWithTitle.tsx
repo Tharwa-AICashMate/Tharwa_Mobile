@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Modal, FlatList } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import Theme from "@/theme";
 import styles from "./HeadericonsWithTitle.styles";
@@ -102,12 +102,14 @@ export default function Header({
 
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
-            <Ionicons
+            {/* <Ionicons
               name="camera-outline"
               size={20}
               color="black"
               style={styles.bellIcon}
-            />
+            /> */}
+
+<MaterialCommunityIcons style={styles.bellIcon} name="line-scan" size={20} color="black" />
           </TouchableOpacity>
 
           {/* Language selector button */}

@@ -10,7 +10,11 @@
   "expenseBrief": {
     "statusMessage": "{{percentage}}% من مصروفاتك، تبدو {{status}}.",
     "good": "جيدة",
-    "bad": "سيئة"
+    "bad": "سيئة",
+    "alertTitle": "تحذير الميزانية",
+    "alertMessage": "لقد تجاوزت نفقاتك {{percentage}}% من رصيدك المتاح. يُرجى النظر في تقليل إنفاقك.",
+    "ok":"موافق"
+
   },
   "balanceDisplay": {
     "totalBalance": "إجمالي الرصيد",
@@ -94,7 +98,20 @@
       "default": "حفظ",
       "processing": "جاري المعالجة..."
     },
-    "deleteItem": "حذف العنصر"
+    "deleteItem": "حذف العنصر",
+    "balanceError": {
+      "title": "رصيد غير كافي",
+      "message": "هذه النفقة تتجاوز رصيدك المتاح. يرجى تعديل المبلغ."
+    },
+    "budgetWarning": {
+      "title": "تحذير إنفاق مرتفع",
+      "message": "هذه النفقة تمثل {{percentage}}٪ من رصيدك المتاح. هل أنت متأكد أنك تريد المتابعة؟"
+    }
+  },
+  "common": {
+    "ok": "موافق",
+    "cancel": "إلغاء",
+    "continue": "متابعة"
   },
   "logo": "Tharwa",
   "onboarding": {

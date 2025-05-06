@@ -11,6 +11,7 @@ import {
   Keyboard,
   ActivityIndicator,
   I18nManager,
+  Alert,
 } from "react-native";
 import { clearUserStores, setUserStores } from "@/redux/slices/storeSlice";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -20,13 +21,13 @@ import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { fetchUserCategories } from "@/redux/slices/categoriesSlice";
 import { getCurrentUserId } from "@/utils/auth";
 import { useTranslation } from "react-i18next";
-
 import Theme from "@/theme";
 import styles from "./style";
 import axios from "axios";
 import { apiBase } from "@/utils/axiosInstance";
 import axiosInstance from "@/config/axios";
 import { store } from "@/redux/store";
+import { fetchBalance, fetchFinanceData } from "@/redux/slices/financeSlice";
 
 interface DescriptionItem {
   name: string;
@@ -94,6 +95,18 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const [showStorePicker, setShowStorePicker] = useState(false);
   const [stores, setStores] = useState<any[]>([]);
   const [storesLoading, setStoresLoading] = useState(false);
+
+
+
+
+
+// Add this selector to get the current balance
+const { balance, expenses, income, savings } = useAppSelector(
+    (state) => state.finance
+  );
+
+
+
   // Redux state
   const dispatch = useAppDispatch();
   const { items: categories, loading: categoriesLoading } = useAppSelector(
@@ -138,6 +151,19 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch user stores directly
+
+  useEffect(() => {
+    async function fetchAll() {
+      const userId = await getCurrentUserId();
+
+      dispatch(fetchBalance(userId));
+      
+    }
+
+    fetchAll();
+  }, [dispatch]);
+
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -368,8 +394,42 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     if (isSubmitting) return;
     if (!validateForm()) return;
 
+    // Check if transaction would reduce balance to zero or negative
+    const transactionAmount = parseFloat(amount);
+    const currentBalance =  balance - expenses - savings + income|| 0;
+    
+  
+    if (!isIncome && !isSavings && transactionAmount >= currentBalance) {
+      Alert.alert(
+        t("transactionForm.balanceError.title"),
+        t("transactionForm.balanceError.message"),
+        [{ text: t("common.ok") }]
+      );
+      return;
+    }
+    
+  
+    if (!isIncome && !isSavings) {
+      const percentage = (transactionAmount / currentBalance) * 100;
+      if (percentage > 50) {
+        Alert.alert(
+          t("transactionForm.budgetWarning.title"),
+          t("transactionForm.budgetWarning.message", { percentage: percentage.toFixed(2) }),
+          [
+            { text: t("common.cancel"), style: "cancel" },
+            { text: t("common.continue"), onPress: () => proceedWithSubmission() }
+          ]
+        );
+        return;
+      }
+    }
+    
+    proceedWithSubmission();
+  };
+  
+  const proceedWithSubmission = () => {
     setIsSubmitting(true);
-
+    
     const filteredItems =
       isIncome || isSavings
         ? undefined
@@ -414,6 +474,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     }
   };
 
+  // Calculate total from items
+  useEffect(() => {
+    if (isIncome || !descriptionItems.length) return;
+    const calculatedAmount = descriptionItems.reduce((acc, item) => {
+      return acc + (Number(item.quantity) || 1) * Number(item.unitPrice);
+    }, 0);
+  
+    setAmount(calculatedAmount ? calculatedAmount.toFixed(2) : '');
+  }, [descriptionItems]);
+
   // Description items functions
   const addDescriptionItem = () => {
     if (isIncome || isSavings) return;
@@ -435,16 +505,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     setErrors((prev) => ({ ...prev, descriptionItems: newErrors }));
   };
 
-  
-  useEffect(()=>{
-    if(isIncome || !descriptionItems.length)return;
-    const amount = descriptionItems.reduce((acc,item)=>{
-      console.log(acc,Number(item.quantity),Number(item.unitPrice))
-      return acc += (Number(item.quantity) || 1) * Number(item.unitPrice)
-    },0)
-  
-    setAmount(amount ? amount.toFixed(2):'')
-  },[descriptionItems])
   const updateDescriptionItem = (
     index: number,
     field: keyof DescriptionItem,
@@ -477,7 +537,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       </View>
     );
   }
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
