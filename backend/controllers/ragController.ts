@@ -50,8 +50,7 @@ export const analyzeData = async (req: Request, res: Response): Promise<void> =>
   try {
     // Check if the input contains Arabic text
     const isArabic = isArabicText(inputs);
-    
-    const result = await ragService.analyzeData(
+    const result = await ragService.query(
       inputs, 
       userId, 
       coordinates,

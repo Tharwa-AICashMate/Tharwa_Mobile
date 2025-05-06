@@ -21,9 +21,9 @@ class RagService {
   private graphs: Map<string, any>;
   private initialized: boolean = false;
   private userContextCache: Map<
-    string,
-    { timestamp: number; documents: Document[] }
-  > = new Map();
+  string,
+  { timestamp: number; documents: Document[]; questionType: string }
+> = new Map();
   private CACHE_TTL = 10 * 60 * 1000; // 10 minutes in milliseconds
 
   private constructor() {
@@ -109,16 +109,28 @@ class RagService {
       const cacheKey = state.user_id;
       const cachedContext = this.userContextCache.get(cacheKey);
       const now = Date.now();
-
-      if (cachedContext && now - cachedContext.timestamp < this.CACHE_TTL) {
-        // Use cached context if it's not expired
+      
+      // Determine current question type
+      const currentQuestionType = this.determineQueryType(state.question);
+      
+      // Check if cache is valid: not expired AND same question type
+      const isCacheValid = cachedContext && 
+                          now - cachedContext.timestamp < this.CACHE_TTL &&
+                          cachedContext.questionType === currentQuestionType;
+                          
+      if (isCacheValid) {
+        // Use cached context if it's not expired and question type is the same
         documents = cachedContext.documents;
-        console.log("Using cached context for user:", cacheKey);
+        console.log("Using cached context for user:", cacheKey, "with question type:", currentQuestionType);
       } else {
-        // Otherwise fetch fresh context
-        console.log("Fetching fresh context for user:", cacheKey);
+        // Refresh context if cache expired or question type changed
+        const cacheStatus = !cachedContext ? "no cache" : 
+                           (now - cachedContext.timestamp >= this.CACHE_TTL) ? "expired" : 
+                           "question type changed";
+        
+        console.log(`Fetching fresh context for user: ${cacheKey} (reason: ${cacheStatus})`);
         const options = state.options || {};
-
+  
         documents = await dataFormaterService.getContext(
           state.user_id,
           state.coordinates,
@@ -134,26 +146,27 @@ class RagService {
             includeBudget: options.includeBudget !== false,
           }
         );
-
-        console.log(documents)
+  
+        console.log(documents);
         
-        // Cache the new context
+        // Cache the new context with question type
         this.userContextCache.set(cacheKey, {
           timestamp: now,
           documents,
+          questionType: currentQuestionType
         });
       }
-
+  
       // Filter context relevant to the query using vector search
       const relevantDocs = await this.vectorStore.similaritySearchWithScore(
         state.question,
         10,
         { filter: { user_id: state.user_id } }
       );
-
+  
       // Combine base context with query-specific relevant docs
       const combinedContext = [...documents];
-
+  
       // Add any high scoring relevant docs not already in the context
       relevantDocs.forEach(([doc, score]) => {
         if (score > 0.7) {
@@ -166,14 +179,8 @@ class RagService {
           }
         }
       });
-
-      // Optimize context based on token limits
-      const optimizedContext = dataFormaterService.optimizeContextForTokenLimit(
-        combinedContext,
-        3000
-      );
-
-      return { context: optimizedContext };
+  
+      return { context: combinedContext };
     };
 
     // Base generate node for answering questions
@@ -256,25 +263,38 @@ class RagService {
   public async refreshUserContext(
     userId: string,
     coordinates: { latitude: number; longitude: number },
-    options: any = {}
+    options: any = {},
+    questionType: string = "general" // Default to general if not specified
   ): Promise<void> {
-    console.log(`Refreshing context for user: ${userId}`);
-
+    console.log(`Refreshing context for user: ${userId} with question type: ${questionType}`);
+  
     const documents = await dataFormaterService.getContext(
       userId,
       coordinates,
       options
     );
-
-    // Update cache with fresh context
+  
+    // Update cache with fresh context and question type
     this.userContextCache.set(userId, {
       timestamp: Date.now(),
       documents,
+      questionType
     });
-
+  
     console.log(`Context refreshed for user: ${userId}`);
   }
   
+  public isContextRefreshNeeded(
+    userId: string,
+    questionType: string
+  ): boolean {
+    const cachedContext = this.userContextCache.get(userId);
+    if (!cachedContext) return true;
+    
+    const now = Date.now();
+    return now - cachedContext.timestamp >= this.CACHE_TTL || 
+           cachedContext.questionType !== questionType;
+  }
   /**
    * Hybrid extraction: try LLM, then fallback to heuristics
    */
@@ -351,11 +371,17 @@ Return only a JSON object with possible keys if nothing found don't return anyth
     // Infer missing options from question
     const inferred = await this.inferOptionsFromQuery(question);
     const mergedOptions = { ...inferred, ...options };
-
+    
     const graphType = this.determineQueryType(question);
+    const isArabic = options?.isArabic || false;
+    let formatInstruction = `Return your answer ${graphType == 'analysis'?"as a detailed analysis with metrics":""} and format it as markdown.`;
+    
+    if (isArabic) {
+      formatInstruction = ` قدم إجابتك ${graphType == 'analysis' ? "كتحليل مفصل مع المقاييس، " : ""} }وقم بتنسيقها بصيغة markdown.`;
+    }
     const graph = this.graphs.get(graphType)!;
     const result = await graph.invoke({
-      question,
+      question:`${question} Return your answer formated as markdown.`,
       user_id: userId,
       coordinates,
       options: mergedOptions,
@@ -456,7 +482,7 @@ Return only a JSON object with possible keys if nothing found don't return anyth
   /**
    * Determine the type of query for routing to appropriate graph
    */
-  private determineQueryType(question: string): string {
+  public determineQueryType(question: string): string {
     const questionLower = question.toLowerCase();
 
     // Analysis related keywords
@@ -522,50 +548,49 @@ const ragService = {
     userId: string,
     coordinates: any,
     options: any = {}
-  ) =>
-    await RagService.getInstance().query(
-      question,
-      userId,
-      coordinates,
-      options
-    ),
+  ) => {
+    const service = RagService.getInstance();
+    const questionType = service.determineQueryType(question);
+    return await service.query(question, userId, coordinates, options);
+  },
   analyzeData: async (
     question: string,
     userId: string,
     coordinates: any,
     options: any = {}
-  ) =>
-    await RagService.getInstance().analyzeData(
-      question,
-      userId,
-      coordinates,
-      options
-    ),
+  ) => {
+    const service = RagService.getInstance();
+    return await service.analyzeData(question, userId, coordinates, options);
+  },
   findData: async (
     question: string,
     userId: string,
     coordinates: any,
     options: any = {}
-  ) =>
-    await RagService.getInstance().findData(
-      question,
-      userId,
-      coordinates,
-      options
-    ),
+  ) => {
+    const service = RagService.getInstance();
+    return await service.findData(question, userId, coordinates, options);
+  },
   refreshUserContext: async (
     userId: string,
     coordinates: any,
-    options: any = {}
+    options: any = {},
+    questionType: string = "general"  // Added parameter
   ) =>
     await RagService.getInstance().refreshUserContext(
       userId,
       coordinates,
-      options
+      options,
+      questionType
     ),
   clearUserCache: (userId: string) => {
     RagService.getInstance().clearUserCache(userId);
   },
+  isContextRefreshNeeded: (userId: string, question: string) => {  // Added method
+    const service = RagService.getInstance();
+    const questionType = service.determineQueryType(question);
+    return service.isContextRefreshNeeded(userId, questionType);
+  }
 };
 
 export default ragService;
