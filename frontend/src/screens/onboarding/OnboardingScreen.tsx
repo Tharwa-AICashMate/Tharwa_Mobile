@@ -36,13 +36,33 @@ const OnboardingScreen: React.FC<navigationProps> = ({ navigation }) => {
   const slides: Slide[] = [
     {
       id: "1",
-      title: t("onboarding.welcomeMsg"),
+      title: t("onboarding.onboarding_page1"),
       image: require("@/assets/conis-hand.png"),
     },
     {
       id: "2",
-      title: t("onboarding.onboardingMsg"),
+      title: t("onboarding.onboarding_page2"),
+      image: require("@/assets/closedwallet.png"),
+    },
+    {
+      id: "3",
+      title: t("onboarding.onboarding_page3"),
       image: require("@/assets/phone-hand.png"),
+    },
+    {
+      id: "4",
+      title: t("onboarding.onboarding_page4"),
+      image: require("@/assets/onecoin.png"),
+    },
+    {
+      id: "5",
+      title: t("onboarding.onboarding_page5"),
+      image: require("@/assets/openwallet.png"),
+    },
+    {
+      id: "6",
+      title: t("onboarding.onboarding_page6"),
+      image: require("@/assets/coinstack.png"),
     },
   ];
   
