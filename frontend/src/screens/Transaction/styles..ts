@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
     backgroundColor: Theme.colors.background,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
+    paddingBottom:0
   },
   loadingContainer: {
     flex: 1,

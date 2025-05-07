@@ -6,7 +6,7 @@ console.log(isRTL)
 
 export default StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: 50,
   },
   containerTitle: {
     flexDirection: 'row',
