@@ -6,7 +6,7 @@ import Theme from "@/theme";
      backgroundColor: Theme.colors.primary,
      borderRadius: 12,
      padding: 12,
-     width: 350,
+     width: "95%",
      shadowColor: "#000",
      shadowOffset: { width: 0, height: 2 },
      shadowOpacity: 0.1,
