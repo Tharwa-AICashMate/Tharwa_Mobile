@@ -89,8 +89,8 @@ const AddCategoryModal = ({
                 ? t("savingsScreen.savingsModal.editSavingsGoal")
                 : t("savingsScreen.savingsModal.addSavingsGoal")
               : isEditing
-                ? t("savingsScreen.savingsModal.edit")
-                : t("savingsScreen.savingsModal.addSavingsGoal")}
+                ? t("categories.editCategory")
+                : t("categories.addCategory")}
           </Text>
 
           <Text style={styles.inputLabel}>{t("savingsScreen.savingsModal.name")}</Text>
@@ -98,7 +98,7 @@ const AddCategoryModal = ({
             style={[styles.input, nameError ? styles.inputError : null]}
             value={categoryName}
             onChangeText={onChangeName}
-            placeholder={t("savingsScreen.savingsModal.goalNamePlaceholder")}
+            placeholder={showTargetInput?t("savingsScreen.savingsModal.goalNamePlaceholder"):t("categories.categoryName")}
             placeholderTextColor="#A0A0A0"
             maxLength={20}
             textAlign={isRTL ? 'right' : 'left'}

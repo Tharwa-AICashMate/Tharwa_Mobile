@@ -57,7 +57,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
         <ScrollView 
           horizontal 
           showsHorizontalScrollIndicator={false} 
-          style={[modalStyles.categoriesContainer, isRTL && { direction: 'rtl' }]}
+          style={[modalStyles.categoriesContainer]}
           contentContainerStyle={modalStyles.categoriesContent}
         >
           {categories.map((category) => (

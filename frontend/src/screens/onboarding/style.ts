@@ -25,11 +25,11 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign:'center',
-    maxWidth:300,
+    maxWidth:270,
     marginTop:60,
     color: Theme.colors.textDark,
     fontFamily:Theme.typography.fonts.poppins.semiBold,
-    fontSize:20
+    fontSize:24
   },
   imageContainer:{
       height:250,

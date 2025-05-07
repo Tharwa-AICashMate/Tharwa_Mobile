@@ -262,7 +262,7 @@ const TransactionScreen: React.FC = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={[styles.container]}>
         <Header title={t("transactionScreen.transactions.title")} />
-        <TransactionSummary activeTab={activeTab} onSelectTab={setActiveTab} />
+        <TransactionSummary activeTab={activeTab} onSelectTab={setActiveTab} transactionsExist={transactions.length === 0}/>
         <View style={styles.contentContainer}>
         {loading && transactions.length === 0 ? (
           <View style={styles.loadingContainer}>

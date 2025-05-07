@@ -45,6 +45,8 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     (state) => state.finance
   );
 
+
+  
   useEffect(() => {
     async function fetchAll() {
       const userId = await getCurrentUserId();
@@ -171,7 +173,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         </View>
       )}
 
-      {activeTab === "income" && (
+      {/* {activeTab === "income" && income && (
         <View style={styles.addExpenseContainer}>
           <TouchableOpacity style={styles.addButton} onPress={() =>  navigation.navigate("AddIncome")}>
             <Text style={styles.addButtonText}>{t("transactionScreen.transactionSummary.editIncome")}</Text>
@@ -179,13 +181,13 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         </View>
       )}
 
-      {activeTab === "expense" && (
+      {activeTab === "expense" && expenses &&(
         <View style={styles.addExpenseContainer}>
           <TouchableOpacity style={styles.addButton} onPress={handleAddExpense}>
             <Text style={styles.addButtonText}>{t("transactionScreen.transactionSummary.addExpense")}</Text>
           </TouchableOpacity>
         </View>
-      )}
+      )} */}
 
       <Modal animationType="slide" transparent visible={modalVisible}>
         <View style={styles.modalOverlay}>

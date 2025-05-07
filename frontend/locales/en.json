@@ -123,12 +123,12 @@
   "logo": "Tharwa",
   "onboarding": {
     "welcomeMsg": "Welcome To Expense Manager",
-    "onboarding_page1": "Welcome! Get ready to take control of your finances and discover a smarter way to manage your savings, expenses, and track grocery deals in your area.",
-    "onboarding_page2": "No need to worry about remembering everything! Use your phone's camera to scan your receipts, and your purchases will be recorded with ease.",
-    "onboarding_page3": "The 'Smart Store' feature helps you find stores that have your groceries at the best prices in your area.",
-    "onboarding_page4": "Start achieving your financial goals with Tharwa! Use the savings tracking tools to set your objectives and monitor your progress towards a better financial future.",
-    "onboarding_page5": "Get a clearer view of your money! You can easily group your expenses into different categories to better understand where your savings are going.",
-    "onboarding_page6": "You are now ready to go with Tharwa! Start your journey towards smart financial management and discover all the powerful features the app offers.",
+    "onboarding_page1": "Control your finances & find local grocery deals easily!",
+    "onboarding_page2": "Scan receipts to track your expenses effortlessly",
+    "onboarding_page3": "Discover the best grocery prices near you with Smart Store",
+    "onboarding_page4": "Set savings goals and track your financial progress",
+    "onboarding_page5": "Understand your spending by categorizing your expenses.",
+    "onboarding_page6": "Start your smart financial management journey with Tharwa!",
     "next": "Next"
   },
   "Login": {
@@ -262,7 +262,7 @@
     "longitude": "Longitude:",
     "retry": "Retry",
     "findByMap": "Find by Map",
-    "analysis": "Analysis",
+    "analysis": "Ask AI",
     "searchScope": "Search scope:",
     "km5": "5 km",
     "km10": "10 km",
@@ -365,6 +365,14 @@
       "targetAmountExceeding": "Target amount cannot exceed 1,000,000",
       "iconError": "Please select an icon"
     }
+  },
+  "errors": {
+    "goalNotFound": "Goal Not Found",
+    "goalNotFoundMessage": "The selected savings goal could not be found.",
+    "invalidAmount": "Invalid Amount",
+    "enterValidAmount": "Please enter a valid numeric amount.",
+    "exceedsTarget": "Amount Exceeds Goal",
+    "depositExceedsTargetMessage": "The deposit exceeds the remaining target amount."
   },
   "addStoreScreen": {
     "addStore": "Add Store",

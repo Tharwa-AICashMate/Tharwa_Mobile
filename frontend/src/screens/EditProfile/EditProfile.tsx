@@ -126,7 +126,7 @@ const Profile: React.FC = () => {
                 style={styles.input}
                 value={email}
                 onChangeText={setEmail}
-                placeholder={t("EditProfile.emailPlaceholder")}
+                placeholder={t("EditProfile.emailAddressPlaceholder")}
                 keyboardType="email-address"
                 placeholderTextColor="#999"
                 editable={false}

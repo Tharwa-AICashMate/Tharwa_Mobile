@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView } from "react-native";
+import { Alert, SafeAreaView } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
@@ -23,8 +23,11 @@ const AddSavingsScreen = () => {
   const { items: savingsGoals } = useAppSelector((state) => state.goals);
   const route = useRoute<editRouteProp>();
 
-  const data = route.params;
-  const savingCategory= data?.savingCategory;
+  const { categoryName, goalID, Target, currentAmount } = route.params;
+  const selectedCategory= categoryName;
+
+  // const data = route.params;
+  // const savingCategory= data?.savingCategory;
   const handleSubmit = (data: {
     category: string;
     amount: string;
@@ -35,12 +38,24 @@ const AddSavingsScreen = () => {
   }) => {
     const selectedGoal = savingsGoals.find((goal) => goal.name === data.category);
     if (!selectedGoal) {
-      console.log("Savings goal not found");
+      Alert.alert(t("errors.goalNotFound"), t("errors.goalNotFoundMessage"));
       return;
     }
 
     const amountValue = parseFloat(data.amount);
-    if (isNaN(amountValue)) return;
+    if (isNaN(amountValue)) {
+      Alert.alert(t("errors.invalidAmount"), t("errors.enterValidAmount"));
+      return;
+    }
+
+    const remainingAmount = Target - currentAmount;
+    if (amountValue > remainingAmount) {
+      Alert.alert(
+        t("errors.exceedsTarget"),
+        t("errors.depositExceedsTargetMessage")
+      );
+      return;
+    }
 
     const newDeposit = {
       goal_id: selectedGoal.id as number,
@@ -52,8 +67,22 @@ const AddSavingsScreen = () => {
 
     dispatch(createDeposit(newDeposit));
 
-    navigation.goBack();
+    // Show success alert after deposit is created
+    Alert.alert(
+      t("savingsSuccess.title"),
+      t("savingsSuccess.message", { 
+        amount: amountValue.toFixed(2), 
+        goal: data.category 
+      }),
+      [
+        { 
+          text: t("common.ok"), 
+          onPress: () => navigation.goBack()
+        }
+      ]
+    );
   };
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Theme.colors.primary}}>
@@ -62,9 +91,9 @@ const AddSavingsScreen = () => {
         title={t("savingsScreen.savings")}
         buttonText={t("savingsScreen.addToSavings")}
         onSubmit={handleSubmit}
-        initialCategory={savingCategory}
+        initialCategory={selectedCategory}
         initialAmount=""
-        initialTitle={`${savingCategory} deposite`}
+        initialTitle={`${selectedCategory} deposite`}
         initialMessage=""
         initialDate={new Date()}
         resetAfterSubmit={true}

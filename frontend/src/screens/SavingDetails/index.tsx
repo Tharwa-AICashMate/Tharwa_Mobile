@@ -35,7 +35,7 @@ type SavingDetailsProps = NativeStackScreenProps<
 const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
   const data = route.params;
   const { t, i18n } = useTranslation();
-  const { categoryName, goalID, Target, Icon } = data
+  const { categoryName, goalID, Target, Icon } = data;
   const dispatch = useAppDispatch();
 
   const goalIdNumber = Number(goalID);
@@ -44,7 +44,9 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
     (state) => state.goals.currentAmounts[goalIdNumber]
   );
 
-  const { deposits, loading: isLoading, } = useAppSelector((state) => state.deposits);
+  const { deposits, loading: isLoading } = useAppSelector(
+    (state) => state.deposits
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -56,16 +58,17 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
     }, [dispatch, goalIdNumber])
   );
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(fetchGoalCurrentAmount(goalIdNumber));
-  },[deposits])
-  const groupedDeposits = groupTransactionsByMonth(deposits,i18n.language);
+  }, [deposits]);
+  const groupedDeposits = groupTransactionsByMonth(deposits, i18n.language);
 
   const formatCurrency = (amount?: number): string => {
-    if (typeof amount !== "number") return t("savingsScreen.currencySymbol") + "0";
+    if (typeof amount !== "number")
+      return t("savingsScreen.currencySymbol") + "0";
     return amount
       .toLocaleString("en-US", {
-        style: "decimal",    
+        style: "decimal",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })
@@ -77,9 +80,14 @@ const SavingDetails: React.FC<SavingDetailsProps> = ({ route, navigation }) => {
       ? Math.min(Math.round((currentAmount / Target) * 100), 100)
       : 0;
 
- const addSavings = () => {
-   navigation.navigate("AddSavings", { savingCategory: categoryName });
- };
+  const addSavings = () => {
+    navigation.navigate("AddSavings", {
+      categoryName,
+      goalID,
+      Target,
+      currentAmount,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>

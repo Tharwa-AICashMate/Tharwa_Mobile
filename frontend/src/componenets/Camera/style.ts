@@ -223,7 +223,7 @@ export const modalStyles = StyleSheet.create({
     fontWeight: "500"
   },
   categoriesContainer: {
-    flexGrow: 0,
+    flexGrow: 1,
     marginVertical: 10
   },
   categoriesContent: {
