@@ -116,7 +116,8 @@
   "common": {
     "ok": "OK",
     "cancel": "Cancel",
-    "continue": "Continue"
+    "continue": "Continue",
+    "confirm": "Confirm"
   },
 
   "logo": "Tharwa",
