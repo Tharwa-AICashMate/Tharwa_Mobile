@@ -5,6 +5,7 @@ import {
   getBestMatch,
   addStore as apiAddStore,
   getBestMatchAi,
+  getLocationSuggestions,
 } from "../../api/storeapi";
 import { RootState } from "../store";
 import {
@@ -98,7 +99,7 @@ export const runAnalysis = createAsyncThunk(
           "Content-Type": "application/json",
         },
       });
-    //  console.log("Analysis response:", response.data);
+      //  console.log("Analysis response:", response.data);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -250,9 +251,49 @@ export const findBestStoreAi = createAsyncThunk<
       searchRadius,
       userId
     );
-    console.log('bestStore',bestStore)
+    console.log("bestStore", bestStore);
     return bestStore;
-  } catch (error){
-    console.log('error fetch store',error)
+  } catch (error) {
+    console.log("error fetch store", error);
   }
 });
+
+export const fetchLocationSuggestions = createAsyncThunk(
+  "store/fetchLocationSuggestions",
+  async (url: string, { rejectWithValue }) => {
+    try {
+      const response = await getLocationSuggestions(url);
+      return response;
+    } catch (error: any) {
+      console.log("Error fetching suggestions:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch suggestions"
+      );
+    }
+  }
+);
+
+export const addStoreByLocation = createAsyncThunk(
+  "store/addStoreByLocation",
+  async (
+    payload: {
+      name: string;
+      latitude: number;
+      longitude: number;
+      city: string;
+      country: string;
+      userId: string;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      // const response = await addStore();
+      console.log(payload)
+      const response = await axiosInstance.post("/stores",payload);
+
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);

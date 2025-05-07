@@ -49,6 +49,8 @@ import TransactionsDetails from "@/screens/transactionsDetails";
 import TermsAndConditions from "@/screens/Security/TermsAndConditions/TermsAndConditions";
 import NetInfo from "@react-native-community/netinfo";
 import LaunchScreen from "@/screens/LaunchScreen/launchScreen";
+import SearchByLocationScreen from "@/screens/SearchByLocationScreen";
+
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const isRTL = I18nManager.isRTL;

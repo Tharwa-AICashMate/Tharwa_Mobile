@@ -1,7 +1,7 @@
 {
   "Cancel": "الغاء",
   "SelectLanguage": "اختر اللغة",
-  "noInternet":".من فضلك تحقق من اتصالك بالشبكة",
+  "noInternet": ".من فضلك تحقق من اتصالك بالشبكة",
   "header": {
     "invoice": "الفاتورة",
     "camera": "الكاميرا",
@@ -11,7 +11,10 @@
   "expenseBrief": {
     "statusMessage": "{{percentage}}% من مصروفاتك، تبدو {{status}}.",
     "good": "جيدة",
-    "bad": "سيئة"
+    "bad": "سيئة",
+    "alertTitle": "تحذير الميزانية",
+    "alertMessage": "لقد تجاوزت نفقاتك {{percentage}}% من رصيدك المتاح. يُرجى النظر في تقليل إنفاقك.",
+    "ok": "موافق"
   },
   "balanceDisplay": {
     "totalBalance": "إجمالي الرصيد",
@@ -95,12 +98,34 @@
       "default": "حفظ",
       "processing": "جاري المعالجة..."
     },
-    "deleteItem": "حذف العنصر"
+    "deleteItem": "حذف العنصر",
+    "balanceError": {
+      "title": "رصيد غير كافي",
+      "message": "هذه النفقة تتجاوز رصيدك المتاح. يرجى تعديل المبلغ."
+    },
+    "budgetWarning": {
+      "title": "تحذير إنفاق مرتفع",
+      "message": "هذه النفقة تمثل {{percentage}}٪ من رصيدك المتاح. هل أنت متأكد أنك تريد المتابعة؟"
+    }
+  },
+  "savingsSuccess": {
+    "title": "نجاح",
+    "message": "سيتم خصم مبلغ {{amount}} من رصيدك وتخصيصه لهدف {{goal}}"
+  },
+  "common": {
+    "ok": "موافق",
+    "cancel": "إلغاء",
+    "continue": "متابعة"
   },
   "logo": "Tharwa",
   "onboarding": {
     "welcomeMsg": "مرحباً بك في مدير المصروفات",
-    "onboardingMsg": "هل أنت جاهز للسيطرة على وضعك المالي؟",
+    "onboarding_page1": "أهلاً بك! استعد للسيطرة على أموالك واكتشاف طريقة أذكى لإدارة مدخراتك ونفقاتك ومتابعة عروض البقالة في محيطك.",
+    "onboarding_page2": "لا داعي للقلق بشأن تذكر كل شيء! استخدم كاميرا هاتفك لمسح إيصالاتك وسيتم تسجيل مشترياتك بكل سهولة.",
+    "onboarding_page3": " ميزة \"المتجر الذكي\" تساعدك في العثور على المتاجر التي تحتوي على مشترياتك بأفضل الأسعار في محيطك.",
+    "onboarding_page4": "ابدأ في تحقيق أهدافك المالية مع ثروة! استخدم أدوات تتبع المدخرات لتحديد أهدافك ومراقبة تقدمك نحو مستقبل مالي أفضل.",
+    "onboarding_page5": "احصل على نظرة أوضح على أموالك! يمكنك بسهولة تجميع نفقاتك في فئات مختلفة لفهم أين تذهب مدخراتك بشكل أفضل.",
+    "onboarding_page6": "أنت الآن جاهز للانطلاق مع ثروة! ابدأ رحلتك نحو إدارة مالية ذكية واكتشف جميع الميزات القوية التي يقدمها التطبيق.",
     "next": "التالي"
   },
   "Login": {
@@ -348,18 +373,36 @@
   },
   "addStoreScreen": {
     "addStore": "إضافة متجر",
-    "locationNote": "ملاحظة: تعذر الحصول على موقعك. قد لا تكون نتائج البحث خاصة بموقعك.",
-    "searchForStoresByName": "ابحث عن متاجر بالاسم...",
+    "howToAddStore": "كيف تريد إضافة المتجر؟",
+    "locationNote": "ملاحظة: تعذر الحصول على موقعك. قد لا تكون نتائج البحث خاصة بالموقع.",
+    "enterStoreName": "أدخل اسم المتجر هنا",
+    "pasteGoogleMapsURL": "الصق رابط خرائط جوجل هنا",
+    "enterStoreNameToSearch": "أدخل اسم المتجر للبحث أو اسمح بالوصول إلى الموقع للمتاجر القريبة.",
+    "searching": "جار البحث...",
     "search": "بحث",
-    "enterStoreNameToSearch": "أدخل اسم متجر للبحث أو اسمح بالوصول إلى الموقع للمتاجر القريبة.",
-    "searchResults": "نتائج البحث:",
-    "noStoresFound": "لم يتم العثور على متاجر. جرب كلمة بحث مختلفة.",
+    "noStoresFound": "لم يتم العثور على متاجر. حاول مصطلح بحث مختلف.",
+    "searchResults": "نتائج البحث",
+    "byName": "بالاسم",
+    "byLocation": "بالموقع",
     "addStoreButton": "إضافة متجر",
     "viewInMap": "عرض على الخريطة",
     "thankYou": "شكراً لك!",
     "storeAdded": "تمت إضافة المتجر {{storeName}} إلى المفضلة!",
     "ok": "موافق",
-    "addingStore": "جاري إضافة المتجر..."
+    "addingStore": "جار إضافة المتجر...",
+    "cancel": "إلغاء",
+    "searchingForNearbyStores": "البحث عن المتاجر القريبة",
+    "failedToAddStore": "فشل في إضافة المتجر",
+    "pleaseEnterValidGoogleMapsURL": "الرجاء إدخال رابط خرائط جوجل صالح",
+    "locationPermissionDenied": "تم رفض إذن الوصول للموقع",
+    "failedToRequestLocationPermission": "فشل في طلب إذن الوصول للموقع",
+    "geolocationNotSupported": "الموقع الجغرافي غير مدعوم من قبل متصفحك",
+    "confirmStoreDetails": "تأكيد تفاصيل المتجر",
+    "storeName": "اسم المتجر",
+    "city": "المدينة",
+    "enterCity": "أدخل اسم المدينة",
+    "country": "الدولة",
+    "enterCountry": "أدخل اسم الدولة"
   },
   "favoriteStoresScreen": {
     "favoriteStores": "المتاجر المفضلة",
@@ -416,7 +459,7 @@
     "Servererror": "خطأ في الخادم",
     "Somethingwentwrong": "حدث خطأ...يرجي المحاوله مرة اخري..",
     "Processing": "معالجة",
-    "weakPassword":"يجب أن تحتوي كلمة المرور على ارقام، حروف: A-Z & a-z، ورمز."
+    "weakPassword": "يجب أن تحتوي كلمة المرور على ارقام، حروف: A-Z & a-z، ورمز."
   },
   "termsAndConditions": {
     "accept": "أوافق على جميع الشروط والأحكام",
@@ -537,7 +580,11 @@
     "selectCategory": "اختر الفئة",
     "update": "تحديث",
     "characterCount": "{{count}}/20 حرف",
-    "addexpense": "إضافة مصروفات"
+    "addexpense": "إضافة مصروفات",
+    "emptyState": {
+      "title": "لا توجد معاملات بعد",
+      "message": "ابدأ بتتبع نفقاتك عن طريق إضافة أول معاملة."
+    }
   },
   "validation": {
     "nameRequired": "الاسم مطلوب",
@@ -545,6 +592,21 @@
     "targetRequired": "المبلغ المستهدف مطلوب",
     "invalidAmount": "يرجى إدخال مبلغ صالح"
   },
+  "emptyState": {
+    "noTransactions": {
+      "title": "لا توجد معاملات بعد",
+      "message": "ستظهر جميع معاملاتك هنا."
+    },
+    "noIncome": {
+      "title": "لم يتم تسجيل أي دخل",
+      "message": "ابدأ في إضافة دخلك لتتبع أرباحك."
+    },
+    "noExpense": {
+      "title": "لم يتم تسجيل أي نفقات",
+      "message": "ابدأ في إضافة نفقاتك لمراقبة إنفاقك."
+    }
+  },
+  "addIncome": "إضافة دخل",
   "camera": {
     "header": {
       "camera": "ماسح الإيصالات"
@@ -633,10 +695,10 @@
       }
     }
   },
-  "PasswordChangeConfirm":{
-    "PasswordChanged":"تغيير كلمة السر",
-    "changeSucesses":"تم تغيير كلمة المرور بنجاح",
-    "sucessDetails":"حسابك مؤمن الأن بكلمة المرور الجديد. من فضلك استخدمها لتسجيل الدخول فى المستقبل",
-    "return":"العودة الى الاعدادت"
+  "PasswordChangeConfirm": {
+    "PasswordChanged": "تغيير كلمة السر",
+    "changeSucesses": "تم تغيير كلمة المرور بنجاح",
+    "sucessDetails": "حسابك مؤمن الأن بكلمة المرور الجديد. من فضلك استخدمها لتسجيل الدخول فى المستقبل",
+    "return": "العودة الى الاعدادت"
   }
 }

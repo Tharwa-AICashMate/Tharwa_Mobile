@@ -29,6 +29,7 @@ import MonthSection from "@/componenets/MonthSection";
 import ExpenseBrief from "@/componenets/expenceBrief";
 import { FlatList } from "react-native-gesture-handler";
 import { useTranslation } from "react-i18next";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 dayjs.extend(utc);
 
@@ -84,7 +85,7 @@ const CategoryDetailScreen = () => {
           setHasMore(true);
         }
       } else {
-       // console.log("Failed to load category transactions:", result.payload);
+        // console.log("Failed to load category transactions:", result.payload);
         setHasMore(false);
       }
     } catch (err) {
@@ -142,44 +143,73 @@ const CategoryDetailScreen = () => {
     return null;
   };
 
+  const renderContent = () => {
+    if (isLoading && TransactionsOfCategory.length === 0) {
+      // Loading state when there are no transactions
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: 200,
+          }}
+        >
+          <ActivityIndicator size="large" color={Theme.colors.primary} />
+        </View>
+      );
+    }
+
+    if (TransactionsOfCategory.length === 0) {
+      // Empty state when there are no transactions
+      return (
+        <View style={styles.emptyStateContainer}>
+          <TouchableOpacity
+            style={styles.emptyStateAddButton}
+            onPress={addExpense}
+          >
+            <Ionicons
+              name="add-circle"
+              size={80}
+              color={Theme.colors.primary}
+            />
+          </TouchableOpacity>
+          <Text style={styles.emptyStateTitle}>
+            {t("categories.emptyState.title")}
+          </Text>
+          <Text style={styles.emptyStateText}>
+            {t("categories.emptyState.message")}
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <FlatList
+        data={Object.entries(groupedTransactions)}
+        keyExtractor={(item) => item[0]}
+        renderItem={({ item }) => (
+          <MonthSection
+            month={item[0]}
+            transactions={item[1]}
+            showCategory={false}
+          />
+        )}
+        ListFooterComponent={renderFooter}
+        onEndReached={() => {
+          if (hasMore && !isLoading) {
+            loadCategoryTransactions(false);
+          }
+        }}
+        onEndReachedThreshold={0.8}
+      />
+    );
+  };
   return (
     <SafeAreaView style={[styles.container]}>
       <Header title={categoryName} />
       <ExpenseBrief />
-      <View style={styles.transactionList}>
-        {isLoading && TransactionsOfCategory.length === 0 ? (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              minHeight: 200,
-            }}
-          >
-            <ActivityIndicator size="large" color={Theme.colors.primary} />
-          </View>
-        ) : (
-          <FlatList
-            data={Object.entries(groupedTransactions)}
-            keyExtractor={(item) => item[0]}
-            renderItem={({ item }) => (
-              <MonthSection
-                month={item[0]}
-                transactions={item[1]}
-                showCategory={false}
-              />
-            )}
-            ListFooterComponent={renderFooter}
-            onEndReached={() => {
-              if (hasMore && !isLoading) {
-                console.log("End reached, loading more transactions...");
-                loadCategoryTransactions(false);
-              }
-            }}
-            onEndReachedThreshold={0.8}
-          />
-        )}
-      </View>
+      <View style={styles.transactionList}>{renderContent()}</View>
 
       <View style={styles.addExpenseContainer}>
         <TouchableOpacity style={styles.addButton} onPress={addExpense}>

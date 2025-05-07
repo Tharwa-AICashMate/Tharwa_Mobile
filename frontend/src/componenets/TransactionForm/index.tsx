@@ -11,6 +11,7 @@ import {
   Keyboard,
   ActivityIndicator,
   I18nManager,
+  Alert,
 } from "react-native";
 import { clearUserStores, setUserStores } from "@/redux/slices/storeSlice";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -27,7 +28,7 @@ import axios from "axios";
 import { apiBase } from "@/utils/axiosInstance";
 import axiosInstance from "@/config/axios";
 import { store } from "@/redux/store";
-
+import { fetchBalance, fetchFinanceData } from "@/redux/slices/financeSlice";
 interface DescriptionItem {
   name: string;
   unitPrice: string;
@@ -75,8 +76,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   isSavings = false,
 }) => {
   const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
-  
+  const isRTL = i18n.language === "ar";
+
   const navigation = useNavigation();
   // Form state
   const [date, setDate] = useState<Date>(initialDate);
@@ -94,6 +95,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const [showStorePicker, setShowStorePicker] = useState(false);
   const [stores, setStores] = useState<any[]>([]);
   const [storesLoading, setStoresLoading] = useState(false);
+  const { balance, expenses, income, savings } = useAppSelector(
+    (state) => state.finance
+  );
   // Redux state
   const dispatch = useAppDispatch();
   const { items: categories, loading: categoriesLoading } = useAppSelector(
@@ -145,6 +149,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    async function fetchAll() {
+      const userId = await getCurrentUserId();
+
+      dispatch(fetchBalance(userId));
+    }
+
+    fetchAll();
+  }, [dispatch]);
+
   const [userId, setUserId] = useState("");
   const { userStores, loading } = useAppSelector((state) => state.store);
 
@@ -368,6 +383,58 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     if (isSubmitting) return;
     if (!validateForm()) return;
 
+    const transactionAmount = parseFloat(amount);
+    const currentBalance = balance - expenses - savings + income || 0;
+
+    if (!isIncome && transactionAmount >= currentBalance) {
+      Alert.alert(
+        t("transactionForm.balanceError.title"),
+        t("transactionForm.balanceError.message"),
+        [{ text: t("common.ok") }]
+      );
+      return;
+    }
+
+    // Check for high expense percentage
+    if (!isIncome) {
+      const percentage = (transactionAmount / currentBalance) * 100;
+      if (percentage > 50) {
+        Alert.alert(
+          t("transactionForm.budgetWarning.title"),
+          t("transactionForm.budgetWarning.message", {
+            percentage: percentage.toFixed(2),
+          }),
+          [
+            { text: t("common.cancel"), style: "cancel" },
+            {
+              text: t("common.continue"),
+              onPress: () => proceedWithSubmission(),
+            },
+          ]
+        );
+        return;
+      }
+    }
+    // Show success alert for savings
+    if (isSavings) {
+      Alert.alert(
+        t("savingsSuccess.title"),
+        t("savingsSuccess.message", {
+          amount: amount,
+          goal: category,
+        }),
+        [
+          {
+            text: t("common.ok"),
+            onPress: () => proceedWithSubmission(),
+          },
+        ]
+      );
+      return;
+    }
+    proceedWithSubmission();
+  };
+  const proceedWithSubmission = () => {
     setIsSubmitting(true);
 
     const filteredItems =
@@ -414,6 +481,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     }
   };
 
+  // Calculate total from items
+  useEffect(() => {
+    if (isIncome || !descriptionItems.length) return;
+    const calculatedAmount = descriptionItems.reduce((acc, item) => {
+      return acc + (Number(item.quantity) || 1) * Number(item.unitPrice);
+    }, 0);
+
+    setAmount(calculatedAmount ? calculatedAmount.toFixed(2) : "");
+  }, [descriptionItems]);
   // Description items functions
   const addDescriptionItem = () => {
     if (isIncome || isSavings) return;
@@ -435,16 +511,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     setErrors((prev) => ({ ...prev, descriptionItems: newErrors }));
   };
 
-  
-  useEffect(()=>{
-    if(isIncome || !descriptionItems.length)return;
-    const amount = descriptionItems.reduce((acc,item)=>{
-      console.log(acc,Number(item.quantity),Number(item.unitPrice))
-      return acc += (Number(item.quantity) || 1) * Number(item.unitPrice)
-    },0)
-  
-    setAmount(amount ? amount.toFixed(2):'')
-  },[descriptionItems])
   const updateDescriptionItem = (
     index: number,
     field: keyof DescriptionItem,
@@ -506,7 +572,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
             <View style={styles.formContainer}>
               {/* Date field */}
               <View style={styles.inputGroup}>
-                <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                <Text
+                  style={[
+                    styles.label,
+                    { textAlign: isRTL ? "right" : "left" },
+                  ]}
+                >
                   {t("transactionForm.date")}
                 </Text>
                 <TouchableOpacity
@@ -551,7 +622,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               {/* Category field (hidden for income) */}
               {!isIncome && (
                 <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                  <Text
+                    style={[
+                      styles.label,
+                      { textAlign: isRTL ? "right" : "left" },
+                    ]}
+                  >
                     {isSavings
                       ? t("transactionForm.savingsGoal")
                       : t("transactionForm.category")}
@@ -627,7 +703,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                             <Text
                               style={[
                                 { color: Theme.colors.text },
-                                isRTL ? { marginRight: 10 } : { marginLeft: 10 },
+                                isRTL
+                                  ? { marginRight: 10 }
+                                  : { marginLeft: 10 },
                               ]}
                             >
                               {cat.name}
@@ -646,7 +724,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               {/* Store field (hidden for income and savings) */}
               {!isIncome && !isSavings && (
                 <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                  <Text
+                    style={[
+                      styles.label,
+                      { textAlign: isRTL ? "right" : "left" },
+                    ]}
+                  >
                     {t("transactionForm.store")}
                   </Text>
                   <TouchableOpacity
@@ -709,7 +792,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                             <Text
                               style={[
                                 { color: Theme.colors.text },
-                                isRTL ? { marginRight: 10 } : { marginLeft: 10 },
+                                isRTL
+                                  ? { marginRight: 10 }
+                                  : { marginLeft: 10 },
                               ]}
                             >
                               {storeItem.name}
@@ -751,14 +836,22 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               )}
               {/* Amount field */}
               <View style={styles.inputGroup}>
-                <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                <Text
+                  style={[
+                    styles.label,
+                    { textAlign: isRTL ? "right" : "left" },
+                  ]}
+                >
                   {t("transactionForm.amount")}
                 </Text>
                 <TextInput
                   ref={(ref) => (inputRefs.current["amount"] = ref)}
                   style={[
                     styles.input,
-                    { color: Theme.colors.text, textAlign: isRTL ? "right" : "left" },
+                    {
+                      color: Theme.colors.text,
+                      textAlign: isRTL ? "right" : "left",
+                    },
                   ]}
                   value={amount}
                   onChangeText={(text) => {
@@ -784,18 +877,26 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
               {/* Title field */}
               <View style={styles.inputGroup}>
-                <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                <Text
+                  style={[
+                    styles.label,
+                    { textAlign: isRTL ? "right" : "left" },
+                  ]}
+                >
                   {isIncome
                     ? t("transactionForm.title.income")
                     : isSavings
-                    ? t("transactionForm.title.savings")
-                    : t("transactionForm.title.expense")}
+                      ? t("transactionForm.title.savings")
+                      : t("transactionForm.title.expense")}
                 </Text>
                 <TextInput
                   ref={(ref) => (inputRefs.current["title"] = ref)}
                   style={[
                     styles.input,
-                    { color: Theme.colors.text, textAlign: isRTL ? "right" : "left" },
+                    {
+                      color: Theme.colors.text,
+                      textAlign: isRTL ? "right" : "left",
+                    },
                   ]}
                   value={titleValue}
                   onChangeText={setTitleValue}
@@ -805,8 +906,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                     isIncome
                       ? t("transactionForm.titlePlaceholder.income")
                       : isSavings
-                      ? t("transactionForm.titlePlaceholder.savings")
-                      : t("transactionForm.titlePlaceholder.expense")
+                        ? t("transactionForm.titlePlaceholder.savings")
+                        : t("transactionForm.titlePlaceholder.expense")
                   }
                   placeholderTextColor={Theme.colors.textLight}
                 />
@@ -818,7 +919,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               {/* Description Items (hidden for income and savings) */}
               {!isIncome && !isSavings && (
                 <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                  <Text
+                    style={[
+                      styles.label,
+                      { textAlign: isRTL ? "right" : "left" },
+                    ]}
+                  >
                     {t("transactionForm.items")}
                   </Text>
                   {descriptionItems.map((item, index) => (
@@ -877,7 +983,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                             setCurrentFocusedInput(`item-${index}`)
                           }
                           onBlur={validateDescriptionItems}
-                          placeholder={t("transactionForm.itemPricePlaceholder")}
+                          placeholder={t(
+                            "transactionForm.itemPricePlaceholder"
+                          )}
                           placeholderTextColor={Theme.colors.textLight}
                           keyboardType="numeric"
                         />
@@ -905,7 +1013,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                             setCurrentFocusedInput(`item-${index}`)
                           }
                           onBlur={validateDescriptionItems}
-                          placeholder={t("transactionForm.itemQuantityPlaceholder")}
+                          placeholder={t(
+                            "transactionForm.itemQuantityPlaceholder"
+                          )}
                           placeholderTextColor={Theme.colors.textLight}
                           keyboardType="numeric"
                         />
@@ -955,7 +1065,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
               {/* Note field */}
               <View style={styles.inputGroup}>
-                <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                <Text
+                  style={[
+                    styles.label,
+                    { textAlign: isRTL ? "right" : "left" },
+                  ]}
+                >
                   {t("transactionForm.note")}
                 </Text>
                 <TextInput

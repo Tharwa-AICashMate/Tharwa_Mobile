@@ -69,6 +69,9 @@ type ProfileStackParamList = {
   TransactionForm: undefined; // Added this line
   Camera: undefined;
   SavingDetails: undefined; // Added this line
+  SearchByLocationScreen: undefined;
+  AddStore: undefined;
+  AllStores: undefined;
 };
 
 type BottomTabParamList = {

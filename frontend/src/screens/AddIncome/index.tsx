@@ -15,6 +15,8 @@ import { fetchUserCategories } from "@/redux/slices/categoriesSlice";
 import { getCurrentUserId } from "@/utils/auth";
 import { editTransactionsAsync } from "@/redux/slices/transactionSlice";
 import { updateWeeklyHighs } from "@/redux/slices/financeSlice";
+import { useTranslation } from "react-i18next";
+
 
 const AddIncomeScreen = () => {
   const dispatch = useAppDispatch();
@@ -26,6 +28,7 @@ const AddIncomeScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const data = route.params;
+  const { t } = useTranslation();
   const transaction = data?.transaction;
 
   useFocusEffect(
@@ -103,7 +106,7 @@ const AddIncomeScreen = () => {
       <Header title="Add Income" />
       {transaction ? (
         <TransactionForm
-          title="Income"
+          title={t("addIncome")}
           buttonText={isProcessing ? "Processing..." : "Save Income"}
           onSubmit={handleSubmit}
           isIncome={true}

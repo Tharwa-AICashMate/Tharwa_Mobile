@@ -1,7 +1,7 @@
 {
   "Cancel": "Cancel",
   "SelectLanguage": "Select Language",
-  "noInternet":"Please check your Internet Connection.",
+  "noInternet": "Please check your Internet Connection.",
   "header": {
     "invoice": "Invoice",
     "camera": "Camera",
@@ -11,7 +11,11 @@
   "expenseBrief": {
     "statusMessage": "{{percentage}}% Of Your Expenses, Looks {{status}}.",
     "good": "Good",
-    "bad": "Bad"
+    "bad": "Bad",
+    "alertTitle": "Budget Warning",
+    "alertMessage": "Your expenses have exceeded {{percentage}}% of your available balance. Consider reducing your spending.",
+
+    "ok": "OK"
   },
   "balanceDisplay": {
     "totalBalance": "Total Balance",
@@ -95,12 +99,35 @@
       "default": "Save",
       "processing": "Processing..."
     },
-    "deleteItem": "Remove item"
+    "deleteItem": "Remove item",
+    "balanceError": {
+      "title": "Insufficient Balance",
+      "message": "This expense exceeds your available balance. Please adjust the amount."
+    },
+    "budgetWarning": {
+      "title": "High Expense Warning",
+      "message": "This expense is {{percentage}}% of your available balance. Are you sure you want to proceed?"
+    }
   },
+  "savingsSuccess": {
+    "title": "Success",
+    "message": "Amount of {{amount}} will be deducted from your balance and allocated to {{goal}}"
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "continue": "Continue"
+  },
+
   "logo": "Tharwa",
   "onboarding": {
     "welcomeMsg": "Welcome To Expense Manager",
-    "onboardingMsg": "Are You Ready To Take Control Of Your Finances?",
+    "onboarding_page1": "Welcome! Get ready to take control of your finances and discover a smarter way to manage your savings, expenses, and track grocery deals in your area.",
+    "onboarding_page2": "No need to worry about remembering everything! Use your phone's camera to scan your receipts, and your purchases will be recorded with ease.",
+    "onboarding_page3": "The 'Smart Store' feature helps you find stores that have your groceries at the best prices in your area.",
+    "onboarding_page4": "Start achieving your financial goals with Tharwa! Use the savings tracking tools to set your objectives and monitor your progress towards a better financial future.",
+    "onboarding_page5": "Get a clearer view of your money! You can easily group your expenses into different categories to better understand where your savings are going.",
+    "onboarding_page6": "You are now ready to go with Tharwa! Start your journey towards smart financial management and discover all the powerful features the app offers.",
     "next": "Next"
   },
   "Login": {
@@ -340,18 +367,36 @@
   },
   "addStoreScreen": {
     "addStore": "Add Store",
+    "howToAddStore": "How do you want to add the store?",
     "locationNote": "Note: Could not get your location. Search results may not be location-specific.",
-    "searchForStoresByName": "Search for stores by name...",
+    "enterStoreName": "Enter store name here",
+    "pasteGoogleMapsURL": "Paste Google Maps URL here",
+    "enterStoreNameToSearch": "Enter store name to search or allow location access for nearby stores.",
+    "searching": "Searching...",
     "search": "Search",
-    "enterStoreNameToSearch": "Enter a store name to search or allow location access for nearby stores.",
-    "searchResults": "Search Results:",
     "noStoresFound": "No stores found. Try a different search term.",
+    "searchResults": "Search Results",
+    "byName": "by Name",
+    "byLocation": "by Location",
     "addStoreButton": "Add Store",
     "viewInMap": "View in Map",
     "thankYou": "Thank You!",
-    "storeAdded": "Store {{storeName}} has been added to your favorites!",
+    "storeAdded": "Store {{storeName}} has been added to favorites!",
     "ok": "OK",
-    "addingStore": "Adding store..."
+    "addingStore": "Adding store...",
+    "cancel": "Cancel",
+    "searchingForNearbyStores": "Searching For Nearby Stores",
+    "failedToAddStore": "Failed to add store",
+    "pleaseEnterValidGoogleMapsURL": "Please enter a valid Google Maps URL",
+    "locationPermissionDenied": "Location permission denied",
+    "failedToRequestLocationPermission": "Failed to request location permission",
+    "geolocationNotSupported": "Geolocation is not supported by your browser",
+    "confirmStoreDetails": "Confirm Store Details",
+    "storeName": "Store Name",
+    "city": "City",
+    "enterCity": "Enter City",
+    "country": "Country",
+    "enterCountry": "Enter Country"
   },
   "favoriteStoresScreen": {
     "favoriteStores": "Favorite Stores",
@@ -442,7 +487,11 @@
     "namePlaceholder": "Category name",
     "selectCategoryIcon": "Select Icon",
     "update": "Update",
-    "characterCount": "{{count}}/20 characters"
+    "characterCount": "{{count}}/20 characters",
+    "emptyState": {
+      "title": "No Transactions Yet",
+      "message": "Start tracking your expenses by adding your first transaction."
+    }
   },
   "savingsGoal": {
     "add": "Add Savings Goal",
@@ -569,49 +618,61 @@
     "Servererror": "Server error",
     "Somethingwentwrong": "Something went wrong. Please try again.",
     "Processing": "Processing...",
-    "weakPassword":"Password must include upper & lower Case letters, numbers & special character."
-
-
+    "weakPassword": "Password must include upper & lower Case letters, numbers & special character."
   },
-  "termsAndConditions":{
-    "accept":"I accept all the terms and conditions",
+  "termsAndConditions": {
+    "accept": "I accept all the terms and conditions",
     "termsAndConditionsTitle": "Terms And Conditions",
     "termsAndConditionsText": "Please read and agree to our basic terms and conditions before proceeding.\n\n1. Account Usage: You are responsible for maintaining the security of your account.\n2. Data Privacy: We respect your privacy and handle your data according to our privacy policy.\n3. Service Changes: We may update our services and terms from time to time.\n\nBy continuing, you agree to these terms.",
-    "acceptButton":"Accept",
-    "title":"Read all there and confirm on it",
-    "readMore":"Read the terms and conditions in more detail at"
+    "acceptButton": "Accept",
+    "title": "Read all there and confirm on it",
+    "readMore": "Read the terms and conditions in more detail at"
   },
-  "deleteAccount":{
-    "deleteAccount":"Delete Account",
-    "error":"Error",
-    "enterPassword":" Please enter your password to confirm ",
-    "unableToFetchUser":"Unable to fetch user information",
-    "emailError":"Unable to fetch user information",
-    "passVerifyFailed":"Password verification failed",
-    "Incorrectpasswordorservererror":"Incorrect password or server error. Please try again.",
-    "AccountDelFailed":"Account deletion failed",
-    "AccountDeleted":"Account Deleted",
-    "accounrDeletedSuccessfully":"Account Deleted Successfully",
-    "OK":"OK",
-    "Youraccountmayhavealreadybeendeleted":"Your account may have already been deleted.",
-    "doyouwanttodelete":"Are You Sure You Want To Delete Your Account?",
-    "bydeleting":"By deleting your account, you will lose all your data permanently including:",
-    "Transactionhistory":"• Transaction history",
-    "Savedbudgets":"• Saved budgets and goals",
-    "Accountsetting":"• Account settings and preferences",
-    "Allpersonalinformation":"• All personal information",
-    "plzenterpasswordtoconfirm":"Please enter your password to confirm:",
-    "doDeleteAccount":"Delete Account",
-    "cancel":"Cancel",
-    "areusure":"Are You Sure You Want To Delete Your Account?",
-    "bydeletinguraccount":" By deleting your account, you agree that you understand the consequences of this action.Your account will be permanently deleted with all associated data.",
-    "yesdelete":"Yes, Delete Account"
+  "deleteAccount": {
+    "deleteAccount": "Delete Account",
+    "error": "Error",
+    "enterPassword": " Please enter your password to confirm ",
+    "unableToFetchUser": "Unable to fetch user information",
+    "emailError": "Unable to fetch user information",
+    "passVerifyFailed": "Password verification failed",
+    "Incorrectpasswordorservererror": "Incorrect password or server error. Please try again.",
+    "AccountDelFailed": "Account deletion failed",
+    "AccountDeleted": "Account Deleted",
+    "accounrDeletedSuccessfully": "Account Deleted Successfully",
+    "OK": "OK",
+    "Youraccountmayhavealreadybeendeleted": "Your account may have already been deleted.",
+    "doyouwanttodelete": "Are You Sure You Want To Delete Your Account?",
+    "bydeleting": "By deleting your account, you will lose all your data permanently including:",
+    "Transactionhistory": "• Transaction history",
+    "Savedbudgets": "• Saved budgets and goals",
+    "Accountsetting": "• Account settings and preferences",
+    "Allpersonalinformation": "• All personal information",
+    "plzenterpasswordtoconfirm": "Please enter your password to confirm:",
+    "doDeleteAccount": "Delete Account",
+    "cancel": "Cancel",
+    "areusure": "Are You Sure You Want To Delete Your Account?",
+    "bydeletinguraccount": " By deleting your account, you agree that you understand the consequences of this action.Your account will be permanently deleted with all associated data.",
+    "yesdelete": "Yes, Delete Account"
   },
-  "PasswordChangeConfirm":{
-    "PasswordChanged":"Password Changed",
-    "changeSucesses":"Password has been changed successfully",
-    "sucessDetails":"Your account is now secured with your new password. Please use it for future logins.",
-    "return":"Return to Settings"
-  }
-  
+  "PasswordChangeConfirm": {
+    "PasswordChanged": "Password Changed",
+    "changeSucesses": "Password has been changed successfully",
+    "sucessDetails": "Your account is now secured with your new password. Please use it for future logins.",
+    "return": "Return to Settings"
+  },
+  "emptyState": {
+    "noTransactions": {
+      "title": "No Transactions Yet",
+      "message": "All your transactions will appear here."
+    },
+    "noIncome": {
+      "title": "No Income Recorded",
+      "message": "Start adding your income to track your earnings."
+    },
+    "noExpense": {
+      "title": "No Expenses Recorded",
+      "message": "Start adding your expenses to monitor your spending."
+    }
+  },
+  "addIncome": "Add Income"
 }

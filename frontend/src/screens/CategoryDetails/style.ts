@@ -131,6 +131,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Theme.colors.textLight,
   },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  emptyStateAddButton: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: "rgba(0, 0, 0, 0.05)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  emptyStateTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: Theme.colors.text,
+    marginBottom: 10,
+  },
+  emptyStateText: {
+    fontSize: 14,
+    color: Theme.colors.textDark,
+    textAlign: "center",
+    maxWidth: "80%",
+    lineHeight: 22,
+  },
 });
 
 export default styles;

@@ -25,11 +25,11 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign:'center',
-    maxWidth:250,
+    maxWidth:300,
     marginTop:60,
     color: Theme.colors.textDark,
     fontFamily:Theme.typography.fonts.poppins.semiBold,
-    fontSize:30
+    fontSize:20
   },
   imageContainer:{
       height:250,
@@ -58,7 +58,10 @@ const styles = StyleSheet.create({
   nextButtonText: {
     color: Theme.colors.textDark,
     fontFamily:Theme.typography.fonts.poppins.semiBold,
-    fontSize:30
+    fontSize:30,
+    textAlign: "center",
+
+
   },
   pagination: {
     flexDirection: 'row',

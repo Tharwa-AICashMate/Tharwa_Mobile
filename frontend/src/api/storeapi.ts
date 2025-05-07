@@ -103,3 +103,16 @@ export const removeUserStore = async (storeId: string): Promise<void> => {
     throw error;
   }
 };
+
+export const getLocationSuggestions = async (url: string): Promise<any> => {
+  try {
+    console.log(url)
+     const response = await axiosInstance.post(`/stores/url`, {url} );
+ 
+     console.log( response.data )
+     return response.data;
+   } catch (error) {
+     console.log('Error fetching location suggestions', error);
+     throw error;
+   }
+ };
