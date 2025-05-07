@@ -21,14 +21,14 @@ const styles = StyleSheet.create({
   },
   transactionDetails: {
     flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
   },
   seperator: {
     borderRightWidth: 2,
     borderRightColor: Theme.colors.highlight,
     borderLeftColor: Theme.colors.highlight,
     borderLeftWidth: 2,
-    width: 95,
+    width: 89,
     paddingHorizontal: 10,
   },
   category: {
@@ -50,10 +50,10 @@ const styles = StyleSheet.create({
   transactionAmount: {
     fontSize: 14,
     fontWeight: "600",
-    width: 70,
+    width: 49,
     height: 30,
     lineHeight: 30,
-    paddingLeft: 15,
+    paddingLeft: 10,
     overflow: "hidden",
     color: Theme.colors.accentDark,
   },
