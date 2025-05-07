@@ -210,6 +210,7 @@ export async function getStoreFromUrl(
     const fullUrl = await expandShortUrl(url);
     const data = extractLocationData(fullUrl);
     if (!data || isNaN(data.latitude) || isNaN(data.longitude)) {
+      console.log("Unable to extract coordinates from the URL.")
       throw new Error("Unable to extract coordinates from the URL.");
     }
 
