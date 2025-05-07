@@ -21,14 +21,15 @@ const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ style }) => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === "ar";
 
-  const weeklyHighlights = useAppSelector(
-    (state) => state.finance.weeklyHighlights
+  const {weeklyHighlights,income,expenses} = useAppSelector(
+    (state) => state.finance
   );
 
   const dispatch = useAppDispatch();
   useEffect(() => {
+    if((income && !weeklyHighlights.highest_income) && (expenses && !weeklyHighlights.highest_expense))
       dispatch(getWeeklyHighs());
-  }, []);
+  }, [weeklyHighlights,income,expenses]);
   //console.log("------", weeklyHighlights);
   const { highest_income: maxIncome, highest_expense: maxExpense } =
     weeklyHighlights || {};

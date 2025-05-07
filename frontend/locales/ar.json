@@ -593,6 +593,7 @@
     "targetRequired": "المبلغ المستهدف مطلوب",
     "invalidAmount": "يرجى إدخال مبلغ صالح"
   },
+  "Nodetailsadded":"لا توجد ملاحظات",
   "emptyState": {
     "noTransactions": {
       "title": "لا توجد معاملات بعد",

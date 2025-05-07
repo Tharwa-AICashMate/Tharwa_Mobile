@@ -71,7 +71,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
 
   const handlePress = () => {
     if (!transaction.type) {
-      Alert.alert(transaction.message || "No details added");
+      Alert.alert(transaction.message ||t("Nodetailsadded"));
     }
   };
 
