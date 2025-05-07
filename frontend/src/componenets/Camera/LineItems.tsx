@@ -87,7 +87,7 @@ const LineItemsEditor: React.FC<LineItemsEditorProps> = ({
                   placeholder={t("camera.lineItems.quantity")}
                 />
                 <TextInput
-                  style={[modalStyles.lineItemInput, modalStyles.lineItemPriceInput]}
+                 style={[modalStyles.lineItemInput, modalStyles.lineItemPriceInput,{ textAlign: isRTL ? "right":"left"}]}
                   value={item.unitPrice.toString()}
                   onChangeText={(text) => handleItemChange(index, 'unitPrice', text)}
                   keyboardType="numeric"
