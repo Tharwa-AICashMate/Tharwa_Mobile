@@ -442,11 +442,14 @@
     "addNewCategory": "Add New Category",
     "add": "Add New Category",
     "addexpense": "Add Expense",
-
     "namePlaceholder": "Category name",
     "selectCategoryIcon": "Select Icon",
     "update": "Update",
-    "characterCount": "{{count}}/20 characters"
+    "characterCount": "{{count}}/20 characters",
+    "emptyState": {
+      "title": "No Transactions Yet",
+      "message": "Start tracking your expenses by adding your first transaction."
+    }
   },
   "savingsGoal": {
     "add": "Add Savings Goal",
@@ -614,5 +617,20 @@
     "changeSucesses": "Password has been changed successfully",
     "sucessDetails": "Your account is now secured with your new password. Please use it for future logins.",
     "return": "Return to Settings"
-  }
+  },
+  "emptyState": {
+    "noTransactions": {
+      "title": "No Transactions Yet",
+      "message": "All your transactions will appear here."
+    },
+    "noIncome": {
+      "title": "No Income Recorded",
+      "message": "Start adding your income to track your earnings."
+    },
+    "noExpense": {
+      "title": "No Expenses Recorded",
+      "message": "Start adding your expenses to monitor your spending."
+    }
+  },
+  "addIncome": "Add Income"
 }

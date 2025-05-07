@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabase";
+import { supabase } from "../config/supabase.js";
 // Spending Analytics
 export const getSpendingAnalytics = async () => {
     const { data, error } = await supabase

@@ -14,19 +14,17 @@ import { useNavigation } from "@react-navigation/native";
 import { apiBase } from "@/utils/axiosInstance";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { setUserBalance } from "@/redux/slices/AuthSlice";
-import { fetchBalance } from "../expenceBrief";
+// Removed incorrect import of fetchBalance
 import {
   fetchFinanceData,
-  selectFinance,
   updateBalance,
-  addTransaction,
   updateIncome,
 } from "@/redux/slices/financeSlice";
 import { useTranslation } from "react-i18next";
-
+import { styles } from "./styles";
 interface TransactionSummaryProps {
-  activeTab: "all" | "income" | "expence" | null;
-  onSelectTab: (tab: "all" | "income" | "expence") => void;
+  activeTab: "all" | "income" | "expense" | null;
+  onSelectTab: (tab: "all" | "income" | "expense") => void;
 }
 
 const TransactionSummary: React.FC<TransactionSummaryProps> = ({
@@ -50,7 +48,8 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     async function fetchAll() {
       const userId = await getCurrentUserId();
       dispatch(fetchFinanceData(userId));
-      dispatch(fetchBalance(userId));
+      // Removed incorrect dispatch call
+      // dispatch(fetchBalance(userId));
     }
     fetchAll();
   }, [dispatch]);
@@ -124,7 +123,9 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         style={styles.balanceContainer}
         onPress={() => onSelectTab("all")}
       >
-        <Text style={styles.balanceLabel}>{t("transactionScreen.transactionSummary.totalBalance")}</Text>
+        <Text style={styles.balanceLabel}>
+          {t("transactionScreen.transactionSummary.totalBalance")}
+        </Text>
         <Text style={styles.balanceAmount}>{availableBalance.toFixed(2)}</Text>
       </TouchableOpacity>
 
@@ -138,10 +139,20 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
             size={24}
             color={activeTab === "income" ? "#fff" : Theme.colors.primary}
           />
-          <Text style={[styles.tabLabel, activeTab === "income" && styles.activeTabText]}>
+          <Text
+            style={[
+              styles.tabLabel,
+              activeTab === "income" && styles.activeTabText,
+            ]}
+          >
             {t("transactionScreen.transactionSummary.income")}
           </Text>
-          <Text style={[styles.tabAmount, activeTab === "income" && styles.activeTabText]}>
+          <Text
+            style={[
+              styles.tabAmount,
+              activeTab === "income" && styles.activeTabText,
+            ]}
+          >
             {income.toFixed(2)}
           </Text>
         </TouchableOpacity>
@@ -155,10 +166,20 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
             size={24}
             color={activeTab === "expense" ? "#fff" : "#202063"}
           />
-          <Text style={[styles.tabLabel, activeTab === "expense" && styles.activeTabText]}>
+          <Text
+            style={[
+              styles.tabLabel,
+              activeTab === "expense" && styles.activeTabText,
+            ]}
+          >
             {t("transactionScreen.transactionSummary.expense")}
           </Text>
-          <Text style={[styles.tabAmount, activeTab === "expense" && styles.activeTabText]}>
+          <Text
+            style={[
+              styles.tabAmount,
+              activeTab === "expense" && styles.activeTabText,
+            ]}
+          >
             {expenses.toFixed(2)}
           </Text>
         </TouchableOpacity>
@@ -166,8 +187,13 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
 
       {activeTab === "all" && (
         <View style={styles.addExpenseContainer}>
-          <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
-            <Text style={styles.addButtonText}>{t("transactionScreen.transactionSummary.editBalance")}</Text>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.addButtonText}>
+              {t("transactionScreen.transactionSummary.editBalance")}
+            </Text>
           </TouchableOpacity>
         </View>
       )}
@@ -180,10 +206,12 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         </View>
       )} */}
 
-      {activeTab === "expence" && (
+      {activeTab === "expense" && (
         <View style={styles.addExpenseContainer}>
           <TouchableOpacity style={styles.addButton} onPress={handleAddExpense}>
-            <Text style={styles.addButtonText}>{t("transactionScreen.transactionSummary.addExpense")}</Text>
+            <Text style={styles.addButtonText}>
+              {t("transactionScreen.transactionSummary.addExpense")}
+            </Text>
           </TouchableOpacity>
         </View>
       )}
@@ -191,20 +219,34 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
       <Modal animationType="slide" transparent visible={modalVisible}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>{t("transactionScreen.transactionSummary.enterBalance")}</Text>
+            <Text style={styles.modalTitle}>
+              {t("transactionScreen.transactionSummary.enterBalance")}
+            </Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
               value={inputValue}
               onChangeText={setInputValue}
-              placeholder={t("transactionScreen.transactionSummary.enterAmount")}
+              placeholder={t(
+                "transactionScreen.transactionSummary.enterAmount"
+              )}
             />
             <View style={styles.buttonRow}>
-              <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
-                <Text style={styles.cancelText}>{t("transactionScreen.common.cancel")}</Text>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={styles.cancelButton}
+              >
+                <Text style={styles.cancelText}>
+                  {t("transactionScreen.common.cancel")}
+                </Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleSaveBalance} style={styles.saveButton}>
-                <Text style={styles.saveText}>{t("transactionScreen.common.save")}</Text>
+              <TouchableOpacity
+                onPress={handleSaveBalance}
+                style={styles.saveButton}
+              >
+                <Text style={styles.saveText}>
+                  {t("transactionScreen.common.save")}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -214,20 +256,34 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
       <Modal animationType="slide" transparent visible={modalIncomeVisible}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>{t("transactionScreen.transactionSummary.enterIncome")}</Text>
+            <Text style={styles.modalTitle}>
+              {t("transactionScreen.transactionSummary.enterIncome")}
+            </Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
               value={inputIncomeValue}
               onChangeText={setInputIncomeValue}
-              placeholder={t("transactionScreen.transactionSummary.enterAmount")}
+              placeholder={t(
+                "transactionScreen.transactionSummary.enterAmount"
+              )}
             />
             <View style={styles.buttonRow}>
-              <TouchableOpacity onPress={() => setModalIncomeVisible(false)} style={styles.cancelButton}>
-                <Text style={styles.cancelText}>{t("transactionScreen.common.cancel")}</Text>
+              <TouchableOpacity
+                onPress={() => setModalIncomeVisible(false)}
+                style={styles.cancelButton}
+              >
+                <Text style={styles.cancelText}>
+                  {t("transactionScreen.common.cancel")}
+                </Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleSaveIncome} style={styles.saveButton}>
-                <Text style={styles.saveText}>{t("transactionScreen.common.save")}</Text>
+              <TouchableOpacity
+                onPress={handleSaveIncome}
+                style={styles.saveButton}
+              >
+                <Text style={styles.saveText}>
+                  {t("transactionScreen.common.save")}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -237,132 +293,4 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   );
 };
 
-
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  balanceContainer: {
-    width: "97%",
-    height: 80,
-    backgroundColor: "white",
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 24,
-    marginLeft: 10,
-    padding: 10,
-  },
-  balanceLabel: {
-    fontSize: 14,
-    color: "#333",
-    marginBottom: 4,
-  },
-  balanceAmount: {
-    fontSize: 24,
-    fontWeight: "600",
-    color: "#333",
-  },
-  tabsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: 12,
-    alignItems: "center",
-    marginHorizontal: 5,
-    backgroundColor: Theme.colors.background,
-    borderRadius: 16,
-  },
-  tabLabel: {
-    fontSize: 14,
-    color: "#32325D",
-    marginBottom: 4,
-  },
-  tabAmount: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#32325D",
-  },
-  activeTab: {
-    backgroundColor: "#32325D",
-  },
-  activeTabText: {
-    color: "#FFFFFF",
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    width: "85%",
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 16,
-    elevation: 5,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginBottom: 12,
-    textAlign: "center",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
-    fontSize: 16,
-    marginBottom: 16,
-    textAlign: "center",
-  },
-  buttonRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  saveButton: {
-    backgroundColor: "#28a745",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-  },
-  saveText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-  cancelButton: {
-    backgroundColor: "#dc3545",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-  },
-  cancelText: {
-    color: "white",
-    fontWeight: "bold",
-  },
-  addExpenseContainer: {
-    marginTop: 20,
-    alignItems: "center",
-  },
-  addButton: {
-    backgroundColor: Theme.colors.accentDark,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  addButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-    marginLeft: 8,
-  },
-});
 export default TransactionSummary;

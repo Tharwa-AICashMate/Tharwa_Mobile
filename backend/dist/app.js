@@ -14,7 +14,7 @@ import { supabase } from "./utils/supabaseClient.js";
 import incomeRoute from "./routes/income.route.js";
 import profileRoutes from "./routes/profile.route.js";
 import deleteAccount from "./routes/deleteAccount.route.js";
-import invoiceRoutes from "./routes/invoiceRoutes";
+import invoiceRoutes from "./routes/invoiceRoutes.js";
 import transactionWithCats from './routes/transwcat.route.js';
 import goalRoutes from './routes/goal.route.js';
 import searchRoutes from './routes/search.route.js';
@@ -66,6 +66,6 @@ supabase
 });
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
-    await ragService.initialize();
+    ragService.initialize();
     console.log(`Server running on port ${PORT}`);
 });

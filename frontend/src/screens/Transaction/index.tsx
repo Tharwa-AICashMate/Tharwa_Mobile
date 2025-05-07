@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   I18nManager,
+  ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
@@ -14,21 +15,33 @@ import { fetchTransactionsAsync } from "@/redux/slices/transactionSlice";
 import MonthSection from "@/componenets/MonthSection";
 import { Transaction } from "@/types/transactionTypes";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  NavigationProp,
+} from "@react-navigation/native";
 import Header from "@/componenets/HeaderIconsWithTitle/HeadericonsWithTitle";
 import TransactionSummary from "@/componenets/TransactionSummary";
 import Theme from "@/theme";
+import { styles } from "./styles"; // ✅ updated import
 
 // ✅ updated helper import
 import { groupTransactionsByMonth } from "@/utils/helpers";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 type FilterType = "all" | "income" | "expense";
 
+type RootStackParamList = {
+  AddExpensesScreen: undefined; // Added screen
+  AddIncome: undefined; // Added screen
+};
+
 const TransactionScreen: React.FC = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
+  const isRTL = i18n.language === "ar";
   const dispatch = useDispatch<AppDispatch>();
   const { transactions, summary, loading, error } = useSelector(
     (state: RootState) => state.transactions
@@ -36,7 +49,6 @@ const TransactionScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState<FilterType>("all");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const navigation = useNavigation();
 
   useEffect(() => {
     I18nManager.forceRTL(isRTL);
@@ -101,7 +113,7 @@ const TransactionScreen: React.FC = () => {
         <View style={[styles.footerLoadingContainer]}>
           <ActivityIndicator size="large" color="#FFC107" />
           <Text style={styles.loadingText}>
-            {t('transactionScreen.transactions.loadingMore')}
+            {t("transactionScreen.transactions.loadingMore")}
           </Text>
         </View>
       );
@@ -113,14 +125,14 @@ const TransactionScreen: React.FC = () => {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>
-          {t('transactionScreen.transactions.error', { error })}
+          {t("transactionScreen.transactions.error", { error })}
         </Text>
         <TouchableOpacity
           style={styles.retryButton}
           onPress={() => dispatch(fetchTransactionsAsync())}
         >
           <Text style={styles.retryButtonText}>
-            {t('transactionScreen.common.retry')}
+            {t("transactionScreen.common.retry")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -131,101 +143,133 @@ const TransactionScreen: React.FC = () => {
     navigation.goBack();
   };
 
+  const renderContent = () => {
+    if (loading && transactions.length === 0) {
+      // Case 1: No transactions at all (loading state)
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#FFC107" />
+          <Text style={styles.loadingText}>
+            {t("transactionScreen.common.loading")}
+          </Text>
+        </View>
+      );
+    }
+
+    if (transactions.length === 0) {
+      // Case 1: No transactions at all
+      return (
+        <View style={styles.emptyStateContainer}>
+          <TouchableOpacity
+            style={styles.emptyStateAddButton}
+            onPress={() => {
+              navigation.navigate("AddExpensesScreen");
+            }}
+          >
+            <Ionicons
+              name="add-circle"
+              size={80}
+              color={Theme.colors.primary}
+            />
+          </TouchableOpacity>
+          <Text style={styles.emptyStateTitle}>
+            {t("emptyState.noTransactions.title")}
+          </Text>
+          <Text style={styles.emptyStateText}>
+            {t("emptyState.noTransactions.message")}
+          </Text>
+        </View>
+      );
+    }
+
+    if (
+      activeTab === "income" &&
+      filterTransactions(transactions).length === 0
+    ) {
+      // Case 2: Active filter is "income" but empty
+      return (
+        <View style={styles.emptyStateContainer}>
+          <TouchableOpacity
+            style={styles.emptyStateAddButton}
+            onPress={() => {
+              navigation.navigate("AddIncome");
+            }}
+          >
+            <Ionicons
+              name="add-circle"
+              size={80}
+              color={Theme.colors.primary}
+            />
+          </TouchableOpacity>
+          <Text style={styles.emptyStateTitle}>
+            {t("emptyState.noIncome.title")}
+          </Text>
+          <Text style={styles.emptyStateText}>
+            {t("emptyState.noIncome.message")}
+          </Text>
+        </View>
+      );
+    }
+
+    if (
+      activeTab === "expense" &&
+      filterTransactions(transactions).length === 0
+    ) {
+      // Case 3: Active filter is "expenses" but empty
+      return (
+        <View style={styles.emptyStateContainer}>
+          <TouchableOpacity
+            style={styles.emptyStateAddButton}
+            onPress={() => {
+              navigation.navigate("AddExpensesScreen");
+            }}
+          >
+            <Ionicons
+              name="add-circle"
+              size={80}
+              color={Theme.colors.primary}
+            />
+          </TouchableOpacity>
+          <Text style={styles.emptyStateTitle}>
+            {t("emptyState.noExpense.title")}
+          </Text>
+          <Text style={styles.emptyStateText}>
+            {t("emptyState.noExpense.message")}
+          </Text>
+        </View>
+      );
+    }
+
+    // Default case: Render the transaction list
+    return (
+      <FlatList
+        data={Object.entries(
+          groupTransactionsByMonth(transactions, i18n.language)
+        )}
+        keyExtractor={(item) => item[0]}
+        renderItem={renderMonthSection}
+        showsVerticalScrollIndicator={false}
+        initialNumToRender={3}
+        windowSize={5}
+        removeClippedSubviews={true}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.8}
+        ListFooterComponent={renderFooter}
+      />
+    );
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={[styles.container]}>
-        <Header title={t('transactionScreen.transactions.title')} />
-        <TransactionSummary
-          activeTab={activeTab}
-          onSelectTab={setActiveTab}
-        />
-        {loading && transactions.length === 0 ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#FFC107" />
-            <Text style={styles.loadingText}>
-              {t('transactionScreen.common.loading')}
-            </Text>
-          </View>
-        ) : (
-          <View style={styles.contentContainer}>
-            <FlatList
-            
-              data={Object.entries(groupTransactionsByMonth(transactions, i18n.language))}
-              keyExtractor={(item) => item[0]}
-              renderItem={renderMonthSection}
-              showsVerticalScrollIndicator={false}
-              initialNumToRender={3}
-              windowSize={5}
-              removeClippedSubviews={true}
-              onEndReached={handleLoadMore}
-              onEndReachedThreshold={0.8}
-              ListFooterComponent={renderFooter}
-            />
-          </View>
-        )}
+        <Header title={t("transactionScreen.transactions.title")} />
+        <TransactionSummary activeTab={activeTab} onSelectTab={setActiveTab} />
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.contentContainer}>{renderContent()}</View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#FFC107",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: Theme.colors.highlight,
-  },
-  contentContainer: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    overflow: "hidden",
-    padding: 16,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    padding: 16,
-  },
-  errorText: {
-    color: "#FF3B30",
-    fontSize: 16,
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  retryButton: {
-    backgroundColor: "#FFC107",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "600",
-  },
-  footerLoadingContainer: {
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  loadingText: {
-    marginLeft: 10,
-    marginRight: 10,
-    fontSize: 14,
-    color: '#666',
-  },
-});
 
 export default TransactionScreen;

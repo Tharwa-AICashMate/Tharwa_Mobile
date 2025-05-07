@@ -15,6 +15,7 @@ const intialCategories = [
 class AuthService {
     static async signup(userData) {
         const { email, password, ...profileData } = userData;
+        console.log(profileData);
         // check If the email exists, throw an error
         try {
             const { data, error } = await AuthService.getuserByEmail(email);
@@ -33,10 +34,10 @@ class AuthService {
         console.log(userData, signupError);
         // update user profile data
         const { data: updatedUserData, error: updateError } = await AuthService.upadateUserProfile(email, {
-            username: profileData.fullName,
-            full_name: profileData.fullName,
-            mobile_num: profileData.phone,
-            DOB: profileData.dob,
+            username: profileData.full_name,
+            full_name: profileData.full_name,
+            mobile_num: profileData.mobile_num,
+            DOB: profileData.DOB,
         });
         console.log(updatedUserData, updateError);
         if (data) {
@@ -80,9 +81,11 @@ class AuthService {
             .from("users")
             .update(profileData)
             .eq("email", email);
+        console.log(status);
         if (status.error)
             throw { status: 400, message: status.error };
-        const { data, error } = await supabase.from("users").select("*").eq("email", email);
+        const { data, error } = await AuthService.getuserByEmail(email);
+        console.log(data);
         return { data, error };
     }
     static async forgetPassword(email) {

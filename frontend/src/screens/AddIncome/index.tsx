@@ -15,6 +15,7 @@ import { fetchUserCategories } from "@/redux/slices/categoriesSlice";
 import { getCurrentUserId } from "@/utils/auth";
 import { editTransactionsAsync } from "@/redux/slices/transactionSlice";
 import { updateWeeklyHighs } from "@/redux/slices/financeSlice";
+import { useTranslation } from "react-i18next";
 
 const AddIncomeScreen = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ const AddIncomeScreen = () => {
   const route = useRoute();
   const data = route.params;
   const transaction = data?.transaction;
+  const { t } = useTranslation();
 
   useFocusEffect(
     useCallback(() => {
@@ -100,7 +102,7 @@ const AddIncomeScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Theme.colors.background }}>
-      <Header title="Add Income" />
+      <Header title={t("addIncome")} />
       {transaction ? (
         <TransactionForm
           title="Income"

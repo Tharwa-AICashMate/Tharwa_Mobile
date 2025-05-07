@@ -1,4 +1,4 @@
-import { getSpendingAnalytics, getIncomeAnalytics, getFinancialSummary, getFinancialTrends, generateFinancialReports, } from "../services/analytics.service";
+import { getSpendingAnalytics, getIncomeAnalytics, getFinancialSummary, getFinancialTrends, generateFinancialReports, } from "../services/analytics.service.js";
 export const getSpendingAnalyticsHandler = async (req, res) => {
     try {
         const data = await getSpendingAnalytics();
