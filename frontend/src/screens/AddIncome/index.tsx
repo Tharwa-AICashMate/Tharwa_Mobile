@@ -103,7 +103,7 @@ const AddIncomeScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Theme.colors.background }}>
-      <Header title="Add Income" />
+      <Header title={t("addIncome")} />
       {transaction ? (
         <TransactionForm
           title={t("addIncome")}

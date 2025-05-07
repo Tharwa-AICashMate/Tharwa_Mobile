@@ -2,6 +2,7 @@
   "expo": {
     "name": "Tharwa-Mobile",
     "slug": "Tharwa-Mobile",
+    "owner": "personaltest",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -52,7 +53,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "fc1fb9cb-a180-4c4d-87f2-5c559fafa7fb"
+        "projectId": "ec28aa1a-082f-414a-a5b7-b06b9a458f07"
       }
     }
   }

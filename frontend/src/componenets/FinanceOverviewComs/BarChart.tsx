@@ -117,7 +117,7 @@ const getDynamicYAxis = (maxValue: number) => {
   let step = Math.ceil(rawStep / magnitude) * magnitude;
   
   if (step === 0) step = 1;  const labels = [];
-
+ console.log(step*5)
   for (let i = 5; i >= 0; i--) {
     labels.push(Math.round(i * step));
   }

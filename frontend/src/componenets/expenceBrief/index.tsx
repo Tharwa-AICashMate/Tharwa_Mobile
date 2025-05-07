@@ -39,7 +39,7 @@ const ExpenseBrief: React.FC<ExpenseBriefProps> = ({ setTotalBalance }) => {
   const percentage = availableBalance ? (expenses / (balance + income - savings)) * 100 : 0;
   const percentageText = percentage.toFixed(2) 
   useEffect(() => {
-    if (percentage > 50 && !alertShown) {
+    if ((percentage > 50 && !alertShown) && (availableBalance> 0 && expenses > 0)) {
       Alert.alert(
         t('expenseBrief.alertTitle'),
         t('expenseBrief.alertMessage', { percentage: percentageText }),

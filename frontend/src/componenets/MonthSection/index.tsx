@@ -17,7 +17,7 @@ const MonthSection: React.FC<MonthSectionProps> = ({ month, transactions,showCat
   const handleToggleMenu = (id: string) => {
     setActiveMenuId((prev) => (prev === id ? null : id));
   };
-  //console.log(transactions)
+  console.log(transactions)
   return (
     <View style={[styles.container, {direction:isRTL?'rtl':'ltr'} ]}>
       <View style={styles.containerTitle}>

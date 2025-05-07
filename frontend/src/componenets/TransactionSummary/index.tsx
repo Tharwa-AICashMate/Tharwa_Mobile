@@ -171,13 +171,13 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         </View>
       )}
 
-      {/* {activeTab === "income" && (
+      {activeTab === "income" && (
         <View style={styles.addExpenseContainer}>
-          <TouchableOpacity style={styles.addButton} onPress={() => setModalIncomeVisible(true)}>
+          <TouchableOpacity style={styles.addButton} onPress={() =>  navigation.navigate("AddIncome")}>
             <Text style={styles.addButtonText}>{t("transactionScreen.transactionSummary.editIncome")}</Text>
           </TouchableOpacity>
         </View>
-      )} */}
+      )}
 
       {activeTab === "expense" && (
         <View style={styles.addExpenseContainer}>

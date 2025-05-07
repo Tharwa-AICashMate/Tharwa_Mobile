@@ -167,9 +167,9 @@ class dataFormaterService {
 
     summary.push(
       new Document({
-        pageContent: `In the past ${timeframe}, you spent $${totalSpent.toFixed(
+        pageContent: `In the past ${timeframe}, you spent ${totalSpent.toFixed(
           2
-        )} and earned $${totalEarned.toFixed(2)}.`,
+        )}EGP and earned ${totalEarned.toFixed(2)}EGP.`,
         metadata: { type: "time_summary", timeframe },
       })
     );
@@ -192,9 +192,9 @@ class dataFormaterService {
     if (topCategories.length > 0) {
       let content = `Your top spending categories in the past ${timeframe} were:\n`;
       topCategories.forEach(([category, amount], idx) => {
-        content += `${idx + 1}. ${category}: $${(amount as number).toFixed(
+        content += `${idx + 1}. ${category}: ${(amount as number).toFixed(
           2
-        )}\n`;
+        )}EGP\n`;
       });
 
       summary.push(
@@ -306,7 +306,7 @@ class dataFormaterService {
       content += `This store may have items you're interested in based on your shopping history:\n`;
 
       matchedProducts.forEach((product) => {
-        content += `- ${product.item} for $${product.price}\n`;
+        content += `- ${product.item} for ${product.price}EGP\n`;
       });
 
       return new Document({
@@ -357,7 +357,7 @@ class dataFormaterService {
     if (!currentMonthTransactions?.length) {
       return [
         new Document({
-          pageContent: `Your monthly budget is $${budgetLimit}. No transactions recorded yet this month.`,
+          pageContent: `Your monthly budget is ${budgetLimit}EGP. No transactions recorded yet this month.`,
           metadata: { type: "budget_insight", insight_type: "empty_month" },
         }),
       ];
@@ -387,15 +387,15 @@ class dataFormaterService {
     const documents: Document[] = [];
 
     // Budget summary
-    let budgetSummary = `Monthly Budget: $${Number(budgetLimit).toFixed(2)}\n`;
-    budgetSummary += `Spent so far: $${(totalSpent as number).toFixed(2)} (${(
+    let budgetSummary = `Monthly Budget: ${Number(budgetLimit).toFixed(2)}EGP\n`;
+    budgetSummary += `Spent so far: ${(totalSpent as number).toFixed(2)}EGP (${(
       ((totalSpent as number) / Number(budgetLimit)) *
       100
     ).toFixed(1)}%)\n`;
-    budgetSummary += `Remaining: $${remainingBudget.toFixed(2)}\n`;
-    budgetSummary += `Daily budget for rest of month: $${(
+    budgetSummary += `Remaining: ${remainingBudget.toFixed(2)}EGP\n`;
+    budgetSummary += `Daily budget for rest of month: ${(
       remainingBudget / Math.max(1, daysRemaining)
-    ).toFixed(2)}/day for ${daysRemaining} days`;
+    ).toFixed(2)}EGP/day for ${daysRemaining} days`;
 
     documents.push(
       new Document({
@@ -408,9 +408,9 @@ class dataFormaterService {
     if (remainingBudget < 0) {
       documents.push(
         new Document({
-          pageContent: `⚠️ Budget Alert: You've exceeded your monthly budget by $${Math.abs(
+          pageContent: `⚠️ Budget Alert: You've exceeded your monthly budget by ${Math.abs(
             remainingBudget
-          ).toFixed(2)}.`,
+          ).toFixed(2)}EGP.`,
           metadata: {
             type: "budget_insight",
             insight_type: "over_budget",
@@ -443,13 +443,13 @@ class dataFormaterService {
     if (projectedMonthlySpend > Number(budgetLimit)) {
       documents.push(
         new Document({
-          pageContent: `At your current rate of spending ($${avgDailySpend.toFixed(
+          pageContent: `At your current rate of spending (${avgDailySpend.toFixed(
             2
-          )}/day), you're projected to spend $${projectedMonthlySpend.toFixed(
+          )}EGP/day), you're projected to spend ${projectedMonthlySpend.toFixed(
             2
-          )} this month, which exceeds your budget by $${(
+          )}EGP this month, which exceeds your budget by ${(
             projectedMonthlySpend - Number(budgetLimit)
-          ).toFixed(2)}.`,
+          ).toFixed(2)}EGP.`,
           metadata: {
             type: "budget_insight",
             insight_type: "projection_warning",
@@ -468,9 +468,9 @@ class dataFormaterService {
 
     let categorySummary = "Top spending categories this month:\n";
     topCategories.forEach(([category, amount], idx) => {
-      categorySummary += `${idx + 1}. ${category}: $${(
+      categorySummary += `${idx + 1}. ${category}: ${(
         amount as number
-      ).toFixed(2)} (${(
+      ).toFixed(2)}EGP (${(
         ((amount as number) / (totalSpent as number)) *
         100
       ).toFixed(1)}% of total)\n`;
@@ -533,18 +533,18 @@ class dataFormaterService {
           (deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
         );
 
-        if (daysRemaining < 0) {
+        if (daysRemaining < 0 && deadline){
           timeInfo = `This goal is overdue by ${Math.abs(daysRemaining)} days.`;
         } else {
-          timeInfo = `${daysRemaining} days remaining until deadline.`;
+          timeInfo = `${deadline?daysRemaining: Number.POSITIVE_INFINITY} days remaining until deadline.`;
 
           // Calculate required savings rate
           const amountRemaining = goal.target_amount - goal.current_amount;
           if (amountRemaining > 0 && daysRemaining > 0) {
             const dailyRequired = amountRemaining / daysRemaining;
-            projectionInfo = `To reach this goal on time, you need to save $${dailyRequired.toFixed(
+            projectionInfo = `To reach this goal on time, you need to save ${dailyRequired.toFixed(
               2
-            )} per day.`;
+            )}EGP per day.`;
           }
         }
       }
@@ -586,9 +586,9 @@ class dataFormaterService {
 
       // Create goal summary
       let summary = `🎯 Goal: ${goal.name}\n`;
-      summary += `Progress: $${goal.current_amount.toFixed(
+      summary += `Progress: ${goal.current_amount.toFixed(
         2
-      )} of $${goal.target_amount.toFixed(2)} (${progressPercentage.toFixed(
+      )}EGP of ${goal.target_amount.toFixed(2)}EGP (${progressPercentage.toFixed(
         1
       )}%)\n`;
 
@@ -631,7 +631,7 @@ class dataFormaterService {
         let depositHistory = `Recent deposits for ${goal.name}:\n`;
 
         recentDeposits.forEach((deposit) => {
-          depositHistory += `- $${deposit.amount.toFixed(2)} on ${new Date(
+          depositHistory += `- ${deposit.amount.toFixed(2)}EGP on ${new Date(
             deposit.created_at
           ).toLocaleDateString()} - "${deposit.title}"\n`;
         });
@@ -1319,7 +1319,7 @@ class dataFormaterService {
       if (transactions.length > 0) {
         let transactionContent = "Recent relevant transactions:\n";
         transactions.forEach((t) => {
-          transactionContent += `- ${t.title} for $${t.amount} (${
+          transactionContent += `- ${t.title} for ${t.amount}EGP (${
             t.category_name
           }) on ${new Date(t.created_at).toLocaleDateString()}\n`;
         });

@@ -49,8 +49,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
   const dispatch = useAppDispatch();
   const navigation = useNavigation<navProps>();
   const { t, i18n } = useTranslation();
-  const isRTL =  i18next.language === 'ar' || I18nManager.isRTL
-
+  const isRTL = i18next.language === "ar" || I18nManager.isRTL;
 
   const handleEdit = () => {
     onToggleMenu(null);
@@ -123,20 +122,41 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
         {renderAmount()}
       </Text>
 
-      <TouchableOpacity
-        onPress={() =>
-          isMenuVisible
-            ? onToggleMenu(null)
-            : onToggleMenu(transaction.transaction_id)
-        }
-        style={styles.menuIcon}
-      >
-        <Ionicons
-          name="ellipsis-vertical"
-          size={20}
-          color={Theme.colors.text}
-        />
-      </TouchableOpacity>
+      {transaction.type ? (
+        <TouchableOpacity
+          onPress={() =>
+            isMenuVisible
+              ? onToggleMenu(null)
+              : onToggleMenu(transaction.transaction_id)
+          }
+          style={styles.menuIcon}
+        >
+          <Ionicons
+            name="ellipsis-vertical"
+            size={20}
+            color={Theme.colors.text}
+          />
+        </TouchableOpacity>
+      ) : (
+        <>
+          <TouchableOpacity
+            onPress={() => dispatch(deleteDeposit(transaction.id))}
+            style={{ zIndex: 100 }}
+          >
+            <Ionicons name="trash" size={15} color="#F55" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handlePress}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              height: "100%",
+              width: "100%",
+            }}
+          ></TouchableOpacity>
+        </>
+      )}
 
       {isMenuVisible && (
         <>
@@ -144,19 +164,23 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
             <View style={StyleSheet.absoluteFillObject} />
           </TouchableWithoutFeedback>
 
-          <View style={[styles.dropdownMenu,{right:isRTL?undefined:20,left:isRTL?20:undefined}]}>
-          
-              <Pressable
-                onPress={() =>
-                  navigation.navigate("transDetails", {
-                    transaction: transaction,
-                  })
-                }
-                style={styles.menuItem}
-              >
-                <Text>{t("transactionItem.viewDetails")}</Text>
-              </Pressable>
-            
+          <View
+            style={[
+              styles.dropdownMenu,
+              { right: isRTL ? undefined : 20, left: isRTL ? 20 : undefined },
+            ]}
+          >
+            <Pressable
+              onPress={() =>
+                navigation.navigate("transDetails", {
+                  transaction: transaction,
+                })
+              }
+              style={styles.menuItem}
+            >
+              <Text>{t("transactionItem.viewDetails")}</Text>
+            </Pressable>
+
             {transaction.type && (
               <Pressable onPress={handleEdit} style={styles.menuItem}>
                 <Text>{t("transactionItem.edit")}</Text>
