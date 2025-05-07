@@ -63,10 +63,11 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: 340,
+    width: "87%",
+    margin :"auto",
     height: 80,
     borderRadius: 20,
-    marginLeft: 30,
+    marginLeft: "8%",
   },
   label: {
     fontSize: 20,
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     color: "#444",
   },
   refreshButton: {
-    marginLeft: 10,
+    marginLeft: "8%",
     padding: 5,
     backgroundColor: "#e0e0e0",
     borderRadius: 5,
