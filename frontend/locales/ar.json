@@ -115,7 +115,8 @@
   "common": {
     "ok": "موافق",
     "cancel": "إلغاء",
-    "continue": "متابعة"
+    "continue": "متابعة",
+    "confirm": "تأكيد"
   },
   "logo": "Tharwa",
   "onboarding": {
