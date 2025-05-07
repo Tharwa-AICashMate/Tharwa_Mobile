@@ -595,11 +595,11 @@
     }
   },
   "settings": {
-    "settings": "settings",
-    "passwordSettings": "passwordSettings",
-    "helpCenter": "helpCenter",
-    "deleteAccount": "deleteAccount",
-    "termsAndConditions": "termsAndConditions"
+    "settings": "Settings",
+    "passwordSettings": "Password Settings",
+    "helpCenter": "Help Center",
+    "deleteAccount": "Delete Account",
+    "termsAndConditions": "Terms And Conditions"
   },
   "passwordChange": {
     "passwordChange": "Password Settings",
