@@ -24,7 +24,7 @@ const AnalysisContent = ({ onAnalyze, isLoading }: AnalysisContentProps) => {
           }
         ]}
         placeholder={t("SmartGrocery.enterMessage")}
-        placeholderTextColor={Theme.colors.primary}
+        placeholderTextColor={Theme.colors.textDark}
         multiline={true}
         value={message}
         onChangeText={setMessage}
