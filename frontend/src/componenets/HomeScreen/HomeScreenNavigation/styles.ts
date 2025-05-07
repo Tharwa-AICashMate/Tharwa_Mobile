@@ -2,13 +2,13 @@ import Theme from "@/theme";
  import { StyleSheet } from "react-native";
  
  export const styles = StyleSheet.create({
-   container: {
-    
+    container: {
      flexDirection: "row",
      flexWrap: "wrap",
      justifyContent: "space-between",
-     margin: 16,
-     paddingHorizontal: 8,
+     margin: 10,
+     marginTop:16,
+     paddingHorizontal:-10,
      paddingVertical: 8,
    },
    tile: {
